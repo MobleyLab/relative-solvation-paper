@@ -1,0 +1,135 @@
+%
+%
+%
+
+\documentclass[journal=jctcce,manuscript=suppinfo]{achemso}
+
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xcolor}
+
+
+\title{Reproducing Relative Alchemical Free Energies of Hydration}
+
+\author{Hannes H. Loeffler}
+\affiliation[STFC Daresbury, Warrington, WA4 4AD, United
+  Kingdom]{Scientific Computing Department, STFC, UK}
+\email{Hannes.Loeffler@stfc.ac.uk}
+\phone{+44 1925 603367}
+\author{Stefano Bosisio}
+\affiliation[University of Edinburgh]{EaStCHEM School of Chemistry,
+  University of Edinburgh, West Mains Road, Edinburgh EH9 3JJ, UK}
+\author{Julien Michel}
+\affiliation[University of Edinburgh]{EaStCHEM School of Chemistry,
+  University of Edinburgh, West Mains Road, Edinburgh EH9 3JJ, UK}
+\author{Guilherme Duarte Ramos Matos}
+\affiliation[University of California, Irvine]{Department of
+  Chemistry, University of California, Irvine}
+\author{David L. Mobley}
+\affiliation[University of California, Irvine]{Departments of
+  Pharmaceutical Sciences and Chemistry, University of California,
+  Irvine}
+\author{Donghyuk Suh}
+\affiliation[University of Chicago]{University of Chicago}
+\author{Benoit Roux}
+\affiliation[University of Chicago]{University of Chicago}
+
+%\abbreviations{$\Delta G^{solv}$, $\Delta H^{solv}$, $\Delta S^{solv}$}
+\keywords{Free Energy, Hydration, Alchemical, Reproducibility}
+
+
+\begin{document}
+
+\maketitle
+
+\section{Softcore Functions}
+
+We describe here the softcore functions for both the van der Waals,
+$V_{\mathrm{LJ}}$ (Lennard--Jones potential) and the electrostatic
+interactions, $V_{\mathrm{Coul}}$ (Coulomb potential) for the
+disappearing atoms as a function of the order parameter $\lambda$.
+For the appearing atoms replace $\lambda$ with $1 - \lambda$ and
+\emph{vice versa}.  Eq.\ \eqref{eq:general} is the generalized form
+for all codes while the specific distance dependent functions are
+outlined in eq.\,\eqref{eq:Sire} for Sire, eq.\,\eqref{eq:Amber} for
+AMBER, eq.\,\eqref{eq:Gromacs} for Gromacs and eq.\,\eqref{eq:CHARMM}
+for CHARMM.
+
+\begin{equation}
+  V = V_{\mathrm{LJ}} + V_{\mathrm{Coul}} =
+  4\epsilon_{\mathrm{ij}}(1 - \lambda) \left[ \left(
+      \frac{\sigma_{ij}}{\textcolor{red}{r_{\mathrm{LJ}}}}
+    \right)^{12} - \left(
+      \frac{\sigma_{ij}}{\textcolor{red}{r_{\mathrm{LJ}}}} \right)^{
+      6} \right] +
+  (1 - \lambda)^{n} \frac{q_{i}q_{j}}
+  {4\pi\varepsilon_{0}\textcolor{red}{r_{\mathrm{Coul}}}}
+  \label{eq:general}
+\end{equation}
+
+For Sire
+\begin{equation}
+  \begin{split}
+    r_{\mathrm{LJ}} &= (\alpha\sigma_{ij}\lambda + r_{ij}^2)^{\frac{1}{2}} \\
+    r_{\mathrm{Coul}} &=  (\lambda + r_{ij}^2)^{\frac{1}{2}}
+  \end{split}
+  \label{eq:Sire}
+\end{equation}
+
+For AMBER
+\begin{equation}
+  \begin{split}
+    r_{\mathrm{LJ}} &= (\alpha \sigma_{ij}^{6} \lambda + % see JCP127, 214108
+                         r_{ij}^6)^{\frac{1}{6}} \\
+    r_{\mathrm{Coul}} &= (\beta\lambda + r_{ij}^{p})^{\frac{1}{p}} \\
+    n &= 1
+  \end{split}
+  \label{eq:Amber}
+\end{equation}
+
+For Gromacs
+\begin{equation}
+  \begin{split}
+    r_{\mathrm{LJ}} &= (\alpha \sigma_{ij}^{w} \lambda^{p} +
+    r_{ij}^{w})^{\frac{1}{w}} \\
+    &p = 1,2; w = 6,48; \\
+    r_{\mathrm{Coul}} &= r_{\mathrm{LJ}} \\
+    &\alpha_{\mathrm{Coul}} = 0,\alpha_{\mathrm{LJ}} \\
+    n &= 1
+  \end{split}
+  \label{eq:Gromacs}
+\end{equation}
+
+For CHARMM (PSSP), applied to all ``reactant'' and all ``product'' atoms
+\begin{equation}
+  \begin{split}
+    r_{\mathrm{LJ}} &= (\alpha \lambda + r_{ij}^2)^{\frac{1}{2}} \\
+    r_{\mathrm{Coul}} &= (\beta\lambda + r_{ij}^{2})^{\frac{1}{2}} \\
+    n &= 1
+   \end{split}
+  \label{eq:CHARMM}
+\end{equation}
+
+$r_{\mathrm{vdW}}$ and $r_{\mathrm{Coul}}$ (both in red) are
+the distance dependent functions, $\epsilon_{\mathrm{Coul}}$ and
+$\sigma_{ij}$ are the Lennard-Jones parameters, $q_{i}$ and $q_{j}$
+are the charges and $\varepsilon_{0}$ is the vacuum permittivity,
+$\alpha$ and $\beta$ are the softcore tuning parameters, and $r_{ij}$
+the distance between atoms.
+
+$n$ is an exponent only used in the Coulomb softcore funtion of Sire.
+Gromacs allows additional exponents for $\lambda$ ($p = 1$ or $2$) and
+$w$ for the distance dependency with values of either $6$ or $48$.
+The Coulomb softcore parameter $\alpha_{\mathrm{Coul}}$ in Gromacs is
+the same as for the Lennard--Jones parameter $\alpha_{\mathrm{LJ}}$
+unless the Coulomb softcore function is requested not to be used.  The
+CHARMM softcore function (PSSP) is applied to \emph{all} atoms in the
+perturbed group and not only to disappearing/appearing atoms as in the
+other codes.  The perturbed group comprises of all atoms that need to
+be transformed, i.e.\ any atom that differs in at least one force
+field parameter in the other end state.
+
+
+\end{document}
