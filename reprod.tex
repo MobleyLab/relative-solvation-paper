@@ -490,6 +490,19 @@ the sample.  The SEM for component free energies is combined as
 \section{Discussion}
 \label{sec:discuss}
 
+% AMBER:
+%   IMPORTANT: look at noshakemask, timask
+%     no SHAKE on real atoms? (symmetry)
+%     tishake=1 removes SHAKE to softcore atoms
+%     ntf=1 required for softcores because SHAKE _may_ be removed for
+%     some bonds
+%     check if SHAKE is handled in for perturbed atoms
+%   end distances in crowded situation
+%   systematic deviations in vacuum: toluene, 2-methylindole
+%   sander cannot sample endpoints
+%   pmemd vacuum buggy at the moment
+%   explicit vs implicit dummies
+
 % what do we need to progress the field
 % e.g. automation to make things easy but also consistent and thus
 % more reproducible
