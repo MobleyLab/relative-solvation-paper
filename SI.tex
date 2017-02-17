@@ -126,10 +126,10 @@ without the associated excluded volume from the van der Walls term.
   and Coulomb terms switched on with parameters for the respective
   hydrogen atom type.  b) The two hydrogen atoms have their charges
   switched to zero (grey symbols in black circle).  All other charges
-  are the ones from the methanol end state c to ensures charge
+  are the ones from the methanol end state c (green) to ensures charge
   neutrality at each step.  VdW parameters are constant in the charge
   transfer step (see annotations in magenta).  c) vdW and Coulomb
-  parameters as for methanol while dummy atoms (grey Du) have
+  parameters as for methanol while dummy atoms (grey Du) have those
   parameters all set to zero.}
 \label{fig:dummies}
 \end{figure}
@@ -142,15 +142,17 @@ both charge and vdW step would be simulated at a range of individual
 $\lambda$s.  Typically the charge transfer is done with linear scaling
 while the vdW mutation is done with softcores (see above).  The
 transformation is fully symmetrical that is the parameters must be
-switched on in opposite order if atoms are to be ``created''.
+switched on in opposite order if atoms are to be ``created''.  The
+intermediate state b has the vdW parameters from state a but the
+charges from state c.
 
-Figure~\ref{fig:dummies} shows how topology files may need to be
-created in the case that the MD software does not allow independent
-$\lambda$s for electrostatic and vdW mutations.  With Gromacs, for
-instance, the transformation only requires a single topology file with
-both A and B states (in single topology fashion, see main text) and a
-single simulation control file with separate $\lambda$ vectors for
-charge and vdW transformations.  Any intermediate state from
+Figure~\ref{fig:dummies} shows how topology files may be created in
+the case that the MD software does not allow independent $\lambda$s
+for electrostatic and vdW mutations.  With Gromacs, for instance, the
+transformation only requires a single topology file with both A and B
+states (in single topology fashion, see main text) and a single
+simulation control file with separate $\lambda$ vectors for charge and
+vdW transformations.  Any intermediate state from
 Figure~\ref{fig:dummies} is thus created ``on--the-fly'' i.e.\
 implictly during the simulation run.  With AMBER (up to version 16 as
 of this writing), however, three eplicit topology files (with sander,
