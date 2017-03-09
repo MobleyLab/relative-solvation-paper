@@ -147,20 +147,21 @@ proposed too~\cite{doi:10.1063/1.3519057, C3FD00125C}.
 Relative alchemical free energy (RAFE) calculations ``mutate'' one
 molecule into another one.  This is most efficiently
 achieved~\cite{doi:10.1021/j100056a020, Michel2010} by making use of
-the single topology method~\cite{doi:10.1021/j100056a020,
-  doi:10.1021/jp981628n}.  Single topology means that there is only
-one description of the molecule to be mutated.  Thus, atom types are
-directly transformed into the new type, typically by linearly scaling
-force field parameters.  Disappearing/appearing atoms are balanced
-with ``dummy'' atoms, i.e. atoms that have no non--bonded interactions
-in the end state but retain the bonded terms of the original atom.
-AMBER is a special case as it does not require the use of dummy atoms:
-the bonded terms of atoms that do not exist in the end state will not
-contribute to the free energy implying that contributions from dummy
-atoms perfectly cancel in the thermodynamic cycle.  RAFEs are useful
-e.g.\ in ranking which one of a set of small molecules binds strongest
-to a chosen target.  This approach has recently gained more traction
-in the context of relative free binding energies of
+the single topology method~\cite{doi:10.1063/1.449208,
+  doi:10.1021/j100056a020, doi:10.1021/jp981628n}.  Single topology
+means that there is only one description of the molecule to be
+mutated.  Thus, atom types are directly transformed into the new type,
+typically by linearly scaling force field parameters.
+Disappearing/appearing atoms are balanced with ``dummy'' atoms,
+i.e. atoms that have no non--bonded interactions in the end state but
+retain the bonded terms of the original atom.  AMBER is a special case
+as it does not require the use of dummy atoms: the bonded terms of
+atoms that do not exist in the end state will not contribute to the
+free energy implying that contributions from dummy atoms perfectly
+cancel in the thermodynamic cycle.  RAFEs are useful e.g.\ in ranking
+which one of a set of small molecules binds strongest to a chosen
+target.  This approach has recently gained more traction in the
+context of relative free binding energies of
 biomolecules~\cite{doi:10.1021/ja512751q}.
 
 The single topology approach~\cite{doi:10.1021/j100056a020} requires a
