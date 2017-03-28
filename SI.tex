@@ -25,13 +25,14 @@
 \section{Softcore Functions}
 
 We describe here the softcore functions~\cite{beutler_avoiding_1994,
-  zacharias_separationshifted_1994} for both the van der Waals,
+  zacharias_separationshifted_1994} as implemented in the MD packages
+AMBER, CHARMM, Gromacs and Sire.  Both the van der Waals,
 $V_{\mathrm{LJ}}$ (Lennard--Jones potential) and the electrostatic
-interactions, $V_{\mathrm{Coul}}$ (Coulomb potential) for the
-disappearing atoms as a function of the order parameter $\lambda$.
-For the appearing atoms replace $\lambda$ with $1 - \lambda$ and
-\emph{vice versa}.  Eq.\ \eqref{eq:general} is the generalized form
-for all codes while the specific distance dependent functions are
+interactions, $V_{\mathrm{Coul}}$ (Coulomb potential) as a function of
+the order parameter $\lambda$ are given for the disappearing atoms
+only.  For the appearing atoms replace $\lambda$ with $1 - \lambda$
+and \emph{vice versa}.  Eq.\ \eqref{eq:general} is the generalized
+form for all codes while the specific distance dependent functions are
 outlined in eq.\,\eqref{eq:Sire} for Sire, eq.\,\eqref{eq:Amber} for
 AMBER, eq.\,\eqref{eq:Gromacs} for Gromacs and eq.\,\eqref{eq:CHARMM}
 for CHARMM.
@@ -109,15 +110,19 @@ CHARMM softcore function (PSSP) is applied to \emph{all} atoms in the
 perturbed group and not only to dummy atoms as in the other codes.
 The perturbed group comprises of all atoms that need to be
 transformed, i.e.\ any atom that differs in at least one force field
-parameter in the other end state.
+parameter in the other end state.  ``Dummy'' atom is used here as a
+shorthand notation for any atom that appears or disappears during the
+course of the transformation.
+
 
 \section{Separated Protocols}
 
-When the RAFE simulation is separated into van der Waals and Coulomb
-steps it must be ensured that charges of vanishing atoms are switched
-off before the vdW radius is scaled to zero.  This is to avoid that
-other atoms e.g.\ from solvent come in close contact to a charged atom
-without the associated excluded volume from the van der Walls term.
+When the AFE (alchemiccal free energy) simulation is separated into van
+der Waals and Coulomb steps it must be ensured that charges of
+vanishing atoms are switched off before the vdW radius is scaled to
+zero.  This is to avoid that other atoms e.g.\ from solvent come in
+close contact to a charged atom without the associated excluded volume
+from the van der Walls term.
 
 \begin{figure}[ht]
 \includegraphics[scale=1.0]{figures/dummies.pdf}
@@ -175,7 +180,7 @@ most MD codes i.e.\ the total system charge varies with $\lambda$
 unless the charges of \emph{all} atoms are switched off.  Possible
 strategies would be to explictly create topology files for each
 intermediate $\lambda$ state and distribute the dimished charges from
-the dummy atoms over the non--dummy atoms.  MD software like CHARMM
+the dummy atoms over to the non--dummy atoms.  MD software like CHARMM
 allow to do this through scripting although this would be just as
 extensive as scripting the aforementioned strategy.
 
@@ -183,7 +188,7 @@ extensive as scripting the aforementioned strategy.
 \includegraphics[scale=1.0]{figures/dummies2.pdf}
 \caption{Explicit topologies involved in a mutation with both
   appearing and disappearing atoms by example of the cyclopentanyl
-  transfer from the 2 position in indole to the 7 position.  Blue
+  transfer from the 2 position in indole to the 7 position.  Green
   lines denote atoms which have their charges switched off but with
   vdW parameters from the left (state b) or right (state c). Grey
   lines are dummy atoms with Coulomb and vdW parameters all zero.
