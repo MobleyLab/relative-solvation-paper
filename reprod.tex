@@ -432,27 +432,30 @@ starting state as taken from the setup step.  In some cases it was
 necessary though to use coordinates from a nearby $\lambda$ state.
 Water hydrogens (TIP3P) were constraint with SHAKE.  None of the atoms
 in the perturbed group were constraint and so the time step was set to
-0.001\,fs (see Sire protocol for an alternative approach).
+\SI{0.001}{fs} (see Sire protocol below for an alternative approach).
 Temperature was controlled through a Langevin thermostat and pressure
 through a Monte Carlo barostat.
 
-\paragraph{Sire/SOMD} All simulations were carried out with Sire/OpenMM 6.3
-(revision 16.1).  Each alchemical transformation was divided into 17 evenly
-spaced windows and simulated for 2\,ns both in water an vacuum phase. A
-velocity-Verlet integrator was employed with 2\,fs timestep, constraining all
-the hydrogen bonds not alchemically transformed (hbonds not perturbed). An
-atom--based Barker--Watts reaction field~\cite{doi:10.1080/00268977300102101}
-with a dielectric constant of 82.0 was employed for water phase simulations. A
-cutoff of \SI{12}{\AA} was set for non-bonded interactions and periodic
-boundary conditions were imposed.  Temperature control was achieved with the
-Andersen thermostat~\cite{doi:10.1063/1.439486} with a coupling constant of
-10\,ps$^{-1}$.  A Monte Carlo barostat assured pressure control, attempting
-isotropic box edge scaling every 25 time steps. At each $\lambda$ window all
-bond, angle and dihedral energy terms were scaled, differently (how?) from
-Gromacs and Amber.  For each vacuum simulation a free energy correction term
-$G_{\mathrm{FUNC}}$ was evaluated to treat intramolecular Coulombic
-interactions consistently between water and vacuum legs of the thermodynamic
-cycle, as explained in~\cite{Bosisio2016} (some details here?).
+\paragraph{Sire/SOMD} All simulations were carried out with
+Sire/OpenMM 6.3 (revision 16.1).  Each alchemical transformation was
+divided into 17 evenly spaced windows and simulated for \SI{2}{ns}
+both in water an vacuum phase. A velocity-Verlet integrator was
+employed with \SI{2}{fs} timestep, constraining all the hydrogen bonds
+not alchemically transformed (unperturbed H protocol). An atom--based
+Barker--Watts reaction field~\cite{doi:10.1080/00268977300102101} with
+a dielectric constant of \num{82.0} was employed for water phase
+simulations. A cutoff of \SI{12}{\AA} was set for non-bonded
+interactions and periodic boundary conditions were imposed.
+Temperature control was achieved with the Andersen
+thermostat~\cite{doi:10.1063/1.439486} with a coupling constant of
+\SI{10}{ps^{-1}}.  A Monte Carlo barostat assured pressure control,
+attempting isotropic box edge scaling every 25 time steps. At each
+$\lambda$ window all bond, angle and dihedral energy terms were
+scaled, differently (how?) from Gromacs and Amber.  For each vacuum
+simulation a free energy correction term $G_{\mathrm{FUNC}}$ was
+evaluated to treat intramolecular Coulombic interactions consistently
+between water and vacuum legs of the thermodynamic cycle, as explained
+in~\cite{Bosisio2016} (some details here?).
 
 
 \subsection{Analysis}
@@ -541,44 +544,47 @@ Results for Sire relative free energy calculations are shown in (FIG OR TABLE
 TO BE DECIDED. Plot for MUD for each package?) good/bad agreement, final MUD =
 ?)
 
-To achieve reproducibility the role of constraints was extremely influencal.
-Fig.\ X shows the comparison between relative hydration free energies computed
-by using different constraint schemes during the simulation. When all bonds are
-constraint a systematic offset with respect to the other constraints with a MUD
-= \SI{0.38}{kcal.mol^{-1}} was observed with respect to the no constraint case
-and MUD = \SI{0.36}{kcal.mol^{-1}} compared to not perturbed hydrogen bonds
-constraint.  Furthermore, analysing these simulations with Gromacs and Amber
-all bond constraints bring a MUD = \SI{1.2}{kcal.mol^{-1}}. The main problem,
-for all bond constraints in RAFE calculations in Sire, is the missing overlap
-between the potential energy functions at each alchemical transformation.
-Further discrepancies appear when different mappings and all bonds constraint
-are considered, as Fig.\ X shows.
+To achieve reproducibility the role of constraints was extremely
+influential.  Fig.\ X shows the comparison between relative hydration
+free energies computed by using different constraint schemes during
+the simulation. When all bonds of the ligand are constraint a
+systematic offset with respect to the other constraints with a MUD =
+\SI{0.38}{kcal.mol^{-1}} was observed with respect to the no
+constraint case and MUD = \SI{0.36}{kcal.mol^{-1}} compared to the
+unperturbed H protocol (see section~\ref{sec:rafe_protocols}).
+Furthermore, analysing these simulations with Gromacs and Amber all
+bond constraints bring a MUD = \SI{1.2}{kcal.mol^{-1}}. The main
+problem, for all bond constraints in RAFE calculations in Sire, is the
+missing overlap between the potential energy functions between each
+$\lambda$--step.  Further discrepancies appear when different
+mappings and all bonds are constraint as Fig.\ X shows.
 
-Referring to Fig.\ X, passing from neopentane to methane (centrally mapped) has
-a $\Delta\Delta G_{\mathrm{hyd}}$ = \SI{2.04 +- 0.01}{kcal.mol^{-1}}, while for
-the backward transformation $\Delta\Delta G_{\mathrm{hyd}}$ = \SI{-2.10 +-
-  0.01}{kcal.mol^{-1}}, which highly overestimates the free energy compared to
-Gromacs and Amber (REFER TO TAB). Unexpectedly, simulation of neopentane to
-methane (terminally mapped) shows a $\Delta\Delta G_{\mathrm{hyd}}$ = \SI{0.59
-  +- 0.01}{kcal.mol^{-1}} and $\Delta\Delta G_{\mathrm{hyd}}$ = \SI{-0.48 +-
-  0.01}{kcal.mol^{-1}} for the reverse transformation.  Thus, the solution
-adopted to achieve reproducibility in Sire is to impose hydrogen bonds not
-perturbed constraint.  These constraints allow to maintain a timestep of 2\,fs
-with a MUD of \SI{0.30 +- 0.01}{kcal.mol^{-1}} with respect to Gromacs and
-Amber.
+Referring to Fig.\ X, transforming neopentane to methane (centrally
+mapped) shows a $\Delta\Delta G_{\mathrm{hyd}}$ of \SI{2.04 +-
+  0.01}{kcal.mol^{-1}}, while for the backward transformation
+$\Delta\Delta G_{\mathrm{hyd}}$ = \SI{-2.10 +- 0.01}{kcal.mol^{-1}},
+which highly overestimates the free energy compared to Gromacs and
+Amber (REFER TO TAB). Unexpectedly, simulation of neopentane to
+methane (terminally mapped) shows a $\Delta\Delta G_{\mathrm{hyd}}$ =
+\SI{0.59 +- 0.01}{kcal.mol^{-1}} and $\Delta\Delta G_{\mathrm{hyd}}$ =
+\SI{-0.48 +- 0.01}{kcal.mol^{-1}} for the reverse transformation.  As
+the free energy must be independent of the chosen path the discrepancy
+highlights a problem with using constraints on transformed atoms.  The
+solution adopted to achieve reproducibility in Sire is to rely on the
+unperturbed H protocol.  These constraints allow a timestep of 2\,fs
+with a MUD of \SI{0.30 +- 0.01}{kcal.mol^{-1}} with respect to Gromacs
+and Amber.
 
-To check the quality of relative free energies of hydration, $\Delta\Delta G$
-were estimated also with absolute free energy calculations.  By computing the
-difference between absolute hydration of methane and all the other molecule,
-the relative free energy of hydration was computed.  Fig.\ X shows the
-reliability of h-bonds not perturbed constraint, by demonstrating consistency
-between relative and absolute simulations. The best protocol to obtain high
-reproducibility in Sire is to use a hydrogen bonds not perturbed constraint, in
-order to keep a 2\,fs timestep and consistency between absolute and relative
-free energy calculations.  Furthermore, all the calculations can be performed
-in one step with a single topology approach, differently (how?)  from Amber and
-Gromacs.  (EXPLAIN EXACTLY WHY)
- 
+To test the quality of relative free energies of hydration,
+$\Delta\Delta G$ were estimated also with absolute free energy
+calculations.  By computing the difference between absolute hydration
+of methane and all the other molecule, the relative free energy of
+hydration was computed.  Fig.\ X demonstrates the reliability of the
+unperturbed H protocol through consistency between relative and
+absolute simulations.  Furthermore, all the calculations can be
+performed in one step, differently (how?) from Amber and Gromacs.
+(EXPLAIN EXACTLY WHY)
+
 
 \section{Discussion}
 \label{sec:discuss}
