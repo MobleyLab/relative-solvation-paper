@@ -431,6 +431,24 @@ in the perturbed group were constraint and so the time step was set to
 Temperature was controlled through a Langevin thermostat and pressure
 through a Monte Carlo barostat.
 
+\paragraph{Sire/SOMD} All simulations were carried out with Sire/OpenMM 6.3
+(revision 16.1).  Each alchemical transformation was divided into 17 evenly
+spaced windows and simulated for 2\,ns both in water an vacuum phase. A
+velocity-Verlet integrator was employed with 2\,fs timestep, constraining all
+the hydrogen bonds not alchemically transformed (hbonds not perturbed). An
+atom-based Barker Watts reaction field~\cite{doi:10.1080/00268977300102101}
+with a dielectric constant of 82.0 (units?) was employed for water phase
+simulations. A cutoff of 12\,\AA was set for non-bonded interactions and
+periodic boundary conditions were imposed.  Temperature control was achieved
+with the Andersen thermostat~\cite{doi:10.1063/1.439486} with a coupling
+constant of 10\,ps$^{-1}$, keeping temperature constant at 298\,K.  A Monte
+Carlo barostat assured pressure control, attempting isotropic box edge scaling
+every 25 time steps. At each $\lambda$ window all bond, angle and dihedral
+energy terms were scaled, differently (how?) from Gromacs and Amber.  For each
+vacuum simulation a free energy correction term GFUNC was evaluated to treat
+intramolecular Coulombic interactions consistently between water and vacuum
+legs of the thermodynamic cycle, as explained in~\cite{Bosisio2016}.
+
 
 \subsection{Analysis}
 \label{sec:analysis}
@@ -549,7 +567,8 @@ contributions.
   We thank Prof.\ Stefan Boresch for valuable discussions and making
   code modifications to CHARMM.  We thank Dr.\ Ross Walker and Daniel
   Mermelstein for valuable discussions and making code modifications
-  to AMBER.
+  to AMBER.  We thank Dr. Michael Shirts for valuable discussions about
+  Gromacs.
 
   We acknowledge use of Hartree Centre resources and the use of the
   SCARF HPC cluster in this work.
