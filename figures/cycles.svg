@@ -25,7 +25,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -751,8 +751,8 @@
      fit-margin-left="0"
      fit-margin-top="0"
      inkscape:current-layer="svg4511"
-     inkscape:cy="157.95933"
-     inkscape:cx="318.90253"
+     inkscape:cy="156.20643"
+     inkscape:cx="319.65377"
      inkscape:zoom="1.9966906"
      showgrid="false"
      id="namedview4513"
@@ -2428,12 +2428,10 @@
        y="189.10934">12</tspan></text>
   <text
      xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:13.32716084px;line-height:24.98842621px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.99953705px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:13.32716059px;line-height:24.98842621px;font-family:Arial;-inkscape-font-specification:'Arial, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr;text-anchor:start;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.99953705px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
      x="541.8512"
      y="132.54852"
      id="text5762-8-9"><tspan
        sodipodi:role="line"
-       id="tspan5488"
-       x="541.8512"
-       y="132.54852">13</tspan></text>
+       id="tspan393">26</tspan></text>
 </svg>
