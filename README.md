@@ -1,6 +1,9 @@
 # relative-solvation-paper
 Paper on reproducibility of relative solvation free energies across packages.
-NOTE: this uses LaTeX and requires siunitx.sty (non-standard package!)
+
+NOTE: this uses LaTeX and requires siunitx.sty (non-standard package!).
+Easiest is to use arara to build the PDFs as the .tex files are prepared for
+this.  Inkscape will be needed to create the PDFS from the SVG sources.
 
 Spreadsheet is at (please add all data here):
 https://docs.google.com/spreadsheets/d/1UUw49F9VDOARsi_38VExEQ4ND0gKgIJQXTxQTl3HJ9M/
