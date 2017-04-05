@@ -537,6 +537,40 @@ contributions.
 % of Physical Chemistry B 2009, 113, 4533-4537 for other functional
 % groups.
 
+\subsection{AMBER}
+\label{sec:amber-results}
+
+% discuss problems:
+% . bugs: coordinate resetting, pmemd vacuum TI
+% . cannot use 1-step protocol in contrast to all other codes
+% . e.g. methane~2-methylindole: needed to use restart file from
+% ... l=0.95 to start simulation at l=1.0.
+% . sander still needed for vacuum (but pmemd on the way), sander
+% ... cannot sample endpoints: major PITA
+% . end point geometries wrong esp. neopentane ("crowding"), as if vdW
+% ... interactions are not switched off so test with GROMACS:
+% ..... separated protocol: 1) Coulomb, 2) bonded, 3) vdW, distance
+% ..... after 2) as in AMBER
+% ..... also tests with "analogues": see av_dist.agr
+% ... systematic differences in some vacuum simulations: 2-methylindole,
+% ..... toluene
+%
+% no-dummy vs dummy
+
+
+\subsection{CHARMM}
+\label{sec:charmm-results}
+
+% bug in TI gradient accumulation in parallel runs (does not affect
+% . serial?, does not affect FEP)
+% cannot handle LRC: test with larger cutoffs and/or LRC correction
+% . with arbitrary, single structure
+
+
+\subsection{GROMACS}
+\label{sec:gromacs-results}
+
+
 \subsection{Sire/SOMD}
 \label{sec:somd-results}
 
