@@ -24,6 +24,14 @@
 \keywords{Free Energy, Hydration, Alchemical, Reproducibility, Automation}
 
 
+% TODO:
+% Objectives:
+% Do the relative free energy results produced across different
+% . softwares agree with each other? What if they don't?
+% Can we outline what should be a standard procedure to calculate
+% . relative free energies of hydration alchemically?
+
+
 \begin{document}
 
 \begin{abstract}
@@ -359,7 +367,8 @@ applied here as a test for possible discrepancies.
     compute the free energy of hydration all pair--wise
     transformations have to be carried out once in solution and once
     in vacuum.  Green and blue colours in neopentane show two
-    alternative mappings for methane.}
+    alternative mappings for methane.  The numbers in red denote the
+    number of dummy atoms.}
   \label{fig:cycles}
 \end{figure}
 
@@ -432,7 +441,7 @@ starting state as taken from the setup step.  In some cases it was
 necessary though to use coordinates from a nearby $\lambda$ state.
 Water hydrogens (TIP3P) were constraint with SHAKE.  None of the atoms
 in the perturbed group were constraint and so the time step was set to
-\SI{0.001}{fs} (see Sire protocol below for an alternative approach).
+\SI{1}{fs} (see Sire protocol below for an alternative approach).
 Temperature was controlled through a Langevin thermostat and pressure
 through a Monte Carlo barostat.
 
@@ -444,7 +453,7 @@ employed with \SI{2}{fs} timestep, constraining all the hydrogen bonds
 not alchemically transformed (unperturbed H protocol). An atom--based
 Barker--Watts reaction field~\cite{doi:10.1080/00268977300102101} with
 a dielectric constant of \num{82.0} was employed for water phase
-simulations. A cutoff of \SI{12}{\AA} was set for non-bonded
+simulations. A cutoff of \SI{12}{\angstrom} was set for non-bonded
 interactions and periodic boundary conditions were imposed.
 Temperature control was achieved with the Andersen
 thermostat~\cite{doi:10.1063/1.439486} with a coupling constant of
@@ -529,6 +538,14 @@ contributions.
 \section{Results}
 \label{sec:results}
 
+% TODO:
+% discuss what protocols did not work!
+%
+% 2-cyclopentanylindole -> 7-cyclopentanylindole: better to go through
+% . intermediates?
+%
+% lessons learned
+%
 % look into Fennell, C. J.; Wymer, K. L.; Mobley, D. L. Journal of
 % Physical Chemistry B 2014, 118, 6438-6446 for errors in hydroxyl
 % compounds (absolute transformations!)
@@ -540,6 +557,7 @@ contributions.
 \subsection{AMBER}
 \label{sec:amber-results}
 
+% TODO:
 % discuss problems:
 % . bugs: coordinate resetting, pmemd vacuum TI
 % . cannot use 1-step protocol in contrast to all other codes
@@ -561,6 +579,7 @@ contributions.
 \subsection{CHARMM}
 \label{sec:charmm-results}
 
+% TODO:
 % bug in TI gradient accumulation in parallel runs (does not affect
 % . serial?, does not affect FEP)
 % cannot handle LRC: test with larger cutoffs and/or LRC correction
@@ -623,18 +642,24 @@ performed in one step, differently (how?) from Amber and Gromacs.
 \section{Discussion}
 \label{sec:discuss}
 
+% TODO:
+% recommended protocols
+% protocols to avoid
+% further investigation required: binding RAFEs?
+
+% TODO:
 % AMBER: IMPORTANT: look at noshakemask, timask no SHAKE on real
 % atoms? (symmetry) tishake=1 removes SHAKE to softcore atoms ntf=1
 % required for softcores because SHAKE _may_ be removed for some bonds
 % check if SHAKE is handled in for perturbed atoms end distances in
-% crowded situation systematic deviations in vacuum: toluene,
-% 2-methylindole sander cannot sample endpoints pmemd vacuum buggy at
-% the moment explicit vs implicit dummies
+% crowded situation
 
+% TODO:
 % what do we need to progress the field e.g. automation to make things
 % easy but also consistent and thus more reproducible (FESetup also
 % for reproducibility) GPU: Gromacs, SOMD but not AMBER (yet) and
-% CHARMM developer notes: constraints, both appearing/disappearing
+% CHARMM
+% developer notes: constraints, both appearing/disappearing
 % atoms lambda paths for AMBER (relative), absolute: crgmask requires
 % vacuum corr
 
