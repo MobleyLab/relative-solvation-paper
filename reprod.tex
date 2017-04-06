@@ -309,14 +309,16 @@ group.  There is only on global $\lambda$ for parameter
 transformation.  Separated protocols (see below) must be emulated
 through careful construction of topology files.
 
-\paragraph{CHARMM} The PERT module uses a single topology description
-of the perturbed group and all terms are energy--scaled.  The softcore
-potential is applied to \emph{all} atoms in the perturbed group.  The
-code can handle constraints of changing bond lengths in the perturbed
-group (true? check!).  There is only one global $\lambda$ for
-parameter transformation, however, the scripting facilities allow run
-time modification of topologies e.g.\ by setting charges or vdW
-parameters to arbitrary values.
+\paragraph{CHARMM} The PERT module duplicates the topology similar to
+sander but requires explicit dummy atoms.  All terms are
+energy--scaled.  The PSSP softcore potential is applied to \emph{all}
+atoms in the perturbed group (see SI).  The code can handle
+constraints of changing bond lengths in the perturbed group but may
+cause wrong results with PSSP softcores (Stefan Boresch, private
+communication).  There is only one global $\lambda$ for parameter
+transformation, however, the scripting facilities allow run time
+modification of topologies e.g.\ by setting charges or vdW parameters
+to arbitrary values.
 
 \paragraph{Gromacs} This code uses a single topology description.
 Bonded terms are strictly parameter--scaled which requires proper
@@ -324,9 +326,9 @@ balancing of multi--term dihedrals.  Non--bonded terms are
 energy--scaled.  The softcore potential applies to dummy atoms only
 which are determined if atoms have zero vdW parameters.  The code
 allows constraints of changing bond lengths in the perturbed group but
-this can lead to instabilities and wrong results (MS, private
-communication).  There are separate $\lambda$s for vdW, Coulomb and
-bonded parameters (and some other).
+this can lead to instabilities and wrong results (Michael Shirts,
+private communication).  There are separate $\lambda$s for vdW,
+Coulomb and bonded parameters (and some other).
 
 \paragraph{Sire/SOMD} This code uses a single topology description.
 The final state is constructed at run time from the initial state with
@@ -582,6 +584,8 @@ contributions.
 % ..... toluene
 %
 % no-dummy vs dummy
+
+
 
 
 \subsection{CHARMM}
