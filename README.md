@@ -3,7 +3,7 @@ Paper on reproducibility of relative solvation free energies across packages.
 
 NOTE: this uses LaTeX and requires siunitx.sty (non-standard package!).
 Easiest is to use arara to build the PDFs as the .tex files are prepared for
-this.  Inkscape will be needed to create the PDFS from the SVG sources.
+this.  Inkscape will be needed to create the PDFs from the SVG sources.
 Also possible to compile with latexmk.
 
 Spreadsheet is at (please add all data here):

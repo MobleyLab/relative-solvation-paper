@@ -593,18 +593,19 @@ topology description.  Vacuum simulation have to be carried out
 separately with sander because pmemd cannot only handle solvated
 (either explicit or implict) systems.  This will, however, be
 rectified in future versions (Ross Walker, private communication).  A
-disadvantage of sander is that it cannot be used to simulate at the
+disadvantage of sander is that it cannot be used to simulate the
 $\lambda$ endpoints~\cite{doi:10.1021/ct400340s} such that the TI
-gradients need to be extrapolated (minimum and maximum allowd
+gradients need to be extrapolated (minimum and maximum allowed
 $\lambda$s are 0.005 and 0.995).  Also, sander considers the whole
-system as the perturbed region while pmemd restricts this to a user
-chosen TI regions.  This has obvious implications for
+system as the perturbed region while pmemd restricts this to the user
+chosen TI region.  This has obvious implications for
 performance~\cite{doi:10.1021/ct400340s}.
 
 We also found that, in contrast to the other three codes, AMBER cannot
 correctly reproduce relative free energies in a 1--step protocol i.e.\
 when all force field parameters are scaled simultaneously with the
-same factor.
+same factor.  Absolute free energies, however, are very close to the
+other MD packages.
 
 \subsection{CHARMM}
 \label{sec:charmm-results}
