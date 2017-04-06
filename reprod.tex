@@ -38,6 +38,8 @@
 % . softwares agree with each other? What if they don't?
 % Can we outline what should be a standard procedure to calculate
 % . relative free energies of hydration alchemically?
+% We want to emphasise that we aim at improving
+% . codes/protocols/practices and not highlight "bad" codes
 
 
 \begin{document}
@@ -313,8 +315,8 @@ through careful construction of topology files.
 sander but requires explicit dummy atoms.  All terms are
 energy--scaled.  The PSSP softcore potential is applied to \emph{all}
 atoms in the perturbed group (see SI).  The code can handle
-constraints of changing bond lengths in the perturbed group but may
-cause wrong results with PSSP softcores (Stefan Boresch, private
+constraints of changing bond lengths in the perturbed group but this
+may cause wrong results with PSSP softcores (Stefan Boresch, private
 communication).  There is only one global $\lambda$ for parameter
 transformation, however, the scripting facilities allow run time
 modification of topologies e.g.\ by setting charges or vdW parameters
@@ -573,8 +575,6 @@ contributions.
 % . cannot use 1-step protocol in contrast to all other codes
 % . e.g. methane~2-methylindole: needed to use restart file from
 % ... l=0.95 to start simulation at l=1.0.
-% . sander still needed for vacuum (but pmemd on the way), sander
-% ... cannot sample endpoints: major PITA
 % . end point geometries wrong esp. neopentane ("crowding"), as if vdW
 % ... interactions are not switched off so test with GROMACS:
 % ..... separated protocol: 1) Coulomb, 2) bonded, 3) vdW, distance
@@ -585,8 +585,26 @@ contributions.
 %
 % no-dummy vs dummy
 
+Using AMBER for RAFE simulations has revealed several problems with
+the implementation.  Some bugs could be idendified and have been fixed
+e.g. energy minimisation in sander led to diverged coordinates for
+mapped atoms which is, however, a necessary condition for a single
+topology description.  Vacuum simulation have to be carried out
+separately with sander because pmemd cannot only handle solvated
+(either explicit or implict) systems.  This will, however, be
+rectified in future versions (Ross Walker, private communication).  A
+disadvantage of sander is that it cannot be used to simulate at the
+$\lambda$ endpoints~\cite{doi:10.1021/ct400340s} such that the TI
+gradients need to be extrapolated (minimum and maximum allowd
+$\lambda$s are 0.005 and 0.995).  Also, sander considers the whole
+system as the perturbed region while pmemd restricts this to a user
+chosen TI regions.  This has obvious implications for
+performance~\cite{doi:10.1021/ct400340s}.
 
-
+We also found that, in contrast to the other three codes, AMBER cannot
+correctly reproduce relative free energies in a 1--step protocol i.e.\
+when all force field parameters are scaled simultaneously with the
+same factor.
 
 \subsection{CHARMM}
 \label{sec:charmm-results}
