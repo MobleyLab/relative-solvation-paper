@@ -16,7 +16,9 @@
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage{booktabs}
 \usepackage{siunitx}
+\usepackage{footref}
 
 
 \sisetup{
@@ -571,8 +573,6 @@ contributions.
 
 % TODO:
 % discuss problems:
-% . bugs: coordinate resetting, pmemd vacuum TI
-% . cannot use 1-step protocol in contrast to all other codes
 % . e.g. methane~2-methylindole: needed to use restart file from
 % ... l=0.95 to start simulation at l=1.0.
 % . end point geometries wrong esp. neopentane ("crowding"), as if vdW
@@ -587,25 +587,33 @@ contributions.
 
 Using AMBER for RAFE simulations has revealed several problems with
 the implementation.  Some bugs could be idendified and have been fixed
-e.g. energy minimisation in sander led to diverged coordinates for
-mapped atoms which is, however, a necessary condition for a single
-topology description.  Vacuum simulation have to be carried out
-separately with sander because pmemd cannot only handle solvated
-(either explicit or implict) systems.  This will, however, be
-rectified in future versions (Ross Walker, private communication).  A
-disadvantage of sander is that it cannot be used to simulate the
-$\lambda$ endpoints~\cite{doi:10.1021/ct400340s} such that the TI
-gradients need to be extrapolated (minimum and maximum allowed
-$\lambda$s are 0.005 and 0.995).  Also, sander considers the whole
-system as the perturbed region while pmemd restricts this to the user
-chosen TI region.  This has obvious implications for
-performance~\cite{doi:10.1021/ct400340s}.
+by the developers e.g. energy minimisation in sander led to diverged
+coordinates for mapped atoms which is, however, a necessary condition
+for a single topology description.  Other issues are that vacuum
+simulation have to be carried out separately with the sander program
+because pmemd cannot only handle solvated (either explicit or implict)
+systems.  This will, however, be rectified in future versions (Ross
+Walker, private communication).  A disadvantage of sander is that it
+cannot be used to simulate the $\lambda$ end
+points~\cite{doi:10.1021/ct400340s} such that the TI gradients need to
+be extrapolated (minimum and maximum allowed $\lambda$s are 0.005 and
+0.995).  Also, sander considers the whole system as the perturbed
+region while pmemd restricts this to the user chosen TI region.  This
+has obvious implications for performance~\cite{doi:10.1021/ct400340s}.
 
 We also found that, in contrast to the other three codes, AMBER cannot
 correctly reproduce relative free energies in a 1--step protocol i.e.\
-when all force field parameters are scaled simultaneously with the
-same factor.  Absolute free energies, however, are very close to the
-other MD packages.
+when all force field parameters are scaled simultaneously (see SI for
+details).  The separated RAFE protocol and absolute free energies,
+however, are very close to the other MD packages.
+
+End point geometries also appear to be an issue with AMBER simulations
+in both solution and vacuum as most obvious in the neopentane to
+methane (central mapping) test case.  As detailed in the SI the
+methane end state shows too long distances between the carbon and the
+four attached hydrogens of approximately \SI{1.23}{\angstrom}.  This
+value is about \SI{1.12}{\angstrom} for terminal dummy atoms but still
+higher than the expected, on average, \SI{1.09}{\angstrom}.
 
 \subsection{CHARMM}
 \label{sec:charmm-results}
