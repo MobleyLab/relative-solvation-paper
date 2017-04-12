@@ -1,4 +1,4 @@
-all: cycles.pdf dummies.pdf dummies2.pdf thermocycle.pdf
+all: cycles.pdf dummies.pdf dummies2.pdf thermocycle.pdf amber-dist.pdf
 
 cycles.pdf: cycles.svg
 dummies.pdf: dummies.svg
@@ -8,3 +8,7 @@ thermocycle.pdf: thermocycle.svg
 %.pdf: %.svg
 	inkscape -z -A $@ $<
 
+%.pdf: %.agr
+	xmgrace -hardcopy -hdevice EPS -printfile tmp.eps $<
+	epstopdf tmp.eps $@
+	rm tmp.eps
