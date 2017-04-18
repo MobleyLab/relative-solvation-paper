@@ -15,7 +15,7 @@
 
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
-\usepackage{amsmath}
+\usepackage{amsmath,amssymb,mathrsfs}
 \usepackage{booktabs}
 \usepackage{siunitx}
 \usepackage{footref}
@@ -24,6 +24,8 @@
 \sisetup{
   separate-uncertainty = true
 }
+
+\renewcommand{\vec}[1]{\mathbf{#1}}
 
 
 \title{Reproducing Relative Alchemical Free Energies of Hydration
@@ -514,7 +516,14 @@ to have the lowest variance of any known
 estimator~\cite{shirts_statistically_2008}.
 
 In this work we primarily focus on TI as this is supported by all MD
-packages ``out--of--the--box''.  Results from additional estimators
+packages ``out--of--the--box''.  Equation~\ref{eq:ti} computes the free energy as
+\begin{equation}\label{eq:ti}
+	\Delta G = \int_{\lambda=0}^{\lambda=1}
+	\left\langle \frac{\mathscr{H}(\vec{q},\vec{p};\lambda)}{\partial\lambda}\right\rangle_\lambda d\lambda
+\end{equation}
+where $\mathscr{H}(\vec{q},\vec{p};\lambda)$ is the Hamiltonian as a function of the coordinate vectors $\vec{q}$ and the momentum vectors $\vec{p}$, and parametric dependence on the coupling parameter $\lambda$.  The angle brackets denote the ensemble average of the gradient of the Hamiltonian with respect to $\lambda$ at a given $\lambda$ value.  An AFE simulation is typically carried out in a series of equilibrium simulations at discrete values of $\lambda$ but the gradient can also be evaluated with a continuously varying coupling parameter as a function of the simulation time.  The free energy is finally computed through a suitable numerical integration method.
+
+Results from additional estimators
 will be given where available.  We have used the alchemical analysis
 tool~\cite{klimovich_guidelines_2015} for all free energies.  This
 tools provides various estimators such as TI, TI with cubic splines,

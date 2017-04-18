@@ -4,6 +4,7 @@ cycles.pdf: cycles.svg
 dummies.pdf: dummies.svg
 dummies2.pdf: dummies2.svg
 thermocycle.pdf: thermocycle.svg
+amber-dist.pdf: amber-dist.agr
 
 %.pdf: %.svg
 	inkscape -z -A $@ $<
