@@ -18,6 +18,7 @@
 \usepackage{amsmath,amssymb,mathrsfs}
 \usepackage{booktabs}
 \usepackage{siunitx}
+\usepackage{easy-todo}
 \usepackage{footref}
 
 
@@ -35,15 +36,6 @@
 
 \keywords{Free Energy, Hydration, Alchemical, Reproducibility, Automation}
 
-
-% TODO:
-% Objectives:
-% Do the relative free energy results produced across different
-% . softwares agree with each other? What if they don't?
-% Can we outline what should be a standard procedure to calculate
-% . relative free energies of hydration alchemically?
-% We want to emphasise that we aim at improving
-% . codes/protocols/practices and not highlight "bad" codes
 
 
 \begin{document}
@@ -70,6 +62,17 @@
   % \includegraphics[scale=1.0]{}
 \end{tocentry}
 
+\todo{Objectives:
+ Do the relative free energy results produced across different
+ softwares agree with each other? What if they don't?}
+
+\todo{Objectives:
+ Can we outline what should be a standard procedure to calculate
+ relative free energies of hydration alchemically?}
+
+\todo{Objectives:
+ We want to emphasise that we aim at improving codes/protocols/practices and not highlight "bad" codes
+}
 
 \section{Introduction}
 \label{sec:intro}
@@ -561,33 +564,30 @@ contributions.
 \section{Results}
 \label{sec:results}
 
-% TODO:
-% discuss what protocols did not work!
-%
-% 2-cyclopentanylindole -> 7-cyclopentanylindole: better to go through
-% . intermediates?
-%
-% lessons learned
-%
-% look into Fennell, C. J.; Wymer, K. L.; Mobley, D. L. Journal of
-% Physical Chemistry B 2014, 118, 6438-6446 for errors in hydroxyl
-% compounds (absolute transformations!)
-% and
-% Mobley, D. L.; Bayly, C. I.; Cooper, M. D.; Dill, K. A. The Journal
-% of Physical Chemistry B 2009, 113, 4533-4537 for other functional
-% groups.
+\todo{discuss what protocols did not work!}
+
+\todo{2-cyclopentanylindole to 7-cyclopentanylindole: better to go through intermediates?}
+
+\todo{discuss lessons learned}
+
+\todo{look into Fennell, C. J.; Wymer, K. L.; Mobley, D. L. Journal of
+ Physical Chemistry B 2014, 118, 6438-6446 for errors in hydroxyl
+ compounds (absolute transformations!) and Mobley, D. L.; Bayly, C. I.; Cooper, M. D.; Dill, K. A. The Journal of Physical Chemistry B 2009, 113, 4533-4537 for other functional groups.}
 
 \subsection{AMBER}
 \label{sec:amber-results}
 
-% TODO:
-% discuss problems:
-% . e.g. methane~2-methylindole: needed to use restart file from
-% ... l=0.95 to start simulation at l=1.0.
-% ... systematic differences in some vacuum simulations: 2-methylindole,
-% ..... toluene
-%
-% no-dummy vs dummy
+\todo{problems:
+	e.g. methane~2-methylindole: needed to use restart file from
+	l=0.95 to start simulation at l=1.0.
+}
+
+\todo{problems:
+	systematic differences in some vacuum simulations: 2-methylindole,
+	toluene
+}
+
+\todo{discuss no--dummy vs dummy}
 
 Using AMBER for RAFE simulations has revealed several problems with
 the implementation.  Some bugs could be idendified and have been fixed
@@ -622,11 +622,11 @@ higher than the expected, on average, \SI{1.09}{\angstrom}.
 \subsection{CHARMM}
 \label{sec:charmm-results}
 
-% TODO:
-% bug in TI gradient accumulation in parallel runs (does not affect
-% . serial?, does not affect FEP)
-% cannot handle LRC: test with larger cutoffs and/or LRC correction
-% . with arbitrary, single structure
+\todo{bug in TI gradient accumulation in parallel runs (does not affect
+	serial?, does not affect EXP)}
+
+\todo{cannot handle LRC: test with larger cutoffs and/or LRC correction
+	with arbitrary, single structure}
 
 
 \subsection{GROMACS}
@@ -685,26 +685,35 @@ performed in one step, differently (how?) from Amber and Gromacs.
 \section{Discussion}
 \label{sec:discuss}
 
-% TODO:
-% recommended protocols
-% protocols to avoid
-% further investigation required: binding RAFEs?
+\todo{recommended protocols}
 
-% TODO:
-% AMBER: IMPORTANT: look at noshakemask, timask no SHAKE on real
-% atoms? (symmetry) tishake=1 removes SHAKE to softcore atoms ntf=1
-% required for softcores because SHAKE _may_ be removed for some bonds
-% check if SHAKE is handled in for perturbed atoms end distances in
-% crowded situation
+\todo{protocols to avoid}
 
-% TODO:
-% what do we need to progress the field e.g. automation to make things
-% easy but also consistent and thus more reproducible (FESetup also
-% for reproducibility) GPU: Gromacs, SOMD but not AMBER (yet) and
-% CHARMM
-% developer notes: constraints, both appearing/disappearing
-% atoms lambda paths for AMBER (relative), absolute: crgmask requires
-% vacuum corr
+\todo{further investigation required: binding RAFEs?}
+
+\todo{
+ AMBER: IMPORTANT: look at noshakemask, timask no SHAKE on real
+ atoms? (symmetry) tishake=1 removes SHAKE to softcore atoms, ntf=1
+ required for softcores because SHAKE \emph{may} be removed for some bonds;
+ check if SHAKE is handled in for perturbed atoms end distances in
+ crowded situation.
+}
+
+\todo{
+ what do we need to progress the field e.g. automation to make things
+ easy but also consistent and thus more reproducible (FESetup also
+ for reproducibility) GPU: Gromacs, SOMD but not AMBER (yet) and
+ CHARMM
+}
+
+\todo{
+ developer notes: constraints, both appearing/disappearing
+ atoms lambda paths for AMBER (relative), absolute: crgmask requires
+ vacuum corr
+}
+
+
+\listoftodos
 
 
 \begin{acknowledgement}
