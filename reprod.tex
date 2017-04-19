@@ -568,10 +568,6 @@ contributions.
 
 \todo{what protocols did not work}
 
-\todo{look into Fennell, C. J.; Wymer, K. L.; Mobley, D. L. Journal of
- Physical Chemistry B 2014, 118, 6438-6446 for errors in hydroxyl
- compounds (absolute transformations!) and Mobley, D. L.; Bayly, C. I.; Cooper, M. D.; Dill, K. A. The Journal of Physical Chemistry B 2009, 113, 4533-4537 for other functional groups.}
-
 \todo{problems:
     e.g. methane~2-methylindole: needed to use restart file from
     l=0.95 to start simulation at l=1.0.
@@ -638,7 +634,9 @@ methane        & 2-methylindole & -9.138   & 0.022 & -9.130 & 0.034 & \\
   \end{minipage}
 \end{table}
 
-In general, the free energies computed with each approach are in good agreement with each other and with the results of the other MD packages.  There are, however, a few notable deviations.  In the neopentane to methane case with the central mapping the difference with the terminal mapping is about \SI{0.4}{kcal.mol^{-1}}.  The terminal mapping and the results from the explicit dummy simulations are, however, consistent with the absolute transformations.  We also observe a systematic deviation between forward and backward transformations in the 2--methylindole and toluene vacuum simulations.  This discrepancy is evident for every $\lambda$ step of the vdW plus bonded transformation with both implicit and explicit dummy atoms.
+In general, the free energies computed with each approach are in good agreement with each other and with the results of the other MD packages.  There are, however, a few notable deviations.  In the neopentane to methane case with the central mapping the difference with the terminal mapping is about \SI{0.4}{kcal.mol^{-1}}.  The terminal mapping and the results from the explicit dummy simulations are, however, consistent with the absolute transformations.  We also observe a systematic deviation between forward and backward vaccum transformations in particular in the 2--methylindole simulation.
+% Note: this is the average over six non-dummy runs each from correlated data!
+A discrepancy of consistently 0.2--\SI{0.4}{kcal.mol^{-1}} is evident from every $\lambda$ step of the vdW plus bonded transformation with both implicit and explicit dummy atoms.
 
 \subsection{CHARMM}
 \label{sec:charmm-results}
@@ -647,8 +645,7 @@ In general, the free energies computed with each approach are in good agreement 
 	serial?, does not affect EXP)}
 
 \todo{cannot handle LRC: test with larger cutoffs and/or LRC correction
-	with arbitrary, single structure}
-
+	with arbitrary, single structure; check http://pubs.acs.org/doi/abs/10.1021/jp0735987}
 
 \subsection{GROMACS}
 \label{sec:gromacs-results}
