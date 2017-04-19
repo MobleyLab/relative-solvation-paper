@@ -22,6 +22,7 @@
 \usepackage{footref}
 
 \renewcommand{\footnoterule}{}
+\newcommand{\hred}[1]{\textcolor{red}{#1}}
 
 
 \title{Reproducing Relative Alchemical Free Energies of Hydration}
@@ -242,28 +243,22 @@ steps.
 \subsection{AMBER}
 \label{sec:amber-probs}
 
-Table~\ref{tab:onestep} compares the separated protocol with the
+Table~\ref{tab:amber-onestep} compares the separated protocol with the
 1--step protocol.  The separated protocol transforms Coulomb force
 field parameters separately from the Lennard--Jones and all bonded
 parameters.  The 1--step protocol transforms all force field
 parameters simultaneously and thus invokes both Coulomb and vdW
 softcore functions.
-
-\begin{table}[]
-  \label{tab:amber-onestep}
-  \centering
+\begin{table}
   \begin{minipage}{\linewidth}
     \caption{Comparison between separated and 1--step protocol in
-      AMBER.  The data for the 1--step protocol highlights problems in
-      the code.}
-    \label{tab:onestep}
+      AMBER.  The data for the 1--step protocol highlights in red problems in
+      the code. $\Delta G_\mathrm{sol}$ has been computed with pmemd.  $\Delta G_\mathrm{vac}$ has been computed with sander.}\label{tab:amber-onestep}
+    \makebox[\textwidth][c]{%
     \begin{tabular}{llrrrrrr}
       \toprule
-   &                & separated protocol &         &        & 1--step  &         &        \\
-   &                & pmemd              & sander  &        & pmemd   & sander  &        \\
-      transformation & & $\Delta G_\mathrm{sol}$ & $\Delta
-                                                   G_\mathrm{vac}$ &
-                                                                     $\Delta\Delta G$ & $\Delta G_\mathrm{sol}$ & $\Delta G_\mathrm{vac}$  & $\Delta\Delta G$ \\
+   &                & \multicolumn{3}{c}{separated protocol} & \multicolumn{3}{c}{1--step} \\
+      transformation & & $\Delta G_\mathrm{sol}$ & $\Delta G_\mathrm{vac}$ & $\Delta\Delta G$ & $\Delta G_\mathrm{sol}$ & $\Delta G_\mathrm{vac}$ & $\Delta\Delta G$ \\
       \midrule
       ethane         & methane        & 1.794              & 1.773   & 0.021  & 2.784   & 2.855   & -0.071 \\
       methane        & ethane         & -1.800             & -1.801  & 0.001  & -2.866  & -2.862  & -0.004 \\
@@ -271,47 +266,44 @@ softcore functions.
       methane        & methanol       & -2.747             & 3.448   & -6.195 & -7.176  & -0.857  & -6.319 \\
       ethane         & methanol       & -2.838             & 3.362   & -6.200 & -2.250  & 3.996   & -6.246 \\
       methanol       & ethane         & 2.836              & -3.361  & 6.196  & 2.199   & -3.998  & 6.197  \\
-      toluene        & methane        & 9.222              & 5.982   & 3.240  & 6.090   & 0.450   & 5.640  \\
-      methane        & toluene        & -9.286             & -5.863  & -3.422 & -6.155  & -0.539  & -5.616 \\
-      neopentane\footnote{\label{foot:cent}central mapping.}     & methane        & 70.163             & 69.848  & 0.315  & 65.763  & 58.495  & 7.267  \\
-      methane\footref{foot:cent}        & neopentane     & -70.171            & -69.921 & -0.250 & -65.824 & -58.779 & -7.045 \\
-      neopentane\footnote{\label{foot:term}terminal mapping.}    & methane        & 11.411             & 11.544  & -0.132 & 4.424   & 3.480   & 0.944  \\
-      methane\footref{foot:term}        & neopentane    & -11.426            & -11.550 & 0.125  & -4.447  & -3.485  & -0.962 \\
-      2-methylfuran  & methane        & 14.622             & 11.533  & 3.089  & 2.205   & -0.943  & 3.148  \\
-      methane        & 2-methyfuran   & -14.604            & -11.504 & -3.100 & -2.216  & -0.063  & -2.153 \\
-      2-methylindole & methane        & 24.251             & 15.473  & 8.778  & 7.113   & -4.021  & 11.135 \\
-      methane        & 2-methylindole & -24.312            & -15.174 &
-                                                                 -9.138
-                                                                        & -7.128  & 1.858   & -8.986 \\
+      toluene        & methane        & 9.222              & 5.982   & 3.240  & 6.090   & 0.450   & \hred{5.640}  \\
+      methane        & toluene        & -9.286             & -5.863  & -3.422 & -6.155  & -0.539  & \hred{-5.616} \\
+      neopentane\footnote{\label{foot:cent}central mapping.}     & methane        & 70.163             & 69.848  & 0.315  & 65.763  & 58.495  & \hred{7.267}  \\
+      methane\footref{foot:cent}        & neopentane     & -70.171            & -69.921 & -0.250 & -65.824 & -58.779 & \hred{-7.045} \\
+      neopentane\footnote{\label{foot:term}terminal mapping.}    & methane        & 11.411             & 11.544  & -0.132 & 4.424   & 3.480   & \hred{0.944}  \\
+      methane\footref{foot:term}        & neopentane    & -11.426            & -11.550 & 0.125  & -4.447  & -3.485  & \hred{-0.962} \\
+      2-methylfuran  & methane        & 14.622             & 11.533  & 3.089  & 2.205   & \hred{-0.943}  & 3.148  \\
+      methane        & 2-methylfuran   & -14.604            & -11.504 & -3.100 & -2.216  & \hred{-0.063}  & \hred{-2.153} \\
+      2-methylindole & methane        & 24.251             & 15.473  & 8.778  & 7.113   & \hred{-4.021}  & \hred{11.135} \\
+      methane        & 2-methylindole & -24.312            & -15.174 & -9.138 & -7.128  & \hred{1.858}   & -8.986 \\
       \bottomrule
     \end{tabular}
+}
   \end{minipage}
 \end{table}
 
 The separated protocol produces consistent results in both solution
-and in vacuum (each $\Delta G$ is the sum of the charge and vdW plus
-bonded contributions).  The 1--step protocol on the other hand
+and in vacuum.  The values are in line with the free energies obtained with the other MD packages (see main text).  Each $\Delta G$ is the sum of the charge and vdW plus
+bonded contributions.  The 1--step protocol on the other hand
 displays various problems.  While the smaller systems with only a few
-dummy atoms show $\Delta G$ and $\Delta\Delta G$ in line with the
-separated protocol, the large transformations show in part striking
-differences and even inconsistencies in forward and backward
-simulations.  The latter is only evident in the vacuum simulations.
-It is not clear however if the deviations can only be attributed to
-the vacuum transformations.
+dummy atoms show $\Delta G$ and $\Delta\Delta G$ consistent with the
+separated protocol, the larger transformations show, in part, striking
+differences and even inconsistencies in forward and backward vacuum
+simulations.
+It is not clear, however, if the inconsistencies can be attributed to
+the vacuum transformations only.
 
-Figure~\ref{fig:amber-dist} shows the average distance between the
+Figure~\ref{fig:amber-dist} shows a problem with end point geometries.  This is demonstrated with the average distance between the
 carbon atom and the four attached hydrogens atoms in the neopentane to
-methane.  The methane carbon atoms is mapped here to the central atom
-of neopentane.  The distances are recorded for the vdw plus bonded
-transformation i.e.\ the charges correspond to the methane end state
-with zero charges on the dummy atoms.
-
+methane case.  The methane carbon atom is mapped here to the central atom
+of neopentane.  The distances are recorded for the vdW plus bonded
+transformation i.e.\ the charges correspond to the methane end state.
 \begin{figure}[ht]
 \includegraphics[scale=0.6]{figures/amber-dist.pdf}
 \caption{The average C--H distance shown as a function of $\lambda$
   for the neopentane to methane and related cases.  The black and red
-  lines display how the distance changes for the solution and the
-  vacuum phase, and with and without explicit dummies.  The other test
+  lines display how the distance changes in solution and the
+  vacuum phase, and with and without explicit dummy atoms.  The other test
   systems are designed to reduce the number of dummy atoms that
   surround the central carbon atom to show whether ``crowding'' is the
   cause of the issue.  The crosses denote end points only, in
@@ -325,7 +317,7 @@ text is shown in the black and red graphs.  The initial distance is
 slightly smaller than what expected from a C--H distance for the
 particular atom types at $\lambda = 0$.  The final distance is about
 \SI{1.23}{\angstrom} which is in contrast to the \SI{1.09}{\angstrom}
-of the c3--hc bond of the GAFF force field.  Tha crosses in violet
+of the c3--hc bond of the GAFF force field.  The crosses in violet
 mark the geometries of the ``pure'' (non--perturbed) end points and
 are connected with a straight line.  The other crosses denote test
 cases which successively replace the methyls on neopentane with
@@ -341,21 +333,19 @@ Figure~\ref{fig:amber-dist}.  In both cases the end point distance is
 about \SI{1.12}{\angstrom} with a slightly lower value for the ethyl
 substitution but which are still too high.
 
-As Gromacs conveniently allows us use a separate $\lambda$ for bonded
+As Gromacs conveniently allows us to use a separate $\lambda$ for bonded
 terms we tested this on the neopentane case.  After the charges were
 transformed to the methane end state (dummy atoms have zero charges),
 the bonded terms were mutated from neopentane to methane while the vdW
 parameters were kept constant at the neopentane initial state.  The
 observed end distance was about \SI{1.23}{\angstrom} which is to be
-expected given that the symmetrically arranged methyl groups (in terms
-of the vdW parameters but with hydrogen charges on the vdW carbons)
+expected given that the symmetrically arranged methyl groups
 will repel each other and thus not allow to reach the final distance.
-Only after the final vdW only mutation are the final distances of
-\SI{1.09}{\angstrom} reached.
+Only after the final vdW only mutation had been carried out, were the final distances of \SI{1.09}{\angstrom} reached.
 
 In sum, this indicates a fundamental problem of the RAFE code in
 AMBER.  Whether that is a bug or a conceptual issue with the
-particular implementation can not be deduced at the moment.
+particular implementation can not be explained at the moment.
 
 \bibliography{journal-abbrev,reprod}
 

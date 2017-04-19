@@ -17,6 +17,7 @@
 \usepackage{graphicx}
 \usepackage{amsmath,amssymb,mathrsfs}
 \usepackage{booktabs}
+\usepackage{multirow}
 \usepackage{siunitx}
 \usepackage{easy-todo}
 \usepackage{footref}
@@ -26,6 +27,7 @@
   separate-uncertainty = true
 }
 
+\renewcommand{\footnoterule}{}
 \renewcommand{\vec}[1]{\mathbf{#1}}
 
 
@@ -574,13 +576,13 @@ contributions.
  Physical Chemistry B 2014, 118, 6438-6446 for errors in hydroxyl
  compounds (absolute transformations!) and Mobley, D. L.; Bayly, C. I.; Cooper, M. D.; Dill, K. A. The Journal of Physical Chemistry B 2009, 113, 4533-4537 for other functional groups.}
 
+\todo{problems:
+    e.g. methane~2-methylindole: needed to use restart file from
+    l=0.95 to start simulation at l=1.0.
+}
+
 \subsection{AMBER}
 \label{sec:amber-results}
-
-\todo{problems:
-	e.g. methane~2-methylindole: needed to use restart file from
-	l=0.95 to start simulation at l=1.0.
-}
 
 \todo{problems:
 	systematic differences in some vacuum simulations: 2-methylindole,
@@ -595,13 +597,7 @@ by the developers e.g. energy minimisation in sander led to diverged
 coordinates for mapped atoms which is, however, a necessary condition
 for a single topology description.  Other issues are that vacuum
 simulation have to be carried out separately with the sander program
-because pmemd cannot only handle solvated (either explicit or implict)
-systems.  This will, however, be rectified in future versions (Ross
-Walker, private communication).  A disadvantage of sander is that it
-cannot be used to simulate the $\lambda$ end
-points~\cite{doi:10.1021/ct400340s} such that the TI gradients need to
-be extrapolated (minimum and maximum allowed $\lambda$s are 0.005 and
-0.995).  Also, sander considers the whole system as the perturbed
+because pmemd cannot handle AFE simulations in vacuum at the moment.  This will, however, be rectified in future versions (Ross Walker, private communication).  A disadvantage of sander is that it cannot be used to simulate the $\lambda$ end points~\cite{doi:10.1021/ct400340s} such that the TI gradients need to be extrapolated (minimum and maximum allowed $\lambda$s are 0.005 and 0.995).  Also, sander considers the whole system as the perturbed
 region while pmemd restricts this to the user chosen TI region.  This
 has obvious implications for performance~\cite{doi:10.1021/ct400340s}.
 
@@ -618,6 +614,39 @@ methane end state shows too long distances between the carbon and the
 four attached hydrogens of approximately \SI{1.23}{\angstrom}.  This
 value is about \SI{1.12}{\angstrom} for terminal dummy atoms but still
 higher than the expected, on average, \SI{1.09}{\angstrom}.
+
+We also compare free energies obtained from the no--explicit dummy approach in AMBER with results form explicit dummy atom simulations and resuls from absolute transformation.  Table~\ref{tab:amber-comp} lists the free energies for these three approaches together with the SEM.
+\begin{table}[]
+  \begin{minipage}{\linewidth}
+  \caption{Comparing AMBER results for simulations with explicit and implicit dummy atoms, and results from absolute transformation.}\label{tab:amber-comp}
+  \makebox[\textwidth][c]{
+  \begin{tabular}{llrrrrr}
+    \toprule
+    &                & \multicolumn{2}{c}{no dummy} & \multicolumn{2}{c}{dummy} & absolute \\
+    \multicolumn{2}{l}{transformation}          & $\Delta\Delta G$  & SEM               & $\Delta\Delta G$    & SEM &  $\Delta G$ \\
+    \midrule
+ethane         & methane        & 0.021    & 0.014 & -0.127 & 0.016 & \multirow{2}{*}{-0.022}   \\
+methane        & ethane         & 0.001    & 0.025 & 0.187  & 0.028 &          \\
+methanol       & methane        & 6.189    & 0.014 & 6.200  & 0.017 & \multirow{2}{*}{6.201}    \\
+methane        & methanol       & -6.195   & 0.029 & -6.145 & 0.013 &          \\
+ethane         & methanol       & -6.200   & 0.012 & -6.268 & 0.009 & \multirow{2}{*}{-6.223}   \\
+methanol       & ethane         & 6.196    & 0.014 & 6.252  & 0.011 &          \\
+toluene        & methane        & 3.240    & 0.020 & 3.386  & 0.021 & \multirow{2}{*}{3.193}    \\
+methane        & toluene        & -3.422   & 0.025 & -3.523 & 0.033 &          \\
+neopentane\footnote{\label{foot:cent}central mapping.}     & methane        & 0.315    & 0.038 & -0.027 & 0.057 & \multirow{4}{*}{-0.132}   \\
+methane\footref{foot:cent}        & neopentane     & -0.250   & 0.032 & 0.071  & 0.026 &          \\
+neopentane\footnote{\label{foot:term}terminal mapping.}    & methane        & -0.132   & 0.012 & -0.118 & 0.015 &          \\
+methane\footref{foot:term}        & neopentane    & 0.125    & 0.031 & 0.123  & 0.034 &          \\
+2-methylfuran  & methane        & 3.089    & 0.014 & 3.102  & 0.009 & \multirow{2}{*}{2.964}    \\
+methane        & 2-methyfuran   & -3.100   & 0.032 & -3.147 & 0.033 &          \\
+2-methylindole & methane        & 8.778    & 0.025 & 8.777  & 0.041 & \multirow{2}{*}{8.717}    \\
+methane        & 2-methylindole & -9.138   & 0.022 & -9.130 & 0.034 \\
+    \bottomrule
+  \end{tabular}
+}
+  \end{minipage}
+\end{table}
+
 
 \subsection{CHARMM}
 \label{sec:charmm-results}
