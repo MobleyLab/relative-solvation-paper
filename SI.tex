@@ -19,6 +19,7 @@
 \usepackage{booktabs}
 \usepackage{xcolor}
 \usepackage{siunitx}
+\usepackage{easy-todo}
 \usepackage{footref}
 
 \renewcommand{\footnoterule}{}
@@ -237,7 +238,7 @@ FESetup~\cite{loeffler_fesetup:_2015} automates most of these setup
 steps.
 
 
-\section{Problems Encountered}
+\section{Detailed Results}
 \label{sec:problems}
 
 \subsection{AMBER}
@@ -255,7 +256,7 @@ softcore functions.
       AMBER.  The data for the 1--step protocol highlights in red problems in
       the code. $\Delta G_\mathrm{sol}$ has been computed with pmemd.  $\Delta G_\mathrm{vac}$ has been computed with sander.}\label{tab:amber-onestep}
     \makebox[\textwidth][c]{%
-    \begin{tabular}{llrrrrrr}
+    \begin{tabular}{lllrrrrrr}
       \toprule
    &                & \multicolumn{3}{c}{separated protocol} & \multicolumn{3}{c}{1--step} \\
       transformation & & $\Delta G_\mathrm{sol}$ & $\Delta G_\mathrm{vac}$ & $\Delta\Delta G$ & $\Delta G_\mathrm{sol}$ & $\Delta G_\mathrm{vac}$ & $\Delta\Delta G$ \\
@@ -346,6 +347,32 @@ Only after the final vdW only mutation had been carried out, were the final dist
 In sum, this indicates a fundamental problem of the RAFE code in
 AMBER.  Whether that is a bug or a conceptual issue with the
 particular implementation can not be explained at the moment.
+
+\begin{table}
+  \begin{minipage}{\linewidth}
+    \caption{Free energies of hydration for the 2--cyclopentanylindole to 7--cyclopentanylindole case with three different protocols.}\label{tab:amber-5ring}
+    \makebox[\textwidth][c]{%
+      \begin{tabular}{llrrrrrr}
+        \toprule
+        transformation & & $\Delta G_\mathrm{sol}$ & SEM & $\Delta G_\mathrm{vac}$ & SEM & $\Delta\Delta G_\mathrm{hydr} $ & SEM \\
+        \midrule
+implicit, partial & & & & & & \\
+2--cyclopentanylindole & 7--cyclopentanylindole &  4.194 &  &  3.833 &  &  0.361 & 0.032 \\
+7--cyclopentanylindole & 2--cyclopentanylindole & -4.300 &  & -3.964 &  &   -0.335 & 0.045\\
+\\
+implicit, full & & & & & & \\
+2--cyclopentanylindole & 7--cyclopentanylindole &  4.286 &  &  3.921 &  & 0.365  & 0.069 \\
+7--cyclopentanylindole & 2--cyclopentanylindole & -4.418 &  & -4.098 &  & -0.320 & 0.036 \\
+\\
+explicit, partial & & & & & \\
+2--cyclopentanylindole & 7--cyclopentanylindole &  4.145 &  &  3.517 &  & 0.628 & 0.059 \\
+7--cyclopentanylindole & 2--cyclopentanylindole & -4.256 &  & -3.759 &  & -0.497 & 0.032 \\
+\\
+        \bottomrule
+      \end{tabular}
+    }
+  \end{minipage}
+\end{table}
 
 \bibliography{journal-abbrev,reprod}
 
