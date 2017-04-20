@@ -627,6 +627,8 @@ methane\footref{foot:term}        & neopentane    & 0.125    & 0.031 & 0.123  & 
 methane        & 2-methyfuran   & -3.100   & 0.032 & -3.147 & 0.033 & &         \\
 2-methylindole & methane        & 8.778    & 0.025 & 8.777  & 0.041 & \multirow{2}{*}{8.717} &\multirow{2}{*}{0.009} \\
 methane        & 2-methylindole & -9.138   & 0.022 & -9.130 & 0.034 & \\
+2--cyclopentanylindole\footnote{\label{foot:partial}partial re/discharge i.e.\ only the charges of the appearing and the disappering 5--rings are switched.} & 7--cyclopentanylindole &  0.361 & 0.032 &  0.628 & 0.059 & \multirow{2}{*}{0.388} &\multirow{2}{*}{0.036} \\
+7--cyclopentanylindole\footref{foot:partial} & 2--cyclopentanylindole & -0.335 & 0.045 & -0.497 & 0.032 & & \\
     \bottomrule
   \end{tabular}
 }
@@ -712,11 +714,7 @@ performed in one step, differently (how?) from Amber and Gromacs.
 \todo{2-cyclopentanylindole to 7-cyclopentanylindole: better to go through intermediates?}
 
 \todo{
- AMBER: IMPORTANT: look at noshakemask, timask no SHAKE on real
- atoms? (symmetry) tishake=1 removes SHAKE to softcore atoms, ntf=1
- required for softcores because SHAKE \emph{may} be removed for some bonds;
- check if SHAKE is handled in for perturbed atoms end distances in
- crowded situation.
+ AMBER: check if SHAKE can be applied to perturbed atoms only.
 }
 
 \todo{
