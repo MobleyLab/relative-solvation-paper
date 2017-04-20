@@ -16,12 +16,15 @@
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
 \usepackage{amsmath,amssymb,mathrsfs}
+\usepackage{xr}
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{siunitx}
 \usepackage{easy-todo}
 \usepackage{footref}
 
+
+\externaldocument[S-]{SI}
 
 \sisetup{
   separate-uncertainty = true
@@ -286,7 +289,7 @@ implementations of the four MD codes AMBER, CHARMM, GROMACS and
 Sire/SOMD.  One key difference is the softcore
 functions~\cite{beutler_avoiding_1994,
   zacharias_separationshifted_1994} used in each code as summarised in
-the SI.  Softcore functions are used to avoid numerical and thus
+section~\ref{S-sec:softcores} of the SI.  Softcore functions are used to avoid numerical and thus
 stability problems of the conventional van der Waals and Coulombic
 potentials~\cite{steinbrecher_nonlinear_2007} as they have
 singularities at zero distance (vertical asymptotes).  Direct scaling
@@ -323,7 +326,7 @@ through careful construction of topology files.
 \paragraph{CHARMM} The PERT module duplicates the topology similar to
 sander but requires explicit dummy atoms.  All terms are
 energy--scaled.  The PSSP softcore potential is applied to \emph{all}
-atoms in the perturbed group (see SI).  The code can handle
+atoms in the perturbed group (see section~\ref{S-sec:softcores} in the SI).  The code can handle
 constraints of changing bond lengths in the perturbed group but this
 may cause wrong results with PSSP softcores (Stefan Boresch, private
 communication).  There is only one global $\lambda$ for parameter
@@ -441,11 +444,11 @@ separated protocol.  In such a protocol the charges are transformed
 linearly between the end states followed by a mutation of the van der
 Waals parameters using a softcore
 potential~\cite{beutler_avoiding_1994,
-  zacharias_separationshifted_1994} (see SI for details) on the vdW
+  zacharias_separationshifted_1994} (see section~\ref{S-sec:softcores} in the SI for details) on the vdW
 term only.  It is important to note that in the separated protocol
 charges have to be switched off before vdW parameters (and vice versa
 for the transformation in opposite direction) to avoid collapse of
-other molecules e.g. solvents onto a ``naked'' charge, see SI.  This
+other molecules e.g. solvents onto a ``naked'' charge, see section~\ref{S-sec:separated} in the SI.  This
 has consequences for setting up simulations as discussed (somewhere
 else).
 
@@ -576,10 +579,6 @@ contributions.
 \subsection{AMBER}
 \label{sec:amber-results}
 
-\todo{cycle closure error}
-
-\todo{2-cylco to 7-cyclo: report results, partial vs complete de/recharging}
-
 Using AMBER for RAFE simulations has revealed several problems with
 the implementation.  Some bugs could be idendified and have been fixed
 by the developers e.g. energy minimisation in sander led to diverged
@@ -592,13 +591,11 @@ has obvious implications for performance~\cite{doi:10.1021/ct400340s}.
 
 We also found that, in contrast to the other three codes, AMBER cannot
 correctly reproduce relative free energies in a 1--step protocol i.e.\
-when all force field parameters are scaled simultaneously (see SI for
-details).  The separated RAFE protocol and absolute free energies,
-however, are very close to the other MD packages.
+when all force field parameters are scaled simultaneously (see Table~\ref{S-tab:amber-onestep}).  The separated RAFE protocol and absolute free energies, however, are very close to the other MD packages.
 
 End point geometries also appear to be an issue with AMBER simulations
 in both solution and vacuum as most obvious in the neopentane to
-methane (central mapping) test case.  As detailed in the SI the
+methane (central mapping) test case.  As outlined in Figure~\ref{S-fig:amber-dist} the
 methane end state shows too long distances between the carbon and the
 four attached hydrogens of approximately \SI{1.23}{\angstrom}.  This
 value is about \SI{1.12}{\angstrom} for terminal dummy atoms but still
@@ -636,9 +633,10 @@ methane        & 2-methylindole & -9.138   & 0.022 & -9.130 & 0.034 & \\
   \end{minipage}
 \end{table}
 
-In general, the free energies computed with each approach are in good agreement with each other and with the results of the other MD packages.  There are, however, a few notable deviations.  In the neopentane to methane case with the central mapping the difference with the terminal mapping is about \SI{0.4}{kcal.mol^{-1}}.  The terminal mapping and the results from the explicit dummy simulations are, however, consistent with the absolute transformations.  We also observe a systematic deviation between forward and backward vaccum transformations in particular in the 2--methylindole simulation.
-% Note: this is the average over six non-dummy runs each from correlated data!
-A discrepancy of consistently 0.2--\SI{0.4}{kcal.mol^{-1}} is evident from every $\lambda$ step of the vdW plus bonded transformation with both implicit and explicit dummy atoms.
+From Table~\ref{tab:amber-comp} we can also compute the cycle closure error for the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane $\rightarrow$ ethane (see Figure~\ref{fig:cycles}).  The free energy difference within a thermodynamic cycle must necessarily be zero.  For the implict dummy simulation with receive a cycle error of \SI{0.069+-0.041}{kcal.mol^{-1}} and for the the explicit dummy simulation the error is \SI{-0.016+-0.047}{kcal.mol^{-1}}.
+
+In general, the free energies computed with each approach are in good agreement with each other and with the results of the other MD packages.  There are, however, a few notable deviations.  In the neopentane to methane case with the central mapping the difference with the terminal mapping is about \SI{0.4}{kcal.mol^{-1}}.  The terminal mapping and the results from the explicit dummy simulations are, however, consistent with the absolute transformations.  We also observe a systematic deviation between forward and backward vaccum transformations in particular in the 2--methylindole simulation (see Table~\ref{S-tab:amber-disc}).
+A discrepancy of consistently 0.2--\SI{0.4}{kcal.mol^{-1}} is evident from every $\lambda$ step of the vdW plus bonded transformation with both implicit and explicit dummy atoms).
 
 \subsection{CHARMM}
 \label{sec:charmm-results}

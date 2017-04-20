@@ -2,7 +2,7 @@ $pdf_mode = 1;
 $dvi_mode = $postscript_mode = 0; 
 $preview_mode = 0;
 $pdf_previewer = 'evince %O %S';
-@default_files = ('reprod.tex', 'SI.tex');
+@default_files = ('SI.tex', 'reprod.tex');
 
 $pdflatex = 'internal _pdflatex %O %S';
 sub _pdflatex{
