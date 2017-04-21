@@ -312,15 +312,11 @@ are energy--scaled.  The code allows, however, to map atoms in a
 single topology fashion and computes the forces appropriately
 (linearly) scaled for each atom in the pair.  The perturbed group must
 be entirely duplicated i.e.\ for sander this means two topology files
-with one end state each, or for pmemd both end states in one topology
-file.  The softcore potential applies to dummy atoms only but which
-can be arbitrarily chosen by the user.  Explicit dummy atoms are not
+with one end state each, and for pmemd both end states in one topology
+file.  The softcore potential applies to dummy atoms only which
+can be freely chosen by the user i.e.\ also for atoms that have an equivalent in the other state.  Explicit dummy atoms are not
 needed as the code will only compute bonded contributions for ``real''
-atoms thus ignores bonded energies involving dummy atoms.  The code
-cannot handle constraints of changing bond lengths in the perturbed
-group.  There is only on global $\lambda$ for parameter
-transformation.  Separated protocols (see below) must be emulated
-through careful construction of topology files.
+atoms thus ignores bonded energies involving dummy atoms (implicit dummy protocol).  The code cannot handle constraints of changing bond lengths in the perturbed group.  There is only on global $\lambda$ for parameter transformation.  Separated protocols (see below) must be emulated through careful construction of topologies by keeping force field parameters constant in the files.
 
 \paragraph{CHARMM} The PERT module duplicates the topology similar to
 sander but requires explicit dummy atoms.  All terms are
@@ -579,28 +575,23 @@ contributions.
 \label{sec:amber-results}
 
 Using AMBER for RAFE simulations has revealed several problems with
-the implementation.  Some bugs could be idendified and have been fixed
+the implementation.  Some bugs were idendified and have been fixed
 by the developers e.g. energy minimisation in sander led to diverged
 coordinates for mapped atoms which is, however, a necessary condition
 for a single topology description.  Other issues are that vacuum
 simulation have to be carried out separately with the sander program
 because pmemd cannot handle AFE simulations in vacuum at the moment.  This will, however, be rectified in future versions (Ross Walker, private communication).  A disadvantage of sander is that it cannot be used to simulate the $\lambda$ end points~\cite{doi:10.1021/ct400340s} such that the TI gradients need to be extrapolated (minimum and maximum allowed $\lambda$s are 0.005 and 0.995).  Also, sander considers the whole system as the perturbed
-region while pmemd restricts this to the user chosen TI region.  This
+region while pmemd restricts this to a user chosen atom selection.  This
 has obvious implications for performance~\cite{doi:10.1021/ct400340s}.
 
 We also found that, in contrast to the other three codes, AMBER cannot
 correctly reproduce relative free energies in a 1--step protocol i.e.\
-when all force field parameters are scaled simultaneously (see Table~\ref{S-tab:amber-onestep}).  The separated RAFE protocol and absolute free energies, however, are very close to the other MD packages.
+when all force field parameters are scaled simultaneously (see Table~\ref{S-tab:amber-onestep}).  This appears to be a problem when more than a few dummy atoms are involved while the 1--step protocol works for the smaller transformations (refer to Figure~\ref{fig:cycles}).  The separated RAFE protocol and absolute free energies, however, are very close to the other MD packages as demonstrated in Table~\ref{tab:amber-comp}.
 
-End point geometries also appear to be an issue with AMBER simulations
-in both solution and vacuum as most obvious in the neopentane to
-methane (central mapping) test case.  As outlined in Figure~\ref{S-fig:amber-dist} the
-methane end state shows too long distances between the carbon and the
-four attached hydrogens of approximately \SI{1.23}{\angstrom}.  This
-value is about \SI{1.12}{\angstrom} for terminal dummy atoms but still
-higher than the expected, on average, \SI{1.09}{\angstrom}.
+End point geometries appear to be another issue with AMBER simulations
+in both solution and vacuum.  This is most obvious in the neopentane $\rightarrow$ methane test case (central mapping).  As shown in Figure~\ref{S-fig:amber-dist} the methane end state exhibits too long distances between the carbon and the four attached hydrogens of approximately \SI{1.23}{\angstrom}.  This value is about \SI{1.12}{\angstrom} for the terminal dummy atoms in the other test cases but still higher than the expected, on average, \SI{1.09}{\angstrom}.  Figure~\ref{S-fig:amber-dist} demonstrates how this depends on the number of dummy atoms immediately surrounding the central atom.
 
-We also compare free energies obtained from the no--explicit dummy approach in AMBER with results form explicit dummy atom simulations and resuls from absolute transformation.  Table~\ref{tab:amber-comp} lists the free energies for these three approaches together with the SEM.
+We also compare free energies obtained from the implicit dummy approach in AMBER with results form explicit dummy atom simulations and results from absolute transformation.  Table~\ref{tab:amber-comp} lists the free energies for these three approaches together with the SEM.  SHAKE was explicitly deactivated for all bonds in the perturbed region in these protocols.
 \begin{table}[]
   \begin{minipage}{\linewidth}
   \caption{Comparing AMBER results for simulations with implicit and explicit dummy atoms, and results from absolute transformation.  A few select cases with SHAKE enabled and a time step of \SI{2}{fs} are shown in addition.  Simulations were carried out with the separated protocol.}\label{tab:amber-comp}
@@ -633,12 +624,13 @@ methane        & 2-methylindole & -9.138   & 0.022 & -9.130 & 0.034 & \\
 }
   \end{minipage}
 \end{table}
-In addition, the table shows results of transformations with SHAKE enabled for all bonds to hydrogens except those bonds that change bond length during transformation.  These free energies are computed from a single run only as we generally observe very small SEM and in practice one simulation  is sufficient to obtain a converged free energy average for the systems studied here.  The time step has been increased from \SI{1}{fs} as used in the other three protocols to \SI{2}{fs}.  As the results are essentially the same as the non--SHAKE simulations, the SHAKE protocol appears to be a viable solution to increase the performance of RAFE simulations.  From a practical point of view, AMBER uses an atom based mask for bond SHAKEs such that the mask must be set for the hydrogens in question while the same is not possible for the counter--part in the other state because \emph{all} bonds from this atom would be affected.
+In addition, the table also shows results of transformations with SHAKE enabled for all bonds to hydrogens except those bonds that change bond length during transformation.  These free energies are computed from a single run as we generally observe very small SEM and in practice one simulation is sufficient to obtain converged free energy averages for all the systems studied here.  The time step has been increased from \SI{1}{fs} as used in the other three protocols to \SI{2}{fs}.  As the results are essentially the same as the non--SHAKE simulations, the SHAKE protocol appears to be a viable solution to increase the performance of RAFE simulations.  From a practical point of view, AMBER uses an atom based mask for bond SHAKEs such that the mask must be set for the hydrogens in question while the same is not possible for their counter--part in the other state because \emph{all} bonds emanating from this atom would be affected.
 
-From Table~\ref{tab:amber-comp} we can also compute the cycle closure error for the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane $\rightarrow$ ethane (see Figure~\ref{fig:cycles}).  The free energy difference within a thermodynamic cycle must necessarily be zero.  For the implict dummy simulation with receive a cycle error for $\Delta\Delta G_\mathrm{hydr}$ of \SI{0.069+-0.041}{kcal.mol^{-1}} and for the the explicit dummy simulation the error is \SI{-0.016+-0.047}{kcal.mol^{-1}}.
+We can also compute the cycle closure error from Table~\ref{tab:amber-comp} for the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane $\rightarrow$ ethane (see Figure~\ref{fig:cycles}).  The free energy difference within a closed thermodynamic cycle must necessarily be zero.  For the implict dummy simulation we calculate a cycle error for $\Delta\Delta G_\mathrm{hydr}$ of \SI{0.069+-0.041}{kcal.mol^{-1}} and for the the explicit dummy simulation the error is \SI{-0.016+-0.047}{kcal.mol^{-1}}.
 
-In general, the free energies computed with each approach are in good agreement with each other and with the results of the other MD packages.  There are, however, a few notable deviations.  In the neopentane to methane case with the central mapping the difference with the terminal mapping is about \SI{0.4}{kcal.mol^{-1}}.  The terminal mapping and the results from the explicit dummy simulations are, however, consistent with the absolute transformations.  We also observe a systematic deviation between forward and backward vaccum transformations in particular in the 2--methylindole simulation (see Table~\ref{S-tab:amber-disc}).
+In general, the free energies computed with each approach are in good agreement with each other and with the results of the other MD packages.  There are, however, a few notable deviations.  Neopentane $\rightarrow$ methane with  central mapping differs from the result with terminal mapping by about \SI{0.4}{kcal.mol^{-1}} (cf.\ Table~\ref{tab:amber-comp}).  The terminal mapping and the free energies from the explicit dummy simulations are, however, consistent with the absolute transformations.  We also observe a systematic deviation between forward and backward vacuum transformations in particular in the 2--methylindole simulation (see Table~\ref{S-tab:amber-disc}).
 A discrepancy of consistently 0.2--\SI{0.4}{kcal.mol^{-1}} is evident from every $\lambda$ step of the vdW plus bonded transformation with both implicit and explicit dummy atoms).
+
 
 \subsection{CHARMM}
 \label{sec:charmm-results}
