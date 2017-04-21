@@ -607,11 +607,11 @@ higher than the expected, on average, \SI{1.09}{\angstrom}.
 We also compare free energies obtained from the no--explicit dummy approach in AMBER with results form explicit dummy atom simulations and resuls from absolute transformation.  Table~\ref{tab:amber-comp} lists the free energies for these three approaches together with the SEM.
 \begin{table}[]
   \begin{minipage}{\linewidth}
-  \caption{Comparing AMBER results for simulations with implicit and explicit dummy atoms, and results from absolute transformation.}\label{tab:amber-comp}
+  \caption{Comparing AMBER results for simulations with implicit and explicit dummy atoms, and results from absolute transformation.  Simulations were carried out with the separated protocol.}\label{tab:amber-comp}
   \makebox[\textwidth][c]{
-  \begin{tabular}{llrrrrrr}
+  \begin{tabular}{llrrrrrrr}
     \toprule
-    &                & \multicolumn{2}{c}{implicit} & \multicolumn{2}{c}{explicit} & \multicolumn{2}{c}{absolute} \\
+    &                & \multicolumn{2}{c}{implicit} & \multicolumn{2}{c}{explicit} & \multicolumn{2}{c}{absolute} & SHAKE \\
     \multicolumn{2}{l}{transformation}          & $\Delta\Delta G$  & SEM               & $\Delta\Delta G$    & SEM &  $\Delta G$\footnote{sign for the forward transformation.} & SEM \\
     \midrule
 ethane         & methane        & 0.021    & 0.014 & -0.127 & 0.016 & \multirow{2}{*}{-0.022} & \multirow{2}{*}{0.012} \\
