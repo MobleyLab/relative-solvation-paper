@@ -10,7 +10,6 @@
 % arara: clean: {files: [reprod.aux, reprod.bbl, reprod.blg, reprod.log, acs-reprod.bib, reprod.lod, reprod.fls]}
 %
 
-
 \documentclass[journal=jctcce,manuscript=article]{achemso}
 
 \usepackage[T1]{fontenc}
@@ -604,22 +603,22 @@ higher than the expected, on average, \SI{1.09}{\angstrom}.
 We also compare free energies obtained from the no--explicit dummy approach in AMBER with results form explicit dummy atom simulations and resuls from absolute transformation.  Table~\ref{tab:amber-comp} lists the free energies for these three approaches together with the SEM.
 \begin{table}[]
   \begin{minipage}{\linewidth}
-  \caption{Comparing AMBER results for simulations with implicit and explicit dummy atoms, and results from absolute transformation.  Simulations were carried out with the separated protocol.}\label{tab:amber-comp}
+  \caption{Comparing AMBER results for simulations with implicit and explicit dummy atoms, and results from absolute transformation.  A few select cases with SHAKE enabled and a time step of \SI{2}{fs} are shown in addition.  Simulations were carried out with the separated protocol.}\label{tab:amber-comp}
   \makebox[\textwidth][c]{
   \begin{tabular}{llrrrrrrr}
     \toprule
-    &                & \multicolumn{2}{c}{implicit} & \multicolumn{2}{c}{explicit} & \multicolumn{2}{c}{absolute} & SHAKE \\
-    \multicolumn{2}{l}{transformation}          & $\Delta\Delta G$  & SEM               & $\Delta\Delta G$    & SEM &  $\Delta G$\footnote{sign for the forward transformation.} & SEM \\
+    &                & \multicolumn{2}{c}{implicit} & \multicolumn{2}{c}{explicit} & \multicolumn{2}{c}{absolute} & SHAKE\footnote{implicit dummy atom protocol with $\delta t =$ \SI{2}{fs} and SHAKE on all H--bonds except perturbed bonds.} \\
+    \multicolumn{2}{l}{transformation}          & $\Delta\Delta G$  & SEM               & $\Delta\Delta G$    & SEM &  $\Delta G$\footnote{sign for the forward transformation.} & SEM & $\Delta\Delta G$ \\
     \midrule
 ethane         & methane        & 0.021    & 0.014 & -0.127 & 0.016 & \multirow{2}{*}{-0.022} & \multirow{2}{*}{0.012} \\
 methane        & ethane         & 0.001    & 0.025 & 0.187  & 0.028 & &        \\
 methanol       & methane        & 6.189    & 0.014 & 6.200  & 0.017 & \multirow{2}{*}{6.201} & \multirow{2}{*}{0.012} \\
 methane        & methanol       & -6.195   & 0.029 & -6.145 & 0.013 & &         \\
-ethane         & methanol       & -6.200   & 0.012 & -6.268 & 0.009 & \multirow{2}{*}{-6.223} & \multirow{2}{*}{0.014} \\
+ethane         & methanol       & -6.200   & 0.012 & -6.268 & 0.009 & \multirow{2}{*}{-6.223} & \multirow{2}{*}{0.014} & -6.196 \\
 methanol       & ethane         & 6.196    & 0.014 & 6.252  & 0.011 & &         \\
-toluene        & methane        & 3.240    & 0.020 & 3.386  & 0.021 & \multirow{2}{*}{3.193} & \multirow{2}{*}{0.014} \\
+toluene        & methane        & 3.240    & 0.020 & 3.386  & 0.021 & \multirow{2}{*}{3.193} & \multirow{2}{*}{0.014} & 3.292 \\
 methane        & toluene        & -3.422   & 0.025 & -3.523 & 0.033 & &         \\
-neopentane\footnote{\label{foot:cent}central mapping.} & methane & 0.315    & 0.038 & -0.027 & 0.057 & \multirow{4}{*}{-0.132} & \multirow{4}{*}{0.016} \\
+neopentane\footnote{\label{foot:cent}central mapping.} & methane & 0.315    & 0.038 & -0.027 & 0.057 & \multirow{4}{*}{-0.132} & \multirow{4}{*}{0.016} & 0.367 \\
 methane\footref{foot:cent}        & neopentane     & -0.250   & 0.032 & 0.071  & 0.026 & & \\
 neopentane\footnote{\label{foot:term}terminal mapping.}    & methane        & -0.132   & 0.012 & -0.118 & 0.015 & & \\
 methane\footref{foot:term}        & neopentane    & 0.125    & 0.031 & 0.123  & 0.034 & & \\
@@ -634,8 +633,9 @@ methane        & 2-methylindole & -9.138   & 0.022 & -9.130 & 0.034 & \\
 }
   \end{minipage}
 \end{table}
+In addition, the table shows results of transformations with SHAKE enabled for all bonds to hydrogens except those bonds that change bond length during transformation.  These free energies are computed from a single run only as we generally observe very small SEM and in practice one simulation  is sufficient to obtain a converged free energy average for the systems studied here.  The time step has been increased from \SI{1}{fs} as used in the other three protocols to \SI{2}{fs}.  As the results are essentially the same as the non--SHAKE simulations, the SHAKE protocol appears to be a viable solution to increase the performance of RAFE simulations.  From a practical point of view, AMBER uses an atom based mask for bond SHAKEs such that the mask must be set for the hydrogens in question while the same is not possible for the counter--part in the other state because \emph{all} bonds from this atom would be affected.
 
-From Table~\ref{tab:amber-comp} we can also compute the cycle closure error for the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane $\rightarrow$ ethane (see Figure~\ref{fig:cycles}).  The free energy difference within a thermodynamic cycle must necessarily be zero.  For the implict dummy simulation with receive a cycle error of \SI{0.069+-0.041}{kcal.mol^{-1}} and for the the explicit dummy simulation the error is \SI{-0.016+-0.047}{kcal.mol^{-1}}.
+From Table~\ref{tab:amber-comp} we can also compute the cycle closure error for the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane $\rightarrow$ ethane (see Figure~\ref{fig:cycles}).  The free energy difference within a thermodynamic cycle must necessarily be zero.  For the implict dummy simulation with receive a cycle error for $\Delta\Delta G_\mathrm{hydr}$ of \SI{0.069+-0.041}{kcal.mol^{-1}} and for the the explicit dummy simulation the error is \SI{-0.016+-0.047}{kcal.mol^{-1}}.
 
 In general, the free energies computed with each approach are in good agreement with each other and with the results of the other MD packages.  There are, however, a few notable deviations.  In the neopentane to methane case with the central mapping the difference with the terminal mapping is about \SI{0.4}{kcal.mol^{-1}}.  The terminal mapping and the results from the explicit dummy simulations are, however, consistent with the absolute transformations.  We also observe a systematic deviation between forward and backward vaccum transformations in particular in the 2--methylindole simulation (see Table~\ref{S-tab:amber-disc}).
 A discrepancy of consistently 0.2--\SI{0.4}{kcal.mol^{-1}} is evident from every $\lambda$ step of the vdW plus bonded transformation with both implicit and explicit dummy atoms).
@@ -712,8 +712,6 @@ performed in one step, differently (how?) from Amber and Gromacs.
 \todo{lessons learned}
 
 \todo{2-cyclopentanylindole to 7-cyclopentanylindole: better to go through intermediates?}
-
-\todo{AMBER: check if SHAKE can be applied to perturbed atoms only.}
 
 \todo{%
  what do we need to progress the field e.g. automation to make things
