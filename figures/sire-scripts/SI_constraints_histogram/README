@@ -1,0 +1,4 @@
+Script to produce a histogram to compare RAFE from different constraints:
+-All bonds
+-none = no constraints
+-unperturbed hydrogen bonds constraint

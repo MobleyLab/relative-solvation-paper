@@ -1,0 +1,18 @@
+Folder with statistical analysis on the final results
+
+- inputdata :  csv files for unpertubed h bonds results of relative and absolute estimation
+	       along with their standard errors
+
+- outputdata:  outputfiles produced by confidence_interval.py and mue_calculator.py
+
+- confidence_interval.py : script which takes as input absolute and relative values and compute
+               r, r2, mue with 95% confidence, by bootstraping each relative estimations
+               Usage: python confidence_interval.py  inputdata/absolute.csv inputdata/relative.csv
+               Output:  errorbounds.dat
+
+- mue_calculator.py : simple python script to compute MUE between rel and abs value
+               Usage: python mue_calculator.py
+               Output: mue_val.dat
+
+
+
