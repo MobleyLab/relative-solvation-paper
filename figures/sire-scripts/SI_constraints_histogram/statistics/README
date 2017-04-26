@@ -1,0 +1,8 @@
+Folder with statistical analysis on the final results
+
+- mue_calculator.py : simple python script to compute MUE between rel and abs value
+               Usage: python mue_calculator.py
+               Output: mue_val.dat
+
+
+

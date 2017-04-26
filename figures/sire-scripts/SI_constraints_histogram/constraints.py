@@ -21,21 +21,21 @@ fig = plt.figure(figsize=[10,7])
 ax = fig.add_subplot(111)
 
 #BARS:
-#methane ~ethane
+#methane ~ethane A
 methethallb = ax.bar(ind[0],-0.4860,width,color=colors[0],yerr=0.003,\
                  error_kw = dict(elinewidth=2,ecolor="black"))
 methethnoconstr = ax.bar(ind[0]+width,-0.1863,width,color=colors[1],yerr=0.0413,\
                  error_kw = dict(elinewidth=2,ecolor="black"))
 methethnohbonds = ax.bar(ind[0]+2*width,-0.0144,width,color=colors[2],yerr=0.0557,\
                  error_kw = dict(elinewidth=2,ecolor="black"))
-#ethane ~methanol
+#ethane ~methanol B
 ethmetholallb = ax.bar(ind[1],-6.2298,width,color=colors[0],yerr=0.0127,\
                 error_kw = dict(elinewidth=2,ecolor="black"))
 ethmetholnoconstr = ax.bar(ind[1]+width,-6.1476,width,color=colors[1],yerr=0.0312,\
                  error_kw = dict(elinewidth=2,ecolor="black"))
 ethmetholhbonds = ax.bar(ind[1]+2*width,-6.0911,width,color=colors[2],yerr=0.0349,\
                  error_kw = dict(elinewidth=2,ecolor="black"))
-#methane ~methanol
+#methane ~methanol C
 methmetholallb = ax.bar(ind[2],-6.0838,width,color=colors[0],yerr=0.0073,\
                  error_kw = dict(elinewidth=2,ecolor="black"))
 methmetholnoconstr = ax.bar(ind[2]+width,-6.1539,width,color=colors[1],yerr=0.0170,\
@@ -43,7 +43,7 @@ methmetholnoconstr = ax.bar(ind[2]+width,-6.1539,width,color=colors[1],yerr=0.01
 methmetholhbonds = ax.bar(ind[2]+2*width,-5.9687,width,color=colors[2],yerr=0.0417,\
                  error_kw = dict(elinewidth=2,ecolor="black"))
 
-#methane ~ 2methylfuran
+#methane ~ 2methylfuran D
 meth2mfallb = ax.bar(ind[3],-3.4023,width,color=colors[0],yerr=0.031,\
                  error_kw = dict(elinewidth=2,ecolor="black"))
 meth2mfnoconstr = ax.bar(ind[3]+width,-2.8950,width,color=colors[1],yerr=0.0637,\
@@ -51,7 +51,7 @@ meth2mfnoconstr = ax.bar(ind[3]+width,-2.8950,width,color=colors[1],yerr=0.0637,
 meth2mfnohbonds = ax.bar(ind[3]+2*width,-2.8337,width,color=colors[2],yerr=0.0365,\
                  error_kw = dict(elinewidth=2,ecolor="black"))
 
-#methane ~ toluene
+#methane ~ toluene E
 methtolallb = ax.bar(ind[4],-3.790,width,color=colors[0],yerr=0.03,\
                  error_kw = dict(elinewidth=2,ecolor="black"))
 methtolnoconstr = ax.bar(ind[4]+width,-3.0719,width,color=colors[1],yerr=0.0635,\
@@ -59,7 +59,7 @@ methtolnoconstr = ax.bar(ind[4]+width,-3.0719,width,color=colors[1],yerr=0.0635,
 methtolnohbonds = ax.bar(ind[4]+2*width,-3.0686,width,color=colors[2],yerr=0.0217,\
                  error_kw = dict(elinewidth=2,ecolor="black"))
 
-#methane ~ 2methylindole
+#methane ~ 2methylindole F
 meth2mindallb = ax.bar(ind[5],-9.150,width,color=colors[0],yerr=0.043,\
                  error_kw = dict(elinewidth=2,ecolor="black"))
 meth2mindnoconstr = ax.bar(ind[5]+width,-8.6157,width,color=colors[1],yerr=0.0413,\
@@ -67,14 +67,14 @@ meth2mindnoconstr = ax.bar(ind[5]+width,-8.6157,width,color=colors[1],yerr=0.041
 meth2mindhbonds = ax.bar(ind[5]+2*width,-8.6737,width,color=colors[2],yerr=0.0826,\
                  error_kw = dict(elinewidth=2,ecolor="black"))
 
-#methane ~ neopentane
+#methane ~ neopentane G
 methneopallb = ax.bar(ind[6],-2.0981,width,color=colors[0],yerr=0.0130,\
                  error_kw = dict(elinewidth=2,ecolor="black"))
 methneopnoconstr = ax.bar(ind[6]+width,0.0187,width,color=colors[1],yerr=0.0618,\
                  error_kw = dict(elinewidth=2,ecolor="black"))
 methneopnohbonds = ax.bar(ind[6]+2*width,0.139,width,color=colors[2],yerr=0.055,\
                  error_kw = dict(elinewidth=2,ecolor="black"))
-#methane ~ neopentane2
+#methane ~ neopentane2 H
 methneo2pallb= ax.bar(ind[7],-0.486,width,color=colors[0],yerr=0.003,\
                  error_kw = dict(elinewidth=2,ecolor="black"))
 methneo2pnoconstr = ax.bar(ind[7]+width,0.157,width,color=colors[1],yerr=0.0380,\
@@ -88,19 +88,22 @@ methneo2phbonds = ax.bar(ind[7]+2*width,0.104,width,color=colors[2],yerr=0.0628,
 #plt.yticks(arange(start,end,pace))
 #set the fontsize of the y-axis ticks
 plt.yticks(fontsize=15)
+ax.set_ylabel("$\Delta\Delta G$ / kcal mol$^{-1}$", fontsize=20)
 #set 8 point for the x ticks
 plt.xticks(arange(8))
 #now I do not put any name on the x ticks, since it may be ok to put molecules
-tick_name = ["","","","","","","","","","",""]
+tick_name = ["A","B","C","D","E","F","G","H"]
 #assign the ticks name
 xTickMarks=[str(x) for x in tick_name]
-#set the size
-xtickNames = ax.set_xticklabels(xTickMarks,fontsize=20)
-
+xtickNames = ax.set_xticklabels(xTickMarks)
+ax.xaxis.tick_top()
+#remember to first put the labels on top of the plot and then fontsize
+#otherwise it won't work- it may be a bug in matplotlib
+plt.xticks(fontsize=20)
 #grid on plot
 plt.grid(True)
 #legend here we need to fix the labels
 ax.legend((methethallb,methethnoconstr,methethnohbonds),("All bonds","None","H bonds not pert"),loc="best",fontsize=20)
 #savefigure
-plt.savefig("sire_constraints.png",dpi=300,transparent=True)
-plt.savefig("sire_constraints.pdf",dpi=300)
+plt.savefig("SI_sire_constraints.png",dpi=300,transparent=True)
+plt.savefig("SI_sire_constraints.pdf",dpi=300)

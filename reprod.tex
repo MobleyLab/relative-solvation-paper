@@ -662,35 +662,31 @@ A discrepancy of consistently 0.2--\SI{0.4}{kcal.mol^{-1}} is evident from every
 \label{sec:somd-results}
 \begin{figure}[ht]
   \includegraphics[width=\textwidth]{figures/sire_histogram.pdf}
-  \caption{Give a caption here explaining RAFE }
+  \caption{Relative free energy of hydration $\Delta\Delta G$ estimation from RAFE calculations compared with $\Delta\Delta G$ computed from absolute free energy calculations for A: methane to ethane, B: ethane to methanol, C: methane to methanol, D: methane to 2-methylfuran, E: methane to toluene,
+  F: methane to 2-methylindole, G: methane to neopentane, H: 2-cyclopentanylindole to 7-cyclopentanylindole.}
   \label{fig:sire_histogram}
 \end{figure}
 
 
-Figure ~\ref{fig:sire_histogram} compares RAFE with RAFE estimations from absolute free energy calculations, according to the best protocol for Sire/SOMD. A very good agreement is present between both estimations, highlighting consistency and reproducibility of results in Sire/SOMD itself, with a correlation index $R^2$=\SI{0.99} and a mean unsigned error MUE=\SI{0.10}{kcal mol^{-1}} 
-(NB we could write a 95\% confidence interval MUE: \SI{0.08}< \SI{0.11} < \SI{0.14}{kcal mol^{-1}})
-To achieve reproducibility in Sire/SOMD and among all the other codes, the role of constraints was crucial and a new kind of constraint was employed: unperturbed hydrogen bond constraint. Here, all the unperturbed hydrogen atoms'bonds are constrained, while the masses of the perturbed hydrogen atoms,namely atoms which undergo a transformation, are equal to the heaviest final state mass. In this way a symmetry between forward and backward mapping is guaranteed, preserving a timestep of \SI{2}{fs}, differently from using no constraints as in Amber, GROMACS or CHARMM. 
+Figure ~\ref{fig:sire_histogram} compares relative hydration free energy $\Delta\Delta G$ with $\Delta\Delta G$ estimations from absolute free energy calculations, according to the best protocol for Sire/SOMD. A very good agreement is present between both estimations, highlighting consistency and reproducibility of results in Sire/SOMD itself, with a correlation index $R^2$=\SI{0.99}{} and a mean unsigned error MUE=\SI{0.10}{kcal.mol^{-1}} 
+(NB we could write a 95\% confidence interval MUE: \SI{0.08}< \SI{0.11} < \SI{0.14}{kcal.mol^{-1}})
+To achieve reproducibility in Sire/SOMD and among all the other codes, the role of constraints was crucial and a new kind of constraint was employed: unperturbed hydrogen bond constraint. Here, all the unperturbed hydrogen atoms'bonds are constrained, while the masses of the perturbed hydrogen atoms, namely atoms which undergo a transformation, are equal to the heaviest final state mass. In this way a symmetry between forward and backward mapping is guaranteed, preserving a timestep of \SI{2}{fs}, differently from using no constraints as in Amber, GROMACS or CHARMM. 
 
-This new kind of constraint overcomes issues encountered with Sire/SOMD starting protocol. Usually, RAFE calculations in Sire/SOMD all bonds were constrained, in order to have a timestep of \SI{2}{fs} or even greater ~\cite{hopkins2015long}, enhancing sampling with a reasonable computational cost.
-However, from a technical point of view, all bond constraints in Sire/SOMD set all the bonds energies to zero. Such an approximation may be true for small and rigid molecules, but a systematic offset of about \SI{0.3}{kcal mol^{-1}}for each bond is introduced in perturbation such as methane to neopentane, where several carbon hydrogen bonds are transformed.
-Considering neopentane to methane (centrally mapped) this bias gives a RAFE $\Delta$G=\SI{2.04 +- 0.01}{kcal mol^{-1}} contrasting the absolute calculations $\Delta$G=\SI{-0.190 +- 0.06}{kcal mol^{-1}}, as tab.~\ref{S-tab:sire_constraints} and fig.~\ref{S-fig:sire_constraints} show.
-Furthermore, simulation of neopentane to methane (terminally mapped) shows a $\Delta\Delta G_{\mathrm{hyd}}$ =\SI{0.59 +- 0.01}{kcal.mol^{-1}} and $\Delta\Delta G_{\mathrm{hyd}}$ =\SI{-0.48 +- 0.01}{kcal.mol^{-1}} for the reverse path. As the free energy must be independent of the chosen path the discrepancy denotes a problem with using constraints on transformed atoms. 
+This new kind of constraint overcomes issues encountered with Sire/SOMD starting protocol. Usually, RAFE calculations in Sire/SOMD all bonds were constrained, in order to have a timestep of \SI{2}{fs} or even greater~\cite{hopkins2015long}, enhancing sampling with a reasonable computational cost.
+However, from a technical point of view, all bond constraints in Sire/SOMD set all the bonds energies to zero. Such an approximation may be true for small and rigid molecules, but a systematic offset of about \SI{0.3}{kcal.mol^{-1}} for each bond is introduced in perturbation such as methane to neopentane, where several carbon--hydrogen bonds are mapped into carbon--carbon bonds.
+Considering neopentane to methane (centrally mapped) this bias gives a RAFE $\Delta\Delta G$=\SI{2.04 +- 0.01}{kcal.mol^{-1}} contrasting the absolute calculations $\Delta\Delta G$=\SI{-0.19 +- 0.06}{kcal.mol^{-1}}, as tab.~\ref{S-tab:sire_constraints} and fig.~\ref{S-fig:sire_constraints} show.
+Furthermore, simulation of neopentane to methane (terminally mapped) shows a $\Delta\Delta G$ =\SI{0.59 +- 0.01}{kcal.mol^{-1}} and $\Delta\Delta G$ =\SI{-0.48 +- 0.01}{kcal.mol^{-1}} for the reverse path. As the free energy must be independent of the chosen path this discrepancy denotes a problem with using constraints on transformed atoms. 
 Such an offset was documented by Boresch and Kollman ~\cite{pearlman1991overlookeds, doi:10.1021/jp981628n,doi:10.1021/jp981629f}, as a missing bond-stretching term, to be accounted for, which can be estimated as: 
 \begin{equation}
  \label{eq:allbondserror}
- \Delta G= RT\ln ( \frac{r_{\mathrm{i}}}{r_\mathrm{f}} )  
+ \Delta G= RT\ln \left ( \frac{r_{\mathrm{i}}}{r_\mathrm{f}} \right)  
 \end{equation}
-where $r_{\mathrm{i}}$ and $r_{\mathrm{f}}$ are the initial and final bond length respectively. Although for small bond lengths change this error may be negligible, it becomes pivotal for perturbations of  hydrogen atoms to carbon, nitrogen, oxygen or sulphur, where the bond length changes of several tenth of Angstrom
+where $r_{\mathrm{i}}$ and $r_{\mathrm{f}}$ are the initial and final bond length respectively. Although for small bond lengths change this error may be negligible, it becomes pivotal for perturbations of  hydrogen atoms to carbon, nitrogen or oxygen, where the bond length changes of several tenth of Angstrom
 
-To test the goodness of unperturbed hydrogen bond constraints a comparison with no constraints simulations has been made. Figure SI shows that both protocols attains the same results between RAFE and absolute free energy estimations with a MUE between both predictions of XXX
-
-The advantage of such a new protocl is to use still a good timestep and sa single topology apporach
-namely with one perturbation/simulatoins Sire/SOmD si able to cgive as the ssame results as gromacs amber charmm
-furthermore a comparison between reaciton field can be done
-Now discuss about the fact that we can use a single step and results are compatible with gromacs and co
-so we ndo not need further step s with the current technical implementation of the software
-furthermore we could carried out a comparison with gromacs reaction field results
-we are using bw their are using a generalized group based cutoff  [S-] to cite your SI
+To test the goodness of unperturbed hydrogen bond constraints a comparison with no constraints simulations has been made. Figure~\ref{S-fig:sire_constraints} shows that both protocols attains the same results with a final MUE=\SI{0.09}{kcal.mol^{-1}}.
+The new protocol in Sire/SOMD can rely on a high reproducibility of results by using a high timestep and a single topology approach~\ref{sec:methods}.
+requiring a single step for relative fre eenergy calculations.
+What about the role of RF?
 
 
 
