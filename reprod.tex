@@ -681,11 +681,52 @@ Such an offset was documented already by Boresch and Kollman ~\cite{pearlman1991
  \label{eq:allbondserror}
  \Delta G= RT\ln \left ( \frac{r_{\mathrm{i}}}{r_\mathrm{f}} \right)  
 \end{equation}
-where $r_{\mathrm{i}}$ and $r_{\mathrm{f}}$ are the initial and final bond length respectively. Although for small bond lengths change this error may be negligible, it becomes pivotal for perturbations of  hydrogen atoms to carbon, nitrogen or oxygen, where the bond length changes of several tenth of Angstrom
+where $r_{\mathrm{i}}$ and $r_{\mathrm{f}}$ are the initial and final bond length respectively. Although for small bond lengths change this error may be negligible, it becomes pivotal for perturbations of  hydrogen atoms to carbon, nitrogen or oxygen, where the bond length changes of several tenth of Angstrom.
+After the implementation of the new constraint, a comparison with no constraints simulations has been run. Figure~\ref{S-fig:sire_constraints} shows that both protocols attains the same results with a final MUE=\SI{0.09}{kcal.mol^{-1}}.
 
-To test the goodness of unperturbed hydrogen bond constraints a comparison with no constraints simulations has been run. Figure~\ref{S-fig:sire_constraints} shows that both protocols attains the same results with a final MUE=\SI{0.09}{kcal.mol^{-1}}.
-Thus, the RAFE protocol for Sire/SOMD can rely on a high reproducibility of results by using a new kind of constraint. Differently from Amber, GROMACS and CHARMM, the timestep of Sire/SOMD simulations can be \SI{2}{fs}. Furthermore, all the results were reproducible by using a single topology paradigm, thus with one single simulation for each phase.
+Tab ~\ref{tab:mue-comp} shows the MUE between Sire/SOMD, Gromacs employing reaction field (Gromacs RF), Gromacs with PME (Gromacs PME) and Amber  (alternatively: tab ~\ref{tab:muebound-comp} shows the MUE comparison with 95$\%$ of confidence interval between Sire/SOMD, Gromacs employing reaction field (Gromacs RF), Gromacs with PME (Gromacs PME) and Amber). 
+As regards Sire/SOMD a very good agreement is present with Gromacs RF with a MUE=\SI{0.18}{kcal.mol^{-1}}. Technically, Sire/SOMD uses a Barker Watts reaction field (BWRF) with atom-based cutoff, as explained in subsection~\ref{sec:rafe_protocols}, while Gromacs a BWRF with charged-group cutoff. 
+However, methane to neopentane is still matter of debate. In this case, Sire/SOMD is able to maintain consistency between central and terminal mapping, as shown in tab~\ref{S-tab:sire-finalresults}, while Gromacs RF has $\Delta\Delta$G=\SI{-0.20 +- 0.01}{kcal.mol^{-1}} for centrally mapped transformation and $\Delta\Delta$G=\SI{-0.05 +- 0.02}{kcal.mol^{-1}} for terminally mapped.
+Additionally, reproducibility is also attained with PME codes, with a MUE=\SI{0.18}{kcal.mol^{-1}} and MUE=\SI{0.23}{kcal.mol^{-1}} with Gromacs PME and Amber respectively. 
+(NB it may be good to say somewhere how much was the MUE with the initial standard protocol)
 
+\begin{table}[]
+  \begin{minipage}{\linewidth}
+  \caption{MUE comparison between Sire/SOMD, Gromacs with Reaction Field (Gromacs RF), Gromacs with PME (Gromacs PME) and Amber in terms of MUE (\SI{}{kcal.mol^{-1}}.}\label{tab:mue-comp}
+  \makebox[\textwidth][c]{
+  \begin{tabular}{lrrrr}
+    \toprule
+    Package & Sire/SOMD & Gromcs RF & Gromacs PME & Amber\\
+    \midrule
+Sire/SOMD         & 0.00 & 0.18    & 0.18 & 0.23\\
+Gromacs RF   & 0.18 & 0.00    & 0.04 & 0.14\\ 
+Gromacs PME  & 0.18 & 0.04    & 0.00 & 0.14\\     
+Amber        & 0.23 & 0.14    & 0.14 & 0.00\\
+     \bottomrule
+  \end{tabular}
+}
+  \end{minipage}
+\end{table}
+
+Alternatively considering 95$\%$ of confidence interval, we can draw a Gaussian distribution for each package and bootstraping we can obtain a error bounds comparison 
+
+\begin{table}[]
+  \begin{minipage}{\linewidth}
+  \caption{MUE comparison between Sire/SOMD, Gromacs with Reaction Field (Gromacs RF), Gromacs with PME (Gromacs PME) and Amber in terms of MUE (\SI{}{kcal.mol^{-1}}.}\label{tab:muebound-comp}
+  \makebox[\textwidth][c]{
+  \begin{tabular}{lcccc}
+    \toprule
+    Package & Sire/SOMD & Gromcs RF & Gromacs PME & Amber\\
+    \midrule
+Sire/SOMD         & 0.02< 0.04< 0.05 & 0.17< 0.19< 0.21    & 0.16< 0.18< 0.20 & 0.21< 0.23< 0.25\\
+Gromacs RF   	  & 0.17< 0.18< 0.19 & 0.01< 0.02< 0.03    & 0.04< 0.05< 0.06 & 0.13< 0.14< 0.15\\
+Gromacs PME       & 0.17< 0.18< 0.19 & 0.04< 0.05< 0.06    & 0.01< 0.02< 0.03 & 0.14< 0.15< 0.16\\
+Amber		  & 0.22< 0.23< 0.24 & 0.13< 0.14< 0.15    & 0.14< 0.15< 0.16 & 0.01< 0.02< 0.03\\
+     \bottomrule
+  \end{tabular}
+}
+  \end{minipage}
+\end{table}
 
 
 \section{Discussion}

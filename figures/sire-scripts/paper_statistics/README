@@ -1,0 +1,5 @@
+Here I am computing the error bounds/ 95% confidence interval among all the 
+packages
+in this way we can have a table of the performances of each software, to see
+which is th emost "biasing" in terms of relative free energy estimations, based
+on relative calculations
