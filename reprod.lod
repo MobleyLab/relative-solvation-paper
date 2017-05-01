@@ -6,7 +6,7 @@
 \contentsline {todos}{{6. }problems: e.g. methane\nobreakspace {}2-methylindole: needed to use restart file from l=0.95 to start simulation at l=1.0. }{14}
 \contentsline {todos}{{7. }bug in TI gradient accumulation in parallel runs (does not affect serial?, does not affect EXP)}{17}
 \contentsline {todos}{{8. }cannot handle LRC: test with larger cutoffs and/or LRC correction with arbitrary, single structure; check http://pubs.acs.org/doi/abs/10.1021/jp0735987}{17}
-\contentsline {todos}{{9. }recommended protocols}{20}
+\contentsline {todos}{{9. }recommended protocols}{21}
 \contentsline {todos}{{10. }protocols to avoid}{21}
 \contentsline {todos}{{11. }lessons learned}{21}
 \contentsline {todos}{{12. }2-cyclopentanylindole to 7-cyclopentanylindole: better to go through intermediates?}{21}

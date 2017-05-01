@@ -690,6 +690,9 @@ However, methane to neopentane is still matter of debate. In this case, Sire/SOM
 Additionally, reproducibility is also attained with PME codes, with a MUE=\SI{0.18}{kcal.mol^{-1}} and MUE=\SI{0.23}{kcal.mol^{-1}} with Gromacs PME and Amber respectively. 
 (NB it may be good to say somewhere how much was the MUE with the initial standard protocol)
 
+Generally, the Sire/SOMD free energy estimations are in good agreement with all the other codes, as the MUE suggests. Reproducibility was attained between reaction field and PME methods. In particular, the unperturbed hydrogen bonds constraint allows a timestep of \SI{2}{fs} and all the Sire/SOMD simulations can be carried out in one single step, with a single-topology paradigm, differently from multi-step approaches used in Amber, Gromacs and CHARMM.
+
+
 \begin{table}[]
   \begin{minipage}{\linewidth}
   \caption{MUE comparison between Sire/SOMD, Gromacs with Reaction Field (Gromacs RF), Gromacs with PME (Gromacs PME) and Amber in terms of MUE (\SI{}{kcal.mol^{-1}}.}\label{tab:mue-comp}
