@@ -1,0 +1,18 @@
+\contentsline {todos}{{1. }Objectives: Do the relative free energy results produced across different softwares agree with each other? What if they don't?}{2}
+\contentsline {todos}{{2. }Objectives: Can we outline what should be a standard procedure to calculate relative free energies of hydration alchemically?}{2}
+\contentsline {todos}{{3. }Objectives: We want to emphasise that we aim at improving codes/protocols/practices and not highlight "bad" codes }{2}
+\contentsline {todos}{{4. }Be clear on what reproducibility means here e.g. no exact numerical}{2}
+\contentsline {todos}{{5. }what protocols did not work}{14}
+\contentsline {todos}{{6. }problems: e.g. methane\nobreakspace {}2-methylindole: needed to use restart file from l=0.95 to start simulation at l=1.0. }{14}
+\contentsline {todos}{{7. }bug in TI gradient accumulation in parallel runs (does not affect serial?, does not affect EXP)}{17}
+\contentsline {todos}{{8. }cannot handle LRC: test with larger cutoffs and/or LRC correction with arbitrary, single structure; check http://pubs.acs.org/doi/abs/10.1021/jp0735987}{17}
+\contentsline {todos}{{9. }investigate why methane\nobreakspace {}ethane and ethane\nobreakspace {}methane differ so much from the other packages}{17}
+\contentsline {todos}{{10. }make a compact $\partial \mathrm {H}/\partial \lambda $ plot}{17}
+\contentsline {todos}{{11. }make figures XX1 and XX2 (I think they should probably go in the SI)}{17}
+\contentsline {todos}{{12. }recommended protocols}{22}
+\contentsline {todos}{{13. }protocols to avoid}{22}
+\contentsline {todos}{{14. }lessons learned}{22}
+\contentsline {todos}{{15. }2-cyclopentanylindole to 7-cyclopentanylindole: better to go through intermediates?}{22}
+\contentsline {todos}{{16. }what do we need to progress the field e.g. automation to make things easy but also consistent and thus more reproducible (FESetup also for reproducibility); GPU: Gromacs, SOMD but not AMBER (yet) and CHARMM; alternative softcore functions?; sampling?; force field improvements?; analysis? }{22}
+\contentsline {todos}{{17. }developer notes: constraints, both appearing/disappearing; lambda paths for AMBER (relative), absolute: crgmask requires vacuum corr if separated protocol }{22}
+\contentsline {todos}{{18. }further investigation required: binding RAFEs?}{22}
