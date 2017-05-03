@@ -422,12 +422,11 @@ discussed.
 One of the major concerns in a reproducibility study is to ensure
 consistency in the applied protocols.  This is complicated by the fact
 that MD software employs a wide range of methods and algorithms that
-may not be available in other MD software.  For example, pressure and
+may not be available in the other MD software.  For example, pressure and
 temperature scaling, integrators and other algorithms can be very
 different.  It is also unclear if and how implementation details can
-affect results, in particular see discussion in
-subsection~\ref{sec:afe_impl} of alchemical free energy
-implementations.
+affect results, in particular see subsection~\ref{sec:afe_impl} discussing the 
+implementation details of alchemical free energy simulation in code.
 
 In this study we look at a set of simple organic molecules (see
 Figure~\ref{fig:cycles}).  As the focus here is on probing for
@@ -442,8 +441,9 @@ TIP3P~\cite{jorgensen_comparison_1983-1} for the solvent.  The quality
 of free energies of various small molecule force fields has been shown
 elsewhere, see e.g. Refs.~\citenum{doi:10.1021/ct300203w,Hu2016}.
 
-While the MD packages principally allow a ``one--step'' transformation
-that is both van der Waals and Coulombic contributions can vary
+While the MD packages principally allow a ``one--step'' 
+transformation~\cite{steinbrecher_soft-core_2011}
+that is both van der Waals and Coulombic contributions vary
 simultaneously, it can be(is? ref?) more efficient to carry out a
 separated protocol.  In such a protocol the charges are transformed
 linearly between the end states followed by a mutation of the van der
@@ -453,9 +453,8 @@ potential~\cite{beutler_avoiding_1994,
 term only.  It is important to note that in the separated protocol
 charges have to be switched off before vdW parameters (and vice versa
 for the transformation in opposite direction) to avoid collapse of
-other molecules e.g. solvents onto a ``naked'' charge, see section~\ref{S-sec:separated} in the SI.  This
-has consequences for setting up simulations as discussed (somewhere
-else).
+other atoms e.g. solvents onto a ``naked'' charge, see 
+section~\ref{S-sec:separated} in the SI.
 
 All simulations were started from the simulation box pre--equilibrated with
 FESetup~\cite{loeffler_fesetup:_2015}.  It should be noted, however, that in
@@ -465,14 +464,16 @@ for forward and backward setups by using the larger box of the two.  Thus, in
 transformation from a smaller to a larger solute water molecules may be in
 close distance.  The simulations were run at \SI{298.15}{K} and \SI{1.0}{bar}.
 
-\paragraph{AMBER} The starting coordinates were usually taken from the
-starting state as taken from the setup step.  In some cases it was
-necessary though to use coordinates from a nearby $\lambda$ state.
-Water hydrogens (TIP3P) were constraint with SHAKE.  None of the atoms
-in the perturbed group were constraint and so the time step was set to
-\SI{1}{fs} (see Sire protocol below for an alternative approach).
-Temperature was controlled through a Langevin thermostat and pressure
-through a Monte Carlo barostat.
+\paragraph{AMBER} The starting coordinates were usually taken directly from the
+pre--equilibrated setup step but no further $\lambda$ specific equilibration 
+was carried out i.e.\ RAFE MD simulations started with new velocties for the 
+final simulation temperature.  In a very few cases it was necessary to use 
+coordinates from a nearby $\lambda$ state because of simulation instabilities.  
+This happened in transformations with a larger number of dummy atoms.  Water 
+hydrogens (TIP3P) were constraint with SHAKE but none of the atoms in the 
+perturbed group and so the time step was set to \SI{1}{fs} (see Sire protocol 
+below for an alternative approach).  Temperature was controlled through a 
+Langevin thermostat and pressure through a Monte Carlo barostat.
 
 \paragraph{Sire/SOMD} All simulations were carried out with
 Sire/OpenMM 6.3 (revision 16.1).  Each alchemical transformation was
