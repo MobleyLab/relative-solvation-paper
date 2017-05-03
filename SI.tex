@@ -118,8 +118,8 @@ For CHARMM (PSSP), applied to all ``reactant'' and all ``product'' atoms
   \label{eq:CHARMM}
 \end{equation}
 
-$r_{\mathrm{vdW}}$ and $r_{\mathrm{Coul}}$ (both in red) are the
-distance dependent functions, $\epsilon_{\mathrm{Coul}}$ and
+$r_{\mathrm{vdW}}$, $r_{\mathrm{Coul}}$ and $r_{\mathrm{Coul}}$ (all in red) 
+are the distance dependent functions, $\epsilon_{\mathrm{Coul}}$ and
 $\sigma_{ij}$ are the Lennard-Jones parameters, $q_{i}$ and $q_{j}$
 are the charges and $\varepsilon_{0}$ is the vacuum permittivity,
 $\alpha$ and $\beta$ are the softcore tuning parameters determining
@@ -179,7 +179,7 @@ intermediate state b has the vdW parameters from state a but the
 charges from state c.
 
 Figure~\ref{fig:dummies} shows how topology files may be created in
-the case that the MD software does not allow independent $\lambda$s
+cases where the MD software does not allow independent $\lambda$s
 for electrostatic and vdW mutations.  With Gromacs, for instance, the
 transformation only requires a single topology file with both A and B
 states (in single topology fashion, see main text) and a single
@@ -191,7 +191,7 @@ of this writing), however, three eplicit topology files (with sander,
 two with pmemd) and two control files would need to be created.  The
 state b in Figure~\ref{fig:dummies} would be created from state a with
 the charges from state c.  The bonded terms can be combined with
-either mutation step or run separately.  For AMBER the easiest is to
+either mutation step or run separately.  For AMBER the easiest way is to
 combine vdW with bonded terms because charges are independent of atom
 types.
 
@@ -208,14 +208,14 @@ unless the charges of \emph{all} atoms are switched off.  Possible
 strategies would be to explictly create topology files for each
 intermediate $\lambda$ state and distribute the dimished charges from
 the dummy atoms over to the non--dummy atoms.  MD software like CHARMM
-allow to do this through scripting although this would be just as
+allows to do this through scripting although this would be just as
 extensive as scripting the aforementioned strategy.
 
 \begin{figure}[ht]
 \includegraphics[scale=1.0]{figures/dummies2.pdf}
 \caption{Explicit topologies involved in a mutation with both
   appearing and disappearing atoms by example of the cyclopentanyl
-  transfer from the 2 position in indole to the 7 position.  Green
+  transfer from the 2 position in indole to the 7 position.  Blue
   lines denote atoms which have their charges switched off but with
   vdW parameters from the left (state b) or right (state c). Grey
   lines are dummy atoms with Coulomb and vdW parameters all zero.
@@ -313,7 +313,7 @@ transformation i.e.\ the charges correspond to the methane end state.
   systems are designed to reduce the number of dummy atoms that
   surround the central carbon atom to show whether ``crowding'' is the
   cause of the issue.  The crosses denote end points only, in
-  particular the magenta crosses represent the non--perturbed end
+  particular the violet crosses represent the non--perturbed end
   point distances.  For details see the text.}
 \label{fig:amber-dist}
 \end{figure}
@@ -368,7 +368,15 @@ methane        & 2-methyindole & -4.900 & 0.017 & -3.185 & 0.011 & -19.412 & 0.0
 
 In sum, this indicates a problem of the RAFE code in AMBER.  Whether that is a bug or a conceptual issue with the particular implementation can not be explained at the moment.
 
-Table~\ref{tab:amber-5ring} summarizes the free energies obtained from forward and backward simulations of the cyclopentanyl transfer from position 2 to position 7 on indole and \emph{vice versa}.  Results from three different protocols are shown: 1) implicit dummy atoms and partial re/discharge of the 5--ring only; 2) implicit dummy atoms and full re/discharge if all atoms; 3) explicit dummy atoms and partial re/discharge.  The free energies from the implicit dummy simulations agree very well with each other while the explicit dummy atom results are about \SI{0.2}{kcal.mol^{-1}} higher and forward and backward simulations have a larger hystersis of \SI{0.1}{kcal.mol^{-1}}.
+Table~\ref{tab:amber-5ring} summarizes the free energies obtained from forward 
+and backward simulations of the cyclopentanyl transfer from position 2 to 
+position 7 on indole and \emph{vice versa}.  Results from three different 
+protocols are shown: 1) implicit dummy atoms and partial re/discharge of the 
+5--ring only; 2) implicit dummy atoms and full re/discharge of all atoms; 3) 
+explicit dummy atoms and partial re/discharge.  The free energies from the 
+implicit dummy simulations agree very well with each other while the explicit 
+dummy atom results are about \SI{0.2}{kcal.mol^{-1}} higher and forward and 
+backward simulations have a larger hystersis of \SI{0.1}{kcal.mol^{-1}}.
 \begin{table}
   \begin{minipage}{\linewidth}
     \caption{Free energies of hydration for the 2--cyclopentanylindole to 7--cyclopentanylindole case with three different protocols.  The data are averages over three runs.}\label{tab:amber-5ring}
@@ -378,16 +386,22 @@ Table~\ref{tab:amber-5ring} summarizes the free energies obtained from forward a
         transformation & & $\Delta G_\mathrm{sol}$ & SEM & $\Delta G_\mathrm{vac}$ & SEM & $\Delta\Delta G_\mathrm{hydr} $ & SEM \\
         \midrule
 implicit, partial & & & & & & \\
-2--cyclopentanylindole & 7--cyclopentanylindole &  4.194 &  &  3.833 &  &  0.361 & 0.032 \\
-7--cyclopentanylindole & 2--cyclopentanylindole & -4.300 &  & -3.964 &  &   -0.335 & 0.045\\
+2--cyclopentanylindole & 7--cyclopentanylindole &  4.194 & 0.032 &  3.833 & 
+0.014  &  0.361 & 0.032 \\
+7--cyclopentanylindole & 2--cyclopentanylindole & -4.300 & 0.044 & -3.964 & 
+0.011  & -0.335 & 0.045\\
 \\
 implicit, full & & & & & & \\
-2--cyclopentanylindole & 7--cyclopentanylindole &  4.286 &  &  3.921 &  & 0.365  & 0.069 \\
-7--cyclopentanylindole & 2--cyclopentanylindole & -4.418 &  & -4.098 &  & -0.320 & 0.036 \\
+2--cyclopentanylindole & 7--cyclopentanylindole &  4.286 & 0.063 &  3.921 & 
+0.028 &  0.365 & 0.069 \\
+7--cyclopentanylindole & 2--cyclopentanylindole & -4.418 & 0.033 & -4.098 & 
+0.014 & -0.320 & 0.036 \\
 \\
 explicit, partial & & & & & \\
-2--cyclopentanylindole & 7--cyclopentanylindole &  4.145 &  &  3.517 &  & 0.628 & 0.059 \\
-7--cyclopentanylindole & 2--cyclopentanylindole & -4.256 &  & -3.759 &  & -0.497 & 0.032 \\
+2--cyclopentanylindole & 7--cyclopentanylindole &  4.145 & 0.041 &  3.517 & 
+0.043 &  0.628 & 0.059 \\
+7--cyclopentanylindole & 2--cyclopentanylindole & -4.256 & 0.030 & -3.759 & 
+0.009 & -0.497 & 0.032 \\
         \bottomrule
       \end{tabular}
     }

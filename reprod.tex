@@ -43,21 +43,21 @@
 \begin{document}
 
 \begin{abstract}
-  Alchemical free energy calculation is a very important branch of
-  modern simulation techniques.  Contemporary Molecular Dynamics and
-  Monte Carlo software such as AMBER, CHARMM, GROMACS and Sire/SOMD
-  include support for the method.  Implementation details vary among
-  those codes but users expect reliability and reproducibility i.e.\ a
-  simulation must yield a comparable free energy within statistical
-  bounds regardless of code used.  \emph{Relative} alchemical free
-  energy simulation has been less well tested than its absolute
-  counterpart in this context, however, relative transformations
-  promise to be computationally and statistically more efficient.
-  Here we present the results for relative hydration free energies
-  (RAFE) for a set of small organic molecules and show that free
-  energies can be satisfactorily reproduced with aforementioned codes.
-  We will also recommend simulation protocols, setup procedures and
-  analysis techniques.
+  Alchemical free energy calculations are an increasingly important modern simulation
+   technique.  Contemporary Molecular Dynamics and Monte Carlo 
+  software such as AMBER, CHARMM, GROMACS and Sire/SOMD include support for the 
+  method.  Implementation details vary among those codes but users expect 
+  reliability and reproducibility, i.e.\ a simulation must yield a comparable 
+  free energy within statistical bounds regardless of code used.  
+  \emph{Relative} alchemical free energy simulation has been less well tested 
+  than its absolute counterpart.  However, relative transformations are thought to 
+  be computationally and statistically more efficient.  Thus, reproducibility of computed 
+  relative free energies across simulation packages is also crucial. Here we present the 
+  results for relative alchemical free energy (RAFE) calculations for hydration free energies of a set of small 
+  organic molecules and show that free energies can be satisfactorily 
+  reproduced with aforementioned codes given some level of care and attention to detail.  We will also recommend simulation 
+  protocols, setup procedures and analysis techniques, and we discuss what 
+  needs to be done to ensure continued progress.
 \end{abstract}
 
 \begin{tocentry}
@@ -73,7 +73,7 @@
  relative free energies of hydration alchemically?}
 
 \todo{Objectives:
- We want to emphasise that we aim at improving codes/protocols/practices and not highlight "bad" codes
+ We want to emphasize that we aim at improving codes/protocols/practices and not highlight "bad" codes
 }
 
 \todo{Be clear on what reproducibility means here e.g. no exact numerical}
@@ -82,11 +82,11 @@
 \label{sec:intro}
 
 The free energy is a fundamental function of thermodynamics and
-kinetics as it explains how processes in nature evolve.  The direction
-that, say, a chemical reaction takes can be immediately determined
-from the knowledge of the free energy difference of reactant and
-product.  The free energy landscape of a given system, however, can be
-very complicated and rugged such that barriers exist which impose
+kinetics as it explains how processes in nature evolve.  The equilibrium balance of products and reactants in
+a hypothetical chemical reaction can be immediately determined
+from the knowledge of the free energy difference of reactants and
+product and their concentrations.  The free energy landscape of a given system, however, can be
+very complicated and rugged with barriers which impose
 limits on how fast the process can take place.  It is therefore of
 little surprise that the determination of this reversible work is of
 utmost importance to all natural sciences e.g.\ for binding and
@@ -98,9 +98,9 @@ The calculation of free energies through
 computers~\cite{hansen_practical_2014, doi:10.1021/jp102971x,
   Gallicchio201127, doi:10.1080/08927022.2015.1132317,
   doi:10.1146/annurev.matsci.32.111901.153708} has been particularly
-attractive as it promises to circumvent limitations of experimental
-approaches, processes can be understood at the molecular level and it
-offers the potential of being more cost and time effective.  Thus, a
+attractive as it promises to circumvent certain limitations of experimental
+approaches. Specifically, processes can be understood at the molecular and atomic level and 
+there is the potential that computational techniques can be more cost and time effective.  Thus, a
 multitude of methods have been devised to make reversible work
 estimates accessible through computation~\cite{hansen_practical_2014,
   doi:10.1021/jp102971x, Gallicchio201127,
@@ -109,10 +109,11 @@ estimates accessible through computation~\cite{hansen_practical_2014,
 reliability of estimates is still very much a matter of
 concern~\cite{doi:10.1021/jp102971x, doi:10.1021/acs.jctc.5b00179}.
 Roughly speaking, fast methods tend to be less accurate while more
-accurate methods tend to be slow to compute.  Nevertheless, rigorous
+accurate methods tend to be slow.  Nevertheless, rigorous
 methods are obligatory in obtaining accurate, precise and reliable
 results, while less accurate methods can be used as an input filter
 for more expensive approaches.
+{\color{red} Do we need to explain ``rigorous'', i.e., methods giving asymptotically correct free energy estimates (correct in the limit of enough simulation time) given a choice of model?}
 
 One such method is the so-called \emph{alchemical} free energy
 approach whose theory is firmly rooted in statistical thermodynamics
@@ -126,13 +127,13 @@ the early days of computer simulation~\cite{doi:10.1063/1.1671118,
 attention in recent years --- concomitant with improvements in
 computer hardware design --- both within the traditional equilibrium
 framework~\cite{GILSON19971047, doi:10.1021/jp0217839,
-  deng_computations_2009} but also increasingly being used in
-non-equilibrium regimes~\cite{ytreberg_comparison_2006, JCC:JCC23804,
+  deng_computations_2009} but also increasingly in combination with
+non-equilibrium techniques~\cite{ytreberg_comparison_2006, JCC:JCC23804,
   doi:10.1021/ct500964e}.  The name comes from the nonphysical
 intermediates that often need to be created to smoothly interpolate
 between end states and because parts or all of a molecule may appear
 or ``disappear'' in a transformation.  In the context of force field
-methods the transformation takes place in parameter space i.e.\ the
+methods the transformation takes place in parameter space, i.e.\ the
 force field's parameters determining strength and equilibrium of
 interactions are varied by scaling.  This can be a particular
 efficient approach as it does not require translocation in
@@ -142,12 +143,12 @@ same time, it is generally unclear along which coordinates a
 translocation simulation should take place.
 
 Alchemical free energy simulations are constructed around the concept
-of thermodynamic cycles.  As the free energy is a state function it
-must always add up to zero within a closed cycle.  This also implies
+of thermodynamic cycles.  As the free energy is a state function, the sum of free energy changes
+computed around any closed cycle must sum to zero.  This also implies
 that the reversible work can be computed arbitrarily along
 conveniently chosen legs of the cycle.  E.g.\ in
 Fig.~\ref{fig:thermocycle} the relative free energy of hydration can
-be computed along the vertical legs, that is following the physical
+be computed along the vertical legs, that is, following the physical
 process of moving a molecule from the gas phase to the liquid phase,
 or along the horizontal legs in an nonphysical alchemical calculation.
 As mentioned above, the latter may be computationally and
@@ -163,7 +164,7 @@ statistically more efficient.
     simulations can be performed along the non--physical horizontal
     legs while vertical legs illustrate the physical process (which is
     directly accessible through absolute alchemical free energy
-    simulation, see [FreeSolv]).}
+    simulation, see e.g.\ Ref.~\citenum{doi:10.1021/acs.jced.7b00104}).}
   \label{fig:thermocycle}
 \end{figure}
 
@@ -174,9 +175,11 @@ particular focus of recent years~\cite{GILSON19971047,
 here really means that the equilibrium constant of a physical
 reaction, e.g.\ binding and dissociation, can be calculated directly
 by completely decoupling a whole molecule from its environment and the
+%need to define ``decoupling''? Will we also be using ``annihilation''? If so may have to clearly define both when first used.
 term is mostly being used to discriminate against \emph{relative}
 techniques (see below).  These schemes may require two simulations
 along the parallel legs of a rectangular thermodynamic cycle but
+%Seems like parallel/rectangular might not be the best way to say this, as one could presumably draw a trapezoidal thermodynamic cycle and it could still work as well.
 approaches that produce the reversible work directly in one simulation
 have been proposed too~\cite{doi:10.1063/1.3519057, C3FD00125C}.
 
@@ -186,25 +189,29 @@ achieved~\cite{doi:10.1021/j100056a020, Michel2010} by making use of
 the single topology method~\cite{doi:10.1063/1.449208,
   doi:10.1021/j100056a020, doi:10.1021/jp981628n}.  Single topology
 means that there is only one description of the molecule to be
-mutated.  Thus, atom types are directly transformed into the new type,
+mutated.  
+%"Description" seems vague. Set of coordinates? Should we have a figure explaining the difference?
+Thus, atom types are directly transformed into the new type,
 typically by linearly scaling force field parameters.
-Disappearing/appearing atoms are balanced with ``dummy'' atoms,
+Disappearing/appearing atoms are balanced with ``dummy'' atoms, %"balanced with" -> "represented by"?
 i.e. atoms that have no non--bonded interactions in the end state but
 retain the bonded terms of the original atom.  AMBER is a special case
 as it does not require the use of dummy atoms: the bonded terms of
 atoms that do not exist in the end state will not contribute to the
 free energy implying that contributions from dummy atoms perfectly
-cancel in the thermodynamic cycle.  RAFEs are useful e.g.\ in ranking
+cancel in the thermodynamic cycle. 
+%DLM: I don't understand what this is saying about how AMBER does things. Clarify?
+ RAFEs are useful e.g.\ in ranking
 which one of a set of small molecules binds strongest to a chosen
 target.  This approach has recently gained more traction in the
-context of relative free binding energies of
+context of relative free binding energies between small molecules and
 biomolecules~\cite{doi:10.1021/ja512751q}.
 
 The single topology approach~\cite{doi:10.1021/j100056a020} requires a
-certain similarity between the two mutated states.  This means
+certain similarity between the two mutated states.  This means primarily
 topological and structural similarity but also chemical similarity is
 of importance e.g.\ chirality and binding modes where the relative
-three dimensional arrangement in space must be taken care of.
+three dimensional arrangement in space must be taken into account.
 Furthermore, ring breaking is technically
 challenging~\cite{doi:10.1021/acs.jctc.6b00991} but it has also been
 shown that this should be done only in certain
@@ -246,14 +253,17 @@ parameter between the end states.
 As alluded to above, reliability is a principal matter of concern.  In
 particular, we need to ensure reproducibility of free energy results
 among computer codes.  To the best of our knowledge this has not been
-systematically tested yet for a set of different MD packages.  Given a
+systematically tested yet for a set of different MD packages. 
+However, there have been some recent efforts to test \emph{energy} reproducibility across 
+packages -- a necessary but not sufficient prerequisite [ref Shirts 10.1007/s10822-016-9977-1]
+Given a
 predefined force field and run--time parameters we should be able to
 obtain comparable free energy results within statistical convergence
 limits.  In practice, we have the problem, however, that the methods
-and algorithms used in MD programs are not always present in all
-packages or are the same, like pressure and temperature scaling,
+and algorithms used in one MD program are not always present in another
+package or are the same, such as algorithms for pressure and temperature scaling,
 integrators, etc.  Nevertheless, the reversible work computed with any
-simulation software should be expected to be reproducible.  Modern MD
+simulation software should be expected to be reproducible within statistical error.  Modern MD
 packages support a wide range of force fields and methods such that
 these packages are replaceable with each other to an ever increasing
 extent and the choice of the right package for the user becomes less
@@ -268,13 +278,15 @@ binding free energies where the simulation in solution (see
 Fig.~\ref{fig:thermocycle}) is combined with a mutation of the
 molecule bound to a partner, and other important physical
 properties~\cite{Skyner:2015:PCCP}.  A large database of hydration
-free energies computed from AFE simulation, FreeSolve, has been
-presented recently (cite). Here, we are interested in the
-reproducibility of RAFE with the simulation programs AMBER, CHARMM,
+free energies computed from AFE simulation, FreeSolv, has been
+presented recently~\cite{doi:10.1021/acs.jced.7b00104} and was just updated [ref 10.1021/acs.jced.7b00104]. Here, we are interested 
+in the reproducibility of RAFE with the simulation programs AMBER, CHARMM,
 GROMACS and Sire/SOMD.  We will discuss the reversible work results
-obtined with these packages as well as making recommendations
+obtained with these packages and make recommendations
 regarding simulation protocols, setup procedures and analysis
-techniques.
+techniques.  We will also deliberate on what needs to be done to progress the 
+field, both from a usability perspective as well as from the view point of code 
+development.
 
 
 \section{Methods}
@@ -313,13 +325,20 @@ single topology fashion and computes the forces appropriately
 (linearly) scaled for each atom in the pair.  The perturbed group must
 be entirely duplicated i.e.\ for sander this means two topology files
 with one end state each, and for pmemd both end states in one topology
-file.  The softcore potential applies to dummy atoms only which
-can be freely chosen by the user i.e.\ also for atoms that have an equivalent in the other state.  Explicit dummy atoms are not
-needed as the code will only compute bonded contributions for ``real''
-atoms thus ignores bonded energies involving dummy atoms (implicit dummy protocol).  The code cannot handle constraints of changing bond lengths in the perturbed group.  There is only on global $\lambda$ for parameter transformation.  Separated protocols (see below) must be emulated through careful construction of topologies by keeping force field parameters constant in the files.
+file.  The softcore potential applies to any atom chosen by the user i.e.\ also 
+for atoms that have an equivalent in the other state but non--softcore atoms 
+must still match 1:1 in both states.  Explicit dummy atoms are 
+not needed as the code will only compute bonded contributions for ``real''
+atoms and thus ignores bonded energies involving dummy atoms (implicit dummy 
+protocol).  The code cannot handle constraints of changing bond lengths in the 
+perturbed group.  There is only one global $\lambda$ for parameter 
+transformation.  Separated protocols (see below) must be emulated through 
+careful construction of topologies by keeping force field parameters constant 
+in the files.
 
 \paragraph{CHARMM} The PERT module duplicates the topology similar to
-sander but requires explicit dummy atoms.  All terms are
+sander but the data structures for mapped atoms are present only once.  The 
+module requires balancing with explicit dummy atoms.  All terms are
 energy--scaled.  The PSSP softcore potential is applied to \emph{all}
 atoms in the perturbed group (see section~\ref{S-sec:softcores} in the SI).  The code can handle
 constraints of changing bond lengths in the perturbed group but this
@@ -333,7 +352,7 @@ to arbitrary values.
 Bonded terms are strictly parameter--scaled which requires proper
 balancing of multi--term dihedrals.  Non--bonded terms are
 energy--scaled.  The softcore potential applies to dummy atoms only
-which are determined if atoms have zero vdW parameters.  The code
+determined from atoms having zero vdW parameters.  The code
 allows constraints of changing bond lengths in the perturbed group but
 this can lead to instabilities and wrong results (Michael Shirts,
 private communication).  There are separate $\lambda$s for vdW,
@@ -412,12 +431,11 @@ discussed.
 One of the major concerns in a reproducibility study is to ensure
 consistency in the applied protocols.  This is complicated by the fact
 that MD software employs a wide range of methods and algorithms that
-may not be available in other MD software.  For example, pressure and
+may not be available in the other MD software.  For example, pressure and
 temperature scaling, integrators and other algorithms can be very
 different.  It is also unclear if and how implementation details can
-affect results, in particular see discussion in
-subsection~\ref{sec:afe_impl} of alchemical free energy
-implementations.
+affect results, in particular see subsection~\ref{sec:afe_impl} discussing the 
+implementation details of alchemical free energy simulation in code.
 
 In this study we look at a set of simple organic molecules (see
 Figure~\ref{fig:cycles}).  As the focus here is on probing for
@@ -432,8 +450,9 @@ TIP3P~\cite{jorgensen_comparison_1983-1} for the solvent.  The quality
 of free energies of various small molecule force fields has been shown
 elsewhere, see e.g. Refs.~\citenum{doi:10.1021/ct300203w,Hu2016}.
 
-While the MD packages principally allow a ``one--step'' transformation
-that is both van der Waals and Coulombic contributions can vary
+While the MD packages principally allow a ``one--step'' 
+transformation~\cite{steinbrecher_soft-core_2011}
+that is both van der Waals and Coulombic contributions vary
 simultaneously, it can be(is? ref?) more efficient to carry out a
 separated protocol.  In such a protocol the charges are transformed
 linearly between the end states followed by a mutation of the van der
@@ -443,9 +462,8 @@ potential~\cite{beutler_avoiding_1994,
 term only.  It is important to note that in the separated protocol
 charges have to be switched off before vdW parameters (and vice versa
 for the transformation in opposite direction) to avoid collapse of
-other molecules e.g. solvents onto a ``naked'' charge, see section~\ref{S-sec:separated} in the SI.  This
-has consequences for setting up simulations as discussed (somewhere
-else).
+other atoms e.g. solvents onto a ``naked'' charge, see 
+section~\ref{S-sec:separated} in the SI.
 
 All simulations were started from the simulation box pre--equilibrated with
 FESetup~\cite{loeffler_fesetup:_2015}.  It should be noted, however, that in
@@ -455,14 +473,16 @@ for forward and backward setups by using the larger box of the two.  Thus, in
 transformation from a smaller to a larger solute water molecules may be in
 close distance.  The simulations were run at \SI{298.15}{K} and \SI{1.0}{bar}.
 
-\paragraph{AMBER} The starting coordinates were usually taken from the
-starting state as taken from the setup step.  In some cases it was
-necessary though to use coordinates from a nearby $\lambda$ state.
-Water hydrogens (TIP3P) were constraint with SHAKE.  None of the atoms
-in the perturbed group were constraint and so the time step was set to
-\SI{1}{fs} (see Sire protocol below for an alternative approach).
-Temperature was controlled through a Langevin thermostat and pressure
-through a Monte Carlo barostat.
+\paragraph{AMBER} The starting coordinates were usually taken directly from the
+pre--equilibrated setup step but no further $\lambda$ specific equilibration 
+was carried out i.e.\ RAFE MD simulations started with new velocties for the 
+final simulation temperature.  In a very few cases it was necessary to use 
+coordinates from a nearby $\lambda$ state because of simulation instabilities.  
+This happened in transformations with a larger number of dummy atoms.  Water 
+hydrogens (TIP3P) were constraint with SHAKE but none of the atoms in the 
+perturbed group and so the time step was set to \SI{1}{fs} (see Sire protocol 
+below for an alternative approach).  Temperature was controlled through a 
+Langevin thermostat and pressure through a Monte Carlo barostat.
 
 \paragraph{Sire/SOMD} All simulations were carried out with
 Sire/OpenMM 6.3 (revision 16.1).  Each alchemical transformation was
@@ -502,9 +522,9 @@ computed in the simulation with a BWRF cutoff.
 \subsection{Analysis}
 \label{sec:analysis}
 
-Various estimators have been proposed to obtain the free energy.
-Early work by Kirkwood~\cite{kirkwood_statistical_1935} expresses the
-free energy as an ensemble average of the derivative of the
+Various estimators have been proposed to obtain the free energy from AFE 
+simulations.  Early work by Kirkwood~\cite{kirkwood_statistical_1935} expresses 
+the free energy as an ensemble average of the derivative of the
 Hamiltonian with respect to the coupling parameter $\lambda$.  The
 method is now known as Thermodynamic Integration (TI).  Zwanzig
 devised the exponential formula~\cite{zwanzig_high-temperature_1954}
@@ -542,16 +562,16 @@ where $\mathscr{H}(\vec{q},\vec{p};\lambda)$ is the Hamiltonian as a function of
 Results from additional estimators
 will be given where available.  We have used the alchemical analysis
 tool~\cite{klimovich_guidelines_2015} for all free energies.  This
-tools provides various estimators such as TI, TI with cubic splines,
+tool provides various estimators such as TI, TI with cubic splines,
 BAR and MBAR.  All data can be sub--sampled to eliminate correlated
 data.
 
 All RAFE simulations where run in triplicate in forward as well as
-backward direction so in total 6 simulations per mutation pairs.  The
+backward direction so in total 6 simulations per mutation pair.  The
 final hydration free energy $\Delta\Delta G_{\mathrm{hydr}}$ was
 computed as average of each direction.  For comparison we have also
 calculated the absolute (standard) hydration free energies for all
-molecules in Figure~~\ref{fig:cycles}).
+molecules in Figure~\ref{fig:cycles}.
 
 To estimate the reliability and convergence of the results, the
 standard error of the mean (SEM) has been calculated.  The SEM is
@@ -563,7 +583,7 @@ defined as
 \end{equation}
 
 where $\sigma$ is the sample standard deviation and $n$ is the size of
-the sample.  The SEM for component free energies is combined as
+the uncorrelated sample.  The SEM for component free energies is combined as
 
 \begin{equation}
   \label{eq:sem-comb}
@@ -578,11 +598,6 @@ contributions.
 \label{sec:results}
 
 \todo{what protocols did not work}
-
-\todo{problems:
-    e.g. methane~2-methylindole: needed to use restart file from
-    l=0.95 to start simulation at l=1.0.
-}
 
 \subsection{AMBER}
 \label{sec:amber-results}
@@ -604,7 +619,11 @@ when all force field parameters are scaled simultaneously (see Table~\ref{S-tab:
 End point geometries appear to be another issue with AMBER simulations
 in both solution and vacuum.  This is most obvious in the neopentane $\rightarrow$ methane test case (central mapping).  As shown in Figure~\ref{S-fig:amber-dist} the methane end state exhibits too long distances between the carbon and the four attached hydrogens of approximately \SI{1.23}{\angstrom}.  This value is about \SI{1.12}{\angstrom} for the terminal dummy atoms in the other test cases but still higher than the expected, on average, \SI{1.09}{\angstrom}.  Figure~\ref{S-fig:amber-dist} demonstrates how this depends on the number of dummy atoms immediately surrounding the central atom.
 
-We also compare free energies obtained from the implicit dummy approach in AMBER with results form explicit dummy atom simulations and results from absolute transformation.  Table~\ref{tab:amber-comp} lists the free energies for these three approaches together with the SEM.  SHAKE was explicitly deactivated for all bonds in the perturbed region in these protocols.
+We also compare free energies obtained from the implicit dummy approach in 
+AMBER with results form explicit dummy atom simulations and results from 
+absolute transformations.  Table~\ref{tab:amber-comp} lists the free energies 
+for these three approaches together with the SEM.  SHAKE was explicitly 
+deactivated for all bonds in the perturbed region in these protocols.
 \begin{table}[]
   \begin{minipage}{\linewidth}
   \caption{Comparing AMBER results for simulations with implicit and explicit dummy atoms, and results from absolute transformation.  A few select cases with SHAKE enabled and a time step of \SI{2}{fs} are shown in addition.  Simulations were carried out with the separated protocol.}\label{tab:amber-comp}
@@ -637,7 +656,20 @@ methane        & 2-methylindole & -9.138   & 0.022 & -9.130 & 0.034 & \\
 }
   \end{minipage}
 \end{table}
-In addition, the table also shows results of transformations with SHAKE enabled for all bonds to hydrogens except those bonds that change bond length during transformation.  These free energies are computed from a single run as we generally observe very small SEM and in practice one simulation is sufficient to obtain converged free energy averages for all the systems studied here.  The time step has been increased from \SI{1}{fs} as used in the other three protocols to \SI{2}{fs}.  As the results are essentially the same as the non--SHAKE simulations, the SHAKE protocol appears to be a viable solution to increase the performance of RAFE simulations.  From a practical point of view, AMBER uses an atom based mask for bond SHAKEs such that the mask must be set for the hydrogens in question while the same is not possible for their counter--part in the other state because \emph{all} bonds emanating from this atom would be affected.
+In addition, the table also shows selected results for transformations with 
+SHAKE enabled for all bonds to hydrogens except those bonds that change bond 
+length during transformation.  These free energies are computed from a single 
+run as we generally observe very small SEM and in practice one simulation is 
+sufficient to obtain converged free energy averages for all the systems studied 
+here.  The time step has been increased from \SI{1}{fs} as used in the other 
+three protocols to \SI{2}{fs}.  As the results are essentially the same as the 
+non--SHAKE simulations, this SHAKE protocol appears to be a viable solution to 
+increase the performance of RAFE simulations (cmp.\ SOMD simulations).  From a 
+practical point of view, 
+AMBER uses an atom based mask for bond SHAKEs such that the mask must be set 
+for the hydrogens in question while the same is not possible for their 
+counter--part in the other state because \emph{all} bonds emanating from this 
+atom would be affected.
 
 We can also compute the cycle closure error from Table~\ref{tab:amber-comp} for the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane $\rightarrow$ ethane (see Figure~\ref{fig:cycles}).  The free energy difference within a closed thermodynamic cycle must necessarily be zero.  For the implict dummy simulation we calculate a cycle error for $\Delta\Delta G_\mathrm{hydr}$ of \SI{0.069+-0.041}{kcal.mol^{-1}} and for the the explicit dummy simulation the error is \SI{-0.016+-0.047}{kcal.mol^{-1}}.
 
