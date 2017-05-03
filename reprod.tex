@@ -45,21 +45,20 @@
 \begin{document}
 
 \begin{abstract}
-  Alchemical free energy calculation is a very important branch of
-  modern simulation techniques.  Contemporary Molecular Dynamics and
-  Monte Carlo software such as AMBER, CHARMM, GROMACS and Sire/SOMD
-  include support for the method.  Implementation details vary among
-  those codes but users expect reliability and reproducibility i.e.\ a
-  simulation must yield a comparable free energy within statistical
-  bounds regardless of code used.  \emph{Relative} alchemical free
-  energy simulation has been less well tested than its absolute
-  counterpart in this context, however, relative transformations
-  promise to be computationally and statistically more efficient.
-  Here we present the results for relative hydration free energies
-  (RAFE) for a set of small organic molecules and show that free
-  energies can be satisfactorily reproduced with aforementioned codes.
-  We will also recommend simulation protocols, setup procedures and
-  analysis techniques.
+  Alchemical free energy calculation is a very important branch of modern 
+  simulation techniques.  Contemporary Molecular Dynamics and Monte Carlo 
+  software such as AMBER, CHARMM, GROMACS and Sire/SOMD include support for the 
+  method.  Implementation details vary among those codes but users expect 
+  reliability and reproducibility i.e.\ a simulation must yield a comparable 
+  free energy within statistical bounds regardless of code used.  
+  \emph{Relative} alchemical free energy simulation has been less well tested 
+  than its absolute counterpart.  However, relative transformations promise to 
+  be computationally and statistically more efficient.  Here we present the 
+  results for relative hydration free energies (RAFE) for a set of small 
+  organic molecules and show that free energies can be satisfactorily 
+  reproduced with aforementioned codes.  We will also recommend simulation 
+  protocols, setup procedures and analysis techniques, and we discuss what 
+  needs to be done to progress the field.
 \end{abstract}
 
 \begin{tocentry}
@@ -165,7 +164,7 @@ statistically more efficient.
     simulations can be performed along the non--physical horizontal
     legs while vertical legs illustrate the physical process (which is
     directly accessible through absolute alchemical free energy
-    simulation, see [FreeSolv]).}
+    simulation, see e.g.\ Ref.~\citenum{doi:10.1021/acs.jced.7b00104}).}
   \label{fig:thermocycle}
 \end{figure}
 
@@ -199,14 +198,14 @@ free energy implying that contributions from dummy atoms perfectly
 cancel in the thermodynamic cycle.  RAFEs are useful e.g.\ in ranking
 which one of a set of small molecules binds strongest to a chosen
 target.  This approach has recently gained more traction in the
-context of relative free binding energies of
+context of relative free binding energies between small molecules and
 biomolecules~\cite{doi:10.1021/ja512751q}.
 
 The single topology approach~\cite{doi:10.1021/j100056a020} requires a
-certain similarity between the two mutated states.  This means
+certain similarity between the two mutated states.  This means primarily
 topological and structural similarity but also chemical similarity is
 of importance e.g.\ chirality and binding modes where the relative
-three dimensional arrangement in space must be taken care of.
+three dimensional arrangement in space must be taken into account.
 Furthermore, ring breaking is technically
 challenging~\cite{doi:10.1021/acs.jctc.6b00991} but it has also been
 shown that this should be done only in certain
@@ -252,8 +251,8 @@ systematically tested yet for a set of different MD packages.  Given a
 predefined force field and run--time parameters we should be able to
 obtain comparable free energy results within statistical convergence
 limits.  In practice, we have the problem, however, that the methods
-and algorithms used in MD programs are not always present in all
-packages or are the same, like pressure and temperature scaling,
+and algorithms used in one MD program are not always present in another
+package or are the same, like pressure and temperature scaling,
 integrators, etc.  Nevertheless, the reversible work computed with any
 simulation software should be expected to be reproducible.  Modern MD
 packages support a wide range of force fields and methods such that
@@ -270,13 +269,15 @@ binding free energies where the simulation in solution (see
 Fig.~\ref{fig:thermocycle}) is combined with a mutation of the
 molecule bound to a partner, and other important physical
 properties~\cite{Skyner:2015:PCCP}.  A large database of hydration
-free energies computed from AFE simulation, FreeSolve, has been
-presented recently (cite). Here, we are interested in the
-reproducibility of RAFE with the simulation programs AMBER, CHARMM,
+free energies computed from AFE simulation, FreeSolv, has been
+presented recently~\cite{doi:10.1021/acs.jced.7b00104}. Here, we are interested 
+in the reproducibility of RAFE with the simulation programs AMBER, CHARMM,
 GROMACS and Sire/SOMD.  We will discuss the reversible work results
-obtined with these packages as well as making recommendations
+obtained with these packages as well as making recommendations
 regarding simulation protocols, setup procedures and analysis
-techniques.
+techniques.  We will also deliberate on what needs to be done to progress the 
+field, both from a usability perspective as well as from the view point of code 
+development.
 
 
 \section{Methods}
