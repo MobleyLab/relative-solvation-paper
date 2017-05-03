@@ -316,13 +316,20 @@ single topology fashion and computes the forces appropriately
 (linearly) scaled for each atom in the pair.  The perturbed group must
 be entirely duplicated i.e.\ for sander this means two topology files
 with one end state each, and for pmemd both end states in one topology
-file.  The softcore potential applies to dummy atoms only which
-can be freely chosen by the user i.e.\ also for atoms that have an equivalent in the other state.  Explicit dummy atoms are not
-needed as the code will only compute bonded contributions for ``real''
-atoms thus ignores bonded energies involving dummy atoms (implicit dummy protocol).  The code cannot handle constraints of changing bond lengths in the perturbed group.  There is only on global $\lambda$ for parameter transformation.  Separated protocols (see below) must be emulated through careful construction of topologies by keeping force field parameters constant in the files.
+file.  The softcore potential applies to any atom chosen by the user i.e.\ also 
+for atoms that have an equivalent in the other state but non--softcore atoms 
+must still match 1:1 in both states.  Explicit dummy atoms are 
+not needed as the code will only compute bonded contributions for ``real''
+atoms and thus ignores bonded energies involving dummy atoms (implicit dummy 
+protocol).  The code cannot handle constraints of changing bond lengths in the 
+perturbed group.  There is only one global $\lambda$ for parameter 
+transformation.  Separated protocols (see below) must be emulated through 
+careful construction of topologies by keeping force field parameters constant 
+in the files.
 
 \paragraph{CHARMM} The PERT module duplicates the topology similar to
-sander but requires explicit dummy atoms.  All terms are
+sander but the data structures for mapped atoms are present only once.  The 
+module requires balancing with explicit dummy atoms.  All terms are
 energy--scaled.  The PSSP softcore potential is applied to \emph{all}
 atoms in the perturbed group (see section~\ref{S-sec:softcores} in the SI).  The code can handle
 constraints of changing bond lengths in the perturbed group but this
@@ -336,7 +343,7 @@ to arbitrary values.
 Bonded terms are strictly parameter--scaled which requires proper
 balancing of multi--term dihedrals.  Non--bonded terms are
 energy--scaled.  The softcore potential applies to dummy atoms only
-which are determined if atoms have zero vdW parameters.  The code
+determined from atoms having zero vdW parameters.  The code
 allows constraints of changing bond lengths in the perturbed group but
 this can lead to instabilities and wrong results (Michael Shirts,
 private communication).  There are separate $\lambda$s for vdW,
