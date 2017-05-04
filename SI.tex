@@ -116,19 +116,20 @@ For CHARMM (PSSP), applied to all ``reactant'' and all ``product'' atoms
 \end{equation}
 
 $r_{\mathrm{vdW}}$, $r_{\mathrm{Coul}}$ and $r_{\mathrm{Coul}}$ (all in red) 
-are the distance dependent functions, $\epsilon_{\mathrm{Coul}}$ and
+are the distance dependent functions, $\epsilon_{\mathrm{ij}}$ and
 $\sigma_{ij}$ are the Lennard-Jones parameters, $q_{i}$ and $q_{j}$
 are the charges and $\varepsilon_{0}$ is the vacuum permittivity,
 $\alpha$ and $\beta$ are the softcore tuning parameters determining
 the softness of the potential, and $r_{ij}$ the distance between
-atoms.
+atoms $i$ and $j$.
 
-$n$ is an exponent only used in the Coulomb softcore funtion of Sire.
+The exponent $n$ is only used in the Coulomb softcore funtion of Sire.
 Gromacs allows additional exponents for $\lambda$ ($p = 1$ or $2$) and
 $w$ for the distance dependency with values of either $6$ or $48$.
 The Coulomb softcore parameter $\alpha_{\mathrm{Coul}}$ in Gromacs is
 the same as for the Lennard--Jones parameter $\alpha_{\mathrm{LJ}}$
-unless the Coulomb softcore function is requested not to be used.  The
+unless the Coulomb softcore function is requested not to be used and thus 
+$\alpha_{\mathrm{Coul}} = 0$.  The
 CHARMM softcore function (PSSP) is applied to \emph{all} atoms in the
 perturbed group and not only to dummy atoms as in the other codes.
 The perturbed group comprises of all atoms that need to be
@@ -141,7 +142,7 @@ course of the transformation.
 \section{Separated Protocols}
 \label{sec:separated}
 
-When the AFE (alchemiccal free energy) simulation is separated into van
+When the AFE (alchemical free energy) simulation is separated into van
 der Waals and Coulomb steps it must be ensured that charges of
 vanishing atoms are switched off before the vdW radius is scaled to
 zero.  This is to avoid that other atoms e.g.\ from solvent come in
@@ -150,15 +151,15 @@ from the van der Walls term.
 
 \begin{figure}[ht]
 \includegraphics[scale=1.0]{figures/dummies.pdf}
-\caption{The mutation of ethane into methanol and explict topologies
+\caption{The mutation of ethane into methanol and explicit topologies
   for three states. a) The two circles denote atoms that have both vdW
   and Coulomb terms switched on with parameters for the respective
   hydrogen atom type.  b) The two hydrogen atoms have their charges
-  switched to zero (grey symbols in black circle).  All other charges
+  switched to zero (gray symbols in black circle).  All other charges
   are the ones from the methanol end state c (green) to ensures charge
   neutrality at each step.  VdW parameters are constant in the charge
   transfer step (see annotations in magenta).  c) vdW and Coulomb
-  parameters as for methanol while dummy atoms (grey Du) have those
+  parameters as for methanol while dummy atoms (gray Du) have those
   parameters all set to zero.}
 \label{fig:dummies}
 \end{figure}
@@ -183,8 +184,8 @@ states (in single topology fashion, see main text) and a single
 simulation control file with separate $\lambda$ vectors for charge and
 vdW transformations.  Any intermediate state from
 Figure~\ref{fig:dummies} is thus created ``on--the-fly'' i.e.\
-implictly during the simulation run.  With AMBER (up to version 16 as
-of this writing), however, three eplicit topology files (with sander,
+implicitly during the simulation run.  With AMBER (up to version 16 as
+of this writing), however, three explicit topology files (with sander,
 two with pmemd) and two control files would need to be created.  The
 state b in Figure~\ref{fig:dummies} would be created from state a with
 the charges from state c.  The bonded terms can be combined with
@@ -192,9 +193,9 @@ either mutation step or run separately.  For AMBER the easiest way is to
 combine vdW with bonded terms because charges are independent of atom
 types.
 
-Figure~\ref{fig:dummies2} illustrates excplicit topologies for
-transformations with both appearing and disappearing atoms.  The
-principle is essentially the same as in Figure~\ref{fig:dummies}:
+Figure~\ref{fig:dummies2} illustrates explicit topologies for
+transformations with both appearing and disappearing atoms in one simulation.  
+The principle is essentially the same as in Figure~\ref{fig:dummies}:
 charges of dummy atoms must be switched off before vdW parameters are
 set to zero to avoid interactions of ``naked'' charge sites with other
 atoms possibly leading to very close contact, large energies and
@@ -202,8 +203,8 @@ forces, and thus to unstable simulations and/or noisy statistics.
 However, charge neutrality at every $\lambda$ step is not supported in
 most MD codes i.e.\ the total system charge varies with $\lambda$
 unless the charges of \emph{all} atoms are switched off.  Possible
-strategies would be to explictly create topology files for each
-intermediate $\lambda$ state and distribute the dimished charges from
+strategies would be to explicitly create topology files for each
+intermediate $\lambda$ state and distribute the diminished charges from
 the dummy atoms over to the non--dummy atoms.  MD software like CHARMM
 allows to do this through scripting although this would be just as
 extensive as scripting the aforementioned strategy.
@@ -214,7 +215,7 @@ extensive as scripting the aforementioned strategy.
   appearing and disappearing atoms by example of the cyclopentanyl
   transfer from the 2 position in indole to the 7 position.  Blue
   lines denote atoms which have their charges switched off but with
-  vdW parameters from the left (state b) or right (state c). Grey
+  vdW parameters from the left (state b) or right (state c). Gray
   lines are dummy atoms with Coulomb and vdW parameters all zero.
   Note, the hydrogen bound to the 2 (state d) and 7 positions (state
   a) can be directly mutated from the respective carbon atom type
@@ -229,7 +230,7 @@ vdW on/off step.  Gromacs' $\lambda$ vectors only apply to the
 perturbed group as a whole and so it is not possible to define a
 $\lambda$ vector for only a subset.  AMBER requires two such files
 with sander and three topology/two control files with pmemd for the
-steps charge off, vdw on/off and charge on.  This is possible because
+three steps charge off, vdw on/off and charge on.  This is possible because
 with AMBER a subset of the perturbed group can be chosen to have zero
 charges (but AMBER does not have $\lambda$ vectors).  CHARMM has
 scripting facilities that let the user manipulate force field
@@ -237,7 +238,7 @@ parameters of any arbitrary subset of the system such that
 intermediate states can be defined ``on--the-fly'' with only one
 control script and one topology file.  The tool
 FESetup~\cite{loeffler_fesetup:_2015} automates most of these setup
-steps.
+steps for all these MD packages.
 
 
 \section{Detailed Results}
@@ -255,8 +256,10 @@ softcore functions.
 \begin{table}
   \begin{minipage}{\linewidth}
     \caption{Comparison between separated and 1--step protocol in
-      AMBER.  The data for the 1--step protocol highlights in red problems in
-      the code. $\Delta G_\mathrm{sol}$ has been computed with pmemd.  $\Delta G_\mathrm{vac}$ has been computed with sander.}\label{tab:amber-onestep}
+      AMBER.  The data for the 1--step protocol highlights problems in
+      the code in red. $\Delta G_\mathrm{sol}$ has been computed with pmemd.  
+      $\Delta G_\mathrm{vac}$ has been computed with 
+      sander.}\label{tab:amber-onestep}
     \makebox[\textwidth][c]{%
     \begin{tabular}{lllrrrrrr}
       \toprule
@@ -317,7 +320,7 @@ transformation i.e.\ the charges correspond to the methane end state.
 
 The geometrical variation along $\lambda$ for the data in the main
 text is shown in the black and red graphs.  The initial distance is
-slightly smaller than what expected from a C--H distance for the
+slightly smaller than what is expected from a C--H distance for the
 particular atom types at $\lambda = 0$.  The final distance is about
 \SI{1.23}{\angstrom} which is in contrast to the \SI{1.09}{\angstrom}
 of the c3--hc bond of the GAFF force field.  The crosses in violet
@@ -344,9 +347,17 @@ parameters were kept constant at the neopentane initial state.  The
 observed end distance was about \SI{1.23}{\angstrom} which is to be
 expected given that the symmetrically arranged methyl groups
 will repel each other and thus not allow to reach the final distance.
-Only after the final vdW only mutation had been carried out, were the final distances of \SI{1.09}{\angstrom} reached.
+Only after the final vdW (only) mutation had been carried out, were the final 
+distances of \SI{1.09}{\angstrom} reached.
 
-Table~\ref{tab:amber-disc} summarizes the free energy components for the 2--methylindole to methane case for both forward and backward transformations.  The electrostatic contributions display a very small SEM and the averages from both directions agree with each other up to the second digit after the comma.  The van der Waals contributions show a higher SEM and the averages from the solution simulations agree well with each other.  However, the van der Waals contributions from the vacuum transformation are apart by \SI{0.3}{kcal.mol^{-1}}.
+Table~\ref{tab:amber-disc} summarizes the free energy components for the 
+2--methylindole to methane case for both forward and backward transformations.  
+The electrostatic contributions display a very small SEM and the averages from 
+both directions agree with each other up to the second digit after the comma.  
+The van der Waals contributions show a higher SEM and the averages from the 
+solution simulations agree well with each other.  However, the van der Waals 
+contributions from the vacuum transformation are apart by 
+\SI{0.3}{kcal.mol^{-1}} (highlighted in red).
 \begin{table}
   \begin{minipage}{\linewidth}
     \caption{Free energy components for 2--methylindole computed from implicit dummy RAFE simulations.  The data are averages over three runs.}\label{tab:amber-disc}
@@ -355,8 +366,10 @@ Table~\ref{tab:amber-disc} summarizes the free energy components for the 2--meth
         \toprule
         transformation & & $\Delta G_\mathrm{sol}^\mathrm{vdW}$ & SEM & $\Delta G_\mathrm{vac}^\mathrm{vdW}$  & SEM & $\Delta G_\mathrm{sol}^\mathrm{elec}$ & SEM & $\Delta G_\mathrm{vac}^\mathrm{elec}$ & SEM \\
         \midrule
-2-methylindole  & methane      &  4.832 & 0.022 &  3.484 & 0.009 &  19.419 & 0.007 &  11.989 & 0.001 \\
-methane        & 2-methyindole & -4.900 & 0.017 & -3.185 & 0.011 & -19.412 & 0.009 & -11.989 & 0.001 \\
+2-methylindole  & methane      &  4.832 & 0.022 &  \hred{3.484} & 0.009 &  
+19.419 & 0.007 &  11.989 & 0.001 \\
+methane        & 2-methyindole & -4.900 & 0.017 & \hred{-3.185} & 0.011 & 
+-19.412 & 0.009 & -11.989 & 0.001 \\
         \bottomrule
       \end{tabular}
     }
