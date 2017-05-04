@@ -114,8 +114,9 @@ Roughly speaking, fast methods tend to be less accurate while more
 accurate methods tend to be slow.  Nevertheless, rigorous
 methods are obligatory in obtaining accurate, precise and reliable
 results, while less accurate methods can be used as an input filter
-for more expensive approaches.
-{\color{red} Do we need to explain ``rigorous'', i.e., methods giving asymptotically correct free energy estimates (correct in the limit of enough simulation time) given a choice of model?}
+for more expensive approaches.  By rigorous we mean methods that give
+asymptotically correct free energy estimates i.e. they are correct in the limit 
+of sufficient simulation time.
 
 One such method is the so-called \emph{alchemical} free energy
 approach whose theory is firmly rooted in statistical thermodynamics
@@ -133,7 +134,7 @@ framework~\cite{GILSON19971047, doi:10.1021/jp0217839,
 non-equilibrium techniques~\cite{ytreberg_comparison_2006, JCC:JCC23804,
   doi:10.1021/ct500964e}.  The name comes from the nonphysical
 intermediates that often need to be created to smoothly interpolate
-between end states and because parts or all of a molecule may appear
+between end states and because parts or all of a molecule may ``appear''
 or ``disappear'' in a transformation.  In the context of force field
 methods the transformation takes place in parameter space, i.e.\ the
 force field's parameters determining strength and equilibrium of
@@ -177,37 +178,45 @@ particular focus of recent years~\cite{GILSON19971047,
 here really means that the equilibrium constant of a physical
 reaction, e.g.\ binding and dissociation, can be calculated directly
 by completely decoupling a whole molecule from its environment and the
-%need to define ``decoupling''? Will we also be using ``annihilation''? If so may have to clearly define both when first used.
 term is mostly being used to discriminate against \emph{relative}
-techniques (see below).  These schemes may require two simulations
-along the parallel legs of a rectangular thermodynamic cycle but
-%Seems like parallel/rectangular might not be the best way to say this, as one could presumably draw a trapezoidal thermodynamic cycle and it could still work as well.
-approaches that produce the reversible work directly in one simulation
+techniques (see below).  Decoupling means the scaling of the non--bonded 
+\emph{inter}--molecular interactions between the perturbed group (all atoms 
+that differ in at least one force field parameter between the end states) and 
+its environment.  We distinguish this from ``annihilation'' which would also
+scale the \emph{intra}--molecular interactions in addition to the 
+inter--molecular interactions. These schemes may require two 
+simulations along the opposite edges of a quadrilateral thermodynamic cycle 
+but approaches that produce the reversible work directly in one simulation
 have been proposed too~\cite{doi:10.1063/1.3519057, C3FD00125C}.
 
 Relative alchemical free energy (RAFE) calculations ``mutate'' one
 molecule into another one.  This is most efficiently
 achieved~\cite{doi:10.1021/j100056a020, Michel2010} by making use of
 the single topology method~\cite{doi:10.1063/1.449208,
-  doi:10.1021/j100056a020, doi:10.1021/jp981628n}.  Single topology
-means that there is only one description of the molecule to be
-mutated.  
-%"Description" seems vague. Set of coordinates? Should we have a figure explaining the difference?
+doi:10.1021/j100056a020, doi:10.1021/jp981628n}.  Single topology means that 
+there is only one representation of the molecule to be mutated, also implying a 
+single set of coordinates.
+% Should we have a figure explaining the difference? In SI?
 Thus, atom types are directly transformed into the new type,
-typically by linearly scaling force field parameters.
-Disappearing/appearing atoms are balanced with ``dummy'' atoms, %"balanced with" -> "represented by"?
-i.e. atoms that have no non--bonded interactions in the end state but
-retain the bonded terms of the original atom.  AMBER is a special case
-as it does not require the use of dummy atoms: the bonded terms of
-atoms that do not exist in the end state will not contribute to the
-free energy implying that contributions from dummy atoms perfectly
-cancel in the thermodynamic cycle. 
-%DLM: I don't understand what this is saying about how AMBER does things. Clarify?
- RAFEs are useful e.g.\ in ranking
-which one of a set of small molecules binds strongest to a chosen
-target.  This approach has recently gained more traction in the
-context of relative free binding energies between small molecules and
-biomolecules~\cite{doi:10.1021/ja512751q}.
+typically by linearly scaling the force field parameters.
+Disappearing/appearing atoms need to be balanced with ``dummy'' atoms to ensure 
+constant number of atoms in both end states.  Dummy atoms have no non--bonded 
+interactions in the end state but retain the bonded terms of the original atom 
+to avoid complications with unbound atoms~\cite{doi:10.1021/jp981628n} (see 
+also ``wandering'' ligand problem below).  AMBER is a special case
+as it does not require the user to define dummy atoms explicitly, i.e.\ as 
+atoms with coordinates and zero end state parameters in the topology, but only 
+to mark the disappearing and appearing atoms in the control file for the 
+MD engine.  The contributions of bonded terms that involve at least one 
+dummy atom will not be factored into the free energy as it is assumed that 
+those contributions will perfectly cancel in the thermodynamic 
+cycle~\cite{doi:10.1021/acs.jcim.5b00057, doi:10.1021/jp994193s}.
+
+RAFEs are useful for instance in ranking which one of a set of molecules binds 
+strongest to a chosen target.  This approach has recently gained more traction 
+in the context of relative free binding energies between small molecules e.g.\ 
+drug or lead like molecules and biomolecules~\cite{doi:10.1021/ja512751q, 
+doi:10.1021/acs.jctc.6b00991}.
 
 The single topology approach~\cite{doi:10.1021/j100056a020} requires a
 certain similarity between the two mutated states.  This means primarily
@@ -230,7 +239,7 @@ corresponds to an ideal gas molecule~\cite{doi:10.1021/jp981628n}.
 This, however, comes with additional complications as two independent
 molecules can drift apart and so suffer from the ``wandering'' ligand
 problem as in absolute transformations\cite{GILSON19971047,
-  doi:10.1021/jp0217839, deng_computations_2009}.  Topolological
+doi:10.1021/jp0217839, deng_computations_2009}.  Topolological
 similarity can only be exploited when the charges of the common core
 are explicitly made equivalent~\cite{doi:10.1021/acs.jctc.5b00179}.
 This approach, however, shifts all the chemical variability
@@ -248,9 +257,7 @@ CHARMM~\cite{JCC:JCC21287}, GROMACS~\cite{Abraham201519},
 GROMOS~\cite{doi:10.1021/jp984217f} and Sire/SOMD~\cite{Sire-2016,
   doi:10.1021/ct300857j} offer a hybrid single/dual topology approach
 i.e.\ the user can specify which part of a perturbed group should be
-handled by which method~\cite{doi:10.1021/jp994193s}.  The perturbed
-group comprises of all atoms that differ in at least one force field
-parameter between the end states.
+handled by which method~\cite{doi:10.1021/jp994193s}.
 
 As alluded to above, reliability is a principal matter of concern.  In
 particular, we need to ensure reproducibility of free energy results
