@@ -492,14 +492,16 @@ in~\cite{Bosisio2016} {\color{red} (some details here?)}.
 the relative hydration free energies ($\Delta \Delta G_{\mathrm{hydr}}$).
 Each transformation had its Gibbs free energy calculated: (i) in a single topology 
 approach in which van der Waals energy terms were changed separately 
-from the electrostatic and bonded components; (ii) in a single topology approach that changed 
-bonded, van der Waals, and electrostatic terms simultaneously;  and (iii) via the difference 
+from the electrostatic and bonded components; (ii) in a single topology approach in which  
+bonded, van der Waals, and electrostatic terms are changed together;  and (iii) via the difference 
 between two absolute calculations.
 In the first two cases, each alchemical transformation was described by 31 and 16 
 states, respectively, and simulated for 4.2 ns with time steps of 1 fs in water and a vacuum. 
+Atomic masses were not changed along the alchemical path;
+their change affect kinetic energy only and do not contribute for the free energy change. 
 We used the Langevin integrator implemented in GROMACS with default friction 
 coefficient of 1.0 $ps/ m_{atom}$. 
-Absolute hydration free energies were calculated using a protocol used in previous works [refs]%\cite{newFreeSolvPaper}.
+Absolute hydration free energies were calculated using a protocol used in previous works \cite{duarte_ramos_matos_approaches_2017, mobley_freeSolv:_2014}.
 A Parrinello-Rahman barostat with $\tau_p =$ 10 ps and compressibility equal to 4.5 $\cdot 10^{-5}$ bar$^{-1}$.
 We used two methods to calculate electrostatic interactions: Particle Mesh Ewald (PME) 
 and Reaction Field with a dielectric of 78.3, as implemented in the software. 
@@ -508,7 +510,10 @@ PME calculations were of order 6 and had a tolerance of 1.0 $\cdot 10^{-6}$, wit
 All transformations required the use of soft-core potentials to avoid numerical problems in the free energy calculation. 
 We chose the 1-1-6 soft-core potential for Lennard-Jones 
 terms and used the default soft-core Coulomb implementation in paths where charges, van der 
-Waals, and bonded terms were modified together.
+Waals, and bonded terms were modified together, but no soft core potentials were applied 
+to Coulomb interactions when Coulomb interactions were modified separately.
+
+\todo{make figure explaining the protocols described here.}
 
 \subsection{Analysis}
 \label{sec:analysis}
@@ -670,39 +675,42 @@ A discrepancy of consistently 0.2--\SI{0.4}{kcal.mol^{-1}} is evident from every
 
 \todo{investigate why methane~ethane and ethane~methane differ so much from the other packages}
 
-\todo{make a compact $\partial \mathrm{H}/\partial\lambda$ plot}
+\todo{Make a figure that illustrates the choices of relative transformation}
+
+\todo{Run split protocol simulations with gaff1.8 \textbf{\emph{and}} soft-core coulomb}
 
 \todo{make figures XX1 and XX2 (I think they should probably go in the SI)}
 
 GROMACS has some run input options which can simplify the procedure for setting up 
 free energy calculations; however, these same options can also provide a source of error
-if used naively. Additionally, analysis of the results depends on understanding how these 
-features are used because 
-they can be a source of errors if misused. Specifically, \texttt{couple-moltype} implicitly defines the 
-initial and final states. %What about them? It defines what molecule to be coupled/decoupled, right? So if it defines something about the 
-%initial and final states you're going to have to say what you mean by that.
- It should be used in absolute free energy calculations to tag the 
-molecule that will be decoupled from the rest of the system. \texttt{couple-moltype} should 
-not be used in relative transformations in GROMACS. %because why? "... because relative calculations rely on turning off interactions between only part of a molecule and the rest of the system, not the entire molecule, so use of this option is inappropriate for relative calculations (though this is not well documented)."
- \texttt{couple-lambda0} and 
-\texttt{couple-lambda1} define which of the \textbf{tagged} molecule's non-bonded parameters  %what is a tagged molecule?
-are present in the initial and in the final state, respectively.  In absolute free energy 
+if used naively. Additionally, running the simulations depends on understanding how these 
+features are used because they can be a source of errors if misused. Specifically, 
+\texttt{couple-moltype} implicitly defines the initial and final states by giving a special tag
+to a molecule and determining how it is coupled to the rest of the system.
+ %What about them? It defines what molecule to be coupled/decoupled, right? So if it defines something about the initial and final states you're going to have to say what you mean by that.
+%[GDRM] changed
+It should be used in absolute free energy calculations to tag the molecule which will be 
+decoupled from the rest of the system. \texttt{couple-moltype} should not be used in 
+relative transformations in GROMACS because relative calculations rely on turning off 
+interactions between only part of a molecule and the rest of the system, not the entire 
+molecule, so use of this option is inappropriate for relative calculations. 
+\texttt{couple-lambda0} and \texttt{couple-lambda1} define which of the tagged 
+molecule's non-bonded parameters are present in the initial and in the final state, respectively. In absolute free energy 
 calculations, one of them is usually set to turn on both van der Waals and electrostatic 
 interactions, while the other, to turn off any interactions with the surroundings.
-In relative free energy calculations, however, they should be avoided. %What does it mean to avoid them? Why?
-\texttt{couple-intramol} 
-specifies if you want to modify intramolecular interactions along the alchemical 
+In relative free energy calculations, however, their use is not necessary because 
+\texttt{couple-moltype} is \texttt{none}. 
+\texttt{couple-intramol}  specifies if you want to modify intramolecular interactions along the alchemical 
 path and should be set to \texttt{yes} in relative transformations. Setting this to \texttt{no}
 would mean intramolecular interactions are maintained at their existing values while the 
 free energy transformation is conducted, leading to an incomplete transformation and introducing 
 errors in computed free energies.
 
 Here, we choose absolute hydration free energies as our standard point of comparison 
-because these are easily calculated with considerable precision [refs] and are considerably simpler to
-set up and implement than relative calculations.
-Prior work actually compared calculated absolute hydration free energies across different codes with considerable success [ref 10.1007/s10822-010-9343-7, see Fig 7], further supporting this view.
-Thus, we compared relative free 
-energies calculated via simultaneous parameter change simulations -- our ``unified protocol'' -- 
+because these are easily calculated with considerable precision \cite{duarte_ramos_matos_approaches_2017} %check for more references 
+and are considerably simpler to set up and implement than relative calculations.
+Prior work actually compared calculated absolute hydration free energies across different codes with considerable success \cite{klimovich_predicting_2010} (see Fig 7 in reference), further supporting this view.
+Thus, we compared relative free energies calculated via simultaneous parameter change simulations -- our ``unified protocol'' -- 
 and separated parameter change simulations -- our ``split protocol''-- to relative free energy 
 calculations obtained from two absolute hydration free energies -- our ``absolute protocol''.
 The unified protocol changes partial charges, van der Waals parameters, and bond 
@@ -710,9 +718,13 @@ parameters simultaneously along the alchemical path, while the split protocol
 stages the transformation in a van der Waals parameter change followed by a simultaneous  
 bonded terms and charges modifications, or vice-versa. In the framework 
 of the split routine, windows without a reasonably strong counterbalancing Lennard-Jones 
-component are subject to very large electrostatic forces that compromise the simulation.  %Compromise how? Is this the "nuclear fusion" type problem previously noted? I think this is discussed on Alchemistry/in the literature, probably should be cited? 
+component are subject to very large electrostatic forces that will crash the simulation
+~\cite{pitera_comparison_2002, anwar_robust_2005}.  
 Thus we find that for stable and effective relative free energy calculations, particle deletion processes
-require electrostatic terms to be turned off before van de Waals and bonded parameters are removed/modified. Insertion processes, in their turn, demand bonded and van der Waals parameters to be changed before charges are turned on.
+require electrostatic terms to be turned off before van de Waals and bonded parameters are removed/modified. 
+Insertion processes, in their turn, demand bonded and van der Waals parameters to be changed before charges are turned on.
+The relative free energies of processes $A \rightarrow B$ and $B \rightarrow A$ tend to be equivalent if the protocol of the former
+is the reverse of the latter, i.e., both end states should be connected by the same path in $\lambda$-space. 
 
 \begin{sidewaystable}[]
 \centering
@@ -720,39 +732,45 @@ require electrostatic terms to be turned off before van de Waals and bonded para
 \label{tab:groresults}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{llcccccccccccc}
-\hline
- &  & \multicolumn{4}{c}{Absolute \footnote{\label{foot:abs}results obtained from absolute free energy calculations.}} & \multicolumn{4}{c}{Split \footnote{\label{foot:split} results obtained from alchemical transformations with vdW scaling separate from scaling of electrostatic and bonded terms.}} & \multicolumn{4}{c}{Unified \footnote{\label{foot:uni} results obtained from alchemical transformations with all parameters scaled together.}} \\
- &  & \multicolumn{2}{c}{GROMACS (RF)} & \multicolumn{2}{c}{GROMACS (PME)} & \multicolumn{2}{c}{GROMACS (RF)} & \multicolumn{2}{c}{GROMACS (PME)} & \multicolumn{2}{c}{GROMACS (RF)} & \multicolumn{2}{c}{GROMACS (PME)} \\
-\multicolumn{2}{c}{Transformations} & $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & SEM \\ \hline
-methane & ethane & 0.059 & 0.012 & 0.036 & 0.009 & -0.199 & 0.015 & -0.183 & 0.007 & -0.187 & 0.018 & -0.165 & 0.011 \\
-ethane & methane & -0.059 & 0.012 & -0.036 & 0.009 & 0.188 & 0.018 & 0.178 & 0.019 & 0.248 & 0.003 & 0.236 & 0.002 \\
-ethane & methanol & -5.829 & 0.012 & -5.983 & 0.008 & -6.046 & 0.008 & -6.107 & 0.006 & -7.038 & 0.005 & -7.134 & 0.018 \\
-methanol & ethane & 5.829 & 0.012 & 5.983 & 0.008 & 6.047 & 0.003 & 6.116 & 0.002 & 7.252 & 0.008 & 7.324 & 0.007 \\
-methane & methanol & -5.77 & 0.01 & -5.947 & 0.009 & -6.212 & 0.047 & -6.243 & 0.047 & -7.205 & 0.019 & -7.289 & 0.019 \\
-methanol & methane & 5.77 & 0.01 & 5.947 & 0.009 & 6.388 & 0.007 & 6.422 & 0.005 & 7.530 & 0.018 & 7.611 & 0.010 \\
-methane & 2-methylfuran & -2.867 & 0.01 & -2.95 & 0.01 & -3.125 & 0.008 & -3.080 & 0.013 & -3.143 & 0.006 & -3.102 & 0.011 \\
-2-methylfuran & methane & 2.867 & 0.01 & 2.95 & 0.01 & 3.084 & 0.008 & 3.028 & 0.008 & 3.144 & 0.014 & 3.087 & 0.013 \\
-methane & toluene & -2.969 & 0.011 & -3.159 & 0.011 & -3.246 & 0.011 & -3.204 & 0.012 & -3.328 & 0.013 & -3.310 & 0.010 \\
-toluene & methane & 2.969 & 0.011 & 3.159 & 0.011 & 3.268 & 0.026 & 3.259 & 0.023 & 3.303 & 0.009 & 3.292 & 0.010 \\
-methane & 2-methylindole & -8.438 & 0.017 & -8.793 & 0.015 & -8.789 & 0.031 & -8.797 & 0.010 & -8.670 & 0.027 & -8.732 & 0.043 \\
-2-methylindole & methane & 8.438 & 0.017 & 8.793 & 0.015 & 8.744 & 0.020 & 8.764 & 0.030 & 8.756 & 0.014 & 8.834 & 0.026 \\
-methane & neopentane\footnote{\label{foot:cent}central mapping.} & 0.181 & 0.012 & 0.135 & 0.009 & -0.207 & 0.018 & -0.154 & 0.047 & -0.239 & 0.014 & -0.076 & 0.011 \\
-neopentane & methane\footref{foot:cent} & -0.181 & 0.012 & -0.135 & 0.009 & 0.359 & 0.021 & 0.309 & 0.026 & 0.294 & 0.021 & 0.218 & 0.034 \\
-methane & neopentane\footnote{\label{foot:term}terminal mapping.} & 0.181 & 0.012 & 0.135 & 0.009 & -0.053 & 0.024 & 0.036 & 0.017 & -0.025 & 0.010 & 0.036 & 0.017 \\
-neopentane2 & methane\footref{foot:term} & -0.181 & 0.012 & -0.135 & 0.009 & -0.027 & 0.007 & -0.043 & 0.012 & -0.049 & 0.011 & -0.069 & 0.012 \\
-2-cyclopentanylindole & 7-cyclopentanylindole & -0.018 & 0.05 & 0.019 & 0.023 & -0.067 & 0.022 & -0.031 & 0.028 & -0.094 & 0.052 & -0.135 & 0.103 \\
-7-cyclopentanylindole & 2-cyclopentanylindole & 0.018 & 0.05 & -0.019 & 0.023 & 0.119 & 0.057 & 0.204 & 0.043 & 0.117 & 0.077 & 0.220 & 0.102 \\ \hline
+\toprule
+ &  & Split \footnote{\label{foot:split} results obtained from alchemical transformations with electrostatic and bonded scaling separate from vdW parameter change.} &  &  &  & Unified \footnote{\label{foot:uni} results obtained from alchemical transformation with all parameters scaling together.} &  &  &  & Absolute \footnote{\label{foot:abs}results obtained from absolute free energy calculations.} &  &  &  \\
+ &  & GROMACS (RF) &  & GROMACS (PME) &  & GROMACS (RF) &  & GROMACS (PME) &  & GROMACS (RF) &  & GROMACS (PME) &  \\
+Transformations &  & $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & SEM \\ \midrule
+methane & ethane & -0.20 & 0.02 & -0.18 & 0.01 & -0.19 & 0.02 & -0.17 & 0.01 & 0.06 & 0.01 & 0.04 & 0.01 \\
+ethane & methane & 0.19 & 0.02 & 0.18 & 0.02 & 0.248 & 0.003 & 0.236 & 0.002 &  &  &  &  \\
+ethane & methanol & -6.05 & 0.01 & -6.11 & 0.01 & -7.04 & 0.01 & -7.13 & 0.02 & -5.83 & 0.01 & -5.98 & 0.01 \\
+methanol & ethane & 6.05 & 0.00 & 6.12 & 0.00 & 7.25 & 0.01 & 7.32 & 0.01 &  &  &  &  \\
+methane & methanol & -6.21 & 0.05 & -6.24 & 0.05 & -7.21 & 0.02 & -7.29 & 0.02 & -5.77 & 0.01 & -5.95 & 0.01 \\
+methanol & methane & 6.39 & 0.01 & 6.42 & 0.01 & 7.53 & 0.02 & 7.61 & 0.01 &  &  &  &  \\
+methane & 2-methylfuran & -3.13 & 0.01 & -3.08 & 0.01 & -3.14 & 0.01 & -3.10 & 0.01 & -2.87 & 0.01 & -2.95 & 0.01 \\
+2-methylfuran & methane & 3.08 & 0.01 & 3.03 & 0.01 & 3.14 & 0.01 & 3.09 & 0.01 &  &  &  &  \\
+methane & toluene & -3.25 & 0.01 & -3.20 & 0.01 & -3.33 & 0.01 & -3.31 & 0.01 & -2.97 & 0.01 & -3.16 & 0.01 \\
+toluene & methane & 3.27 & 0.03 & 3.26 & 0.02 & 3.30 & 0.01 & 3.29 & 0.01 &  &  &  &  \\
+methane & 2-methylindole & -8.79 & 0.03 & -8.80 & 0.01 & -8.67 & 0.03 & -8.73 & 0.04 & -8.44 & 0.02 & -8.79 & 0.02 \\
+2-methylindole & methane & 8.74 & 0.02 & 8.76 & 0.03 & 8.76 & 0.01 & 8.83 & 0.03 &  &  &  &  \\
+methane & neopentane & -0.21 & 0.02 & -0.15 & 0.05 & -0.24 & 0.01 & -0.08 & 0.01 & 0.18 & 0.01 & 0.14 & 0.01 \\
+neopentane & methane & 0.36 & 0.02 & 0.31 & 0.03 & 0.29 & 0.02 & 0.22 & 0.03 &  &  &  &  \\
+methane & neopentane2 & -0.05 & 0.02 & 0.04 & 0.02 & -0.03 & 0.01 & 0.04 & 0.02 & 0.18 & 0.01 & 0.14 & 0.01 \\
+neopentane2 & methane & -0.03 & 0.01 & -0.04 & 0.01 & -0.05 & 0.01 & -0.07 & 0.01 &  &  &  &  \\
+2-cyclopentanylindole & 7-cyclopentanylindole & -0.07 & 0.02 & -0.03 & 0.03 & -0.09 & 0.05 & -0.1 & 0.1 & -0.02 & 0.05 & 0.02 & 0.02 \\
+7-cyclopentanylindole & 2-cyclopentanylindole & 0.12 & 0.06 & 0.20 & 0.04 & 0.12 & 0.08 & 0.2 & 0.1 &  &  &  &  \\ \bottomrule
 \end{tabular}
 }
 \end{sidewaystable}
 
 Transformations having simultaneous particle insertion or deletion, such as 
 2-cyclopentanylindole $\rightarrow$ 7-cyclopentanylindole and its reverse, require 
-an adapted split protocol. The simulation is divided into two stages: a deletion and 
-an insertion stage. For the sake of optimizing computational resources used, the deletion 
-step transforms a molecular branch into a dummy branch while turning on the Lennard-
-Jones parameters of the new molecular piece in 31 windows. This modification 
-allows a smaller insertion step of 16 windows.
+an adapted split protocol. The simulation is divided into two stages: a deletion stage, 
+in which a molecular part is transformed in a group of dummy atoms, and 
+an insertion stage, in which a different set of dummy atoms fully become another 
+molecular part. These stages differ from the aforementioned deletion and insertion stages
+in the states in which Lennard-Jones parameters are modified, and the number 
+of simulation windows. In the interest of optimizing computational resources used, the deletion 
+stage changes all Lennard-Jones parameters associated to all molecular parts relevant 
+to the transformation. This modification allows a smaller insertion stage of 16 windows 
+in which only charges and bonded terms of the new molecular part are modified.
+
+\todo{make a figure illustrating the idea of the previous paragraph} 
 
 Table \ref{tab:groresults} lists the relative free energies obtained from GROMACS simulations.
 Relative free energies are in good agreement with each other and with 
@@ -764,7 +782,8 @@ near $\lambda = $ 1.0, while similar behavior is not observed in the latter (Fig
 Investigation of the phase space overlap plots (Figure XX2) obtained from \texttt{alchemical}\_\texttt{analysis.py} 
 show in the unified case a poor overlap between the last state and its neighbors, 
 which can explain the difference in free energy. 
-%Why is there poor overlap?
+
+\todo{we speculate it is an soft-core coulomb issue, but I'm not confident enough to write it down before I run some gaff1.8 simulations using soft-core coulomb in the split protocol. In this way it will be possible to compare electrostatic components of $\Delta G_{A\rightarrow B}$.}
 
 Ethane $\rightarrow$ methane and methane $\rightarrow$ ethane split and unified 
 results are quite different from their corresponding absolute results, and from other MD packages. %(WHY? Investigate it)
@@ -772,8 +791,7 @@ Neopentane $\rightarrow$ methane transformations, and their reverse processes
 also disagree with the absolute protocol, but similar differences can be seen in AMBER.
 
 We find that there is no significant difference in calculated free energies depending on the choice of 
-Particle Mesh Ewald or Reaction Field 
-for calculation of long-range electrostatic interactions. 
+Particle Mesh Ewald or Reaction Field for calculation of long-range electrostatic interactions. 
 
 One particularity of the software worth mentioning is 
 that relative free energy simulations will blow up if a hydrogen alchemically becomes a heavy 
