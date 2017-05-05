@@ -493,6 +493,7 @@ perturbed group and so the time step was set to \SI{1}{fs} (see Sire protocol
 below for an alternative approach).  Temperature was controlled through a 
 Langevin thermostat and pressure through a Monte Carlo barostat.
 
+
 \paragraph{Sire/SOMD} All simulations were carried out with
 Sire/OpenMM 6.3 (revision 16.1).  Each alchemical transformation was
 divided into 17 evenly spaced windows and simulated for \SI{2}{ns}
@@ -500,19 +501,32 @@ both in water an vacuum phase. A velocity-Verlet integrator was
 employed with \SI{2}{fs} timestep, constraining all the hydrogen bonds
 not alchemically transformed (unperturbed H protocol). An atom--based
 Barker--Watts reaction field~\cite{doi:10.1080/00268977300102101} with
-a dielectric constant of \num{82.0} was employed for water phase
-simulations. A cutoff of \SI{12}{\angstrom} was set for non-bonded
+a dielectric constant of \num{82.0} was adopted for water phase
+simulations. Furthermore, a cutoff of \SI{12}{\angstrom} was set for non-bonded
 interactions and periodic boundary conditions were imposed.
 Temperature control was achieved with the Andersen
 thermostat~\cite{doi:10.1063/1.439486} with a coupling constant of
 \SI{10}{ps^{-1}}.  A Monte Carlo barostat assured pressure control,
-attempting isotropic box edge scaling every 25 time steps. At each
-$\lambda$ window all bond, angle and dihedral energy terms were
-scaled, differently (how?) from Gromacs and Amber.  For each vacuum
-simulation a free energy correction term $G_{\mathrm{FUNC}}$ was
+attempting isotropic box edge scaling every 25 time steps.
+Differently from water phase simulations, he reaction field was not employed in vacuum
+and a Coulombic potential without cutoff was used.
+This aspect led to an inconsistent description of the intramolecular electrostatic interactions
+of the solute in the solvated and vacuum phases.
+Thus, to enable a meaningful estimation of the free energy change 
+a free energy correction term $G_{\mathrm{FUNC}}$ was
 evaluated to treat intramolecular Coulombic interactions consistently
-between water and vacuum legs of the thermodynamic cycle, as explained
-in~\cite{Bosisio2016} (some details here?).
+between water and vacuum legs of the thermodynamic cycle, fig~\ref{fig:thermocycle}, as explained
+in ~\cite{Bosisio2016} . $G_{\mathrm{FUNC}}$ term was obtained
+via post-processing the end states trajectories of each water
+phase simulations, by using the Zwanzig relation~\cite{zwanzig_high-temperature_1954}:
+\begin{equation}
+ \label{eq:ZwanzigDGfunc}
+ G_{\mathrm{FUNC}} = -\beta^{-1} \ln \langle exp \left[-\beta(U_{\mathrm{ic,nc}}(\mathbf{r}) - U_{\mathrm{ic,sim}}(\mathbf{r}))\right]\rangle_{\mathrm{sim}}
+\end{equation}
+where $U_{\mathrm{ic,nc}}(\mathbf{r})$ is the solute intramolecular electrostatic 
+potential that depends on the coordiantes $\mathbf{r}$ of the solute and Coulomb's law. 
+$U_{\mathrm{ic,sim}}(\mathbf{r})$ is the intramolecular electrostatic potential term as
+computed in the simulation with a BWRF cutoff. 
 
 
 \subsection{Analysis}
@@ -707,50 +721,76 @@ A discrepancy of consistently 0.2--\SI{0.4}{kcal.mol^{-1}} is evident from every
 \subsection{Sire/SOMD}
 \label{sec:somd-results}
 
-Results for Sire relative free energy calculations are shown in (FIG OR TABLE
-TO BE DECIDED. Plot for MUD for each package?) good/bad agreement, final MUD =
-?)
+\begin{figure}[ht]
+  \includegraphics[width=\textwidth]{figures/sire_histogram.pdf}
+  \caption{Relative free energy of hydration $\Delta\Delta G$, computed with RAFE calculations, compared with $\Delta\Delta G$ derived from absolute free energy calculations for A: methane to ethane, B: ethane to methanol, C: methane to methanol, D: methane to 2-methylfuran, E: methane to toluene,
+  F: methane to 2-methylindole, G: methane to neopentane, H: 2-cyclopentanylindole to 7-cyclopentanylindole.}
+  \label{fig:sire_histogram}
+\end{figure}
 
-To achieve reproducibility the role of constraints was extremely
-influential.  Fig.\ X shows the comparison between relative hydration
-free energies computed by using different constraint schemes during
-the simulation. When all bonds of the ligand are constraint a
-systematic offset with respect to the other constraints with a MUD =
-\SI{0.38}{kcal.mol^{-1}} was observed with respect to the no
-constraint case and MUD = \SI{0.36}{kcal.mol^{-1}} compared to the
-unperturbed H protocol (see section~\ref{sec:rafe_protocols}).
-Furthermore, analysing these simulations with Gromacs and Amber all
-bond constraints bring a MUD = \SI{1.2}{kcal.mol^{-1}}. The main
-problem, for all bond constraints in RAFE calculations in Sire, is the
-missing overlap between the potential energy functions between each
-$\lambda$--step.  Further discrepancies appear when different
-mappings and all bonds are constraint as Fig.\ X shows.
 
-Referring to Fig.\ X, transforming neopentane to methane (centrally
-mapped) shows a $\Delta\Delta G_{\mathrm{hyd}}$ of \SI{2.04 +-
-  0.01}{kcal.mol^{-1}}, while for the backward transformation
-$\Delta\Delta G_{\mathrm{hyd}}$ = \SI{-2.10 +- 0.01}{kcal.mol^{-1}},
-which highly overestimates the free energy compared to Gromacs and
-Amber (REFER TO TAB). Unexpectedly, simulation of neopentane to
-methane (terminally mapped) shows a $\Delta\Delta G_{\mathrm{hyd}}$ =
-\SI{0.59 +- 0.01}{kcal.mol^{-1}} and $\Delta\Delta G_{\mathrm{hyd}}$ =
-\SI{-0.48 +- 0.01}{kcal.mol^{-1}} for the reverse transformation.  As
-the free energy must be independent of the chosen path the discrepancy
-highlights a problem with using constraints on transformed atoms.  The
-solution adopted to achieve reproducibility in Sire is to rely on the
-unperturbed H protocol.  These constraints allow a timestep of 2\,fs
-with a MUD of \SI{0.30 +- 0.01}{kcal.mol^{-1}} with respect to Gromacs
-and Amber.
+Figure ~\ref{fig:sire_histogram} compares relative free energy of hydration $\Delta\Delta G$ with relative $\Delta\Delta G$ estimations from absolute free energy calculations, according to the best protocol for Sire/SOMD. A very good agreement is present between both calculations, highlighting consistency and reproducibility of results in Sire/SOMD itself, with a correlation index $R^2$=\SI{0.99}{} and a mean unsigned error MUE=\SI{0.10}{kcal.mol^{-1}} 
+(NB we could write a 95\% confidence interval MUE: \SI{0.08}< \SI{0.11} < \SI{0.14}{kcal.mol^{-1}})
+To achieve reproducibility in Sire/SOMD and among all the other codes, the role of constraints was crucial and a new kind of constraint was employed: unperturbed hydrogen bond constraint. Here, all the unperturbed hydrogen atoms'bonds are constrained, while the masses of the perturbed hydrogen atoms, namely atoms which undergo a transformation, are equal to the heaviest final state mass. In this way a symmetry between forward and backward mapping is guaranteed, and a timestep of \SI{2}{fs} is preserved, differently from using no constraints as in Amber, GROMACS or CHARMM. (Here add a figure to describe the constraint)
 
-To test the quality of relative free energies of hydration,
-$\Delta\Delta G$ were estimated also with absolute free energy
-calculations.  By computing the difference between absolute hydration
-of methane and all the other molecule, the relative free energy of
-hydration was computed.  Fig.\ X demonstrates the reliability of the
-unperturbed H protocol through consistency between relative and
-absolute simulations.  Furthermore, all the calculations can be
-performed in one step, differently (how?) from Amber and Gromacs.
-(EXPLAIN EXACTLY WHY)
+This new constraint overcomes issues encountered with Sire/SOMD starting protocol. Usually, RAFE calculations were performed with all bonds constrained, in order to have time step longer than \SI{2}{fs} ~\cite{hopkins2015long} , enhancing sampling with a reasonable computational cost.
+However, from a technical point of view, all bond constraint in Sire/SOMD sets all the bond energies to zero. Such an approximation may be true for small and rigid molecules, but a systematic offset is introduced for perturbations which involve lot of bonds to be perturbed.
+Indeed, considering neopentane to methane (centrally mapped) this bias gives a RAFE $\Delta\Delta G$=\SI{2.04 +- 0.01}{kcal.mol^{-1}} contrasting the absolute calculations $\Delta\Delta G$=\SI{-0.19 +- 0.06}{kcal.mol^{-1}}, as tab.~\ref{S-tab:sire_constraints} and fig.~\ref{S-fig:sire_constraints} show.
+Furthermore, simulation of neopentane to methane (terminally mapped) shows a $\Delta\Delta G$ =\SI{0.59 +- 0.01}{kcal.mol^{-1}}. As the free energy must be independent of the chosen path this discrepancy denotes a problem with using constraints on transformed atoms. 
+Such an offset was documented already by Boresch and Kollman ~\cite{pearlman1991overlookeds, doi:10.1021/jp981628n,doi:10.1021/jp981629f} , as a missing bond-stretching term, which can be estimated as: 
+\begin{equation}
+ \label{eq:allbondserror}
+ \Delta G= RT\ln \left ( \frac{r_{\mathrm{i}}}{r_\mathrm{f}} \right)  
+\end{equation}
+where $r_{\mathrm{i}}$ and $r_{\mathrm{f}}$ are the initial and final bond length respectively. Although for small bond lengths change this error may be negligible, it becomes pivotal for perturbations of  hydrogen atoms to carbon, nitrogen or oxygen, where the bond length changes of several tenth of Angstrom.
+After the implementation of the new constraint, a comparison with no constraints simulations has been run. Figure~\ref{S-fig:sire_constraints} shows that both protocols attains the same results with a final MUE=\SI{0.09}{kcal.mol^{-1}}.
+
+Tab ~\ref{tab:mue-comp} shows the MUE between Sire/SOMD, Gromacs employing reaction field (Gromacs RF), Gromacs with PME (Gromacs PME) and Amber  (alternatively: tab ~\ref{tab:muebound-comp} shows the MUE comparison with 95$\%$ of confidence interval between Sire/SOMD, Gromacs employing reaction field (Gromacs RF), Gromacs with PME (Gromacs PME) and Amber). 
+As regards reaction field methods, Sire/SOMD implements a Barker Watts reaction field (BWRF) with atom-based cutoff, as explained in subsection~\ref{sec:rafe_protocols} , while Gromacs adopts a BWRF with charge-group cutoff. Although this technical differences, consistency between Sire/SOMD  and Gromacs RF is present, with a MUE=\SI{0.18}{kcal.mol^{-1}}.
+However, methane to neopentane transformation is still matter of problems. In this case, Sire/SOMD is able to maintain consistency between central and terminal mapping, as shown in tab~\ref{S-tab:sire-finalresults}, while Gromacs RF has $\Delta\Delta$G=\SI{-0.20 +- 0.01}{kcal.mol^{-1}} for centrally mapped transformation and $\Delta\Delta$G=\SI{-0.05 +- 0.02}{kcal.mol^{-1}} for terminally mapped.
+As regards PME methods, Sire/SOMD presents a MUE=\SI{0.18}{kcal.mol^{-1}} and MUE=\SI{0.23}{kcal.mol^{-1}} with Gromacs PME and Amber respectively, achieving a very good agreement between $\Delta\Delta$G predictions. 
+(NB it may be good to say somewhere how much was the MUE with the initial standard protocol)
+(NB Gromacs RF in vacuum uses a dielectric of 1.0, this caused problem to Sire vacuum simulations instead)
+
+Overall, the Sire/SOMD free energy estimations are in good agreement with all the other codes, as the MUE suggests. Reproducibility was attained between reaction field and PME methods. In particular, the unperturbed hydrogen bonds constraint allows a timestep of \SI{2}{fs} and all the Sire/SOMD simulations can be carried out in one single step, with a single-topology paradigm, differently from multi-step approaches used in Amber, Gromacs and CHARMM.
+
+
+\begin{table}[]
+  \begin{minipage}{\linewidth}
+  \caption{MUE comparison between Sire/SOMD, Gromacs with Reaction Field (Gromacs RF), Gromacs with PME (Gromacs PME) and Amber in terms of MUE (\SI{}{kcal.mol^{-1}}.}\label{tab:mue-comp}
+  \makebox[\textwidth][c]{
+  \begin{tabular}{lrrrr}
+    \toprule
+    Package & Sire/SOMD & Gromcs RF & Gromacs PME & Amber\\
+    \midrule
+Sire/SOMD         & 0.00 & 0.18    & 0.18 & 0.23\\
+Gromacs RF   & 0.18 & 0.00    & 0.04 & 0.14\\ 
+Gromacs PME  & 0.18 & 0.04    & 0.00 & 0.14\\     
+Amber        & 0.23 & 0.14    & 0.14 & 0.00\\
+     \bottomrule
+  \end{tabular}
+}
+  \end{minipage}
+\end{table}
+
+
+\begin{table}[]
+  \begin{minipage}{\linewidth}
+  \caption{MUE with 95$\%$ confidence interval between Sire/SOMD, Gromacs with Reaction Field (Gromacs RF), Gromacs with PME (Gromacs PME) and Amber in terms of MUE (\SI{}{kcal.mol^{-1}}.}\label{tab:muebound-comp}
+  \makebox[\textwidth][c]{
+  \begin{tabular}{lcccc}
+    \toprule
+    Package & Sire/SOMD & Gromcs RF & Gromacs PME & Amber\\
+    \midrule
+Sire/SOMD         & 0.02< 0.04< 0.05 & 0.17< 0.19< 0.21    & 0.16< 0.18< 0.20 & 0.21< 0.23< 0.25\\
+Gromacs RF   	  & 0.17< 0.18< 0.19 & 0.01< 0.02< 0.03    & 0.04< 0.05< 0.06 & 0.13< 0.14< 0.15\\
+Gromacs PME       & 0.17< 0.18< 0.19 & 0.04< 0.05< 0.06    & 0.01< 0.02< 0.03 & 0.14< 0.15< 0.16\\
+Amber		  & 0.22< 0.23< 0.24 & 0.13< 0.14< 0.15    & 0.14< 0.15< 0.16 & 0.01< 0.02< 0.03\\
+     \bottomrule
+  \end{tabular}
+}
+  \end{minipage}
+\end{table}
 
 
 \section{Discussion}
