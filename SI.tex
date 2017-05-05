@@ -22,6 +22,8 @@
 \usepackage{easy-todo}
 \usepackage{footref}
 
+\externaldocument[R-]{reprod}
+
 \renewcommand{\footnoterule}{}
 \newcommand{\hred}[1]{\textcolor{red}{#1}}
 
@@ -417,6 +419,101 @@ explicit, partial & & & & & \\
     }
   \end{minipage}
 \end{table}
+
+
+\subsection{Sire/SOMD}
+\label{sec:sire-probs}
+
+
+\begin{table}
+  \begin{minipage}{\linewidth}
+    \caption{Final relative free energy of hydration $\Delta\Delta G$ estimations and standard error SEM with Sire/SOMD unperturbed hydrogen bonds protocol, RAFE, compared with 
+    relative free energy of hydration computed from absolute free energy simulations, RAFE-absolute}
+    \label{tab:sire-finalresults}
+    \makebox[\textwidth][c]{%
+      \begin{tabular}{llrrrr}
+        \toprule
+         & & \multicolumn{2}{c}{RAFE} & \multicolumn{2}{c}{RAFE-absolute} & transformation & &$\Delta\Delta G$ & SEM & $\Delta\Delta G$
+         & SEM\\
+        \midrule
+ethane         & methane        & -0.014    & 0.056 & 0.046 & 0.021\\
+methane        & ethane         &  0.049    & 0.023 &-0.046 & 0.021\\
+methanol       & methane        &  5.993    & 0.054 & 6.214 & 0.055\\
+methane        & methanol       & -5.969    & 0.042 &-6.214 & 0.055\\
+ethane         & methanol       & -6.091    & 0.035 &-6.260 & 0.051\\
+methanol       & ethane         &  6.090    & 0.022 & 6.260 & 0.051\\
+toluene        & methane        &  2.891    & 0.093 & 3.065 & 0.031\\
+methane        & toluene        & -3.069    & 0.022 &-3.065 & 0.031\\
+neopentane\footnote{\label{foot:cent}central mapping.} & methane &-0.200    & 0.054 & -0.190 & 0.060\\
+methane\footref{foot:cent}        & neopentane     & 0.139   & 0.055 & 0.190  & 0.060\\
+neopentane\footnote{\label{foot:term}terminal mapping.}    & methane        & -0.111   & 0.006 & -0.190 & 0.060\\
+methane\footref{foot:term}        & neopentane    & 0.104    & 0.063 & 0.190  & 0.060\\
+2-methylfuran  & methane        & 2.923    & 0.055 & 2.903  & 0.029\\
+methane        & 2-methyfuran   &-2.834    & 0.037 &-2.903  & 0.029\\
+2-methylindole & methane        & 8.643    & 0.063 & 8.571  & 0.029\\
+methane        & 2-methylindole &-8.674    & 0.083 &-8.571  & 0.029\\
+2--cyclopentanylindole & 7--cyclopentanylindole &-0.116 & 0.077 &  0.080 & 0.142\\
+7--cyclopentanylindole & 2--cyclopentanylindole & 0.018 & 0.081 & -0.080 & 0.142 \\
+	\bottomrule
+      \end{tabular}
+    }
+  \end{minipage}
+\end{table}
+
+Table~\ref{tab:sire-finalresults} shows relative free energy of hydration $\Delta\Delta G$ compared to $\Delta\Delta G$ values extracted from absolute free energy calculations, depicted in Fig~\ref{R-fig:sire_histogram} in the paper.
+
+Initially, Sire/SOMD RAFE protocols used all bonds constraint algorithm. In this way all the solute bonds are constrained, which results in a
+systematic offset for each RAFE predictions, compared to the RAFE from absolute free energy calculations.
+Figure ~\ref{fig:sire_allbonds} show the discrepancy between RAFE computed with all bond constraints and RAFE from absolute free energy calculations.
+
+
+\begin{figure}[ht]
+  \includegraphics[width=\textwidth]{figures/SI_sire_allbonds_relabs.pdf}
+  \caption{Comparison between RAFE of hydration computed with all bond constraints and RAFE computed from absolute free energy calculations}
+  \label{fig:sire_allbonds}
+\end{figure}
+
+Finally, figure~\ref{fig:sire_constraints} and tab.~\ref{tab:sire_constraints} compare relative free energy of hydration $\Delta \Delta G$ estimated with RAFE using all bonds constraints, no constraints and unperturbed hydrogen bond constraints.
+
+\begin{figure}[ht]
+  \includegraphics[width=\textwidth]{figures/SI_sire_constraints.pdf}
+  \caption{Comparison between RAFE of hydration computed with all bond constraints, no constraints and unperturbed hydrogen bonds constraint}
+  \label{fig:sire_constraints}
+\end{figure}
+
+\begin{table}
+  \begin{minipage}{\linewidth}
+    \caption{Relative free energy of hydration $\Delta\Delta G$ computed with all bond constraints, \textit{All bonds}, no constraints, \textit{None}, and unperturbed hydrogen bond constraint, \textit{unpert H bonds} }
+    \label{tab:sire_constraints}
+    \makebox[\textwidth][c]{%
+      \begin{tabular}{llrrrrrr}
+        \toprule
+         & & \multicolumn{2}{c}{All bonds} & \multicolumn{2}{c}{None} & \multicolumn{2}{c}{unpert H bonds} & 
+         transformation &  &$\Delta\Delta G$ & SEM & $\Delta\Delta G$ & SEM & $\Delta\Delta G$ & SEM \\
+        \midrule
+ethane         & methane        &-0.486 & 0.003 &-0.186 & 0.041 & -0.014 & 0.056\\
+methane        & ethane         & 0.493 & 0.005 & 0.008 & 0.021 & 0.0485 & 0.022\\ 
+methanol       & methane        & 6.069 & 0.006 & 6.498 & 0.008 &  5.993 & 0.054\\
+methane        & methanol       &-6.083 & 0.007 &-6.153 & 0.017 & -5.969 & 0.042\\
+ethane         & methanol       &-6.229 & 0.012 &-6.147 & 0.031 & -6.091 & 0.035\\
+methanol       & ethane         & 6.235 & 0.011 & 6.099 & 0.004 &  6.090 & 0.022\\
+toluene        & methane        & 3.730 & 0.276 & 3.096 & 0.063 &  2.891 & 0.093\\
+methane        & toluene        &-3.790 & 0.030 &-3.071 & 0.063 & -3.069 & 0.022\\
+neopentane\footnote{\label{foot:cent}central mapping.} & methane  &-2.098 & 0.013 &-0.142 & 0.142   &-0.200    & 0.054\\
+methane\footref{foot:cent}        & neopentane     & 2.041 & 0.012 & 0.0187 & 0.0618  & 0.139   & 0.055\\
+neopentane\footnote{\label{foot:term}terminal mapping.}    & methane  &-0.486 & 0.003  &-0.147 & 0.060  & -0.111   & 0.006\\
+methane\footref{foot:term}        & neopentane    & 0.593 & 0.021  &-0.147 & 0.0608   & 0.104    & 0.063\\
+2-methylfuran  & methane        & 3.381 & 0.022 & 2.817 & 0.035 & 2.923  & 0.055\\
+methane        & 2-methyfuran   &-3.402 & 0.031 &-2.895 & 0.063 &-2.834  & 0.037\\
+2-methylindole & methane        & 9.297 & 0.063 & 8.721 & 0.056 & 8.643  & 0.063\\
+methane        & 2-methylindole &-9.150 & 0.043 &-8.615 & 0.041 &-8.674  & 0.083\\
+	\bottomrule
+      \end{tabular}
+    }
+  \end{minipage}
+\end{table}
+
+
 
 \bibliography{journal-abbrev,reprod}
 
