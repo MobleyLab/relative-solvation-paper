@@ -14,8 +14,8 @@
 
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
-\usepackage{amsmath}
-\usepackage{amssymb}
+\usepackage{amsmath,amssymb}
+\usepackage{xr}
 \usepackage{booktabs}
 \usepackage{xcolor}
 \usepackage{siunitx}
@@ -433,7 +433,8 @@ explicit, partial & & & & & \\
     \makebox[\textwidth][c]{%
       \begin{tabular}{llrrrr}
         \toprule
-         & & \multicolumn{2}{c}{RAFE} & \multicolumn{2}{c}{RAFE-absolute} & transformation & &$\Delta\Delta G$ & SEM & $\Delta\Delta G$
+         & & \multicolumn{2}{c}{RAFE} & \multicolumn{2}{c}{RAFE-absolute} \\
+         transformation & &$\Delta\Delta G$ & SEM & $\Delta\Delta G$
          & SEM\\
         \midrule
 ethane         & methane        & -0.014    & 0.056 & 0.046 & 0.021\\
@@ -444,10 +445,14 @@ ethane         & methanol       & -6.091    & 0.035 &-6.260 & 0.051\\
 methanol       & ethane         &  6.090    & 0.022 & 6.260 & 0.051\\
 toluene        & methane        &  2.891    & 0.093 & 3.065 & 0.031\\
 methane        & toluene        & -3.069    & 0.022 &-3.065 & 0.031\\
-neopentane\footnote{\label{foot:cent}central mapping.} & methane &-0.200    & 0.054 & -0.190 & 0.060\\
-methane\footref{foot:cent}        & neopentane     & 0.139   & 0.055 & 0.190  & 0.060\\
-neopentane\footnote{\label{foot:term}terminal mapping.}    & methane        & -0.111   & 0.006 & -0.190 & 0.060\\
-methane\footref{foot:term}        & neopentane    & 0.104    & 0.063 & 0.190  & 0.060\\
+neopentane\footnote{\label{foot:cent2}central mapping.} & methane &-0.200    & 
+0.054 & -0.190 & 0.060\\
+methane\footref{foot:cent2}        & neopentane     & 0.139   & 0.055 & 0.190  
+& 0.060\\
+neopentane\footnote{\label{foot:term2}terminal mapping.}    & methane        & 
+-0.111   & 0.006 & -0.190 & 0.060\\
+methane\footref{foot:term2}        & neopentane    & 0.104    & 0.063 & 0.190  
+& 0.060\\
 2-methylfuran  & methane        & 2.923    & 0.055 & 2.903  & 0.029\\
 methane        & 2-methyfuran   &-2.834    & 0.037 &-2.903  & 0.029\\
 2-methylindole & methane        & 8.643    & 0.063 & 8.571  & 0.029\\
@@ -488,7 +493,8 @@ Finally, figure~\ref{fig:sire_constraints} and tab.~\ref{tab:sire_constraints} c
     \makebox[\textwidth][c]{%
       \begin{tabular}{llrrrrrr}
         \toprule
-         & & \multicolumn{2}{c}{All bonds} & \multicolumn{2}{c}{None} & \multicolumn{2}{c}{unpert H bonds} & 
+         & & \multicolumn{2}{c}{All bonds} & \multicolumn{2}{c}{None} & 
+         \multicolumn{2}{c}{unpert H bonds} \\
          transformation &  &$\Delta\Delta G$ & SEM & $\Delta\Delta G$ & SEM & $\Delta\Delta G$ & SEM \\
         \midrule
 ethane         & methane        &-0.486 & 0.003 &-0.186 & 0.041 & -0.014 & 0.056\\
@@ -499,10 +505,14 @@ ethane         & methanol       &-6.229 & 0.012 &-6.147 & 0.031 & -6.091 & 0.035
 methanol       & ethane         & 6.235 & 0.011 & 6.099 & 0.004 &  6.090 & 0.022\\
 toluene        & methane        & 3.730 & 0.276 & 3.096 & 0.063 &  2.891 & 0.093\\
 methane        & toluene        &-3.790 & 0.030 &-3.071 & 0.063 & -3.069 & 0.022\\
-neopentane\footnote{\label{foot:cent}central mapping.} & methane  &-2.098 & 0.013 &-0.142 & 0.142   &-0.200    & 0.054\\
-methane\footref{foot:cent}        & neopentane     & 2.041 & 0.012 & 0.0187 & 0.0618  & 0.139   & 0.055\\
-neopentane\footnote{\label{foot:term}terminal mapping.}    & methane  &-0.486 & 0.003  &-0.147 & 0.060  & -0.111   & 0.006\\
-methane\footref{foot:term}        & neopentane    & 0.593 & 0.021  &-0.147 & 0.0608   & 0.104    & 0.063\\
+neopentane\footnote{\label{foot:cent3}central mapping.} & methane  &-2.098 & 
+0.013 &-0.142 & 0.142   &-0.200    & 0.054\\
+methane\footref{foot:cent3}        & neopentane     & 2.041 & 0.012 & 0.0187 & 
+0.0618  & 0.139   & 0.055\\
+neopentane\footnote{\label{foot:term3}terminal mapping.}    & methane  &-0.486 
+& 0.003  &-0.147 & 0.060  & -0.111   & 0.006\\
+methane\footref{foot:term3}        & neopentane    & 0.593 & 0.021  &-0.147 & 
+0.0608   & 0.104    & 0.063\\
 2-methylfuran  & methane        & 3.381 & 0.022 & 2.817 & 0.035 & 2.923  & 0.055\\
 methane        & 2-methyfuran   &-3.402 & 0.031 &-2.895 & 0.063 &-2.834  & 0.037\\
 2-methylindole & methane        & 9.297 & 0.063 & 8.721 & 0.056 & 8.643  & 0.063\\
