@@ -686,21 +686,23 @@ free energy calculations; however, these same options can also provide a source 
 if used naively. Additionally, running the simulations depends on understanding how these 
 features are used because they can be a source of errors if misused. Specifically, 
 \texttt{couple-moltype} implicitly defines the initial and final states by giving a special tag
-to a molecule and determining how it is coupled to the rest of the system.
- %What about them? It defines what molecule to be coupled/decoupled, right? So if it defines something about the initial and final states you're going to have to say what you mean by that.
-%[GDRM] changed
+to a molecule and controls whether intramolecular interactions of the tagged molecule are 
+retained or not along the alchemical path.
 It should be used in absolute free energy calculations to tag the molecule which will be 
 decoupled from the rest of the system. \texttt{couple-moltype} should not be used in 
 relative transformations in GROMACS because relative calculations rely on turning off 
 interactions between only part of a molecule and the rest of the system, not the entire 
-molecule, so use of this option is inappropriate for relative calculations. 
-\texttt{couple-lambda0} and \texttt{couple-lambda1} define which of the tagged 
-molecule's non-bonded parameters are present in the initial and in the final state, respectively. In absolute free energy 
-calculations, one of them is usually set to turn on both van der Waals and electrostatic 
-interactions, while the other, to turn off any interactions with the surroundings.
-In relative free energy calculations, however, their use is not necessary because 
-\texttt{couple-moltype} is \texttt{none}. 
-\texttt{couple-intramol}  specifies if you want to modify intramolecular interactions along the alchemical 
+molecule. 
+\texttt{couple-lambda0} and \texttt{couple-lambda1} control the interactions of the molecule
+specified by \texttt{couple-moltype} with its surroundings. For instance, if \texttt{couple-lambda0}
+is set to \texttt{vdw-q} and \texttt{couple-lambda1} to \texttt{none}, the calculation will be set
+in such a way that the tagged molecule is fully coupled to its surrounding by its electrostatic and
+van der Waals interactions, while it will be completely decoupled from its surroundings in
+the final state, effectively acting as an ideal gas molecule. These should be the default choices in
+absolute free energy simulations; there is no need to specify both end states in the topology file.
+In relative free energy calculations, however, \texttt{couple-lambda0} and \texttt{-lambda1} are
+not necessary because \texttt{couple-moltype} should be set to \texttt{none}. 
+\texttt{couple-intramol} specifies if you want to modify intramolecular interactions along the alchemical 
 path and should be set to \texttt{yes} in relative transformations. Setting this to \texttt{no}
 would mean intramolecular interactions are maintained at their existing values while the 
 free energy transformation is conducted, leading to an incomplete transformation and introducing 
@@ -718,8 +720,8 @@ parameters simultaneously along the alchemical path, while the split protocol
 stages the transformation in a van der Waals parameter change followed by a simultaneous  
 bonded terms and charges modifications, or vice-versa. In the framework 
 of the split routine, windows without a reasonably strong counterbalancing Lennard-Jones 
-component are subject to very large electrostatic forces that will crash the simulation
-~\cite{pitera_comparison_2002, anwar_robust_2005}.  
+component are subject to very large electrostatic forces that will often lead to simulations
+which crash with standard protocols~\cite{pitera_comparison_2002, anwar_robust_2005}.  
 Thus we find that for stable and effective relative free energy calculations, particle deletion processes
 require electrostatic terms to be turned off before van de Waals and bonded parameters are removed/modified. 
 Insertion processes, in their turn, demand bonded and van der Waals parameters to be changed before charges are turned on.
@@ -761,13 +763,13 @@ neopentane2 & methane & -0.03 & 0.01 & -0.04 & 0.01 & -0.05 & 0.01 & -0.07 & 0.0
 Transformations having simultaneous particle insertion or deletion, such as 
 2-cyclopentanylindole $\rightarrow$ 7-cyclopentanylindole and its reverse, require 
 an adapted split protocol. The simulation is divided into two stages: a deletion stage, 
-in which a molecular part is transformed in a group of dummy atoms, and 
-an insertion stage, in which a different set of dummy atoms fully become another 
-molecular part. These stages differ from the aforementioned deletion and insertion stages
-in the states in which Lennard-Jones parameters are modified, and the number 
-of simulation windows. In the interest of optimizing computational resources used, the deletion 
-stage changes all Lennard-Jones parameters associated to all molecular parts relevant 
-to the transformation. This modification allows a smaller insertion stage of 16 windows 
+in which part of the molecule is transformed into dummy atoms, and an insertion stage, 
+in which dummy atoms which were initially present are transformed into an 
+interacting part of the molecule. Each stage requires its own alchemical free energy calculation and
+they differ from the aforementioned deletion and insertion protocols in such a way
+that we first turned off the charges on atoms being deleted, then modified the bonded 
+and van der Waals terms, then turned back on the charges on any atoms which were 
+being inserted. This modification allows a smaller insertion stage of 16 windows 
 in which only charges and bonded terms of the new molecular part are modified.
 
 \todo{make a figure illustrating the idea of the previous paragraph} 
@@ -783,7 +785,7 @@ Investigation of the phase space overlap plots (Figure XX2) obtained from \textt
 show in the unified case a poor overlap between the last state and its neighbors, 
 which can explain the difference in free energy. 
 
-\todo{we speculate it is an soft-core coulomb issue, but I'm not confident enough to write it down before I run some gaff1.8 simulations using soft-core coulomb in the split protocol. In this way it will be possible to compare electrostatic components of $\Delta G_{A\rightarrow B}$.}
+\todo{we speculate it is an soft-core coulomb issue, but I'm not confident enough to write it down before I run some gaff1.8 simulations using soft-core coulomb in the split protocol (I had that information for gaff 1.7). It will be possible to compare electrostatic components of $\Delta G_{A\rightarrow B}$ then.}
 
 Ethane $\rightarrow$ methane and methane $\rightarrow$ ethane split and unified 
 results are quite different from their corresponding absolute results, and from other MD packages. %(WHY? Investigate it)
