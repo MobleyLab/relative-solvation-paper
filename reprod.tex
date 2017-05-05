@@ -622,31 +622,53 @@ for these three approaches together with the SEM.  SHAKE was explicitly
 deactivated for all bonds in the perturbed region in these protocols.
 \begin{table}[]
   \begin{minipage}{\linewidth}
-  \caption{Comparing AMBER results for simulations with implicit and explicit dummy atoms, and results from absolute transformation.  A few select cases with SHAKE enabled and a time step of \SI{2}{fs} are shown in addition.  Simulations were carried out with the separated protocol.}\label{tab:amber-comp}
+  \caption{Comparing AMBER results for simulations with implicit and explicit 
+  dummy atoms, and results from absolute transformation.  A few select cases 
+  with SHAKE enabled and a time step of \SI{2}{fs} are shown in addition.  
+  Simulations were carried out with the separated protocol.  Signs of the 
+  backward transformation have been reverted to correspond to the forward 
+  transformation.}\label{tab:amber-comp}
   \makebox[\textwidth][c]{
-  \begin{tabular}{llrrrrrrr}
+  \begin{tabular}{llrrrr}
     \toprule
-    &                & \multicolumn{2}{c}{implicit} & \multicolumn{2}{c}{explicit} & \multicolumn{2}{c}{absolute} & SHAKE\footnote{implicit dummy atom protocol with $\delta t =$ \SI{2}{fs} and SHAKE on all H--bonds except perturbed bonds.} \\
-    \multicolumn{2}{l}{transformation}          & $\Delta\Delta G$  & SEM               & $\Delta\Delta G$    & SEM &  $\Delta G$\footnote{sign for the forward transformation.} & SEM & $\Delta\Delta G$ \\
+    &                & implicit & explicit & absolute & SHAKE\footnote{implicit 
+    dummy atom protocol with $\delta t =$ \SI{2}{fs} and SHAKE on all H--bonds 
+    except perturbed bonds.} \\
+    \multicolumn{2}{l}{transformation}          & $\Delta\Delta G$  & 
+    $\Delta\Delta G$ & $\Delta G$ & $\Delta\Delta G$ \\
     \midrule
-ethane         & methane        & 0.021    & 0.014 & -0.127 & 0.016 & \multirow{2}{*}{-0.022} & \multirow{2}{*}{0.012} \\
-methane        & ethane         & 0.001    & 0.025 & 0.187  & 0.028 & &        \\
-methanol       & methane        & 6.189    & 0.014 & 6.200  & 0.017 & \multirow{2}{*}{6.201} & \multirow{2}{*}{0.012} \\
-methane        & methanol       & -6.195   & 0.029 & -6.145 & 0.013 & &         \\
-ethane         & methanol       & -6.200   & 0.012 & -6.268 & 0.009 & \multirow{2}{*}{-6.223} & \multirow{2}{*}{0.014} & -6.196 \\
-methanol       & ethane         & 6.196    & 0.014 & 6.252  & 0.011 & &         \\
-toluene        & methane        & 3.240    & 0.020 & 3.386  & 0.021 & \multirow{2}{*}{3.193} & \multirow{2}{*}{0.014} & 3.292 \\
-methane        & toluene        & -3.422   & 0.025 & -3.523 & 0.033 & &         \\
-neopentane\footnote{\label{foot:cent}central mapping.} & methane & 0.315    & 0.038 & -0.027 & 0.057 & \multirow{4}{*}{-0.132} & \multirow{4}{*}{0.016} & 0.367 \\
-methane\footref{foot:cent}        & neopentane     & -0.250   & 0.032 & 0.071  & 0.026 & & \\
-neopentane\footnote{\label{foot:term}terminal mapping.}    & methane        & -0.132   & 0.012 & -0.118 & 0.015 & & \\
-methane\footref{foot:term}        & neopentane    & 0.125    & 0.031 & 0.123  & 0.034 & & \\
-2-methylfuran  & methane        & 3.089    & 0.014 & 3.102  & 0.009 & \multirow{2}{*}{2.964} & \multirow{2}{*}{0.023} \\
-methane        & 2-methyfuran   & -3.100   & 0.032 & -3.147 & 0.033 & &         \\
-2-methylindole & methane        & 8.778    & 0.025 & 8.777  & 0.041 & \multirow{2}{*}{8.717} &\multirow{2}{*}{0.009} \\
-methane        & 2-methylindole & -9.138   & 0.022 & -9.130 & 0.034 & \\
-2--cyclopentanylindole\footnote{\label{foot:partial}partial re/discharge i.e.\ only the charges of the appearing and the disappering 5--rings are switched.} & 7--cyclopentanylindole &  0.361 & 0.032 &  0.628 & 0.059 & \multirow{2}{*}{0.388} &\multirow{2}{*}{0.036} \\
-7--cyclopentanylindole\footref{foot:partial} & 2--cyclopentanylindole & -0.335 & 0.045 & -0.497 & 0.032 & & \\
+ethane & methane & 0.02 $\pm$ 0.01 & -0.13 $\pm$ 0.02 &
+\multirow{2}{*}{-0.02 $\pm$ 0.01} & \\
+methane & ethane & 0.00 $\pm$ 0.03 & -0.19 $\pm$ 0.03 & & \\
+methanol & methane & 6.19 $\pm$ 0.01 & 6.20 $\pm$ 0.02 & 
+\multirow{2}{*}{6.20 $\pm$ 0.01} \\
+methane & methanol & 6.20 $\pm$ 0.03 & -6.15 $\pm$ 0.01 & & \\
+ethane  & methanol & -6.20 $\pm$ 0.01 & -6.27 $\pm$ 0.01 &
+\multirow{2}{*}{-6.22 $\pm$ 0.01} & -6.20 \\
+methanol & ethane & -6.20 $\pm$ 0.01 & -6.25 $\pm$ 0.01 & & \\
+toluene & methane & 3.24 $\pm$ 0.02 & 3.39 $\pm$ 0.02 &
+\multirow{2}{*}{3.19 $\pm$ 0.01} & 3.29 \\
+methane & toluene & 3.42 $\pm$ 0.03 & 3.52 $\pm$ 0.03 & & \\
+neopentane\footnote{\label{foot:cent}central mapping.} & methane & 0.32 $\pm$ 
+0.04 & -0.03 $\pm$ 0.06 & \multirow{4}{*}{-0.13 $\pm$ 0.02} & 0.37 \\
+methane\footref{foot:cent} & neopentane & 0.25 $\pm$ 0.03 & -0.07 $\pm$ 
+0.03 & & \\
+neopentane\footnote{\label{foot:term}terminal mapping.} & methane & -0.13 
+$\pm$ 0.01 & -0.12 $\pm$ 0.02 & & \\
+methane\footref{foot:term} & neopentane & -0.13 $\pm$ 0.03 & -0.12 $\pm$ 
+0.03 & & \\
+2-methylfuran  & methane & 3.09 $\pm$ 0.01 & 3.10 $\pm$ 0.01 &
+\multirow{2}{*}{2.96 $\pm$ 0.02} \\
+methane & 2-methyfuran  & 3.10 $\pm$ 0.03 & 3.15 $\pm$ 0.03 & & \\
+2-methylindole & methane & 8.78 $\pm$ 0.03 & 8.78 $\pm$ 0.04 &
+\multirow{2}{*}{8.72 $\pm$ 0.01} \\
+methane & 2-methylindole & 9.14 $\pm$ 0.02 & 9.13 $\pm$ 0.03 & \\
+2--cyclopentanylindole\footnote{\label{foot:partial}partial re/discharge i.e.\ 
+only the charges of the appearing and the disappering 5--rings are switched.} & 
+7--cyclopentanylindole & 0.36 $\pm$ 0.03 & 0.63 $\pm$ 0.06 & 
+\multirow{2}{*}{0.39 $\pm$ 0.04} \\
+7--cyclopentanylindole\footref{foot:partial} & 2--cyclopentanylindole & 0.34 
+$\pm$ 0.05 & 0.50 $\pm$ 0.03 & & \\
     \bottomrule
   \end{tabular}
 }
