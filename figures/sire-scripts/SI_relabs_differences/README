@@ -1,0 +1,5 @@
+This image should go in the SI
+
+Here I am comparing absoulte free energy estimation vs all bonds relative values
+Absolute free energy values are the same as in the paper, since they do not differ from 
+the ones computed with all bond constraint, allowing a better comparison in the end

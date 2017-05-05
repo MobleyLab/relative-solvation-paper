@@ -1,0 +1,18 @@
+Scripts to create all the images for Sire
+
+1) paper_relabs_histogram: 
+Comparison between relative and absolute estimations with hbonds-notperturbed constraints 
+Used in the paper
+
+Usage: cd rel_abs_histogram
+       python relabs.py
+
+2) SI_relabs_differences: 
+Comparison between relative and absolute estimations using allbonds constraints 
+Used in the SI
+
+
+3) SI_constraints_histogram:
+Comparison between  "no constraints", "hbonds not perturbed"constr and "allbonds" constr
+in the relative free energy calculations
+Used in the SI

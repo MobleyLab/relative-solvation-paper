@@ -1,0 +1,16 @@
+Folder with statistical analysis on the final results
+
+- inputdata :  csv files 
+
+- outputdata:  outputfiles produced by confidence_interval.py and mue_calculator.py
+
+- confidence_interval.py : script which takes as input the computed DDG and give
+               r, r2, mue with 95% confidence, by bootstraping each relative estimations
+               Usage: python confidence_interval.py  inputdata/experimental.csv inputdata/computed.csv
+               Output:  errorbounds.dat
+
+- mue_calculator.py : simple python script to compute MUE
+               Usage: python mue_calculator.py inputdat/experimental.csv inputdata/computed.csv
+               Output: mue_val.dat
+
+
