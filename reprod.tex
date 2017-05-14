@@ -30,6 +30,8 @@
   separate-uncertainty = true
 }
 
+\newcommand{\progname}[1]{\texttt{#1}}
+\newcommand{\inpopt}[1]{\texttt{#1}}
 \renewcommand{\footnoterule}{}
 \renewcommand{\vec}[1]{\mathbf{#1}}
 
@@ -341,8 +343,8 @@ single topology fashion and computes the forces appropriately
 (linearly) scaled for each atom in the pair. 
 %DLM: Why is "appropriately" "linearly" here? This would presumably apply only to non-softcore terms? Somewhat confusing to say it this way then...?
 The perturbed group must
-be entirely duplicated i.e.\ for \texttt{sander} this means two topology files
-with one end state each, and for \texttt{pmemd} both end states in one topology
+be entirely duplicated i.e.\ for \progname{sander} this means two topology files
+with one end state each, and for \progname{pmemd} both end states in one topology
 file.  The softcore potential applies to any atom chosen by the user i.e.\ also 
 for atoms that have an equivalent in the other state but non--softcore atoms 
 must still match 1:1 in both states.  Explicit dummy atoms are 
@@ -358,7 +360,7 @@ careful construction of topologies by keeping force field parameters that are no
 between different files.
 
 \paragraph{CHARMM} The PERT module duplicates the topology similar to
-\texttt{sander} but the data structures for mapped atoms are present only once.  The
+\progname{sander} but the data structures for mapped atoms are present only once.  The
 %DLM: What does it mean for the "data structures" to be present only once? Maybe something like, "definitions for mapped atoms are given only once"? 
 %DLM: Can we provide sample files for all of these in SI, and maybe even give topology snippets in figure(s) to illustrate the point? 
 module requires balancing with explicit dummy atoms.  All terms are
@@ -673,16 +675,16 @@ contributions.
 
 Using AMBER for RAFE simulations has revealed several problems with
 the implementation.  Some bugs were identified and have been fixed
-by the developers, e.g. energy minimization in \texttt{sander} led to diverged
+by the developers, e.g. energy minimization in \progname{sander} led to diverged
 coordinates for mapped atoms which is, however, a necessary condition
 for a single topology description. %DLM: This reads like diverged coordinates is necessary, but I think you mean that consistent coordinates is necessary? 
 %DLM: Also, should list what version of AMBER this was fixed for. 
  Other issues are that vacuum
-simulations have to be carried out separately with the \texttt{sander} program %DLM: Separately from what? Do you mean that if the solution calculations are done with PMEMD you have to do the vacuum calculations with sander anyway?
-because \texttt{pmemd} cannot handle AFE simulations in vacuum at the moment.  This will, however, be rectified in future versions (Ross Walker, private communication).  A disadvantage of \texttt{sander} is that it cannot be used to simulate the $\lambda$ end points~\cite{doi:10.1021/ct400340s} such that the TI gradients need to be extrapolated (minimum and maximum allowed $\lambda$s are 0.005 and 0.995). 
+simulations have to be carried out separately with the \progname{sander} program %DLM: Separately from what? Do you mean that if the solution calculations are done with PMEMD you have to do the vacuum calculations with sander anyway?
+because \progname{pmemd} cannot handle AFE simulations in vacuum at the moment.  This will, however, be rectified in future versions (Ross Walker, private communication).  A disadvantage of \progname{sander} is that it cannot be used to simulate the $\lambda$ end points~\cite{doi:10.1021/ct400340s} such that the TI gradients need to be extrapolated (minimum and maximum allowed $\lambda$s are 0.005 and 0.995). 
 %DLM: Wait, so this means that there's no way around extrapolating the endpoints in vacuum?
- Also, \texttt{sander} considers the whole system as the perturbed
-region while \texttt{pmemd} restricts this to a user chosen atom selection.  This
+ Also, \progname{sander} considers the whole system as the perturbed
+region while \progname{pmemd} restricts this to a user chosen atom selection.  This
 has obvious implications for performance~\cite{doi:10.1021/ct400340s}.
 
 We also found that, in contrast to the other three codes, AMBER cannot
@@ -798,25 +800,25 @@ GROMACS has some run input options which can simplify the procedure for setting 
 free energy calculations; however, these same options can also provide a source of error
 if used naively. Additionally, running the simulations depends on understanding how these 
 features are used because they can be a source of errors if misused. Specifically, 
-\texttt{couple-moltype} implicitly defines the initial and final states by giving a special tag
+\inpopt{couple-moltype} implicitly defines the initial and final states by giving a special tag
 to a molecule and controls whether intramolecular interactions of the tagged molecule are 
 retained or not along the alchemical path.
 It should be used in absolute free energy calculations to tag the molecule which will be 
-decoupled from the rest of the system. \texttt{couple-moltype} should not be used in 
+decoupled from the rest of the system. \inpopt{couple-moltype} should not be used in 
 relative transformations in GROMACS because relative calculations rely on turning off 
 interactions between only part of a molecule and the rest of the system, not the entire 
 molecule. 
-\texttt{couple-lambda0} and \texttt{couple-lambda1} control the interactions of the molecule
-specified by \texttt{couple-moltype} with its surroundings. For instance, if \texttt{couple-lambda0}
-is set to \texttt{vdw-q} and \texttt{couple-lambda1} to \texttt{none}, the calculation will be set
+\inpopt{couple-lambda0} and \inpopt{couple-lambda1} control the interactions of the molecule
+specified by \inpopt{couple-moltype} with its surroundings. For instance, if \inpopt{couple-lambda0}
+is set to \inpopt{vdw-q} and \inpopt{couple-lambda1} to \inpopt{none}, the calculation will be set
 in such a way that the tagged molecule is fully coupled to its surrounding by its electrostatic and
 van der Waals interactions, while it will be completely decoupled from its surroundings in
 the final state, effectively acting as an ideal gas molecule. These should be the default choices in
 absolute free energy simulations; there is no need to specify both end states in the topology file.
-In relative free energy calculations, however, \texttt{couple-lambda0} and \texttt{-lambda1} are
-not necessary because \texttt{couple-moltype} should be set to \texttt{none}. 
-\texttt{couple-intramol} specifies if you want to modify intramolecular interactions along the alchemical 
-path and should be set to \texttt{yes} in relative transformations. Setting this to \texttt{no}
+In relative free energy calculations, however, \inpopt{couple-lambda0} and \inpopt{-lambda1} are
+not necessary because \inpopt{couple-moltype} should be set to \inpopt{none}. 
+\inpopt{couple-intramol} specifies if you want to modify intramolecular interactions along the alchemical 
+path and should be set to \inpopt{yes} in relative transformations. Setting this to \inpopt{no}
 would mean intramolecular interactions are maintained at their existing values while the 
 free energy transformation is conducted, leading to an incomplete transformation and introducing 
 errors in computed free energies.
@@ -894,7 +896,7 @@ A few noteworthy exceptions are the differences between the unified and split re
 methane $\rightarrow$ methanol, ethane $\rightarrow$ methanol, and their reverse processes.
 In the former, $\langle \partial \mathrm{H}/\partial \lambda \rangle$ plots show a sharp decrease 
 near $\lambda = $ 1.0, while similar behavior is not observed in the latter (Figure XX1). 
-Investigation of the phase space overlap plots (Figure XX2) obtained from \texttt{alchemical}\_\texttt{analysis.py} 
+Investigation of the phase space overlap plots (Figure XX2) obtained from \progname{alchemical\_analysis.py} 
 show in the unified case a poor overlap between the last state and its neighbors, 
 which can explain the difference in free energy. 
 
