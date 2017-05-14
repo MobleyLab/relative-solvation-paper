@@ -18,6 +18,7 @@
 \usepackage{xr}
 \usepackage{booktabs}
 \usepackage{multirow}
+\usepackage{rotating}
 \usepackage{siunitx}
 \usepackage{easy-todo}
 \usepackage{footref}
@@ -672,13 +673,13 @@ contributions.
 
 Using AMBER for RAFE simulations has revealed several problems with
 the implementation.  Some bugs were identified and have been fixed
-by the developers, e.g. energy minimization in \textttt{sander} led to diverged
+by the developers, e.g. energy minimization in \texttt{sander} led to diverged
 coordinates for mapped atoms which is, however, a necessary condition
 for a single topology description. %DLM: This reads like diverged coordinates is necessary, but I think you mean that consistent coordinates is necessary? 
 %DLM: Also, should list what version of AMBER this was fixed for. 
  Other issues are that vacuum
 simulations have to be carried out separately with the \texttt{sander} program %DLM: Separately from what? Do you mean that if the solution calculations are done with PMEMD you have to do the vacuum calculations with sander anyway?
-because \textttt{pmemd} cannot handle AFE simulations in vacuum at the moment.  This will, however, be rectified in future versions (Ross Walker, private communication).  A disadvantage of \texttt{sander} is that it cannot be used to simulate the $\lambda$ end points~\cite{doi:10.1021/ct400340s} such that the TI gradients need to be extrapolated (minimum and maximum allowed $\lambda$s are 0.005 and 0.995). 
+because \texttt{pmemd} cannot handle AFE simulations in vacuum at the moment.  This will, however, be rectified in future versions (Ross Walker, private communication).  A disadvantage of \texttt{sander} is that it cannot be used to simulate the $\lambda$ end points~\cite{doi:10.1021/ct400340s} such that the TI gradients need to be extrapolated (minimum and maximum allowed $\lambda$s are 0.005 and 0.995). 
 %DLM: Wait, so this means that there's no way around extrapolating the endpoints in vacuum?
  Also, \texttt{sander} considers the whole system as the perturbed
 region while \texttt{pmemd} restricts this to a user chosen atom selection.  This
