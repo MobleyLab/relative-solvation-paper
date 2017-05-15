@@ -20,6 +20,7 @@
 \usepackage{multirow}
 \usepackage{rotating}
 \usepackage{siunitx}
+\usepackage{nameref}
 \usepackage{easy-todo}
 \usepackage{footref}
 
@@ -309,8 +310,7 @@ development.
 \subsection{Alchemical Free Energy Implementations}
 \label{sec:afe_impl}
 
-We begin by describing the differences in the alchemical free energy
-%DLM: "working out"? Unclear if this means "finding" or "describing" which are rather different; I think we mean "describing"
+We begin by working out the differences in the alchemical free energy
 implementations of the four MD codes AMBER, CHARMM, GROMACS and
 Sire/SOMD.  One key difference is in the softcore
 functions employed~\cite{beutler_avoiding_1994,
@@ -328,65 +328,57 @@ the integrator, as well as analysis problems even when simulations run~\cite{beu
   zacharias_separationshifted_1994, steinbrecher_nonlinear_2007}.
 
 Other differences include whether the code scales individual (force field)
-parameters and/or the total energy~\cite{doi:10.1021/jp981628n}, or if
+parameters (``parameter--scaled'') and/or the total 
+energy~\cite{doi:10.1021/jp981628n} (``energy--scaled''), or if
 %DLM: What does it mean to scale the total energy? Can you be more clear? I'm assuming what you mean is that in some cases, one actually modifies the force field parameters, whereas in others, one modifies the contributions of those terms to the potential energy/total energy by scaling those terms in the Hamiltonian?
-%DLM: Also, after reading below -- do we need to define one of these approaches as "energy scaled"? We don't introduce the term "energy scaled" but we use it below
 the code allows constraints for bonds with changing bond lengths.
 These and other details will be outlined below.  The perturbed group
 consists of all atoms that need to be transformed, i.e.\ any atom
 that differs in at least one force field parameter in the other end
-state.
+state.  In our case this means the whole solute.
 
 \paragraph{AMBER} This code is strictly dual topology and all terms
-are energy--scaled.
-%DLM: See above, what is "energy--scaled"?
-  The code allows, however, mapping of atoms in a
-single topology fashion and computes the forces appropriately
-(linearly) scaled for each atom in the pair. 
-%DLM: Why is "appropriately" "linearly" here? This would presumably apply only to non-softcore terms? Somewhat confusing to say it this way then...?
-The perturbed group must
-be entirely duplicated i.e.\ for \progname{sander} this means two topology files
-with one end state each, and for \progname{pmemd} both end states in one topology
-file.  The softcore potential applies to any atom chosen by the user i.e.\ also 
-for atoms that have an equivalent in the other state but non--softcore atoms 
-must still match 1:1 in both states.  Explicit dummy atoms are 
-not needed as the code will only compute bonded contributions for ``real''
-atoms and thus ignores bonded energies involving dummy atoms (implicit dummy 
-%DLM: I think this is defining the term "implicit dummy protocol" for the first time; it could be made more clear, as I just read right past it and later when I encountered the term again, I wondered, "what is the implicit dummy protocol?"
-protocol).  The code cannot handle constraints of changing bond lengths in the 
-perturbed group.
-%DLM: "changing bond lengths involving constraints" perhaps more clear? 
-  There is only one global $\lambda$ for parameter 
+are energy--scaled.  The code allows, however, mapping of atoms in a
+single topology fashion and computes these non--softcore atoms 
+by linear scaling the forces for each atom in the pair. 
+The perturbed group must be entirely duplicated i.e.\ for \progname{sander} 
+this means two topology files with one end state each, and for \progname{pmemd} 
+both end states in one topology file.  The softcore potential applies to any 
+atom chosen by the user i.e.\ also for atoms that have an equivalent in the 
+other state but non--softcore atoms must still match 1:1 in both states.  
+Explicit dummy atoms are not needed as the code will only compute bonded 
+contributions for ``real'' atoms and thus ignores bonded energies involving 
+dummy atoms.  We will call this the ``implicit dummy protocol''. The code 
+cannot handle changing bond lengths involving constraints 
+in the perturbed group.  There is only one global $\lambda$ for parameter 
 transformation.  Separated protocols (see below) must be emulated through 
-careful construction of topologies by keeping force field parameters that are not being modified constant 
-between different files.
+careful construction of topologies by keeping force field parameters that are 
+not being modified constant between different files.
 
 \paragraph{CHARMM} The PERT module duplicates the topology similar to
-\progname{sander} but the data structures for mapped atoms are present only once.  The
-%DLM: What does it mean for the "data structures" to be present only once? Maybe something like, "definitions for mapped atoms are given only once"? 
-%DLM: Can we provide sample files for all of these in SI, and maybe even give topology snippets in figure(s) to illustrate the point? 
+\progname{sander} but the definitions for mapped atoms are given only once.  The
+%DLM: Can we provide sample files for all of these in SI, and maybe even give 
+%topology snippets in figure(s) to illustrate the point? 
 module requires balancing with explicit dummy atoms.  All terms are
 energy--scaled.  The PSSP softcore potential is applied to \emph{all}
 atoms in the perturbed group (see section~\ref{S-sec:softcores} in the SI).  The code can handle
 constraints of changing bond lengths in the perturbed group but this
 may cause wrong results with PSSP softcores (Stefan Boresch, private
 communication).  There is only one global $\lambda$ for parameter
-transformation, however, the scripting facilities allow run time
-%DLM: What scripting facilities? 
+transformation, however, the scripting facilities in CHARMM allow run time
 modification of topologies e.g.\ by setting charges or vdW parameters
 to arbitrary values.
 
 \paragraph{GROMACS} This code uses a single topology description.
 Bonded terms are strictly parameter--scaled which requires proper
-%DLM: Need to define "parameter--scaled"
 balancing of multi--term dihedrals.  Non--bonded terms are
 energy--scaled.  The softcore potential applies to dummy atoms only
 determined from atoms having zero vdW parameters.  The code
-allows changing bond lengths involving constraints within the perturbed group but
-this can lead to instabilities and wrong results (Michael Shirts,
+allows changing bond lengths involving constraints within the perturbed group 
+but this can lead to instabilities and wrong results (Michael Shirts,
 private communication).  There are separate $\lambda$s for vdW,
-Coulomb and bonded parameters (and some other).
-%DLM: The other sections discuss the possibility of separated protocols; this probably should be addressed explicitly here (e.g. "Separated protocols are possible here because there are separate $\lambda$s...")
+Coulomb and bonded parameters (and some other) which allows easy implementation 
+of separated protocols.
 
 \paragraph{Sire/SOMD} This code uses a single topology description.
 The final state is constructed at run time from the initial state with
@@ -399,6 +391,7 @@ scaling.  Separated protocols (see below) must be emulated through
 careful construction of the patch file.  Sire/SOMD is
 Sire~\cite{Sire-2016} employing OpenMM~\cite{doi:10.1021/ct300857j}
 for MD simulation.
+
 
 \subsection{RAFE Setup}
 \label{sec:rafe_setup}
@@ -424,14 +417,10 @@ Ref.~\citenum{loeffler_fesetup:_2015}.
 
 Figure~\ref{fig:cycles} shows all 18 transformation considered in this
 study including ``forward'' and ``backward'' mutations.  RAFE
-simulations are principally fully symmetric i.e.\ they do not have a
-directionality with respect to the coupling (order) parameter
-$\lambda$.  Performing simulations in either direction, however, is
-applied here as a test for possible discrepancies.
-%DLM: I don't understand what it means for them to be "principally fully symmetric".
-%DLM: I also think it may confuse the reader to say that the directionality doesn't matter but that you do tests in both directions; maybe
-% you want to explain what exactly this is testing then. 
-
+simulations do not have a directionality with respect to the coupling (order) 
+parameter $\lambda$.  But to test for possible discrepancies we have run 
+simulations in both directions.  As we shall discuss in the 
+\nameref{sec:results} section we do see differences in some cases.
 \begin{figure}[ht]
   \includegraphics[scale=1.0]{figures/cycles.pdf}
   \caption{The thermodynamic cycles considered in this study.  To
@@ -455,8 +444,9 @@ neopentane $\rightarrow$ methane we point out that there are two
 alternative mappings possible, see Figure~\ref{fig:cycles}.  One in
 which methane is mapped with a terminal methyl (green) and the other
 one where the methane carbon is mapped with the central carbon in
-neopentane (blue).  Results from both mutations will be shown and
-discussed.
+neopentane (blue).  The first approach will be called ``terminally mapped'' and 
+the second one ``centrally mapped''. Results from both mutations will be shown 
+and discussed.
 
 
 \subsection{RAFE Simulation Protocols}
@@ -480,10 +470,12 @@ particles~\cite{rocklin_calculating_2013, JCC:JCC1050}.  The force
 field was chosen to be GAFF~\cite{wang_development_2004} (version
 1.8), utilising AM1/BCC charges~\cite{jakalian_fast_2000,
   jakalian_fast_2002} for the solute and
-TIP3P~\cite{jorgensen_comparison_1983-1} for the solvent.  The quality
-of free energies of various small molecule force fields has been shown
+TIP3P~\cite{jorgensen_comparison_1983-1} for the solvent.  Charges were 
+computed with the \progname{antechamber} program and missing bonded and vdW 
+terms were generated with the \progname{parmchk2} program, both from the 
+AmberTools16 distribution.  The quality of free energies of various small 
+molecule force fields has been shown
 elsewhere, see e.g. Refs.~\citenum{doi:10.1021/ct300203w,Hu2016}.
-%DLM: Can we say how charges were assigned? Antechamber?
 
 While the MD packages principally allow a ``one--step'' 
 transformation~\cite{steinbrecher_soft-core_2011}
@@ -501,16 +493,16 @@ other atoms, e.g. solvents, onto a ``naked'' charge, see
 section~\ref{S-sec:separated} in the SI.
 %DLM: I think there is a literature reference on the need to do this; asking Guilherme for it as I don't recall it off the top of my head.
 
-All simulations were started from the simulation box pre--equilibrated with
-FESetup~\cite{loeffler_fesetup:_2015}.
-%DLM: This seems to be saying that the box is pre-equilibrated with FESetup? Is that really what you mean, or do you mean a simulation box prepared with FESetup and then pre-equilibrated? Or a pre-equilibrated simulation box then prepared with FESetup?
-  It should be noted, however, that in
-constructing the system steric overlaps between the solute and the solvent can
-happen.  This is because the number of atoms are always chosen to be the same
-%DLM: Not following how this can happen if it is pre-equilibrated. Do you mean it was pre-equilibrated BEFORE adding the solute, or pre-equilibrated for just one lambda value, or ... ? Would be helpful to be slightly more specific.
-for forward and backward setups by using the larger box of the two.  Thus, in
-transformation from a smaller to a larger solute water molecules may be in
-close distance.  The simulations were run at \SI{298.15}{K} and \SI{1.0}{bar}.
+All simulations were started from the simulation box which has been 
+created with FESetup~\cite{loeffler_fesetup:_2015}.  It should be noted, 
+however, that in constructing the system steric overlaps between the solute and 
+the solvent may happen.  This is because each unperturbed solute is 
+independently equilibrated and the perturbed system combined from those two.  
+The number of atoms are always chosen to be the same for forward and backward 
+setups by using the larger box of the two unperturbed systems.  Thus, in 
+transformation from a smaller to a larger solute water molecules may be in 
+close distance to the solute.  The production simulations were run at 
+\SI{298.15}{K} and \SI{1.0}{bar}.
 
 \paragraph{AMBER} The starting coordinates were usually taken directly from the
 pre--equilibrated setup step but no further $\lambda$ specific equilibration 
@@ -519,22 +511,21 @@ final simulation temperature.  In a very few cases it was necessary to use
 coordinates from a nearby $\lambda$ state because of simulation instabilities.  
 This happened in transformations with a larger number of dummy atoms.  Water 
 hydrogens (TIP3P) were constrained with SHAKE but none of the atoms in the 
-perturbed group
-%DLM: I think it should be "constrained with SHAKE, as were all bonds involving hydrogen except those within the perturbed group. None of the bonds in the perturbed group were constrained." Is that right? (Currently, you say you don't constrain within the perturbed group but you don't say that you DO constrain the other ones, which is odd.)
- and so the time step was set to \SI{1}{fs} (see Sire protocol 
+perturbed group and so the time step was set to \SI{1}{fs} (see Sire protocol 
 below for an alternative approach).  The temperature was controlled through a 
-Langevin thermostat and pressure through a Monte Carlo barostat.
-%DLM: For consistency with Sire/SOMD (and thoroughness) we should give details of friction constant/pressure rescaling.
-
+Langevin thermostat with a friction constant of \SI{2.0}{ps-1} and pressure 
+rescaling through a Monte Carlo barostat with 100 steps between volume change 
+attempts and \SI{2.0}{ps} relaxation time.
 
 \paragraph{Sire/SOMD} All simulations were carried out with
 Sire/OpenMM 6.3 (revision 16.1).  Each alchemical transformation was
 divided into 17 evenly spaced windows and simulated for \SI{2}{ns}
 both in water an vacuum phase. A velocity-Verlet integrator was
-employed with \SI{2}{fs} timestep, constraining all the hydrogen bonds
-not alchemically transformed (unperturbed H protocol).
-%DLM: It's not clear what "unperturbed H protocol" refers to; are we introducing a new term? 
- An atom--based
+employed with \SI{2}{fs} timestep, constraining only those hydrogen bonds
+which are not alchemically transformed.  This approach will be called 
+``unperturbed H protocol''.
+% HHL: maybe discuss this earlier in the non-code specific section?
+An atom--based
 Barker--Watts reaction field~\cite{doi:10.1080/00268977300102101} with
 a dielectric constant of \num{82.0} was adopted for water phase
 simulations. Furthermore, a cutoff of \SI{12}{\angstrom} was set for non-bonded
@@ -641,10 +632,10 @@ data.
 All RAFE simulations were run in triplicate in forward as well as
 backward direction for a total of 6 simulations per mutation.  The
 final hydration free energy $\Delta\Delta G_{\mathrm{hydr}}$ was
-computed as the average for each direction separately.  For comparison we have also
-calculated the absolute (standard) hydration free energies for all
-molecules in Figure~\ref{fig:cycles}.
-%DLM: Explain that these are less implementation-dependent and provide a check/"gold standard" set of answers? 
+computed as the average for each direction separately.  For comparison we have 
+also calculated the absolute (standard) hydration free energies for all
+molecules in Figure~\ref{fig:cycles}.  These energies are less 
+pmplementation--dependent and thus provide an additional check.
 
 To estimate the reliability and convergence of the results, the
 standard error of the mean (SEM) has been calculated.  The SEM is
@@ -676,15 +667,15 @@ contributions.
 \label{sec:amber-results}
 
 Using AMBER for RAFE simulations has revealed several problems with
-the implementation.  Some bugs were identified and have been fixed
+the implementation.  Some bugs were identified and have been fixed for AMBER16
 by the developers, e.g. energy minimization in \progname{sander} led to diverged
-coordinates for mapped atoms which is, however, a necessary condition
-for a single topology description. %DLM: This reads like diverged coordinates is necessary, but I think you mean that consistent coordinates is necessary? 
-%DLM: Also, should list what version of AMBER this was fixed for. 
- Other issues are that vacuum
-simulations have to be carried out separately with the \progname{sander} program %DLM: Separately from what? Do you mean that if the solution calculations are done with PMEMD you have to do the vacuum calculations with sander anyway?
+coordinates for mapped atoms.  For a single topology description, however, it 
+is necessary to have the same coordinates.  Other issues are that vacuum
+simulations can only be carried out with the \progname{sander} program 
 because \progname{pmemd} cannot handle AFE simulations in vacuum at the moment.  This will, however, be rectified in future versions (Ross Walker, private communication).  A disadvantage of \progname{sander} is that it cannot be used to simulate the $\lambda$ end points~\cite{doi:10.1021/ct400340s} such that the TI gradients need to be extrapolated (minimum and maximum allowed $\lambda$s are 0.005 and 0.995). 
-%DLM: Wait, so this means that there's no way around extrapolating the endpoints in vacuum?
+%DLM: Wait, so this means that there's no way around extrapolating the 
+%endpoints in vacuum?
+%HHL: Yes, extrapolation needs to be done with sander.
  Also, \progname{sander} considers the whole system as the perturbed
 region while \progname{pmemd} restricts this to a user chosen atom selection.  This
 has obvious implications for performance~\cite{doi:10.1021/ct400340s}.
@@ -694,10 +685,19 @@ correctly reproduce relative free energies in a 1--step protocol i.e.\
 when all force field parameters are scaled simultaneously (see Table~\ref{S-tab:amber-onestep}).  This appears to be a problem when more than a few dummy atoms are involved while the 1--step protocol works for the smaller transformations (refer to Figure~\ref{fig:cycles}).  The separated RAFE protocol and absolute free energies, however, are very close to the other MD packages as demonstrated in Table~\ref{tab:amber-comp}.
 
 End point geometries appear to be another issue with AMBER simulations
-in both solution and vacuum.  This is most obvious in the neopentane $\rightarrow$ methane test case (central mapping).
-%DLM: First use of the term "central mapping". What does it mean? 
-  As shown in Figure~\ref{S-fig:amber-dist} the methane end state exhibits incorrect distances (which are too long) between the carbon and the four attached hydrogens of approximately \SI{1.23}{\angstrom}.  This value is about \SI{1.12}{\angstrom} for the terminal dummy atoms in the other test cases but still higher than the expected \SI{1.09}{\angstrom} on average.  Figure~\ref{S-fig:amber-dist} demonstrates how this depends on the number of dummy atoms immediately surrounding the central atom.
-%DLM: I think we need error bars on the values otherwise it's impossible to tell if the difference is significant. 
+in both solution and vacuum.  This is most obvious in the neopentane 
+$\rightarrow$ methane test case with central mapping (see 
+\nameref{sec:rafe_setup} and Figure~\ref{fig:thermocycle}).
+As shown in Figure~\ref{S-fig:amber-dist} the methane endstate exhibits 
+incorrect distances (which are too long) between the carbon and the four 
+attached hydrogens of approximately \SI{1.23}{\angstrom}.  This value is about 
+\SI{1.12}{\angstrom} for the terminal dummy atoms in the other test cases but 
+still higher than the expected \SI{1.09}{\angstrom} on average.  
+Figure~\ref{S-fig:amber-dist} demonstrates how this depends on the number of 
+dummy atoms immediately surrounding the central atom.
+%DLM: I think we need error bars on the values otherwise it's impossible to 
+%tell if the difference is significant.
+%HHL: We can also compare this between all MD codes
 
 We also compare free energies obtained from the implicit dummy approach in 
 AMBER with results form explicit dummy atom simulations and results from 
@@ -772,9 +772,15 @@ atom would be affected.
 
 We can also compute the cycle closure error from Table~\ref{tab:amber-comp} for the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane $\rightarrow$ ethane (see Figure~\ref{fig:cycles}).  The free energy difference within a closed thermodynamic cycle must necessarily be zero.  For the implicit dummy simulation we calculate a cycle error for $\Delta\Delta G_\mathrm{hydr}$ of \SI{0.069+-0.041}{kcal.mol^{-1}} and for the explicit dummy simulation the error is \SI{-0.016+-0.047}{kcal.mol^{-1}}.
 
-In general, the free energies computed with each approach are in good agreement with each other and with the results of the other MD packages.  There are, however, a few notable deviations.  Neopentane $\rightarrow$ methane with central mapping differs from the result with terminal mapping by about \SI{0.4}{kcal.mol^{-1}} (cf.\ Table~\ref{tab:amber-comp}). 
-%DLM: first use of the term "terminal mapping" (except in the table). What does it mean? 
- The terminal mapping and the free energies from the explicit dummy simulations are, however, consistent with the absolute transformations.  We also observe a systematic deviation between forward and backward vacuum transformations in particular in the 2--methylindole simulation (see Table~\ref{S-tab:amber-disc}).
+In general, the free energies computed with each approach are in good agreement 
+with each other and with the results of the other MD packages.  There are, 
+however, a few notable deviations.  Neopentane $\rightarrow$ methane with 
+central mapping differs from the result with terminal mapping by about 
+\SI{0.4}{kcal.mol^{-1}} (cf.\ Table~\ref{tab:amber-comp}).
+The terminal mapping and the free energies from the explicit dummy simulations 
+are, however, consistent with the absolute transformations.  We also observe a 
+systematic deviation between forward and backward vacuum transformations in 
+particular in the 2--methylindole simulation (see Table~\ref{S-tab:amber-disc}).
 A discrepancy of consistently 0.2--\SI{0.4}{kcal.mol^{-1}} is evident from every $\lambda$ step of the vdW plus bonded transformation with both implicit and explicit dummy atoms).
 
 
@@ -917,20 +923,20 @@ that relative free energy simulations will blow up if a hydrogen alchemically be
 atom if the simulation employs hydrogen bond constraining algorithms such as SHAKE or LINCS.
 Successful simulations seem to require turning off the constraint and decreasing the time step.
 
-\subsection{Sire/SOMD}
+\subsectio\underline{}n{Sire/SOMD}
 \label{sec:somd-results}
 
 Figure ~\ref{fig:sire_histogram} compares relative free energy of hydration 
 $\Delta\Delta G$ with relative $\Delta\Delta G$ estimations from absolute free 
 energy calculations, according to the best protocol for Sire/SOMD.
-% halx: we don't know yet what the best protocol is, you need to discuss this 
+% HHL: we don't know yet what the best protocol is, you need to discuss this 
 %       first
 A very good agreement is present between both calculations, highlighting 
 consistency and reproducibility of results in Sire/SOMD itself, with a 
 correlation index $R^2$=\SI{0.99}{} and a mean unsigned error 
 MUE=\SI{0.10}{kcal.mol^{-1}}
-% halx: MUE not defined (is this the same as MAE/MAD?)
-% halx: figure needs to go to SI
+% HHL: MUE not defined (is this the same as MAE/MAD?)
+% HHL: figure needs to go to SI
 \begin{figure}[ht]
   \includegraphics[width=\textwidth]{figures/sire_histogram.pdf}
   \caption{Relative free energy of hydration $\Delta\Delta G$, computed with 
@@ -958,10 +964,10 @@ forward and backward transformations is guaranteed, and a time step of
 
 This new constraint overcomes issues encountered with Sire/SOMD starting 
 protocol.
-% halx: what is the ``starting protocol''
+% HHL: what is the ``starting protocol''
 Usually, RAFE calculations were performed with all bonds constrained, 
 in order to have time step longer than \SI{2}{fs}~\cite{hopkins2015long},
-% halx: really longer than 2fs
+% HHL: really longer than 2fs
 enhancing sampling with a reasonable computational cost.
 However, from a technical point of view, a constraint in Sire/SOMD sets the 
 bond energy to zero.  This may be a valid approximation for small and rigid 
@@ -988,14 +994,14 @@ lengths, respectively.  Although for small bond length changes this error may
 be negligible, it becomes pivotal for perturbations of hydrogen atoms to 
 carbon, nitrogen or oxygen, where the bond length changes of several tenths of 
 an \AA.
-% halx: please quantify
+% HHL: please quantify
 
 After the implementation of the our new constraint scheme, a comparison with simulations without constraints has been run. 
 Figure~\ref{S-fig:sire_constraints} shows 
 that both protocols attain the same results with a final 
 MUE = \SI{0.09}{kcal.mol^{-1}}.
 
-% halx: we don't have MUE for the other results so need to discuss if we want 
+% HHL: we don't have MUE for the other results so need to discuss if we want 
 %       to use this
 %       most of the following needs to be discussed at the beginning of this 
 %c      chapter when comparing all codes
@@ -1007,7 +1013,7 @@ reaction field (Gromacs RF), Gromacs with PME (Gromacs PME) and Amber
 95$\%$ of confidence interval between Sire/SOMD, Gromacs with reaction 
 field (Gromacs RF), Gromacs with PME (Gromacs PME) and Amber). 
 As regards reaction field methods, Sire/SOMD implements a Barker Watts reaction 
-% halx: citation for BWRF missing
+% HHL: citation for BWRF missing
 field (BWRF) with a atom based cutoff, as explained in 
 subsection~\ref{sec:rafe_protocols}, while Gromacs adopts a BWRF with a
 charge group cutoff.  Despite this technical difference,
@@ -1137,5 +1143,3 @@ Amber		  & 0.22< 0.23< 0.24 & 0.13< 0.14< 0.15    & 0.14< 0.15< 0.16 & 0.01< 0.0
 \bibliography{journal-abbrev,reprod}
 
 \end{document}
-
-%  LocalWords:  loeffler
