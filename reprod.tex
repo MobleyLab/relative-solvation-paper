@@ -32,8 +32,9 @@
 
 \newcommand{\progname}[1]{\texttt{#1}}
 \newcommand{\inpopt}[1]{\texttt{#1}}
-\renewcommand{\footnoterule}{}
+
 \renewcommand{\vec}[1]{\mathbf{#1}}
+\renewcommand{\footnoterule}{}
 
 
 \title{Reproducing Relative Alchemical Free Energies of Hydration
@@ -117,9 +118,9 @@ Roughly speaking, fast methods tend to be less accurate while more
 accurate methods tend to be slow.  Nevertheless, rigorous
 methods are obligatory in obtaining accurate, precise and reliable
 results, while less accurate methods can be used as an input filter
-for more expensive approaches.  By rigorous we mean methods that give
-asymptotically correct free energy estimates i.e. they are correct in the limit 
-of sufficient simulation time.
+for computationally more expensive approaches.  By rigorous we mean methods 
+that give asymptotically correct free energy estimates i.e.\ they are correct 
+in the limit of sufficient simulation time.
 
 One such method is the so-called \emph{alchemical} free energy
 approach whose theory is firmly rooted in statistical thermodynamics
@@ -266,9 +267,9 @@ As alluded to above, reliability is a principal matter of concern.  In
 particular, we need to ensure reproducibility of free energy results
 among computer codes.  To the best of our knowledge this has not been
 systematically tested yet for a set of different MD packages. 
-However, there have been some recent efforts to test \emph{energy} reproducibility across 
-packages -- a necessary but not sufficient prerequisite [ref Shirts 10.1007/s10822-016-9977-1]
-Given a
+However, there have been some recent efforts to test \emph{energy} 
+reproducibility across packages~\cite{Shirts2017} --- a necessary but not 
+sufficient prerequisite.  Given a
 predefined force field and run--time parameters we should be able to
 obtain comparable free energy results within statistical convergence
 limits.  In practice, we have the problem, however, that the methods
@@ -290,8 +291,9 @@ binding free energies where the simulation in solution (see
 Fig.~\ref{fig:thermocycle}) is combined with a mutation of the
 molecule bound to a partner, and other important physical
 properties~\cite{Skyner:2015:PCCP}.  A large database of hydration
-free energies computed from alchemical free energy (AFE) simulation, FreeSolv, has been
-presented recently~\cite{doi:10.1021/acs.jced.7b00104} and was just updated [ref 10.1021/acs.jced.7b00104]. Here, we are interested 
+free energies computed from alchemical free energy (AFE) simulation, FreeSolv, 
+has been presented recently~\cite{Mobley2014} and was just 
+updated~\cite{doi:10.1021/acs.jced.7b00104}.  Here, we are interested 
 in the reproducibility of RAFE with the simulation programs AMBER, CHARMM,
 GROMACS and Sire/SOMD.  We will discuss the reversible work results
 obtained with these packages and make recommendations
