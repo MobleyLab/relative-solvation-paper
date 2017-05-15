@@ -71,6 +71,8 @@
   % \includegraphics[scale=1.0]{}
 \end{tocentry}
 
+\todo{Unify language!}
+
 \todo{Objectives:
  Do the relative free energy results produced across different
  softwares agree with each other? What if they don't?}
@@ -584,13 +586,13 @@ energy change. We used the Langevin integrator implemented in GROMACS with a
 default friction coefficient of \SI{1.0}{ps/m_{atom}}. 
 Absolute hydration free energies were calculated using a protocol used in 
 previous works \cite{Mobley2014, doi:10.1021/acs.jced.7b00104}.
-A Parrinello-Rahman barostat with $\tau_p =$ \SI{10}{ps} and compressibility 
+A Parrinello--Rahman barostat with $\tau_p =$ \SI{10}{ps} and compressibility 
 equal to \SI{4.5d-5}{bar^{-1}}.
 We used two methods to calculate electrostatic interactions: Particle Mesh 
 Ewald (PME) and Reaction Field with a dielectric of 78.3, as implemented in the 
 software. We set the non--bonded cutoff to \SI{10.0}{\angstrom}, with a switch 
-starting at \SI{9.0}{\angstrom}. PME calculations were of order 6 and had a 
-tolerance of \SI{1.0d-6}{XXX}, with a grid spacing of \SI{1.0}{\angstrom}. 
+starting at \SI{9.0}{\angstrom}.  PME calculations were of order 6 and had a 
+tolerance of \num{1.0d-6}, with a grid spacing of \SI{1.0}{\angstrom}. 
 All transformations required the use of softcore potentials to avoid numerical 
 problems in the free energy calculation.  We chose the 1--1--6 softcore 
 potential for Lennard-Jones terms and used the default softcore Coulomb 
@@ -848,11 +850,16 @@ absolute free energy simulations; there is no need to specify both end states in
 In relative free energy calculations, however, \inpopt{couple-lambda0} and \inpopt{-lambda1} are
 not necessary because \inpopt{couple-moltype} should be set to \inpopt{none}. 
 \inpopt{couple-intramol} specifies if you want to modify intramolecular interactions along the alchemical 
-path and should be set to \inpopt{yes} in relative transformations. Setting this to \inpopt{no}
+path and should be set to \inpopt{yes} in relative transformations.
+% HHL: none of the couple-* parameters have any effect if couple-moltype is not 
+%set, see the code.
+Setting this to \inpopt{no}
 would mean intramolecular interactions are maintained at their existing values while the 
 free energy transformation is conducted, leading to an incomplete transformation and introducing 
 errors in computed free energies.
 
+% HHL: most of the following is the same for all codes and should be discussed 
+%in a 'code-agnostic' section
 Here, we choose absolute hydration free energies as our standard point of comparison 
 because these are easily calculated with considerable precision 
 \cite{doi:10.1021/acs.jced.7b00104} %check for more references 
@@ -867,45 +874,15 @@ stages the transformation in a van der Waals parameter change followed by a simu
 bonded terms and charges modifications, or vice-versa. In the framework 
 of the split routine, windows without a reasonably strong counterbalancing Lennard-Jones 
 component are subject to very large electrostatic forces that will often lead to simulations
-which crash with standard protocols~\cite{pitera_comparison_2002, anwar_robust_2005}.  
+which crash with standard protocols~\cite{pitera_comparison_2002, 
+anwar_robust_2005}. % HHL: see also discussion in SI
 Thus we find that for stable and effective relative free energy calculations, particle deletion processes
 require electrostatic terms to be turned off before van de Waals and bonded parameters are removed/modified. 
 Insertion processes, in their turn, demand bonded and van der Waals parameters to be changed before charges are turned on.
 The relative free energies of processes $A \rightarrow B$ and $B \rightarrow A$ tend to be equivalent if the protocol of the former
 is the reverse of the latter, i.e., both end states should be connected by the same path in $\lambda$-space. 
 
-\begin{sidewaystable}[]
-\centering
-\caption{Relative hydration free energies obtained from GROMACS simulations in $kcal\cdot mol^{-1}$.}
-\label{tab:groresults}
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{llcccccccccccc}
-\toprule
- &  & Split \footnote{\label{foot:split} results obtained from alchemical transformations with electrostatic and bonded scaling separate from vdW parameter change.} &  &  &  & Unified \footnote{\label{foot:uni} results obtained from alchemical transformation with all parameters scaling together.} &  &  &  & Absolute \footnote{\label{foot:abs}results obtained from absolute free energy calculations.} &  &  &  \\
- &  & GROMACS (RF) &  & GROMACS (PME) &  & GROMACS (RF) &  & GROMACS (PME) &  & GROMACS (RF) &  & GROMACS (PME) &  \\
-Transformations &  & $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & SEM \\ \midrule
-methane & ethane & -0.20 & 0.02 & -0.18 & 0.01 & -0.19 & 0.02 & -0.17 & 0.01 & 0.06 & 0.01 & 0.04 & 0.01 \\
-ethane & methane & 0.19 & 0.02 & 0.18 & 0.02 & 0.248 & 0.003 & 0.236 & 0.002 &  &  &  &  \\
-ethane & methanol & -6.05 & 0.01 & -6.11 & 0.01 & -7.04 & 0.01 & -7.13 & 0.02 & -5.83 & 0.01 & -5.98 & 0.01 \\
-methanol & ethane & 6.05 & 0.00 & 6.12 & 0.00 & 7.25 & 0.01 & 7.32 & 0.01 &  &  &  &  \\
-methane & methanol & -6.21 & 0.05 & -6.24 & 0.05 & -7.21 & 0.02 & -7.29 & 0.02 & -5.77 & 0.01 & -5.95 & 0.01 \\
-methanol & methane & 6.39 & 0.01 & 6.42 & 0.01 & 7.53 & 0.02 & 7.61 & 0.01 &  &  &  &  \\
-methane & 2-methylfuran & -3.13 & 0.01 & -3.08 & 0.01 & -3.14 & 0.01 & -3.10 & 0.01 & -2.87 & 0.01 & -2.95 & 0.01 \\
-2-methylfuran & methane & 3.08 & 0.01 & 3.03 & 0.01 & 3.14 & 0.01 & 3.09 & 0.01 &  &  &  &  \\
-methane & toluene & -3.25 & 0.01 & -3.20 & 0.01 & -3.33 & 0.01 & -3.31 & 0.01 & -2.97 & 0.01 & -3.16 & 0.01 \\
-toluene & methane & 3.27 & 0.03 & 3.26 & 0.02 & 3.30 & 0.01 & 3.29 & 0.01 &  &  &  &  \\
-methane & 2-methylindole & -8.79 & 0.03 & -8.80 & 0.01 & -8.67 & 0.03 & -8.73 & 0.04 & -8.44 & 0.02 & -8.79 & 0.02 \\
-2-methylindole & methane & 8.74 & 0.02 & 8.76 & 0.03 & 8.76 & 0.01 & 8.83 & 0.03 &  &  &  &  \\
-methane & neopentane & -0.21 & 0.02 & -0.15 & 0.05 & -0.24 & 0.01 & -0.08 & 0.01 & 0.18 & 0.01 & 0.14 & 0.01 \\
-neopentane & methane & 0.36 & 0.02 & 0.31 & 0.03 & 0.29 & 0.02 & 0.22 & 0.03 &  &  &  &  \\
-methane & neopentane2 & -0.05 & 0.02 & 0.04 & 0.02 & -0.03 & 0.01 & 0.04 & 0.02 & 0.18 & 0.01 & 0.14 & 0.01 \\
-neopentane2 & methane & -0.03 & 0.01 & -0.04 & 0.01 & -0.05 & 0.01 & -0.07 & 0.01 &  &  &  &  \\
-2-cyclopentanylindole & 7-cyclopentanylindole & -0.07 & 0.02 & -0.03 & 0.03 & -0.09 & 0.05 & -0.1 & 0.1 & -0.02 & 0.05 & 0.02 & 0.02 \\
-7-cyclopentanylindole & 2-cyclopentanylindole & 0.12 & 0.06 & 0.20 & 0.04 & 0.12 & 0.08 & 0.2 & 0.1 &  &  &  &  \\ \bottomrule
-\end{tabular}
-}
-\end{sidewaystable}
-
+% HHL: this is also in the SI
 Transformations having simultaneous particle insertion or deletion, such as 
 2--cyclopentanylindole $\rightarrow$ 7--cyclopentanylindole and its reverse, 
 require 
@@ -921,17 +898,85 @@ in which only charges and bonded terms of the new molecular part are modified.
 
 \todo{make a figure illustrating the idea of the previous paragraph} 
 
-Table \ref{tab:groresults} lists the relative free energies obtained from GROMACS simulations.
+Table \ref{tab:groresults} lists the relative free energies obtained from 
+GROMACS simulations.
+% HHL: change table entries as suggested by DLM and demonstrated in Table 1 
+%(AMBER)
+% HHL: order of transformations is not the same as in Table 1
+\begin{sidewaystable}[]
+  \centering
+  \caption{Relative hydration free energies obtained from GROMACS simulations 
+  in $kcal\cdot mol^{-1}$.}
+  \label{tab:groresults}
+  \resizebox{\columnwidth}{!}{%
+    \begin{tabular}{llcccccccccccc}
+      \toprule
+      &  & Split \footnote{\label{foot:split} results obtained from alchemical 
+      transformations with electrostatic and bonded scaling separate from vdW 
+      parameter change.} &  &  &  & Unified \footnote{\label{foot:uni} results 
+      obtained from alchemical transformation with all parameters scaling 
+      together.} &  &  &  & Absolute \footnote{\label{foot:abs}results obtained 
+      from absolute free energy calculations.} &  &  &  \\
+      &  & GROMACS (RF) &  & GROMACS (PME) &  & GROMACS (RF) &  & GROMACS (PME) 
+      &  & GROMACS (RF) &  & GROMACS (PME) &  \\
+      Transformations &  & $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & SEM & 
+      $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & 
+      SEM & $\Delta \Delta G$ & SEM \\ \midrule
+      methane & ethane & -0.20 & 0.02 & -0.18 & 0.01 & -0.19 & 0.02 & -0.17 & 
+      0.01 & 0.06 & 0.01 & 0.04 & 0.01 \\
+      ethane & methane & 0.19 & 0.02 & 0.18 & 0.02 & 0.248 & 0.003 & 0.236 & 
+      0.002 &  &  &  &  \\
+      ethane & methanol & -6.05 & 0.01 & -6.11 & 0.01 & -7.04 & 0.01 & -7.13 & 
+      0.02 & -5.83 & 0.01 & -5.98 & 0.01 \\
+      methanol & ethane & 6.05 & 0.00 & 6.12 & 0.00 & 7.25 & 0.01 & 7.32 & 0.01 
+      &  &  &  &  \\
+      methane & methanol & -6.21 & 0.05 & -6.24 & 0.05 & -7.21 & 0.02 & -7.29 & 
+      0.02 & -5.77 & 0.01 & -5.95 & 0.01 \\
+      methanol & methane & 6.39 & 0.01 & 6.42 & 0.01 & 7.53 & 0.02 & 7.61 & 
+      0.01 &  &  &  &  \\
+      methane & 2-methylfuran & -3.13 & 0.01 & -3.08 & 0.01 & -3.14 & 0.01 & 
+      -3.10 & 0.01 & -2.87 & 0.01 & -2.95 & 0.01 \\
+      2-methylfuran & methane & 3.08 & 0.01 & 3.03 & 0.01 & 3.14 & 0.01 & 3.09 
+      & 0.01 &  &  &  &  \\
+      methane & toluene & -3.25 & 0.01 & -3.20 & 0.01 & -3.33 & 0.01 & -3.31 & 
+      0.01 & -2.97 & 0.01 & -3.16 & 0.01 \\
+      toluene & methane & 3.27 & 0.03 & 3.26 & 0.02 & 3.30 & 0.01 & 3.29 & 0.01 
+      &  &  &  &  \\
+      methane & 2-methylindole & -8.79 & 0.03 & -8.80 & 0.01 & -8.67 & 0.03 & 
+      -8.73 & 0.04 & -8.44 & 0.02 & -8.79 & 0.02 \\
+      2-methylindole & methane & 8.74 & 0.02 & 8.76 & 0.03 & 8.76 & 0.01 & 8.83 
+      & 0.03 &  &  &  &  \\
+      methane & neopentane & -0.21 & 0.02 & -0.15 & 0.05 & -0.24 & 0.01 & -0.08 
+      & 0.01 & 0.18 & 0.01 & 0.14 & 0.01 \\
+      neopentane & methane & 0.36 & 0.02 & 0.31 & 0.03 & 0.29 & 0.02 & 0.22 & 
+      0.03 &  &  &  &  \\
+      methane & neopentane2 & -0.05 & 0.02 & 0.04 & 0.02 & -0.03 & 0.01 & 0.04 
+      & 0.02 & 0.18 & 0.01 & 0.14 & 0.01 \\
+      neopentane2 & methane & -0.03 & 0.01 & -0.04 & 0.01 & -0.05 & 0.01 & 
+      -0.07 & 0.01 &  &  &  &  \\
+      2-cyclopentanylindole & 7-cyclopentanylindole & -0.07 & 0.02 & -0.03 & 
+      0.03 & -0.09 & 0.05 & -0.1 & 0.1 & -0.02 & 0.05 & 0.02 & 0.02 \\
+      7-cyclopentanylindole & 2-cyclopentanylindole & 0.12 & 0.06 & 0.20 & 0.04 
+      & 0.12 & 0.08 & 0.2 & 0.1 &  &  &  &  \\ \bottomrule
+    \end{tabular}
+  }
+\end{sidewaystable}
 Relative free energies are in good agreement with each other and with 
 $\Delta \Delta G_{\mathrm{hydr}}$ obtained from the other software used in this study. 
 A few noteworthy exceptions are the differences between the unified and split results of 
 methane $\rightarrow$ methanol, ethane $\rightarrow$ methanol, and their reverse processes.
 In the former, $\langle \partial \mathrm{H}/\partial \lambda \rangle$ plots show a sharp decrease 
-near $\lambda = $ 1.0, while similar behavior is not observed in the latter (Figure XX1). 
+near $\lambda = $ 1.0, while similar behavior is not observed in the latter 
+(Figure XX1). 
+
 Investigation of the phase space overlap plots (Figure XX2) obtained from \progname{alchemical\_analysis.py} 
 show in the unified case a poor overlap between the last state and its neighbors, 
 which can explain the difference in free energy. 
 
+% HHL: we have discussed this a while ago: you will need to adjust lambda
+%spacing in the rapidly varying part of the dH/dl region.  A quick look at the 
+%dH/dl curve will make this clear immediately which probably means adding a 
+%figure to the SI.  This is not a problem with BAR/MBAR.
 \todo{we speculate it is an soft-core coulomb issue, but I'm not confident enough to write it down before I run some gaff1.8 simulations using soft-core coulomb in the split protocol (I had that information for gaff 1.7). It will be possible to compare electrostatic components of $\Delta G_{A\rightarrow B}$ then.}
 
 Ethane $\rightarrow$ methane and methane $\rightarrow$ ethane split and unified 
@@ -942,6 +987,8 @@ also disagree with the absolute protocol, but similar differences can be seen in
 We find that there is no significant difference in calculated free energies depending on the choice of 
 Particle Mesh Ewald or Reaction Field for calculation of long-range electrostatic interactions. 
 
+% HHL: have you actually seens this happening?  I have added a comment
+% regarding this in the implementation details.
 One particularity of the software worth mentioning is 
 that relative free energy simulations will blow up if a hydrogen alchemically becomes a heavy 
 atom if the simulation employs hydrogen bond constraining algorithms such as SHAKE or LINCS.
