@@ -327,14 +327,22 @@ strongly fluctuating forces/energies and to severe instabilities in
 the integrator, as well as analysis problems even when simulations run~\cite{beutler_avoiding_1994,
   zacharias_separationshifted_1994, steinbrecher_nonlinear_2007}.
 
-Other differences include whether the code scales individual (force field)
-parameters (``parameter--scaled'') and/or the total 
-energy~\cite{doi:10.1021/jp981628n} (``energy--scaled''), or if
-%DLM: What does it mean to scale the total energy? Can you be more clear? I'm assuming what you mean is that in some cases, one actually modifies the force field parameters, whereas in others, one modifies the contributions of those terms to the potential energy/total energy by scaling those terms in the Hamiltonian?
-the code allows constraints for bonds with changing bond lengths.
-These and other details will be outlined below.  The perturbed group
-consists of all atoms that need to be transformed, i.e.\ any atom
-that differs in at least one force field parameter in the other end
+Another difference is how the code scales force field parameters (``parameter 
+scaling'') and/or the total energy (``energy 
+scaling'')~\cite{doi:10.1021/jp981628n}.  In the former case each parameter is 
+scaled individually e.g.\ in the case of a harmonic bond or angle term
+this is the force constant and the equilibrium distance/angle while in the 
+latter case the total energy term resulting from the potential is scaled at 
+once.  The two approaches are not mathematically equivalent and so the pathway 
+is different.  It should be noted, however, that the non--bonded interactions 
+are handled through softcore functions in modern codes and thus parameter 
+scaling~\cite{doi:10.1021/j100056a020, JCROSS1986198} is now only used for 
+bonded terms in some codes.
+
+One more important question is if the code allows constraints for bonds with 
+changing bond lengths.  These and other details will be outlined below.  The 
+perturbed group consists of all atoms that need to be transformed, i.e.\ any 
+atom that differs in at least one force field parameter in the other end
 state.  In our case this means the whole solute.
 
 \paragraph{AMBER} This code is strictly dual topology and all terms
@@ -356,10 +364,10 @@ careful construction of topologies by keeping force field parameters that are
 not being modified constant between different files.
 
 \paragraph{CHARMM} The PERT module duplicates the topology similar to
-\progname{sander} but the definitions for mapped atoms are given only once.  The
+\progname{sander} but the definitions for mapped atoms are given only once.
 %DLM: Can we provide sample files for all of these in SI, and maybe even give 
 %topology snippets in figure(s) to illustrate the point? 
-module requires balancing with explicit dummy atoms.  All terms are
+The module requires balancing with explicit dummy atoms.  All terms are
 energy--scaled.  The PSSP softcore potential is applied to \emph{all}
 atoms in the perturbed group (see section~\ref{S-sec:softcores} in the SI).  The code can handle
 constraints of changing bond lengths in the perturbed group but this
@@ -371,9 +379,8 @@ to arbitrary values.
 
 \paragraph{GROMACS} This code uses a single topology description.
 Bonded terms are strictly parameter--scaled which requires proper
-balancing of multi--term dihedrals.  Non--bonded terms are
-energy--scaled.  The softcore potential applies to dummy atoms only
-determined from atoms having zero vdW parameters.  The code
+balancing of multi--term dihedrals.  The softcore potential applies to dummy 
+atoms only determined from atoms having zero vdW parameters.  The code
 allows changing bond lengths involving constraints within the perturbed group 
 but this can lead to instabilities and wrong results (Michael Shirts,
 private communication).  There are separate $\lambda$s for vdW,
@@ -383,8 +390,9 @@ of separated protocols.
 \paragraph{Sire/SOMD} This code uses a single topology description.
 The final state is constructed at run time from the initial state with
 a ``patch'' (list of force field parameters to be modified).  Bond and
-angle terms are parameter--scaled while all other terms are
+angle terms are parameter--scaled while the dihedral term is
 energy--scaled.  The softcore potential applies to dummy atoms only.
+%HHL: Julien, please check and tell how SOMD determines dummy atoms
 The code cannot handle constraints of changing bond lengths in the
 perturbed group.  There is only one global $\lambda$ for parameter
 scaling.  Separated protocols (see below) must be emulated through
@@ -514,70 +522,81 @@ hydrogens (TIP3P) were constrained with SHAKE but none of the atoms in the
 perturbed group and so the time step was set to \SI{1}{fs} (see Sire protocol 
 below for an alternative approach).  The temperature was controlled through a 
 Langevin thermostat with a friction constant of \SI{2.0}{ps-1} and pressure 
-rescaling through a Monte Carlo barostat with 100 steps between volume change 
-attempts and \SI{2.0}{ps} relaxation time.
+rescaling through a Monte Carlo barostat with 100 steps between isotropic 
+volume change attempts.
 
 \paragraph{Sire/SOMD} All simulations were carried out with
-Sire/OpenMM 6.3 (revision 16.1).  Each alchemical transformation was
+Sire/OpenMM 6.3 (revision 16.1). % HHL: citation?
+Each alchemical transformation was
 divided into 17 evenly spaced windows and simulated for \SI{2}{ns}
-both in water an vacuum phase. A velocity-Verlet integrator was
-employed with \SI{2}{fs} timestep, constraining only those hydrogen bonds
+both in water and in vacuum. A velocity-Verlet integrator was
+employed with a \SI{2}{fs} time step, constraining only those hydrogen bonds
 which are not alchemically transformed.  This approach will be called 
 ``unperturbed H protocol''.
 % HHL: maybe discuss this earlier in the non-code specific section?
 An atom--based
 Barker--Watts reaction field~\cite{doi:10.1080/00268977300102101} with
-a dielectric constant of \num{82.0} was adopted for water phase
-simulations. Furthermore, a cutoff of \SI{12}{\angstrom} was set for non-bonded
-interactions and periodic boundary conditions were imposed.
+a dielectric constant of \num{82.0} was adopted for the solution phase
+simulations. % HHL: why 82?  For 298K this would be more like 78.
+Furthermore, a cutoff of \SI{12}{\angstrom} was set for the non--bonded
+interactions and periodic boundary conditions were imposed. % HHL: check box 
+%sizes
 Temperature control was achieved with the Andersen
 thermostat~\cite{doi:10.1063/1.439486} with a coupling constant of
 \SI{10}{ps^{-1}}.  A Monte Carlo barostat assured pressure control,
 attempting isotropic box edge scaling every 25 time steps.
-The reaction field was not employed in vacuum
-and a Coulombic potential without cutoff was used.
-This aspect led to an inconsistent description of the intramolecular electrostatic interactions
-of the solute in the solvated and vacuum phases.
-Thus, to enable a meaningful estimation of the free energy change 
-a free energy correction term $G_{\mathrm{FUNC}}$ was
+The reaction field was not employed in vacuum and a Coulombic potential without 
+cutoff was used.  This aspect led to an inconsistent description of the 
+intramolecular electrostatic interactions of the solute in the solvated and 
+vacuum phases.  Thus, to enable a meaningful estimation of the free energy 
+change a free energy correction term $G_{\mathrm{c}}$ was
 evaluated to treat intramolecular Coulombic interactions consistently
-between water and vacuum legs of the thermodynamic cycle, fig~\ref{fig:thermocycle}, as explained
-in ~\cite{Bosisio2016} . The $G_{\mathrm{FUNC}}$ term was obtained
-via post-processing the end states trajectories of each water
-phase simulation, using the Zwanzig relationship~\cite{zwanzig_high-temperature_1954}:
+between the water and vacuum legs of the thermodynamic cycle (see 
+Fig~\ref{fig:thermocycle}) as detailled in Ref.~\citenum{Bosisio2016}. The 
+$G_{\mathrm{c}}$ term was obtained via post-processing of the end state 
+trajectories of each water phase simulation, using the Zwanzig 
+relationship~\cite{zwanzig_high-temperature_1954}:
 \begin{equation}
  \label{eq:ZwanzigDGfunc}
- G_{\mathrm{FUNC}} = -\beta^{-1} \ln \langle exp \left[-\beta(U_{\mathrm{ic,nc}}(\mathbf{r}) - U_{\mathrm{ic,sim}}(\mathbf{r}))\right]\rangle_{\mathrm{sim}}
+ G_{\mathrm{c}} = -\beta^{-1} \ln \langle exp 
+ \left[-\beta(U_{\mathrm{ic,nc}}(\mathbf{r}) - 
+ U_{\mathrm{ic,sim}}(\mathbf{r}))\right]\rangle_{\mathrm{sim}}
 \end{equation}
-where $U_{\mathrm{ic,nc}}(\mathbf{r})$ is the solute intramolecular electrostatic 
+where $U_{\mathrm{ic,nc}}(\mathbf{r})$ is the solute intramolecular 
+electrostatic % HHL: I guess 'nc' stands for no cutoff?
 potential that depends on the coordinates $\mathbf{r}$ of the solute and is given by Coulomb's law. 
 $U_{\mathrm{ic,sim}}(\mathbf{r})$ is the intramolecular electrostatic potential term as
-computed in the simulation with a BWRF cutoff. 
+computed in the simulation with a BWRF cutoff.
 
 \paragraph{GROMACS} We used GROMACS 4.6.7 to carry out simulations for 
 the relative hydration free energies ($\Delta \Delta G_{\mathrm{hydr}}$).
-Each transformation had its Gibbs free energy calculated: (i) in a single topology 
-approach in which van der Waals energy terms were changed separately 
-from the electrostatic and bonded components; (ii) in a single topology approach in which  
-bonded, van der Waals, and electrostatic terms are changed together;  and (iii) via the difference 
-between two absolute calculations.
-In the first two cases, each alchemical transformation was described by 31 and 16 
-states, respectively, and simulated for 4.2 ns with time steps of 1 fs in water and a vacuum. 
-Atomic masses were not changed along the alchemical path;
-their change affect kinetic energy only and do not contribute for the free energy change. 
-We used the Langevin integrator implemented in GROMACS with default friction 
-coefficient of 1.0 $ps/ m_{atom}$. 
-Absolute hydration free energies were calculated using a protocol used in previous works \cite{duarte_ramos_matos_approaches_2017, mobley_freeSolv:_2014}.
-A Parrinello-Rahman barostat with $\tau_p =$ 10 ps and compressibility equal to 4.5 $\cdot 10^{-5}$ bar$^{-1}$.
-We used two methods to calculate electrostatic interactions: Particle Mesh Ewald (PME) 
-and Reaction Field with a dielectric of 78.3, as implemented in the software. 
-We set the non-bonded cutoff to 10 angstroms, with a switch starting at 9 angstroms. 
-PME calculations were of order 6 and had a tolerance of 1.0 $\cdot 10^{-6}$, with a grid spacing of 1 angstrom. 
-All transformations required the use of soft-core potentials to avoid numerical problems in the free energy calculation. 
-We chose the 1-1-6 soft-core potential for Lennard-Jones 
-terms and used the default soft-core Coulomb implementation in paths where charges, van der 
-Waals, and bonded terms were modified together, but no soft core potentials were applied 
-to Coulomb interactions when Coulomb interactions were modified separately.
+Each transformation had its Gibbs free energy calculated: (i) in a single 
+topology approach in which van der Waals energy terms were changed separately 
+from the electrostatic and bonded components; (ii) in a single topology 
+approach in which bonded, van der Waals, and electrostatic terms are changed 
+together;  and (iii) via the difference between two absolute calculations.
+In the first two cases, each alchemical transformation was described by 31 and 
+16 states, respectively, and simulated for \SI{4.2}{ns} with time steps of 
+\SI{1.0}{fs} in water and a vacuum. Atomic masses were not changed along the 
+alchemical path;
+their change affect kinetic energy only and do not contribute to the free 
+energy change. We used the Langevin integrator implemented in GROMACS with a 
+default friction coefficient of \SI{1.0}{ps/m_{atom}}. 
+Absolute hydration free energies were calculated using a protocol used in 
+previous works \cite{Mobley2014, doi:10.1021/acs.jced.7b00104}.
+A Parrinello-Rahman barostat with $\tau_p =$ \SI{10}{ps} and compressibility 
+equal to \SI{4.5d-5}{bar^{-1}}.
+We used two methods to calculate electrostatic interactions: Particle Mesh 
+Ewald (PME) and Reaction Field with a dielectric of 78.3, as implemented in the 
+software. We set the non--bonded cutoff to \SI{10.0}{\angstrom}, with a switch 
+starting at \SI{9.0}{\angstrom}. PME calculations were of order 6 and had a 
+tolerance of \SI{1.0d-6}{XXX}, with a grid spacing of \SI{1.0}{\angstrom}. 
+All transformations required the use of softcore potentials to avoid numerical 
+problems in the free energy calculation.  We chose the 1--1--6 softcore 
+potential for Lennard-Jones terms and used the default softcore Coulomb 
+implementation in paths where charges, van der Waals, and bonded terms were 
+modified together, but no soft core potentials were applied to Coulomb 
+interactions when Coulomb interactions were modified separately.
 
 \todo{make figure explaining the protocols described here.}
 
@@ -697,7 +716,8 @@ Figure~\ref{S-fig:amber-dist} demonstrates how this depends on the number of
 dummy atoms immediately surrounding the central atom.
 %DLM: I think we need error bars on the values otherwise it's impossible to 
 %tell if the difference is significant.
-%HHL: We can also compare this between all MD codes
+%HHL: We can also compare this between all MD codes.  I'm confident this is 
+%significant.
 
 We also compare free energies obtained from the implicit dummy approach in 
 AMBER with results form explicit dummy atom simulations and results from 
@@ -765,6 +785,8 @@ non--SHAKE simulations, this SHAKE protocol appears to be a viable solution to
 increase the performance of RAFE simulations (cmp.\ SOMD simulations).  From a 
 practical point of view, 
 %DLM: How much speed difference does this make?
+%HHL: I would say by a factor of two as the number of SHAKEs is practically the 
+%same.
 AMBER uses an atom based mask for bond SHAKEs such that the mask must be set 
 for the hydrogens in question while the same is not possible for their 
 counter--part in the other state because \emph{all} bonds emanating from this 
@@ -832,7 +854,8 @@ free energy transformation is conducted, leading to an incomplete transformation
 errors in computed free energies.
 
 Here, we choose absolute hydration free energies as our standard point of comparison 
-because these are easily calculated with considerable precision \cite{duarte_ramos_matos_approaches_2017} %check for more references 
+because these are easily calculated with considerable precision 
+\cite{doi:10.1021/acs.jced.7b00104} %check for more references 
 and are considerably simpler to set up and implement than relative calculations.
 Prior work actually compared calculated absolute hydration free energies across different codes with considerable success \cite{klimovich_predicting_2010} (see Fig 7 in reference), further supporting this view.
 Thus, we compared relative free energies calculated via simultaneous parameter change simulations -- our ``unified protocol'' -- 
@@ -884,7 +907,8 @@ neopentane2 & methane & -0.03 & 0.01 & -0.04 & 0.01 & -0.05 & 0.01 & -0.07 & 0.0
 \end{sidewaystable}
 
 Transformations having simultaneous particle insertion or deletion, such as 
-2-cyclopentanylindole $\rightarrow$ 7-cyclopentanylindole and its reverse, require 
+2--cyclopentanylindole $\rightarrow$ 7--cyclopentanylindole and its reverse, 
+require 
 an adapted split protocol. The simulation is divided into two stages: a deletion stage, 
 in which part of the molecule is transformed into dummy atoms, and an insertion stage, 
 in which dummy atoms which were initially present are transformed into an 
@@ -1005,35 +1029,33 @@ MUE = \SI{0.09}{kcal.mol^{-1}}.
 %       to use this
 %       most of the following needs to be discussed at the beginning of this 
 %c      chapter when comparing all codes
-Tab~\ref{tab:mue-comp} shows the MUE between Sire/SOMD, Gromacs employing 
-%DLM: Should be GROMACS, not Gromacs, throughout (it's an acronym, like AMBER)
-%DLM: Also should be AMBER throughout.
-reaction field (Gromacs RF), Gromacs with PME (Gromacs PME) and Amber  
+Tab~\ref{tab:mue-comp} shows the MUE between Sire/SOMD, GROMACS employing 
+reaction field (GROMACS RF), GROMACS with PME (GROMACS PME) and AMBER  
 (alternatively: Tab~\ref{tab:muebound-comp} shows the MUE comparison with 
-95$\%$ of confidence interval between Sire/SOMD, Gromacs with reaction 
-field (Gromacs RF), Gromacs with PME (Gromacs PME) and Amber). 
+95$\%$ of confidence interval between Sire/SOMD, GROMACS with reaction 
+field (GROMACS RF), GROMACS with PME (GROMACS PME) and AMBER). 
 As regards reaction field methods, Sire/SOMD implements a Barker Watts reaction 
 % HHL: citation for BWRF missing
 field (BWRF) with a atom based cutoff, as explained in 
-subsection~\ref{sec:rafe_protocols}, while Gromacs adopts a BWRF with a
+subsection~\ref{sec:rafe_protocols}, while GROMACS adopts a BWRF with a
 charge group cutoff.  Despite this technical difference,
-Sire/SOMD and Gromacs RF produce comparable results with a MUE of 
+Sire/SOMD and GROMACS RF produce comparable results with a MUE of 
 \SI{0.18}{kcal.mol^{-1}}.
 In]the methane $\rightarrow$ neopentane transformation is still matter of 
 problems. In this case, Sire/SOMD is able to maintain consistency between 
 central and terminal mapping, as shown in tab~\ref{S-tab:sire-finalresults}, 
-while Gromacs RF displays a $\Delta\Delta$G of \SI{-0.20 +- 
+while GROMACS RF displays a $\Delta\Delta$G of \SI{-0.20 +- 
 0.01}{kcal.mol^{-1}} for the
 centrally mapped transformation and $\Delta\Delta$G = \SI{-0.05 +- 
 0.02}{kcal.mol^{-1}} for the terminally mapped transformation.
 As regards PME methods, Sire/SOMD presents a MUE = \SI{0.18}{kcal.mol^{-1}} and 
-MUE = \SI{0.23}{kcal.mol^{-1}} with Gromacs PME and Amber respectively, 
+MUE = \SI{0.23}{kcal.mol^{-1}} with GROMACS PME and AMBER respectively, 
 achieving a very good agreement between $\Delta\Delta$G predictions. 
 
 \todo{it may be good to say somewhere how much was the MUE with the initial 
 standard protocol} %DLM: What is "initial standard protocol"?
 
-\todo{Gromacs RF in vacuum uses a dielectric of 1.0, this causes problems for 
+\todo{GROMACS RF in vacuum uses a dielectric of 1.0, this causes problems for 
 Sire vacuum simulations} %DLM: What does this mean? 
 
 Overall, the Sire/SOMD free energy estimations are in good agreement with the 
@@ -1047,16 +1069,18 @@ single step.
 
 \begin{table}[]
   \begin{minipage}{\linewidth}
-  \caption{MUE comparison between Sire/SOMD, Gromacs with Reaction Field (Gromacs RF), Gromacs with PME (Gromacs PME) and Amber in terms of MUE (\SI{}{kcal.mol^{-1}}.}\label{tab:mue-comp}
+  \caption{MUE comparison between Sire/SOMD, GROMACS with Reaction Field 
+  (GROMACS RF), GROMACS with PME (GROMACS PME) and AMBER in terms of MUE 
+  (\SI{}{kcal.mol^{-1}}.}\label{tab:mue-comp}
   \makebox[\textwidth][c]{
   \begin{tabular}{lrrrr}
     \toprule
-    Package & Sire/SOMD & Gromcs RF & Gromacs PME & Amber\\
+    Package & Sire/SOMD & Gromcs RF & GROMACS PME & AMBER\\
     \midrule
 Sire/SOMD         & 0.00 & 0.18    & 0.18 & 0.23\\
-Gromacs RF   & 0.18 & 0.00    & 0.04 & 0.14\\ 
-Gromacs PME  & 0.18 & 0.04    & 0.00 & 0.14\\     
-Amber        & 0.23 & 0.14    & 0.14 & 0.00\\
+GROMACS RF   & 0.18 & 0.00    & 0.04 & 0.14\\ 
+GROMACS PME  & 0.18 & 0.04    & 0.00 & 0.14\\     
+AMBER        & 0.23 & 0.14    & 0.14 & 0.00\\
      \bottomrule
   \end{tabular}
 }
@@ -1066,16 +1090,21 @@ Amber        & 0.23 & 0.14    & 0.14 & 0.00\\
 
 \begin{table}[]
   \begin{minipage}{\linewidth}
-  \caption{MUE with 95$\%$ confidence interval between Sire/SOMD, Gromacs with Reaction Field (Gromacs RF), Gromacs with PME (Gromacs PME) and Amber in terms of MUE (\SI{}{kcal.mol^{-1}}.}\label{tab:muebound-comp}
+  \caption{MUE with 95$\%$ confidence interval between Sire/SOMD, GROMACS with 
+  Reaction Field (GROMACS RF), GROMACS with PME (GROMACS PME) and AMBER in 
+  terms of MUE (\SI{}{kcal.mol^{-1}}.}\label{tab:muebound-comp}
   \makebox[\textwidth][c]{
   \begin{tabular}{lcccc}
     \toprule
-    Package & Sire/SOMD & Gromcs RF & Gromacs PME & Amber\\
+    Package & Sire/SOMD & Gromcs RF & GROMACS PME & AMBER\\
     \midrule
 Sire/SOMD         & 0.02< 0.04< 0.05 & 0.17< 0.19< 0.21    & 0.16< 0.18< 0.20 & 0.21< 0.23< 0.25\\
-Gromacs RF   	  & 0.17< 0.18< 0.19 & 0.01< 0.02< 0.03    & 0.04< 0.05< 0.06 & 0.13< 0.14< 0.15\\
-Gromacs PME       & 0.17< 0.18< 0.19 & 0.04< 0.05< 0.06    & 0.01< 0.02< 0.03 & 0.14< 0.15< 0.16\\
-Amber		  & 0.22< 0.23< 0.24 & 0.13< 0.14< 0.15    & 0.14< 0.15< 0.16 & 0.01< 0.02< 0.03\\
+GROMACS RF   	  & 0.17< 0.18< 0.19 & 0.01< 0.02< 0.03    & 0.04< 0.05< 0.06 & 
+0.13< 0.14< 0.15\\
+GROMACS PME       & 0.17< 0.18< 0.19 & 0.04< 0.05< 0.06    & 0.01< 0.02< 0.03 & 
+0.14< 0.15< 0.16\\
+AMBER		  & 0.22< 0.23< 0.24 & 0.13< 0.14< 0.15    & 0.14< 0.15< 0.16 & 0.01< 
+0.02< 0.03\\
      \bottomrule
   \end{tabular}
 }
@@ -1097,7 +1126,7 @@ Amber		  & 0.22< 0.23< 0.24 & 0.13< 0.14< 0.15    & 0.14< 0.15< 0.16 & 0.01< 0.0
 \todo{%
  what do we need to progress the field e.g. automation to make things
  easy but also consistent and thus more reproducible (FESetup also
- for reproducibility); GPU: Gromacs, SOMD but not AMBER (yet) and
+ for reproducibility); GPU: GROMACS, SOMD but not AMBER (yet) and
  CHARMM; alternative softcore functions?; sampling?; force field improvements?; analysis?
 }
 
@@ -1131,7 +1160,7 @@ Amber		  & 0.22< 0.23< 0.24 & 0.13< 0.14< 0.15    & 0.14< 0.15< 0.16 & 0.01< 0.0
   We thank Prof.\ Stefan Boresch for valuable discussions and making code
   modifications to CHARMM.  We thank Dr.\ Ross Walker and Daniel Mermelstein
   for valuable discussions and making code modifications to AMBER.  We thank
-  Prof. Michael Shirts for valuable discussions about Gromacs.
+  Prof. Michael Shirts for valuable discussions about GROMACS.
 
   We acknowledge use of Hartree Centre resources and the use of the
   SCARF HPC cluster in this work.
