@@ -1,15 +1,13 @@
+$recorder = 1;
 $pdf_mode = 1;
+$bibtex_use = 2;
+$clean_ext .= 'acs-%R.bib lod';
 $dvi_mode = $postscript_mode = 0; 
 $preview_mode = 0;
 $pdf_previewer = 'evince %O %S';
 @default_files = ('SI.tex', 'reprod.tex');
 
-$pdflatex = 'internal _pdflatex %O %S';
-sub _pdflatex{
-  my @args = @_;
-  system('make');  # a bit silly...
-  return system('pdflatex', @args);
-}
+$pdflatex = 'make && pdflatex %O %S';
 
 add_cus_dep('svg', 'pdf', 0, 'svg2pdf');
 sub svg2pdf {
