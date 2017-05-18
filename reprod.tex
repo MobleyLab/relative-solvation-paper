@@ -490,8 +490,9 @@ elsewhere, see e.g. Refs.~\citenum{doi:10.1021/ct300203w,Hu2016}.
 While the MD packages principally allow a ``one--step'' 
 transformation~\cite{steinbrecher_soft-core_2011}
 that is both van der Waals and Coulombic contributions vary
-simultaneously, it can be(is? ref?) more efficient to carry out a
-separated protocol.  In such a protocol the charges are transformed
+simultaneously, it can be more efficient to carry out a
+separated protocol~\cite{naden_linear_2014, naden_linear_2015}. 
+In such a protocol the charges are transformed
 linearly between the end states followed by a mutation of the van der
 Waals parameters using a softcore
 potential~\cite{beutler_avoiding_1994,
@@ -909,57 +910,31 @@ GROMACS simulations.
   in $kcal\cdot mol^{-1}$.}
   \label{tab:groresults}
   \resizebox{\columnwidth}{!}{%
-    \begin{tabular}{llcccccccccccc}
-      \toprule
-      &  & Split \footnote{\label{foot:split} results obtained from alchemical 
-      transformations with electrostatic and bonded scaling separate from vdW 
-      parameter change.} &  &  &  & Unified \footnote{\label{foot:uni} results 
-      obtained from alchemical transformation with all parameters scaling 
-      together.} &  &  &  & Absolute \footnote{\label{foot:abs}results obtained 
-      from absolute free energy calculations.} &  &  &  \\
-      &  & GROMACS (RF) &  & GROMACS (PME) &  & GROMACS (RF) &  & GROMACS (PME) 
-      &  & GROMACS (RF) &  & GROMACS (PME) &  \\
-      Transformations &  & $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & SEM & 
-      $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & SEM & $\Delta \Delta G$ & 
-      SEM & $\Delta \Delta G$ & SEM \\ \midrule
-      methane & ethane & -0.20 & 0.02 & -0.18 & 0.01 & -0.19 & 0.02 & -0.17 & 
-      0.01 & 0.06 & 0.01 & 0.04 & 0.01 \\
-      ethane & methane & 0.19 & 0.02 & 0.18 & 0.02 & 0.248 & 0.003 & 0.236 & 
-      0.002 &  &  &  &  \\
-      ethane & methanol & -6.05 & 0.01 & -6.11 & 0.01 & -7.04 & 0.01 & -7.13 & 
-      0.02 & -5.83 & 0.01 & -5.98 & 0.01 \\
-      methanol & ethane & 6.05 & 0.00 & 6.12 & 0.00 & 7.25 & 0.01 & 7.32 & 0.01 
-      &  &  &  &  \\
-      methane & methanol & -6.21 & 0.05 & -6.24 & 0.05 & -7.21 & 0.02 & -7.29 & 
-      0.02 & -5.77 & 0.01 & -5.95 & 0.01 \\
-      methanol & methane & 6.39 & 0.01 & 6.42 & 0.01 & 7.53 & 0.02 & 7.61 & 
-      0.01 &  &  &  &  \\
-      methane & 2-methylfuran & -3.13 & 0.01 & -3.08 & 0.01 & -3.14 & 0.01 & 
-      -3.10 & 0.01 & -2.87 & 0.01 & -2.95 & 0.01 \\
-      2-methylfuran & methane & 3.08 & 0.01 & 3.03 & 0.01 & 3.14 & 0.01 & 3.09 
-      & 0.01 &  &  &  &  \\
-      methane & toluene & -3.25 & 0.01 & -3.20 & 0.01 & -3.33 & 0.01 & -3.31 & 
-      0.01 & -2.97 & 0.01 & -3.16 & 0.01 \\
-      toluene & methane & 3.27 & 0.03 & 3.26 & 0.02 & 3.30 & 0.01 & 3.29 & 0.01 
-      &  &  &  &  \\
-      methane & 2-methylindole & -8.79 & 0.03 & -8.80 & 0.01 & -8.67 & 0.03 & 
-      -8.73 & 0.04 & -8.44 & 0.02 & -8.79 & 0.02 \\
-      2-methylindole & methane & 8.74 & 0.02 & 8.76 & 0.03 & 8.76 & 0.01 & 8.83 
-      & 0.03 &  &  &  &  \\
-      methane & neopentane & -0.21 & 0.02 & -0.15 & 0.05 & -0.24 & 0.01 & -0.08 
-      & 0.01 & 0.18 & 0.01 & 0.14 & 0.01 \\
-      neopentane & methane & 0.36 & 0.02 & 0.31 & 0.03 & 0.29 & 0.02 & 0.22 & 
-      0.03 &  &  &  &  \\
-      methane & neopentane2 & -0.05 & 0.02 & 0.04 & 0.02 & -0.03 & 0.01 & 0.04 
-      & 0.02 & 0.18 & 0.01 & 0.14 & 0.01 \\
-      neopentane2 & methane & -0.03 & 0.01 & -0.04 & 0.01 & -0.05 & 0.01 & 
-      -0.07 & 0.01 &  &  &  &  \\
-      2-cyclopentanylindole & 7-cyclopentanylindole & -0.07 & 0.02 & -0.03 & 
-      0.03 & -0.09 & 0.05 & -0.1 & 0.1 & -0.02 & 0.05 & 0.02 & 0.02 \\
-      7-cyclopentanylindole & 2-cyclopentanylindole & 0.12 & 0.06 & 0.20 & 0.04 
-      & 0.12 & 0.08 & 0.2 & 0.1 &  &  &  &  \\ \bottomrule
-    \end{tabular}
-  }
+  \begin{tabular}{@{}llllllll@{}}
+  \toprule
+   &  & \multicolumn{2}{l}{Split \footnote{\label{foot:split} results obtained from alchemical transformations with electrostatic and bonded scaling separate from    vdW parameter change.}} & \multicolumn{2}{l}{Unified \footnote{\label{foot:uni} results obtained from alchemical transformation with all parameters scaling together.}} & \multicolumn{2}{l}{Absolute \footnote{\label{foot:abs}results obtained from absolute free energy calculations.}} \\
+ &  & GROMACS (RF) & GROMACS (PME) & GROMACS (RF) & GROMACS (PME) & GROMACS (RF) & GROMACS (PME) \\
+\multicolumn{2}{l}{Transformations} & $\Delta \Delta G$ & $\Delta \Delta G$ & $\Delta \Delta G$ & $\Delta \Delta G$ & $\Delta \Delta G$ & $\Delta \Delta G$ \\ \midrule
+ethane & methane & -0.025 $\pm$ 0.005 & -0.035 $\pm$ 0.02 & -0.017 $\pm$ 0.003 & 0.236 $\pm$ 0.002 & \multicolumn{2}{l}{\multirow{2}{*}{-0.06 $\pm$ 0.01}} \\
+methane & ethane & -0.01 $\pm$ 0.02 & -0.02 $\pm$ 0.01 & 0.046 $\pm$ 0.02 \footnote{\label{foot:inv} inverted sign} & 0.17 $\pm$ 0.01 & \multicolumn{2}{l}{} \\
+methanol & methane & 6.163 $\pm$ 0.006 & 6.197 $\pm$ 0.004 & 7.30 $\pm$ 0.02 & 7.61 $\pm$ 0.01 & \multicolumn{2}{l}{\multirow{2}{*}{5.77 $\pm$ 0.01}} \\
+methane & methanol & 6.168 $\pm$ 0.005 & 6.199 $\pm$ 0.008 & 7.09 $\pm$ 0.02 & 7.29 $\pm$ 0.02 & \multicolumn{2}{l}{} \\
+ethane & methanol & -6.123 $\pm$ 0.007 & -6.185 $\pm$ 0.006 & -7.117 $\pm$ 0.005 & -7.13 $\pm$ 0.02 & \multicolumn{2}{l}{\multirow{2}{*}{-5.83 $\pm$ 0.01}} \\
+methanol & ethane & -6.124 $\pm$ 0.005 & -6.193$\pm$ 0.004 & -7.338 $\pm$ 0.004 & -7.32 $\pm$ 0.01 & \multicolumn{2}{l}{} \\
+toluene & methane & 3.22 $\pm$ 0.01 & 3.211 $\pm$ 0.006 & 3.229 $\pm$ 0.008 & 3.29 $\pm$ 0.01 & \multicolumn{2}{l}{\multirow{2}{*}{2.97 $\pm$ 0.01}} \\
+methane & toluene & 3.25 $\pm$ 0.01 & 3.20 $\pm$ 0.01 & 3.22 $\pm$ 0.01 & 3.31 $\pm$ 0.01 & \multicolumn{2}{l}{} \\
+neopentane \footnote{\label{foot:c-map}central mapping} & methane & -0.103 $\pm$ 0.008 & -0.15 $\pm$ 0.02 & -0.08 $\pm$ 0.02 & 0.22 $\pm$ 0.03 & \multicolumn{2}{l}{\multirow{4}{*}{-0.18 $\pm$ 0.01}} \\
+methane  \footref{foot:c-map} & neopentane & -0.11 $\pm$ 0.02 & -0.16 $\pm$ 0.05 & 0.00 $\pm$ 0.03 & 0.08 $\pm$ 0.01 & \multicolumn{2}{l}{} \\
+neopentane  \footnote{\label{foot:t-map}terminal mapping} & methane & -0.116 $\pm$ 0.007 & -0.13 $\pm$ 0.01 & -0.14 $\pm$ 0.01 & -0.07 $\pm$ 0.01 & \multicolumn{2}{l}{} \\
+methane  \footref{t-map} & neopentane2 & -0.10 $\pm$ 0.03 & -0.18 $\pm$ 0.03 & -0.089 $\pm$ 0.007 & -0.04 $\pm$ 0.04 & \multicolumn{2}{l}{} \\
+2-methylfuran & methane & 2.986 $\pm$ 0.006 & 2.930 $\pm$ 0.05 & 3.05 $\pm$ 0.01 & 3.09 $\pm$ 0.01 & \multicolumn{2}{l}{\multirow{2}{*}{2.87 $\pm$ 0.01}} \\
+methane & 2-methylfuran & 3.007 $\pm$ 0.004 & 2.96 $\pm$ 0.01 & 3.056 $\pm$ 0.006 & 3.10 $\pm$ 0.01 & \multicolumn{2}{l}{} \\
+2-methylindole & methane & 8.71 $\pm$ 0.02 & 8.73 $\pm$ 0.03 & 8.73 $\pm$ 0.01 & 8.83 $\pm$ 0.04 & \multicolumn{2}{l}{\multirow{2}{*}{8.44 $\pm$ 0.02}} \\
+methane & 2-methylindole & 8.73 $\pm$ 0.03 & 8.74 $\pm$ 0.01 & 8.30 $\pm$ 0.02 & 8.73 $\pm$ 0.04 & \multicolumn{2}{l}{} \\
+2-cyclopentanylindole & 7-cyclopentanylindole & -0.07 $\pm$ 0.02 & -0.03 $\pm$ 0.03 & -0.10 $\pm$ 0.05 & -0.1 $\pm$ 0.1 & \multicolumn{2}{l}{\multirow{2}{*}{-0.02 $\pm$ 0.05}} \\
+7-cyclopentanylindole & 2-cyclopentanylindole & -0.12 $\pm$ 0.06 & -0.20 $\pm$ 0.04 & -0.04 $\pm$ 0.06 & -0.2 $\pm$ 0.1 & \multicolumn{2}{l}{} \\ \bottomrule
+\end{tabular}  
+}
 \end{sidewaystable}
 Relative free energies are in good agreement with each other and with 
 $\Delta \Delta G_{\mathrm{hydr}}$ obtained from the other software used in this study. 
