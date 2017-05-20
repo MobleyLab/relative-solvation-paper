@@ -9,10 +9,10 @@ all: ${PDF}
 %.pdf: %.svg
 	${SVG2PDF} $(realpath $<)
 
-%.pdf: %.agr
-	xmgrace -hardcopy -hdevice EPS -printfile tmp.eps $<
-	epstopdf tmp.eps $@
-	rm tmp.eps
+#%.pdf: %.agr
+#	xmgrace -hardcopy -hdevice EPS -printfile tmp.eps $<
+#	epstopdf tmp.eps $@
+#	rm tmp.eps
 
 clean:
 	${RM} ${PDF}
