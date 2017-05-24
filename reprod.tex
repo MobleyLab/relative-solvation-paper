@@ -848,6 +848,9 @@ path and should be set to \inpopt{yes} in relative transformations.
 % HHL: none of the couple-* parameters have any effect if couple-moltype is not 
 %set, see the code.
 % GDRM: Yes, I knew that. I made the passage more clear
+% HHL: the point is that couple-intramol does not have any effect if 
+%      couple-moltype = none.  In other words: the user needs to make sure
+%      to set couple-moltype = none
 Setting this to \inpopt{no} would mean intramolecular interactions are maintained at their existing values 
 while the free energy transformation is conducted, leading to an incomplete transformation and 
 introducing errors in computed free energies.
@@ -857,12 +860,15 @@ while the latter changed all $\lambda$ vector components that are not specified 
 For instance, in split protocol simulations, these entries can be defined as the sets 
 (\inpopt{0.0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 
 1.0, 1.0, 1.0,  1.0, 1.0,  1.0, 1.0, 1.0, 1.0, 1.0}) and (\inpopt{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
-0.0, 0.0, 0.0, 0.0, 0.0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0}); if the 
+0.0, 0.0, 0.0, 0.0, 0.0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.65, 0.7, 0.75, 
+0.8, 0.85, 0.9, 0.95, 1.0}); if the 
+% HHL: this is too much information, we will bundle up a set of input files
 transformation involves particle deletion ("forward process"), \inpopt{fep}\_\inpopt{lambdas} must correspond to 
 the first set, while \inpopt{vdw}\_\inpopt{lambdas} to the second. If the process involves particle insertion ("backward 
 process") we swap the sets between the entries. In this work, \inpopt{mass}\_\inpopt{lambdas} was specified as
 a set of 31 zeros. Unified protocols have all \inpopt{-lambdas} entries equal to the set (\inpopt{0.0, 0.05, 
 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0}).
+% HHL: also mass-lambdas?
 
 
 % HHL: most of the following is the same for all codes and should be discussed 
@@ -891,7 +897,9 @@ The relative free energies of processes $A \rightarrow B$ and $B \rightarrow A$ 
 is the reverse of the latter, i.e., both end states should be connected by the same path in $\lambda$-space. 
 
 % HHL: this is also in the SI
-% GDRM: But here I tried to explain the specificities of what I did. 
+% GDRM: But here I tried to explain the specificities of what I did.
+% HHL: I do not see anything specific here.  I have done the same with AMBER
+%      just like the other groups.
 Transformations having simultaneous particle insertion or deletion, such as 
 2--cyclopentanylindole $\rightarrow$ 7--cyclopentanylindole and its reverse, require 
 an adapted split protocol. The simulation is divided into two stages: a deletion stage, 
@@ -970,13 +978,12 @@ electrostatic interactions requires adjustments in the $\lambda$-distance betwee
 rapidly varying part of the $\partial \mathcal{H}/\partial\lambda$, see Figure \ref{fig:ti-fep}. 
 The split protocol without Coulomb softcore potentials is the most effective way to calculate 
 relative free energy calculations. 
-% GDRM: new info -- why doesn't it happen in ethane~methanol and methanol~ethane?
-% The lambda spacing between the states is the same in both cases. 
-
-% HHL: we have discussed this a while ago: you will need to adjust lambda
-%spacing in the rapidly varying part of the dH/dl region.  A quick look at the 
-%dH/dl curve will make this clear immediately which probably means adding a 
-%figure to the SI.  This is not a problem with BAR/MBAR.
+% HHL: This needs more detail.  It is not clear to me if the split+sc
+%      protocol gives a higher ddG because of the chosen lambda spacing or
+%      because the Coulumb softcores are switch on too.  The latter
+%      should not have any effect in vacuum, so does this come from the
+%      solution simulation only?  When a split protocol is used there is
+%      no need to use a Coulomb softcore. Please clarify.
 
 Neopentane $\rightarrow$ methane transformations, and their reverse processes 
 also disagree with the absolute protocol, but similar differences can be seen in AMBER.
