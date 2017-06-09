@@ -312,8 +312,10 @@ Nevertheless, it is critical that free energy changes computed with different
 simulation software should be reproducible within statistical error, as this otherwise 
 limits the transferability of potential energy functions, and the relevance of properties
 computed from a molecular simulation.  This is especially important as the community 
-increasingly combines or swap between different simulation packages within workflows 
+increasingly combines or swaps different simulation packages within workflows 
 aimed at addressing challenging scientific problems.
+%%JM: SOME CITATIONS: COPERNICUS, BAC, STAGGE,FESETUP,ExTASY..
+
 %%Modern MD packages support a wide range of force fields and methods such that
 %%these packages are replaceable with each other to an ever increasing
 %%extent and the choice of the right package for the user becomes less
@@ -330,8 +332,8 @@ molecule bound to a partner, and other important physical
 properties~\cite{Skyner:2015:PCCP}.  A large database of hydration
 free energies computed from alchemical free energy (AFE) simulation, FreeSolv, 
 has been presented recently~\cite{Mobley2014} and was just 
-updated~\cite{doi:10.1021/acs.jced.7b00104}.  Here, we are interested 
-in the reproducibility of RAFE with the simulation programs AMBER, CHARMM,
+updated~\cite{doi:10.1021/acs.jced.7b00104}.  Here, we focus on the 
+reproducibility of RAFE with the simulation programs AMBER, CHARMM,
 GROMACS and SOMD.  We will discuss the reversible work results
 obtained with these packages and make recommendations
 regarding simulation protocols, setup procedures and analysis
@@ -462,7 +464,13 @@ strategy achieves a maximal single topology description: any atom that
 does not match will be made a dummy atom.  FESetup allows
 equilibration of the solvated simulation systems and ensures that
 ``forward'' and ``backward'' simulations have the same amount of
-total atoms.  The tool creates all input files with control
+total atoms. 
+%%JM: Also the atomic masses are identical in the forward and backward 
+%%simulations, thus a hydrogen perturbed to another heavy atom is 'heavy'
+%%or does this only apply to SOMD input files? This is important to clarify 
+%%as this is how we make the 2fs protocol work
+
+ The tool creates all input files with control
 parameters, topologies and coordinates as required for RAFE
 simulations.  Full details on FESetup can be found in
 Ref.~\citenum{loeffler_fesetup:_2015}.
@@ -612,6 +620,9 @@ electrostatic, potential that depends on the coordinates $\mathbf{r}$ of the sol
 computed without cutoffs. $U_{\mathrm{ic,sim}}(\mathbf{r})$ is the intramolecular electrostatic potential term as
 computed in the simulation with the shifted atom-based Barker-Watts Reaction Field cutoff.
 
+%%JM: Stefano please describe the protocols used to compute the absolute hydration 
+%% free energies. Be clear on constraints and time-steps.
+
 \paragraph{GROMACS} We used GROMACS 4.6.7 to carry out simulations for 
 the relative hydration free energies ($\Delta \Delta G_{\mathrm{hydr}}$).
 Each transformation had its Gibbs free energy calculated: (i) in a single 
@@ -624,21 +635,26 @@ In the first two cases, each alchemical transformation was described by 31 and
 \SI{1.0}{fs} in water and a vacuum. 
 Atomic masses were not changed along the  alchemical path; their change affect 
 kinetic energy only and do not contribute to the free energy change.
-%%JM Sentence needed here? Applies to all codes. Be careful about meaning of
-%%free energy change. Only true in closed cycles.
+%%JM Sentence needed here? Applies to all codes. Be careful about when neglect is ok, 
+%%only true in some conditions
  We used the Langevin integrator implemented in GROMACS with a 
 default friction coefficient of \SI{1.0}{ps/m_{atom}}. 
 Absolute hydration free energies were calculated using a protocol used in 
 previous works \cite{Mobley2014, doi:10.1021/acs.jced.7b00104}.
+%%JM: Elaborate a bit, especially regarding constraints
 A Parrinello--Rahman barostat with $\tau_p =$ \SI{10}{ps} and compressibility 
 equal to \SI{4.5d-5}{bar^{-1}}.
 We used two methods to calculate electrostatic interactions: Particle Mesh 
 Ewald (PME) and Reaction Field with a dielectric of 78.3, as implemented in the 
-software. We set the non--bonded cutoff to \SI{10.0}{\angstrom}, with a switch 
-starting at \SI{9.0}{\angstrom}.  PME calculations were of order 6 and had a 
+software.
+%%JM : Please clarify if using an atom based or group based reaction field
+ We set the non--bonded cutoff to \SI{10.0}{\angstrom}, with a switch 
+starting at \SI{9.0}{\angstrom}.
+%%JM: switch applies to both RF and LJ ?
+  PME calculations were of order 6 and had a 
 tolerance of \num{1.0d-6}, with a grid spacing of \SI{1.0}{\angstrom}. 
 All transformations required the use of softcore potentials to avoid numerical 
-problems in the free energy calculation.  We chose the 1--1--6 softcore 
+instabilities in the free energy calculation.  We chose the 1--1--6 softcore 
 potential for Lennard-Jones terms and used the default softcore Coulomb 
 implementation in paths where charges, van der Waals, and bonded terms were 
 modified together, but no soft core potentials were applied to Coulomb 
@@ -675,6 +691,8 @@ other $\lambda$s.  This approach has been called multi--state BAR
 (MBAR)~\cite{shirts_statistically_2008-1} method.  MBAR has been shown
 to have the lowest variance of any known
 estimator~\cite{shirts_statistically_2008}.
+%JM I don't think we need all of this at this stage of the paper, go straight to
+%TI and justify why we use it.
 
 In this work we primarily focus on TI as this is supported by all MD
 packages ``out--of--the--box'', whereas BAR and MBAR are not.
@@ -684,7 +702,8 @@ Equation~\ref{eq:ti} computes the free energy as
 	\left\langle \frac{\mathscr{H}(\vec{q},\vec{p};\lambda)}{\partial\lambda}\right\rangle_\lambda d\lambda
 \end{equation}
 where $\mathscr{H}(\vec{q},\vec{p};\lambda)$ is the Hamiltonian as a function of the coordinate vectors $\vec{q}$ and the momentum vectors $\vec{p}$, and parametric dependence on the coupling parameter $\lambda$.  The angle brackets denote the ensemble average of the gradient of the Hamiltonian with respect to $\lambda$ at a given $\lambda$ value.  An AFE simulation is typically carried out in a series of equilibrium simulations at discrete values of $\lambda$ but the gradient can also be evaluated with a continuously varying coupling parameter as a function of the simulation time.  The free energy is finally computed through a suitable numerical integration method.
-%%JM We don't actually compute momenta contribution in the codes so needs clarification
+%%JM We don't actually compute momenta contribution in the codes so needs clarification. Also since this justifies 
+%%changing masses of elements (which FESetup does), we should delve on that. 
 
 Results from additional estimators
 will be given where available.  We have used the alchemical analysis
@@ -728,6 +747,11 @@ contributions.
 \label{sec:results}
 
 \todo{what protocols did not work}
+
+%%JM: Include section on Absolute hydration free energy calculations.
+%% Do they all agree well between codes for this benchmark? 
+%% Then we can move on to relative hydration free energy calculation 
+%% results per code. 
 
 \subsection{AMBER}
 \label{sec:amber-results}
@@ -834,6 +858,9 @@ practical point of view,
 %DLM: How much speed difference does this make?
 %HHL: I would say by a factor of two as the number of SHAKEs is practically the 
 %same.
+%JM: You could explicitly state that this protocol was tested in response to 
+% the feedback from the SOMD calculations, we can spin this then as a benefit 
+% of having developers talk to each other :-) 
 AMBER uses an atom based mask for bond SHAKEs such that the mask must be set 
 for the hydrogens in question while the same is not possible for their 
 counter--part in the other state because \emph{all} bonds emanating from this 
@@ -872,8 +899,9 @@ A discrepancy of consistently 0.2--\SI{0.4}{kcal.mol^{-1}} is evident from every
 GROMACS has some run input options which can simplify the procedure for setting up 
 free energy calculations; however, these same options can also provide a source of error
 if used naively. Additionally, running the simulations depends on understanding how these 
-features are used because they can be a source of errors if misused. Specifically, 
-\inpopt{couple-moltype} implicitly defines the initial and final states by giving a special tag
+features are used because they can be a source of errors if misused. 
+% JM: shorten above
+Specifically, \inpopt{couple-moltype} implicitly defines the initial and final states by giving a special tag
 to a molecule and controls whether intramolecular interactions of the tagged molecule are 
 retained or not along the alchemical path.
 It should be used in absolute free energy calculations to tag the molecule which will be 
@@ -910,6 +938,7 @@ For instance, in split protocol simulations, these entries can be defined as the
 0.0, 0.0, 0.0, 0.0, 0.0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.65, 0.7, 0.75, 
 0.8, 0.85, 0.9, 0.95, 1.0}); if the 
 % HHL: this is too much information, we will bundle up a set of input files
+% JM: Summarises the number of windows used this gives us an idea of efficiency
 transformation involves particle deletion ("forward process"), \inpopt{fep}\_\inpopt{lambdas} must correspond to 
 the first set, while \inpopt{vdw}\_\inpopt{lambdas} to the second. If the process involves particle insertion ("backward 
 process") we swap the sets between the entries. In this work, \inpopt{mass}\_\inpopt{lambdas} was specified as
@@ -927,6 +956,7 @@ because these are easily calculated with considerable precision
 and are considerably simpler to set up and implement than relative calculations.
 Prior work actually compared calculated absolute hydration free energies across different codes with 
 considerable success \cite{klimovich_predicting_2010} (see Fig 7 in reference), further supporting this view.
+%JM above redundant
 Thus, we compared relative free energies calculated via simultaneous parameter change simulations -- our ``unified protocol'' -- 
 and separated parameter change simulations -- our ``split protocol''-- to relative free energy 
 calculations obtained from two absolute hydration free energies -- our ``absolute protocol''.
@@ -942,6 +972,10 @@ require electrostatic terms to be turned off before van de Waals and bonded para
 Insertion processes, in their turn, demand bonded and van der Waals parameters to be changed before charges are turned on.
 The relative free energies of processes $A \rightarrow B$ and $B \rightarrow A$ tend to be equivalent if the protocol of the former
 is the reverse of the latter, i.e., both end states should be connected by the same path in $\lambda$-space. 
+%JM: Do you have a way to control the strength of softening of Coul and LJ in Gromacs? 
+% Does the soft-core apply to ALL atoms, or only atoms that are dummies in one end-state?
+% We must delve in differences with the SOMD softcore for the discussions section.
+
 
 % HHL: this is also in the SI
 % GDRM: But here I tried to explain the specificities of what I did.
@@ -1048,13 +1082,18 @@ Successful simulations seem to require turning off the constraint and decreasing
 \subsection{SOMD}
 \label{sec:somd-results}
 
+%%JM: Stefano do update the tables to follow HLL convention 'Signs of the 
+%%  backward transformation have been reverted to correspond to the forward 
+%%  transformation.''
+
 Figure ~\ref{fig:sire_histogram} compares relative free energy of hydration 
-$\Delta\Delta G$ with relative $\Delta\Delta G$ estimations from absolute free 
-energy calculations, according to 'unperturbed H bond' protocol for SOMD.
+$\Delta\Delta G$  according to the 'unperturbed H bond' protocol, with 
+relative $\Delta\Delta G$ obtained from two absolute free energy calculations,
 A very good agreement is observed between both methodologies ($R^2$=\SI{0.99+/-0.0X}{} and 
-MAD=\SI{0.10+/-0.03}{kcal.mol^{-1}}), highlighting internal consistency and reproducibility. 
+MAD=\SI{0.10+/-0.03}{kcal.mol^{-1}}), highlighting internal consistency within SOMD.
 
 % HHL: figure needs to go to SI
+%JM: Better to replace labels A-H with chemical structures?
 \begin{figure}[ht]
   \includegraphics[width=\textwidth]{figures/sire_histogram.pdf}
   \caption{Relative hydration free energies $\Delta\Delta G$, computed with 
@@ -1067,97 +1106,89 @@ MAD=\SI{0.10+/-0.03}{kcal.mol^{-1}}), highlighting internal consistency and repr
 \end{figure}
 
 To achieve this level of reproducibility within SOMD it was crucial to use the
-''unperturbed H protocol''. Specifically, bonds that involve unperturbed hydrogen 
-atoms are constrained. Bonds involving hydrogen atoms that are perturbed to a heavy elements are unconstrained. 
-However the atomic mass of the pertubed hydrogen atom is set to the mass of the the heavy atom in the other end-state.
-Bonds involving hydrogen atoms that are perturbed to another hydrogen atom type are constrained. This protocol suppresses 
-high frequency vibrations in flexible bonds involving hydrogen atoms, thus enabling a time step of \SI{2}{fs), whilst giving 
-essentially negligible errors due to the use of constraints for perturbed bonds.
+''unperturbed H bond'' protocol. Specifically, bonds that involve unperturbed hydrogen 
+atoms are constrained. Bonds involving hydrogen atoms that are perturbed to a heavy elements
+are unconstrained.
+Additionally the atomic mass of the pertubed hydrogen atom is set to the mass of 
+the heavy atom it is perturbed to.
+Bonds involving hydrogen atoms that are perturbed to another hydrogen atom type are 
+constrained. This protocol suppresses high frequency vibrations in flexible bonds 
+involving hydrogen atoms, thus enabling a time step of \SI{2}{fs), whilst giving 
+essentially negligible errors due to the use of constraints for perturbed bonds. 
+This is apparent from the comparison with the absolute hydration free energy calculations. 
+Additionally, the protocol yields relative hydration free energy extremely similar
+ (MAD = \SI{0.09}{kcal.mol^{-1}}) to those computed from simulations where no
+constraints are applied on the solutes and a timestep of \SI{1}{fs) is
+used (Figure~\ref{S-fig:sire_constraints}).
 
-%%JM still need to clarify this better. This works because hydrogen to hydrogen perturbations have neglibible changes in equilibrium 
-%%bond length, and the error due to their constraint is proportional to the log of the ratio of equilibrium bond lengths between 
-%%the end states equilibrium bond lengths.
+By contrast, a protocol that constrain all bonds in a solute leads to significant
+differences with the absolute hydration free energies. For instance 
+neopentane $\rightarrow$ methane (centrally mapped) gives a RAFE
+$\Delta\Delta G$=\SI{2.04 +- 0.01}{kcal.mol^{-1}}  whereas the absolute hydration free
+energy calculations give $\Delta\Delta G$=\SI{-0.19+-0.06}{kcal.mol^{-1}} as shown in 
+tab.~\ref{S-tab:sire_constraints} and fig.~\ref{S-fig:sire_constraints}.
 
-\todo{maybe add figure to SI explaining how these constraints are used}
-
-This new constraint overcomes issues encountered with Sire/SOMD starting 
-protocol.
-% HHL: what is the ``starting protocol''
-Usually, RAFE calculations were performed with all bonds constrained, 
-in order to have time step longer than \SI{2}{fs}~\cite{hopkins2015long},
-% HHL: really longer than 2fs
-enhancing sampling with a reasonable computational cost.
-However, from a technical point of view, a constraint in Sire/SOMD sets the 
-bond energy to zero.  This may be a valid approximation for small and rigid 
-molecules, but a systematic offset is introduced which necessarily increases 
-with every additional perturbation introduced.
-%DLM: I don't understand the "a systematic offset" part here.
-Indeed, looking at neopentane $\rightarrow$ methane (centrally mapped) this 
-bias gives a RAFE $\Delta\Delta G$=\SI{2.04 +- 0.01}{kcal.mol^{-1}} in contrast 
-to $\Delta G$=\SI{-0.19+-0.06}{kcal.mol^{-1}} from the absolute calculations, 
-as tab.~\ref{S-tab:sire_constraints} and fig.~\ref{S-fig:sire_constraints} show.
-Furthermore, neopentane $\rightarrow$ methane (terminally mapped) shows a 
-$\Delta\Delta G$ =\SI{0.59 +- 0.01}{kcal.mol^{-1}}. As the free energy must be 
-independent of the chosen path this discrepancy denotes a problem with using 
-constraints on transformed atoms. 
-This problem has been discussed by Pearlman~\cite{pearlman1991overlooked} 
-and Boresch~\cite{doi:10.1021/jp981628n, doi:10.1021/jp981629f}, 
-as a missing bond-stretching term, which can be estimated as: 
-\begin{equation}
- \label{eq:allbondserror}
- \Delta G= RT\ln \left ( \frac{r_{\mathrm{i}}}{r_\mathrm{f}} \right)  
-\end{equation}
-where $r_{\mathrm{i}}$ and $r_{\mathrm{f}}$ are the initial and final bond 
-lengths, respectively.  Although for small bond length changes this error may 
-be negligible, it becomes pivotal for perturbations of hydrogen atoms to 
-carbon, nitrogen or oxygen, where the bond length changes of several tenths of 
-an \AA.
-% HHL: please quantify
-
-After the implementation of the our new constraint scheme, a comparison with simulations without constraints has been run. 
-Figure~\ref{S-fig:sire_constraints} shows 
-that both protocols attain the same results with a final 
-MUE = \SI{0.09}{kcal.mol^{-1}}.
+This discrepancy occurs because in the SOMD implementation, the energies of 
+constrained bonds are not evaluated, but the calculation of the energies of the 
+solute at perturbed \lambda values is carried out using the coordinates of the 
+reference \lambda trajectory. This leads to a neglect of contributions of the bonded
+term (and associated coupled terms) to the free energy change. The effect 
+is more pronounced for perturbations that feature a large change in 
+equilibrium bond lengths, such as those where a hydrogen atom is perturbed to/from a heavy atom.
+%%JM still not sure I understand why to be honest, I would have expected most 
+%%Jacobian/vibrational terms to cancel out in a thermodynamic cycle. 
 
 % HHL: we don't have MUE for the other results so need to discuss if we want 
 %       to use this
 %       most of the following needs to be discussed at the beginning of this 
 %c      chapter when comparing all codes
-Tab~\ref{tab:mue-comp} shows the MUE between SOMD, GROMACS employing 
-reaction field (GROMACS RF), GROMACS with PME (GROMACS PME) and AMBER  
-(alternatively: Tab~\ref{tab:muebound-comp} shows the MUE comparison with 
-95$\%$ of confidence interval between SOMD, GROMACS with reaction 
-field (GROMACS RF), GROMACS with PME (GROMACS PME) and AMBER). 
-As regards reaction field methods, SOMD implements a Barker Watts reaction 
-% HHL: citation for BWRF missing
-field (BWRF) with a atom based cutoff, as explained in 
-subsection~\ref{sec:rafe_protocols}, while GROMACS adopts a BWRF with a
-charge group cutoff.  Despite this technical difference,
-SOMD and GROMACS RF produce comparable results with a MUE of 
+% JM : feel free to move this part around. It could also come at the end of the results, 
+% when RAFE are compared between codes. 
+
+Tab~\ref{tab:mue-comp} shows the MUE between SOMD, GROMACS with
+reaction field (GROMACS RF), GROMACS with PME (GROMACS PME) and AMBER
+(alternatively: Tab~\ref{tab:muebound-comp} shows the MUE comparison with
+95$\%$ of confidence interval between SOMD, GROMACS with reaction
+field (GROMACS RF), GROMACS with PME (GROMACS PME) and AMBER).
+The reaction fields implemented in SOMD and GROMACS differ somewhat (atom-based shifted Barker Watts vs group based switched 
+Barker Watts), but nevertheless SOMD and GROMACS RF produce comparable results with a MAD of 
 \SI{0.18}{kcal.mol^{-1}}.
-In]the methane $\rightarrow$ neopentane transformation is still matter of 
+% HHL: citation for BWRF missing
+% JM: Guilherme/DLM can you double check that I described correctly the RF 
+% implemented in Gromacs?
+
+In the methane $\rightarrow$ neopentane transformation is still matter of 
 problems. In this case, SOMD is able to maintain consistency between 
 central and terminal mapping, as shown in tab~\ref{S-tab:sire-finalresults}, 
 while GROMACS RF displays a $\Delta\Delta$G of \SI{-0.20 +- 
 0.01}{kcal.mol^{-1}} for the
 centrally mapped transformation and $\Delta\Delta$G = \SI{-0.05 +- 
 0.02}{kcal.mol^{-1}} for the terminally mapped transformation.
-As regards PME methods, SOMD presents a MUE = \SI{0.18}{kcal.mol^{-1}} and 
-MUE = \SI{0.23}{kcal.mol^{-1}} with GROMACS PME and AMBER respectively, 
-achieving a very good agreement between $\Delta\Delta$G predictions. 
+
+The SOMD RF calculations show a MAD = \SI{0.18}{kcal.mol^{-1}} and 
+MAD = \SI{0.23}{kcal.mol^{-1}} with GROMACS PME and AMBER respectively,
+similar to the MAD obtained with GROMACS RF. 
+
 
 \todo{it may be good to say somewhere how much was the MUE with the initial 
 standard protocol} %DLM: What is "initial standard protocol"?
 
 \todo{GROMACS RF in vacuum uses a dielectric of 1.0, this causes problems for 
 Sire vacuum simulations} %DLM: What does this mean? 
+%JM: we get different intramolecular electrostatics if using a dielectric of 1.0.
+% because RF with dielectric of 1.0 does not become Coulomb law in OpenMM.
+% The issue I think is that the OpenMM RF is shifted. 
 
 Overall, the SOMD free energy estimations are in good agreement with the 
-other MD packages, as the MUE suggests.  Reaction field and PME results are in 
-good agreement.  In particular, the unperturbed hydrogen bonds constraint 
+other MD packages, as the MAD suggests.  Reaction field and PME results are in 
+good agreement.  In particular, the unperturbed hydrogen bonds constraint protocol 
 %DLM: "unperturbed hydrogen bonds constraint" is unclear.
-allows a timestep of \SI{2}{fs} and SOMD RAFE simulations can be carried 
-out in one single step.
+%JM: suggestions for a better name?
+allows a timestep of \SI{2}{fs}. All SOMD RAFE simulations were carried out 
+with simultaneous transformation of Lennard-Jones, charges, and bonded terms. 
+This suggests that the failure of the GROMACS ''unified protocol'' in some instances 
+may be due to differences in the softcore implementations. 
+%%JM we need to elaborate here
 
 
 \begin{table}[]
@@ -1168,11 +1199,11 @@ out in one single step.
   \makebox[\textwidth][c]{
   \begin{tabular}{lrrrr}
     \toprule
-    Package & Sire/SOMD & Gromcs RF & GROMACS PME & AMBER\\
+    Package & SOMD & Gromcs RF & GROMACS PME & AMBER\\
     \midrule
-Sire/SOMD         & 0.00 & 0.18    & 0.18 & 0.23\\
-GROMACS RF   & 0.18 & 0.00    & 0.04 & 0.14\\ 
-GROMACS PME  & 0.18 & 0.04    & 0.00 & 0.14\\     
+SOMD         & 0.00 & 0.18    & 0.18 & 0.23\\
+GROMACS RF   & 0.18 & 0.00    & 0.04 & 0.14\\
+GROMACS PME  & 0.18 & 0.04    & 0.00 & 0.14\\
 AMBER        & 0.23 & 0.14    & 0.14 & 0.00\\
      \bottomrule
   \end{tabular}
@@ -1191,7 +1222,7 @@ AMBER        & 0.23 & 0.14    & 0.14 & 0.00\\
     \toprule
     Package & SOMD & Gromacs RF & GROMACS PME & AMBER\\
     \midrule
-Sire/SOMD         & 0.02< 0.04< 0.05 & 0.17< 0.19< 0.21    & 0.16< 0.18< 0.20 & 0.21< 0.23< 0.25\\
+SOMD         & 0.02< 0.04< 0.05 & 0.17< 0.19< 0.21    & 0.16< 0.18< 0.20 & 0.21< 0.23< 0.25\\
 GROMACS RF   	  & 0.17< 0.18< 0.19 & 0.01< 0.02< 0.03    & 0.04< 0.05< 0.06 & 
 0.13< 0.14< 0.15\\
 GROMACS PME       & 0.17< 0.18< 0.19 & 0.04< 0.05< 0.06    & 0.01< 0.02< 0.03 & 
@@ -1207,6 +1238,31 @@ AMBER		  & 0.22< 0.23< 0.24 & 0.13< 0.14< 0.15    & 0.14< 0.15< 0.16 & 0.01<
 
 \section{Discussion}
 \label{sec:discuss}
+
+% JM
+% Concretely
+
+% we can recommend 'unperturbed hbonds' as it seems to work in at
+% least SOMD and AMBER
+
+% We can point out that comparison must be done carefully because of the way electrostatics 
+% are handled in vacuum differ between the codes
+
+% We can point out that softcore implementations can make '1-step' protocols
+% unreliable? We need to elaborate on WHY though. I'm still not 100% convinced
+% we understand what is going on in AMBER and GROMACS calculations. 
+
+% Consequently, currently we CANNOT run the same simulation protocol in all the codes
+% tested. However, we have iterated onto a set of protocols that SHOULD give consistent
+% results (to within MAD of ca. 0.2 kcal.mol-1). This is what we will call 
+% the 'limit of reproducibility'. 
+
+% We make benchmark and protocols available as part of this work. We recommend 
+% new and future RAFE implementations to carry out the following checks to avoid 
+% introducing errors etc...:
+% - compare against absolute
+% - run A-->B and B-->A
+% - compare to our benchmark
 
 \todo{recommended protocols}
 
