@@ -529,7 +529,7 @@ rescaling through a Monte Carlo barostat with 100 steps between isotropic
 volume change attempts.
 
 \paragraph{Sire/SOMD} All simulations were carried out with
-Sire/OpenMM 6.3 (revision 16.1). % HHL: citation?
+Sire/OpenMM 6.3 (revision 16.1) ~\cite{Sire,eastman2012openmm}.
 Each alchemical transformation was
 divided into 17 evenly spaced windows and simulated for \SI{2}{ns}
 both in water and in vacuum. A velocity-Verlet integrator was
@@ -537,13 +537,11 @@ employed with a \SI{2}{fs} time step, constraining only those hydrogen bonds
 which are not alchemically transformed.  This approach will be called 
 ``unperturbed H protocol''.
 % HHL: maybe discuss this earlier in the non-code specific section?
-An atom--based
-Barker--Watts reaction field~\cite{doi:10.1080/00268977300102101} with
-a dielectric constant of \num{82.0} was adopted for the solution phase
-simulations. % HHL: why 82?  For 298K this would be more like 78.
-Furthermore, a cutoff of \SI{12}{\angstrom} was set for the non--bonded
-interactions and periodic boundary conditions were imposed. % HHL: check box 
-%sizes
+A shifted atom--based Barker--Watts reaction field~\cite{doi:10.1080/00268977300102101} with
+a dielectric constant of \num{78.3} was adopted for the solution phase
+simulations. 
+Furthermore, a cutoff of \SI{10}{\angstrom} was set for the non--bonded
+interactions and periodic boundary conditions were imposed.
 Temperature control was achieved with the Andersen
 thermostat~\cite{doi:10.1063/1.439486} with a coupling constant of
 \SI{10}{ps^{-1}}.  A Monte Carlo barostat assured pressure control,
@@ -555,7 +553,7 @@ vacuum phases.  Thus, to enable a meaningful estimation of the free energy
 change a free energy correction term $G_{\mathrm{c}}$ was
 evaluated to treat intramolecular Coulombic interactions consistently
 between the water and vacuum legs of the thermodynamic cycle (see 
-Fig~\ref{fig:thermocycle}) as detailled in Ref.~\citenum{Bosisio2016}. The 
+Fig~\ref{fig:thermocycle}) as detailed in ref.~\citenum{Bosisio2016}. The 
 $G_{\mathrm{c}}$ term was obtained via post-processing of the end state 
 trajectories of each water phase simulation, using the Zwanzig 
 relationship~\cite{zwanzig_high-temperature_1954}:
@@ -566,10 +564,23 @@ relationship~\cite{zwanzig_high-temperature_1954}:
  U_{\mathrm{ic,sim}}(\mathbf{r}))\right]\rangle_{\mathrm{sim}}
 \end{equation}
 where $U_{\mathrm{ic,nc}}(\mathbf{r})$ is the solute intramolecular 
-electrostatic % HHL: I guess 'nc' stands for no cutoff?
+electrostatic-no cutoff 
 potential that depends on the coordinates $\mathbf{r}$ of the solute and is given by Coulomb's law. 
 $U_{\mathrm{ic,sim}}(\mathbf{r})$ is the intramolecular electrostatic potential term as
 computed in the simulation with a BWRF cutoff.
+
+To compute absolute free energy of hydration a double annihilation technique~\cite{jorgensen1988efficient,GILSON19971047,Bosisio2016}
+was adopted. 
+Initially the solute atoms'partial charges are turned off both in water and in vacuum, discharging step, giving a discharging
+free energy change $\Delta G_\mathrm{solv}^\mathrm{elec}$ and $\Delta G_\mathrm{vac}^\mathrm{elec}$ respectively. Secondly,
+the molecule is fully decoupled from the surrounding environment by switching off the van der Waals terms, vanishing step, retrieving a $\Delta G_\mathrm{solv}^\mathrm{vdW}$ in water phase and $\Delta G_\mathrm{vac}^\mathrm{vdW}$ in vacuum. 
+Eventually, the absolute free energy of hydration $\Delta G$ can be computed as:
+\begin{equation}
+\label{eq:absolutehyd}
+\Delta G = (\Delta G_\mathrm{solv}^\mathrm{elec} + \Delta G_\mathrm{solv}^\mathrm{vdW}) - (\Delta G_\mathrm{vac}^\mathrm{elec} + \Delta G_\mathrm{vac}^\mathrm{vdW})
+\end{equation}
+The same setup for relative free energy calculations was followed to compute absolute free energy of hydration. Thus, 17 evenly spaced $\lambda$ windows were used and simulations were run for \SI{2}{ns} employing a velocity-Verlet integrator with \SI{2}{fs} time step, constraining only the hydrogen bonds which are not alchemically transformed. 
+
 
 \paragraph{GROMACS} We used GROMACS 4.6.7 to carry out simulations for 
 the relative hydration free energies ($\Delta \Delta G_{\mathrm{hydr}}$).
@@ -1001,122 +1012,123 @@ Successful simulations seem to require turning off the constraint and decreasing
 \subsection{Sire/SOMD}
 \label{sec:somd-results}
 
-Figure ~\ref{fig:sire_histogram} compares relative free energy of hydration 
-$\Delta\Delta G$ with relative $\Delta\Delta G$ estimations from absolute free 
-energy calculations, according to the best protocol for Sire/SOMD.
-% HHL: we don't know yet what the best protocol is, you need to discuss this 
-%       first
-A very good agreement is present between both calculations, highlighting 
-consistency and reproducibility of results in Sire/SOMD itself, with a 
-correlation index $R^2$=\SI{0.99}{} and a mean unsigned error 
-MUE=\SI{0.10}{kcal.mol^{-1}}
+Table ~\ref{tab:sire-table} shows the relative free energy of hydration estimated with Sire/SOMD, according to the protocol described in ~\ref{sec:rafe_protocols}.
+Furthermore, fig.~\ref{S-fig:sire_histogram} compares relative free energy of hydration $\Delta\Delta G$ with relative free energies estimated by mean of absolute free energy calculations.
+A very good agreement is present between both calculations, highlighting consistency and reproducibility of results in Sire/SOMD itself, achieving a correlation index $R^2$=\SI{0.99}{} and a mean unsigned error MUE=\SI{0.10}{kcal.mol^{-1}}, computed as:
+\begin{equation}
+ \label{eq:MUE}
+ MUE = \frac{1}{N}\sum_\mathrm{i=1}^N \left | \Delta\Delta G^\mathrm{rel}_\mathrm{i} - \Delta\Delta G^\mathrm{abs}_\mathrm{i} \right |
+\end{equation}
+where $N$ is the number of samples, $\Delta\Delta G^\mathrm{rel}_\mathrm{i}$ is the $i$-th relative free energy of hydration and  $\Delta G^\mathrm{abs}_\mathrm{i}$ the $i$-th relative free energy from absolute free energy simulations.
 % HHL: MUE not defined (is this the same as MAE/MAD?)
-% HHL: figure needs to go to SI
-\begin{figure}[ht]
-  \includegraphics[width=\textwidth]{figures/sire_histogram.pdf}
-  \caption{Relative free energy of hydration $\Delta\Delta G$, computed with 
-  RAFE calculations, compared with $\Delta\Delta G$ derived from absolute free 
-  energy calculations for A: methane to ethane, B: ethane to methanol, C: 
-  methane to methanol, D: methane to 2-methylfuran, E: methane to toluene,
-    F: methane to 2-methylindole, G: methane to neopentane, H: 
-    2-cyclopentanylindole to 7-cyclopentanylindole.}
-  \label{fig:sire_histogram}
-\end{figure}
-
-\todo{we could write a 95\% confidence interval MUE: \SI{0.08}< \SI{0.11} < 
-\SI{0.14}{kcal.mol^{-1}}}
+% SB:  Yes it is. I am giving here a definition of MUE, but it should be moved somewhere else if we eventually decide to compare
+% based on MUE. Actually, this definition could be defined as: 
+% \frac{1}{N}\sum_\mathrm{i=1}^N \left | y_\mathrm{i} - \hat{y}_\mathrm{i} \right |
+% where y_\mathrm{i} is the actual measurement and \hat{y}_\mathrm{i} the i-th reference measure
 
 To achieve reproducibility in Sire/SOMD and among all the other codes, the role 
 of constraints was crucial and a new kind of constraint was employed: 
-unperturbed hydrogen bond constraint. Here, all the unperturbed hydrogen 
-atoms'bonds are constrained, while the perturbed hydrogen atoms, namely atoms 
-which undergo a transformation, are unconstrained and their masses are
-equal to the heavier mass of the two end states. In this way symmetry between 
+the unperturbed hydrogen bonds constraint. In particular, all the unperturbed hydrogen atoms' bonds are constrained, while the perturbed hydrogen atoms, namely atoms  which undergo a transformation, are unconstrained and their masses are
+equal to the heavier atomic mass of the two end states. In this way a symmetry between 
 forward and backward transformations is guaranteed, and a time step of 
 \SI{2}{fs} can be employed.
 
-\todo{maybe add figure to SI explaining how these constraints are used}
+\todo{Add a figure in SI to explain how this constraint works}
 
-This new constraint overcomes issues encountered with Sire/SOMD starting 
-protocol.
-% HHL: what is the ``starting protocol''
+This new constraint overcomes issues encountered with Sire/SOMD.
 Usually, RAFE calculations were performed with all bonds constrained, 
-in order to have time step longer than \SI{2}{fs}~\cite{hopkins2015long},
-% HHL: really longer than 2fs
+in order to have time up to \SI{4}{fs}~\cite{hopkins2015long},
 enhancing sampling with a reasonable computational cost.
 However, from a technical point of view, a constraint in Sire/SOMD sets the 
-bond energy to zero.  This may be a valid approximation for small and rigid 
-molecules, but a systematic offset is introduced which necessarily increases 
-with every additional perturbation introduced.
-%DLM: I don't understand the "a systematic offset" part here.
-Indeed, looking at neopentane $\rightarrow$ methane (centrally mapped) this 
-bias gives a RAFE $\Delta\Delta G$=\SI{2.04 +- 0.01}{kcal.mol^{-1}} in contrast 
-to $\Delta G$=\SI{-0.19+-0.06}{kcal.mol^{-1}} from the absolute calculations, 
-as tab.~\ref{S-tab:sire_constraints} and fig.~\ref{S-fig:sire_constraints} show.
-Furthermore, neopentane $\rightarrow$ methane (terminally mapped) shows a 
-$\Delta\Delta G$ =\SI{0.59 +- 0.01}{kcal.mol^{-1}}. As the free energy must be 
-independent of the chosen path this discrepancy denotes a problem with using 
-constraints on transformed atoms. 
-This problem has been discussed by Pearlman~\cite{pearlman1991overlooked} 
-and Boresch~\cite{doi:10.1021/jp981628n, doi:10.1021/jp981629f}, 
-as a missing bond-stretching term, which can be estimated as: 
+bond energy to zero. Neglecting this energy term can introduce a free energy offset in alchemical free energy calculation estimated as:
 \begin{equation}
  \label{eq:allbondserror}
  \Delta G= RT\ln \left ( \frac{r_{\mathrm{i}}}{r_\mathrm{f}} \right)  
 \end{equation}
 where $r_{\mathrm{i}}$ and $r_{\mathrm{f}}$ are the initial and final bond 
-lengths, respectively.  Although for small bond length changes this error may 
-be negligible, it becomes pivotal for perturbations of hydrogen atoms to 
-carbon, nitrogen or oxygen, where the bond length changes of several tenths of 
-an \AA.
-% HHL: please quantify
+lengths, respectively. 
+This problem was already discussed by Pearlman~\cite{pearlman1991overlooked} 
+and Boresch~\cite{doi:10.1021/jp981628n, doi:10.1021/jp981629f}, as a missing 
+bond-stretching term.
+Thus, although for small bond length changes this approximation may be acceptable, it becomes
+he up to 1.81\AA (carbon--sulphur bonds).
+Furthermore, looking at neopentane $\rightarrow$ methane (centrally mapped) this 
+bias gives a RAFE $\Delta\Delta G$=\SI{2.04 +- 0.01}{kcal.mol^{-1}} in contrast 
+to $\Delta G$=\SI{-0.19+-0.06}{kcal.mol^{-1}} from the absolute calculations, 
+as tab.~\ref{S-tab:sire_constraints} and fig.~\ref{S-fig:sire_constraints} show.
+Further differences arises for neopentane $\rightarrow$ methane (terminally mapped), which has a 
+$\Delta\Delta G$ =\SI{0.59 +- 0.01}{kcal.mol^{-1}}. As the free energy must be 
+independent of the chosen path this discrepancy denotes a problem with using all bonds 
+constraints on transformed atoms. 
+%SB: To further argue the discussion above about the missing bond-stretching term, 
+% I could include in the SI some test we made on an ideal biatomic molecule
 
-After the implementation of the our new constraint scheme, a comparison with simulations without constraints has been run. 
-Figure~\ref{S-fig:sire_constraints} shows 
-that both protocols attain the same results with a final 
+
+To ensure the efficiency and goodness of the new constraint, a comparison with simulations run without
+constraints was done.
+Figure~\ref{S-fig:sire_constraints} shows  that both protocols attain the same results with a final 
 MUE = \SI{0.09}{kcal.mol^{-1}}.
-
 % HHL: we don't have MUE for the other results so need to discuss if we want 
-%       to use this
-%       most of the following needs to be discussed at the beginning of this 
-%c      chapter when comparing all codes
+%      to use this
+%      most of the following needs to be discussed at the beginning of this 
+%      chapter when comparing all codes
 Tab~\ref{tab:mue-comp} shows the MUE between Sire/SOMD, GROMACS employing 
 reaction field (GROMACS RF), GROMACS with PME (GROMACS PME) and AMBER  
-(alternatively: Tab~\ref{tab:muebound-comp} shows the MUE comparison with 
-95$\%$ of confidence interval between Sire/SOMD, GROMACS with reaction 
-field (GROMACS RF), GROMACS with PME (GROMACS PME) and AMBER). 
-As regards reaction field methods, Sire/SOMD implements a Barker Watts reaction 
-% HHL: citation for BWRF missing
-field (BWRF) with a atom based cutoff, as explained in 
-subsection~\ref{sec:rafe_protocols}, while GROMACS adopts a BWRF with a
+%(alternatively: Tab~\ref{tab:muebound-comp} shows the MUE comparison with 
+%95$\%$ of confidence interval between Sire/SOMD, GROMACS with reaction 
+%field (GROMACS RF), GROMACS with PME (GROMACS PME) and AMBER). 
+As regards reaction field methods, Sire/SOMD implements a shifted Barker Watts reaction
+field (BWRF) with a atom based cutoff~\cite{doi:10.1080/00268977300102101} , as explained in 
+subsection~\ref{sec:rafe_protocols}, while GROMACS adopts a switched BWRF with a
 charge group cutoff.  Despite this technical difference,
 Sire/SOMD and GROMACS RF produce comparable results with a MUE of 
 \SI{0.18}{kcal.mol^{-1}}.
-In]the methane $\rightarrow$ neopentane transformation is still matter of 
-problems. In this case, Sire/SOMD is able to maintain consistency between 
+As regards methane $\rightarrow$ neopentane transformation Sire/SOMD is able to maintain consistency between 
 central and terminal mapping, as shown in tab~\ref{S-tab:sire-finalresults}, 
 while GROMACS RF displays a $\Delta\Delta$G of \SI{-0.20 +- 
 0.01}{kcal.mol^{-1}} for the
 centrally mapped transformation and $\Delta\Delta$G = \SI{-0.05 +- 
-0.02}{kcal.mol^{-1}} for the terminally mapped transformation.
+0.02}{kcal.mol^{-1}} for the terminally mapped transformation. Such a discrepancy may be due to the different softcore potential
+employed for dummy atoms 
+%SB: Here we need to discuss this in more details
 As regards PME methods, Sire/SOMD presents a MUE = \SI{0.18}{kcal.mol^{-1}} and 
 MUE = \SI{0.23}{kcal.mol^{-1}} with GROMACS PME and AMBER respectively, 
 achieving a very good agreement between $\Delta\Delta$G predictions. 
 
-\todo{it may be good to say somewhere how much was the MUE with the initial 
-standard protocol} %DLM: What is "initial standard protocol"?
-
-\todo{GROMACS RF in vacuum uses a dielectric of 1.0, this causes problems for 
-Sire vacuum simulations} %DLM: What does this mean? 
-
-Overall, the Sire/SOMD free energy estimations are in good agreement with the 
-other MD packages, as the MUE suggests.  Reaction field and PME results are in 
-good agreement.  In particular, the unperturbed hydrogen bonds constraint 
-%DLM: "unperturbed hydrogen bonds constraint" is unclear.
-allows a timestep of \SI{2}{fs} and Sire/SOMD RAFE simulations can be carried 
-out in one 
-single step.
-
+\begin{table}
+  \begin{minipage}{\linewidth}
+    \caption{Relative free energy of hydration $\Delta\Delta G$ and standard error SEM with Sire/SOMD unperturbed hydrogen bonds protocol. Signs of the backward transformation have been reverted to correspond to the forward transformation.}
+    \label{tab:sire-table}
+    \makebox[\textwidth][c]{%
+      \begin{tabular}{llrr}
+        \toprule
+         transformation & &$\Delta\Delta G$ & SEM \\
+        \midrule
+ethane         & methane        & -0.01    & 0.05 \\
+methane        & ethane         & -0.04    & 0.02 \\
+methanol       & methane        &  5.99    & 0.05 \\
+methane        & methanol       &  5.96    & 0.04 \\
+ethane         & methanol       & -6.09    & 0.03 \\
+methanol       & ethane         & -6.09    & 0.02 \\
+toluene        & methane        &  2.89    & 0.09 \\
+methane        & toluene        &  3.06    & 0.02 \\
+neopentane\footnote{\label{foot:cent2}central mapping.} & methane &-0.20    & 
+0.05 \\
+methane\footref{foot:cent2}        & neopentane     &-0.13   & 0.05 \\
+neopentane\footnote{\label{foot:term2}terminal mapping.}    & methane        & 
+-0.11   & 0.01\\
+methane\footref{foot:term2}        & neopentane    &-0.10    & 0.06\\
+2-methylfuran  & methane        & 2.92    & 0.05 \\
+methane        & 2-methyfuran   & 2.83    & 0.03 \\
+2-methylindole & methane        & 8.64    & 0.06 \\
+methane        & 2-methylindole & 8.67    & 0.08 \\
+2--cyclopentanylindole & 7--cyclopentanylindole &-0.11 & 0.07 \\
+7--cyclopentanylindole & 2--cyclopentanylindole &-0.01 & 0.08 \\
+	\bottomrule
+      \end{tabular}
+    }
+  \end{minipage}
+\end{table}
 
 \begin{table}[]
   \begin{minipage}{\linewidth}
