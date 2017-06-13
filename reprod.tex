@@ -90,9 +90,6 @@
 \section{Introduction}
 \label{sec:intro}
 
-\section{Introduction}
-\label{sec:intro}
-
 The free energy is a fundamental function of thermodynamics and
 kinetics as it explains how processes in nature evolve.  The equilibrium balance of products and reactants in
 a hypothetical chemical reaction can be immediately determined
@@ -588,7 +585,7 @@ rescaling through a Monte Carlo barostat with 100 steps between isotropic
 volume change attempts.
 
 \paragraph{SOMD} All simulations were carried out with
-SOMD from the Sire 2016.1 release ~\cite{Sire,eastman2012openmm}.
+SOMD from the Sire 2016.1 release ~\cite{Sire-2016, doi:10.1021/ct300857j}
 Each alchemical transformation was
 divided into 17 evenly spaced windows and simulated for \SI{2}{ns}
 both in water and in vacuum. A velocity-Verlet integrator was
@@ -1035,10 +1032,10 @@ GROMACS simulations.
     methanol & ethane & \num{-6.124 +- 0.005} & \num{-6.193+- 0.004} & \num{-7.338 +- 0.004} & \num{-7.404 +- 0.004} &  &  \\
     toluene & methane & \num{3.22 +- 0.01} & \num{3.211 +- 0.006} & \num{3.229 +- 0.008} & \num{3.22 +- 0.01} & \num{2.97 +- 0.01} & \num{3.16 +- 0.01} \\
     methane & toluene & \num{3.25 +- 0.01} & \num{3.20 +- 0.01} & \num{3.22 +- 0.01} & \num{3.211 +- 0.001} &  &  \\
-    neopentane \footnote{\label{foot:c-map}central mapping} & methane & \num{-0.103 +- 0.008} & \num{-0.15 +- 0.02} & \num{-0.08 +- 0.02} & \num{-0.18 +- 0.03} & \num{-0.18 +- 0.01} & \num{-0.14 +- 0.01} \\
-    methane  \footref{foot:c-map} & neopentane & \num{-0.11 +- 0.02} & \num{-0.16 +- 0.05} & \num{0.00 +- 0.03} & \num{-0.18 +- 0.03} &  &  \\
-    neopentane  \footnote{\label{foot:t-map}terminal mapping} & methane & \num{-0.116 +- 0.007} & \num{-0.13 +- 0.01} & \num{-0.14 +- 0.01} & \num{-0.14 +- 0.01} &  &  \\
-    methane  \footref{t-map} & neopentane2 & \num{-0.10 +- 0.03} & \num{-0.18 +- 0.03} & \num{-0.089 +- 0.007} & \num{-0.15 +- 0.02} &  &  \\
+    neopentane\footnote{\label{foot:c-map}central mapping} & methane & \num{-0.103 +- 0.008} & \num{-0.15 +- 0.02} & \num{-0.08 +- 0.02} & \num{-0.18 +- 0.03} & \num{-0.18 +- 0.01} & \num{-0.14 +- 0.01} \\
+    methane\footref{foot:c-map} & neopentane & \num{-0.11 +- 0.02} & \num{-0.16 +- 0.05} & \num{0.00 +- 0.03} & \num{-0.18 +- 0.03} &  &  \\
+    neopentane\footnote{\label{foot:t-map}terminal mapping} & methane & \num{-0.116 +- 0.007} & \num{-0.13 +- 0.01} & \num{-0.14 +- 0.01} & \num{-0.14 +- 0.01} &  &  \\
+    methane\footref{foot:t-map} & neopentane2 & \num{-0.10 +- 0.03} & \num{-0.18 +- 0.03} & \num{-0.089 +- 0.007} & \num{-0.15 +- 0.02} &  &  \\
     2-methylfuran & methane & \num{2.986 +- 0.006} & \num{2.930 +- 0.05} & \num{3.05 +- 0.01} & \num{3.00 +- 0.01} & \num{2.87 +- 0.01} & \num{2.95 +- 0.01} \\
     methane & 2-methylfuran & \num{3.007 +- 0.004} & \num{2.96 +- 0.01} & \num{3.056 +- 0.006} & \num{3.01 +- 0.01} &  &  \\
     2-methylindole & methane & \num{8.71 +- 0.02} & \num{8.73 +- 0.03} & \num{8.73 +- 0.01} & \num{8.80 +- 0.03} & \num{8.44 +- 0.02} & \num{8.79 +- 0.02} \\
@@ -1074,7 +1071,8 @@ methane & methanol & \multicolumn{1}{l}{\num{6.168 +- 0.005}} & \num{6.199 +- 0.
 We noticed a difference of approximately \SI{1.5}{kcal.mol^{-1}} between the split protocol without 
 Coulomb softcore potentials and both protocols that use it. Data suggests that softcore use in 
 electrostatic interactions requires adjustments in the $\lambda$-distance between states in the
-rapidly varying part of the $\partial \mathcal{H}/\partial\lambda$, see Figure \ref{fig:ti-fep}. 
+rapidly varying part of the $\partial \mathcal{H}/\partial\lambda$, see Figure
+%\ref{fig:ti-fep}. 
 The split protocol without Coulomb softcore potentials is the most effective way to calculate 
 relative free energy calculations. 
 % HHL: This needs more detail.  It is not clear to me if the split+sc
@@ -1101,8 +1099,10 @@ Successful simulations seem to require turning off the constraint and decreasing
 \label{sec:somd-results}
 
 Fig.~\ref{S-fig:sire_histogram} compares relative free energy of hydration $\Delta\Delta G$ according to the 'unperturbed H bond' protocol, with relative $\Delta \Delta G$ obtained from two absolute free energy calculations. Table ~\ref{tab:sire-table} summarizes all the computed relative free energy of hydration for the dataset in fig.~\ref{fig:cycles}.
-A very good agreement is observed between both methodologies ($R^2$=\SI{0.99+/-0.01}{} and 
-MAD=\SI{0.10+/-0.03}{kcal.mol^{-1}}), highlighting internal consistency within SOMD.
+A very good agreement is observed between both methodologies 
+($R^2$=\SI{0.99+-0.01}{} and 
+MAD=\SI{0.10+-0.03}{kcal.mol^{-1}}), highlighting internal consistency within 
+SOMD.
 \begin{equation}
  \label{eq:MUE}
  MUE = \frac{1}{N}\sum_\mathrm{i=1}^N \left | \Delta\Delta G^\mathrm{rel}_\mathrm{i} - \Delta\Delta G^\mathrm{abs}_\mathrm{i} \right |
@@ -1122,12 +1122,13 @@ Additionally the atomic mass of the pertubed hydrogen atom is set to the mass of
 the heavy atom it is perturbed to.
 Bonds involving hydrogen atoms that are perturbed to another hydrogen atom type are 
 constrained. This protocol suppresses high frequency vibrations in flexible bonds 
-involving hydrogen atoms, thus enabling a time step of \SI{2}{fs), whilst giving 
+involving hydrogen atoms, thus enabling a time step of \SI{2}{fs}, whilst 
+giving 
 essentially negligible errors due to the use of constraints for perturbed bonds. 
 This is apparent from the comparison with the absolute hydration free energy calculations. 
 Additionally, the protocol yields relative hydration free energy extremely similar
- (MAD = \SI{0.09}{kcal.mol^{-1}}) to those computed from simulations where no
-constraints are applied on the solutes and a timestep of \SI{1}{fs) is
+(MAD = \SI{0.09}{kcal.mol^{-1}}) to those computed from simulations where no
+constraints are applied on the solutes and a timestep of \SI{1}{fs} is
 used (Figure~\ref{S-fig:sire_constraints}).
 
 By contrast, a protocol that constrain all bonds in a solute leads to significant
@@ -1139,8 +1140,10 @@ tab.~\ref{S-tab:sire_constraints} and fig.~\ref{S-fig:sire_constraints}.
 
 This discrepancy occurs because in the SOMD implementation, the energies of 
 constrained bonds are not evaluated, but the calculation of the energies of the 
-solute at perturbed \lambda values is carried out using the coordinates of the 
-reference \lambda trajectory. This leads to a neglect of contributions of the bonded
+solute at perturbed $\lambda$ values is carried out using the coordinates of 
+the 
+reference $\lambda$ trajectory. This leads to a neglect of contributions of the 
+bonded
 term (and associated coupled terms) to the free energy change. The effect 
 is more pronounced for perturbations that feature a large change in 
 equilibrium bond lengths, such as those where a hydrogen atom is perturbed to/from a heavy atom.
