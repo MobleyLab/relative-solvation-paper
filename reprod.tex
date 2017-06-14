@@ -60,6 +60,7 @@
   than its absolute counterpart.  However, relative transformations are thought to 
   be computationally and statistically more efficient.
   %%JM Above two lines not necessary in abstract
+  %% HHL: two lines or two sentences?
   Thus, reproducibility of computed 
   relative free energies across simulation packages is also crucial. Here we present the 
   results for relative alchemical free energy (RAFE) calculations for hydration free energies of a set of small 
@@ -67,9 +68,11 @@
   reproduced with aforementioned codes, but this requires care and attention to detail.  The benchmarks and protocols reported 
   here may be used to validate new and future versions of alchemical free energy calculations software.  
 \end{abstract}
+
 \begin{tocentry}
   % \includegraphics[scale=1.0]{}
 \end{tocentry}
+
 
 \todo{Unify language!}
 
@@ -109,7 +112,9 @@ The calculation of free energies via molecular simulations~\cite{hansen_practica
 attractive as it promises to circumvent certain limitations of experimental
 approaches. Specifically, processes can be understood at the molecular and atomic level and 
 there is the potential that computational techniques can be more cost and time effective.  Thus, a
-multitude of methods have been devised to make reversible work%%JM I like 'free energy changes' better
+multitude of methods have been devised to make reversible work%%JM I like 'free 
+%%energy changes' better
+% HHL: Benoit uses this and I got tired of the same word all over
 estimates accessible through computation~\cite{hansen_practical_2014,
   doi:10.1021/jp102971x, Gallicchio201127,
   doi:10.1080/08927022.2015.1132317,
@@ -117,14 +122,12 @@ estimates accessible through computation~\cite{hansen_practical_2014,
 reliability of estimates is still very much a matter of
 concern~\cite{doi:10.1021/jp102971x, doi:10.1021/acs.jctc.5b00179}.
 Roughly speaking, fast methods tend to be less accurate while more
-accurate methods tend to be slow.  
-Nevertheless, rigorous methods are obligatory in obtaining accurate, precise and reliable
-results, while less accurate methods can be used as an input filter
-for computationally more expensive approaches.  By rigorous we mean methods 
-that give asymptotically correct free energy estimates i.e.\ they are correct 
+accurate methods tend to be slow.  Here we are interested in alchemical free 
+energy methods because they are firmly rooted in statistical thermodynamics and 
+thus give asymptotically correct free energy estimates i.e.\ they are correct 
 in the limit of sufficient simulation time.
-%%JM the last two sentences do not add anything. What is fast?Accurate? What is correct?
-%%JM suggest to rewrite to say here our interest is in AFE because firmly rooted in stat mech.
+%%JM the last two sentences do not add anything.
+% HHL: fixed
 
 One such method is the so-called \emph{alchemical} free energy
 approach whose theory is firmly rooted in statistical thermodynamics
@@ -144,12 +147,12 @@ non-equilibrium techniques~\cite{ytreberg_comparison_2006, JCC:JCC23804,
 intermediates that often need to be created to smoothly interpolate
 between end states and because parts or all of a molecule may ``appear''
 or ``disappear'' in a transformation.  In the context of force field
-methods the transformation takes place in parameter space, i.e.\ the
-force field's parameters determining strength and equilibrium of
-interactions are varied by scaling.  
-%%JM what is 'equilibrium of interactions' ? Does this description include 'dual topology' ?
-This can be a particular efficient approach as it does not require translocation in
-configuration space.
+methods the transformation takes place in ``parameter space'', i.e.\ the
+various force field parameters are varied by scaling.  
+%%JM what is 'equilibrium of interactions'
+% HHL: fixed
+This can be a particular efficient approach as it does not require 
+translocation in configuration space.
 %%JM awkward, you still need to sample configuration space in AFE. You mean, the 
 %%approach is efficient because it does not require sampling diffusive motions between 
 %%phases (aqueous,protein binding site, or vacuum/solvent interface).
@@ -178,11 +181,13 @@ efficient alchemical calculation.
     G_{\mathrm{vac}}=\Delta G'' - \Delta G'$.  The example is for the
     ethanol $\leftrightarrow$ methanol transformation.  Alchemical
     simulations are performed along the non-physical horizontal
-    legs while vertical legs illustrate the physical process (which is
-    directly accessible through absolute alchemical free energy
-    simulation, see e.g.\ Ref.~\citenum{doi:10.1021/acs.jced.7b00104}).}
+    legs while vertical legs illustrate the physical process of moving a 
+    molecule from the vacuum to the solution.  The latter is also accessible 
+    through absolute alchemical free energy simulation, see e.g.\ 
+    Ref.~\citenum{doi:10.1021/acs.jced.7b00104}.}
 %%JM no the absolute alchemical free energy simulation is NOT a simulation of
 %%the physical process
+% HHK: fixed
   \label{fig:thermocycle}
 \end{figure}
 
@@ -192,12 +197,14 @@ particular focus of recent years~\cite{GILSON19971047,
   ytreberg_comparison_2006, doi:10.1021/ct500964e}.  \emph{Absolute}
 here really means that the equilibrium constant of a physical
 reaction, e.g.\ binding and dissociation, can be calculated directly
-by completely decoupling or annihilating a whole molecule from its environment and the
-term is mostly being used to discriminate against \emph{relative}
-techniques (see below).
-%%JM important to clarify that this does not give an 'ABSOLUTE' G but still a DeltaG. 
-%%that is, this is just a relative calculation where the solute is perturbed to
-%%a state that does not interact with the surrounding environment.
+by completely decoupling or annihilating a whole molecule from its environment 
+and the term is mostly being used to discriminate against techniques usually 
+referred to as \emph{relative} (see below).  We emphasize that the 
+``absolute'' approach will still result in a \emph{relative} free energy 
+between the solute fully interacting with its environment and one where it does 
+not.
+%%JM important to clarify that this does not give an 'ABSOLUTE' G 
+% HHL: fixed
 Decoupling means the scaling of the non--bonded 
 \emph{inter}--molecular interactions between the perturbed group (all atoms 
 that differ in at least one force field parameter between the end states) and 
@@ -229,10 +236,11 @@ In typical implementations, disappearing/appearing atoms need to be balanced wit
 constant number of atoms in both end states.  Dummy atoms have no non--bonded 
 interactions in the end state but retain the bonded terms of the original atom 
 to avoid complications with unbound atoms~\cite{doi:10.1021/jp981628n} (see 
-also ``wandering'' ligand problem below). However this need not be. 
+also ``wandering'' ligand problem below).  However this need not be. 
 For instance the AMBER implementation 
 %%JM is it both pmemd and sander?has it always been like this, or are we talking
 %%about specific versions 
+% HHL: both, probably since AMBER 7 or 8, before was DAP's GIBBS program
 is a special case as it does not require the user to define dummy atoms explicitly, i.e.\ as 
 atoms with coordinates and zero end state parameters in the topology, but only 
 to mark the disappearing and appearing atoms in the control file for the 
@@ -243,39 +251,47 @@ cycle~\cite{doi:10.1021/acs.jcim.5b00057, doi:10.1021/jp994193s}.
 
 The single topology approach~\cite{doi:10.1021/j100056a020} requires a
 certain similarity between the two mutated states.
-%%JM a bit vague. you mean to be efficient, the method needs some topological similarity?
+%%JM a bit vague. you mean to be efficient, the method needs some topological 
+%%similarity?
+% HHL: see next sentence
 This means primarily topological and structural similarity but also chemical similarity is
 of importance e.g.\ chirality and binding modes where the relative
 three dimensional arrangement in space must be taken into account.
 Furthermore, ring breaking is technically
 challenging~\cite{doi:10.1021/acs.jctc.6b00991} but it has also been
-shown that this could be done in certain circumstances~\cite{doi:10.1021/acs.jcim.5b00057,
+shown that this can be done in certain 
+circumstances~\cite{doi:10.1021/acs.jcim.5b00057,
   doi:10.1021/jp994193s}.
 
 When the two molecules are structurally dissimilar or do not spatially overlap, 
-the dual topology method~\cite{doi:10.1021/j100056a020, doi:10.1021/jp981628n} can be
-applied to compute relative free energies.  In this approach all atoms
-in the end states are duplicated and thus both sets are present at all
+the dual topology method~\cite{doi:10.1021/j100056a020, doi:10.1021/jp981628n} 
+can be applied to compute relative free energies.  In this approach \emph{all} 
+atoms of the end states are duplicated and thus both sets are present at all
 times but don't interact with each other.  Only non--bonded
 interactions need to be scaled such that the disappearing end state
 corresponds to an ideal gas molecule~\cite{doi:10.1021/jp981628n}.
 This, however, comes with additional complications as two independent
 molecules can drift apart and so suffer from the ``wandering'' ligand
 problem as in absolute transformations\cite{GILSON19971047,
-doi:10.1021/jp0217839, deng_computations_2009}.  
-
-Topological similarity can only be exploited when the charges of the common core
-are explicitly made equivalent~\cite{doi:10.1021/acs.jctc.5b00179}.
-This approach, however, shifts all the chemical variability
-exclusively to the dummy atoms and is thus of only limited use.
-%%JM I don't understand how this work in above sentence if all atoms are duplicated. 
+doi:10.1021/jp0217839, deng_computations_2009}.  Restraints between 
+corresponding atoms, emulating the single topology approach, can be used to 
+counter this without affecting the free energy~\cite{JCC:Axelsen-Li}.
+Topological similarity can also be exploited in the dual topology approach when 
+the charges of a common core are explicitly made equal, while the atoms are all 
+of the same type, and thus need to be present only 
+once~\cite{doi:10.1021/acs.jctc.5b00179}. This approach, however, shifts all 
+the chemistry exclusively into the dummy atoms and is thus of only limited use.
+%%JM I don't understand how this work in above sentence if all atoms are 
+%%duplicated.
+% HHL: fixed.
  
 Technically, a dual topology calculation is the same as two absolute
 calculations run simultaneously in opposite directions.  It has been
 shown though that with the introduction of special restraints or
 constraints this can be a viable option~\cite{doi:10.1021/ct700081t,
-  rocklin_separated_2013}.
+  rocklin_separated_2013, JCC:Axelsen-Li}.
 %%JM see also doi:10.1021/ct700081t
+% HHL: that one is right there already :-)
 A covalent link, e.g.\ as in side--chain
 mutation simulations, provides a natural restraint such that dual
 topology simulations can be applied without further problems.  Modern
@@ -285,10 +301,12 @@ GROMOS~\cite{doi:10.1021/jp984217f} and SOMD~\cite{Sire-2016,
   doi:10.1021/ct300857j}
 %%JM Sire-->general purpose library. SOMD -->AFE MD software build with Sire (and other libraries)
 %%best to cite SOMD rather than Sire throughout the paper to avoid confusion.
+% HHL: fix that as you wish
 offer a hybrid single/dual topology approach
 i.e.\ the user can specify which part of a perturbed group should be
 handled by which method~\cite{doi:10.1021/jp994193s}.
 %%JM SOMD can't do that currently.
+% HHL: why not? this information is in the patch file?
 
 As alluded to above, reliability is a principal matter of concern.  In
 particular, we need to ensure reproducibility of free energy results
@@ -304,22 +322,22 @@ limits.
 %%on the forcefield and thermodynamic parameters (Temperature...), given sufficient sampling.
 %%other 'run--time parameters' such as timestep etc...should NOT matter provided they are 
 %%reasonable.
+% HHL: equation is currently in Methods but can me moved here as well
 In practice, we have the problem, however, that the methods
 and algorithms used in one MD program are not always present in another
-package or are the same, such as algorithms for pressure and temperature scaling,
-integrators, etc.  
-Nevertheless, it is critical that free energy changes computed with different
-simulation software should be reproducible within statistical error, as this otherwise 
-limits the transferability of potential energy functions, and the relevance of properties
-computed from a molecular simulation.  This is especially important as the community 
+package or are the same, such as algorithms for pressure and temperature 
+scaling, integrators, etc.  Nevertheless, it is critical that free energy 
+changes computed with different simulation software should be reproducible 
+within statistical error, as this otherwise limits the transferability of 
+potential energy functions, and the relevance of properties computed from a 
+molecular simulation.  This is especially important as the community  
 increasingly combines or swaps different simulation packages within workflows 
-aimed at addressing challenging scientific problems.
-%%JM: SOME CITATIONS: COPERNICUS, BAC, STAGGE,FESETUP,ExTASY..
-
-%%Modern MD packages support a wide range of force fields and methods such that
-%%these packages are replaceable with each other to an ever increasing
-%%extent and the choice of the right package for the user becomes less
-%%and less a matter of technical restrictions.
+aimed at addressing challenging scientific 
+problems~\cite{Pronk:2011:CNP:2063384.2063465, doi:10.1021/ci8000937, 
+doi:10.1021/jp505332p, loeffler_fesetup:_2015, 
+DBLP:journals/corr/Balasubramanian16g}.
+%%JM: SOME CITATIONS
+% HHL: not sure if they all are really applicable here...
 
 In this work we present the results of relative hydration free
 energies of a set of small organic molecules (see
@@ -366,7 +384,7 @@ the integrator, as well as analysis problems even when simulations do not crash~
   zacharias_separationshifted_1994, steinbrecher_nonlinear_2007}.
 
 Another difference is how the codes scale force field parameters (``parameter 
-scaling'') and/or the total energy (``energy 
+scaling'') and/or the energy (``energy 
 scaling'')~\cite{doi:10.1021/jp981628n}.  In the former case each parameter is 
 scaled individually e.g.\ in the case of a harmonic bond or angle term
 this is the force constant and the equilibrium distance/angle while in the 
@@ -387,11 +405,12 @@ state.  In our case this means the whole solute.%%JM: last sentence redundant?
 This code is strictly dual topology and all terms
 are energy--scaled.
 %%JM you said energy-scaling scales the total energy, so implies 'all terms'
+% HHL: pmemd scales individual energy terms. fixed.
   The code allows, however, mapping of atoms in a
 single topology fashion and computes these non--softcore atoms 
-by linear scaling the forces for each atom in the pair.
-%%JM the forces are scaled but not the potential??? also does it imply 
-%%that atoms that are mapped cannot use a softcore potential? 
+by linear scaling the energy and forces for each atom in the pair.
+%%JM atoms that are mapped cannot use a softcore potential? 
+% HHL: yes
 The perturbed group must be entirely duplicated i.e.\ for \progname{sander} 
 this means two topology files with one end state each, and for \progname{pmemd} 
 both end states in one topology file.  The softcore potential applies to any 
@@ -422,11 +441,15 @@ to arbitrary values.
 
 \paragraph{GROMACS} This code uses a single topology description.
 Bonded terms are strictly parameter--scaled, which requires proper
-balancing of multi--term dihedrals.
+balancing of multi--term dihedrals i.e.\ each individual term in the Fourier 
+series must have an equivalent in both end states.  If the term does not exist 
+it must be created with parameters zeroing its energy.
 %%JM what does the last sentence mean?
+% HHL: fixed
 The softcore potential applies to dummy 
-atoms only determined from atoms having zero vdW parameters.
+atoms only determined from atoms having zero vdW parameters in the end states.
 %%JM in end-state A or B presumably?
+% HHL: fixed
 The code
 allows changing bond lengths involving constraints within the perturbed group 
 but this can lead to instabilities and wrong results (Michael Shirts,
@@ -466,11 +489,13 @@ strategy achieves a maximal single topology description: any atom that
 does not match will be made a dummy atom.  FESetup allows
 equilibration of the solvated simulation systems and ensures that
 ``forward'' and ``backward'' simulations have the same amount of
-total atoms. 
+total atoms.  Atom masses are kept at the initial state.
 %%JM: Also the atomic masses are identical in the forward and backward 
 %%simulations, thus a hydrogen perturbed to another heavy atom is 'heavy'
 %%or does this only apply to SOMD input files? This is important to clarify 
 %%as this is how we make the 2fs protocol work
+% HHL: AMBER sets the masses to the initial state in the code. GROMACS let's 
+%the user do that.  Not sure about CHARMM/PERT.
 
 The tool creates all input files with control
 parameters, topologies and coordinates as required for RAFE
@@ -482,6 +507,7 @@ study including ``forward'' and ``backward'' mutations.  RAFE
 simulations do not have a directionality with respect to the coupling (order) 
 parameter $\lambda$.
 %%JM Not true for EXP, clarify because we are using TI
+% HHL: also in the limit of infinite sampling?
 But to test for possible discrepancies we have run 
 simulations in both directions.  As we shall discuss in the 
 \nameref{sec:results} section we do see differences in some cases.
@@ -522,9 +548,7 @@ that a given MD software may employ a wide range of methods and algorithms that
 may not be available in other MD software.  For example, pressure and
 temperature scaling, integrators and other algorithms can be very
 different.  It is also unclear if and how implementation details can
-affect results,
-%%JM avoid sending readers back and forth to different sections
-in particular see subsection~\ref{sec:afe_impl} discussing the 
+affect results, in particular see subsection~\ref{sec:afe_impl} discussing the 
 implementation details of alchemical free energy simulation in code.
 
 In this study we look at a set of simple organic molecules (see
@@ -596,10 +620,8 @@ values of n=0 and delta=2.0 for all transformations.~\cite{doi:10.1021/ct700081t
 % HHL: maybe discuss this earlier in the non-code specific section?
 A shifted atom--based Barker--Watts reaction field~\cite{doi:10.1080/00268977300102101} with
 a dielectric constant of \num{78.3} was adopted for the solution phase
-simulations with a cutoff of \SI{10}{\angstrom}. A similar cutoff was used for Lennard-Jones interactions.
-%%SB: I checked the latest simulations run and dielectric constant was kept at 78.3 (default value)
-%% I think this is in line with all the other codes, too
-Temperature control was achieved with the Andersen
+simulations with a cutoff of \SI{10}{\angstrom}. A similar cutoff was used for 
+Lennard-Jones interactions. Temperature control was achieved with the Andersen
 thermostat~\cite{doi:10.1063/1.439486} with a coupling constant of
 \SI{10}{ps^{-1}}.  A Monte Carlo barostat assured pressure control,
 attempting isotropic box edge scaling every 25 time steps.
@@ -708,6 +730,7 @@ to have the lowest variance of any known
 estimator~\cite{shirts_statistically_2008}.
 %JM I don't think we need all of this at this stage of the paper, go straight to
 %TI and justify why we use it.
+% HHL: can go to Discussion under the title of ``recommendations''
 
 In this work we primarily focus on TI as this is supported by all MD
 packages ``out--of--the--box'', whereas BAR and MBAR are not.
@@ -896,6 +919,7 @@ systematic deviation between forward and backward vacuum transformations in
 particular in the 2--methylindole simulation (see Table~\ref{S-tab:amber-disc}).
 A discrepancy of consistently 0.2--\SI{0.4}{kcal.mol^{-1}} is evident from every $\lambda$ step of the vdW plus bonded transformation with both implicit and explicit dummy atoms).
 %%JM: any hint of the problem? This suggests a bug in AMBER
+% HHL: no hints yet, only symptoms.  Strongly suspect a bug too.
 
 \subsection{CHARMM}
 \label{sec:charmm-results}
