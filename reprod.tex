@@ -364,9 +364,9 @@ development.
 We begin by working out the differences in the alchemical free energy
 implementations of the four MD codes AMBER, CHARMM, GROMACS and
 SOMD.  One key difference is in the softcore
-functions employed~\cite{beutler_avoiding_1994,
-  zacharias_separationshifted_1994} used in each code as summarised in
-section~\ref{S-sec:softcores} of the SI.  Softcore functions are used to avoid numerical and thus
+functions~\cite{beutler_avoiding_1994, zacharias_separationshifted_1994} used 
+in each code as summarised in section~\ref{S-sec:softcores} of the SI.  
+Softcore functions are used to avoid numerical and thus
 stability problems of the conventional van der Waals and Coulombic
 potentials~\cite{steinbrecher_nonlinear_2007} as they have
 singularities at zero distance (vertical asymptotes).  Direct scaling
@@ -375,8 +375,9 @@ hard--sphere potentials as $\lambda\rightarrow 0$.  This implies a
 higher probability of other atoms to penetrate into the highly
 repulsive short--range portion of the potential which can lead to
 strongly fluctuating forces/energies and to severe instabilities in
-the integrator, as well as analysis problems even when simulations do not crash~\cite{beutler_avoiding_1994,
-  zacharias_separationshifted_1994, steinbrecher_nonlinear_2007}.
+the integrator, as well as analysis problems even when simulations do terminate 
+normally~\cite{beutler_avoiding_1994, zacharias_separationshifted_1994, 
+steinbrecher_nonlinear_2007}.
 
 Another difference is how the codes scale force field parameters (``parameter 
 scaling'') and/or the energy (``energy 
@@ -401,7 +402,7 @@ This code is strictly dual topology and all terms
 are energy--scaled.
 %%JM you said energy-scaling scales the total energy, so implies 'all terms'
 % HHL: pmemd scales individual energy terms. fixed.
-  The code allows, however, mapping of atoms in a
+The code allows, however, mapping of atoms in a
 single topology fashion and computes these non--softcore atoms 
 by linear scaling the energy and forces for each atom in the pair.
 %%JM atoms that are mapped cannot use a softcore potential? 
@@ -409,19 +410,19 @@ by linear scaling the energy and forces for each atom in the pair.
 The perturbed group must be entirely duplicated i.e.\ for \progname{sander} 
 this means two topology files with one end state each, and for \progname{pmemd} 
 both end states in one topology file.  The softcore potential applies to any 
-atom chosen by the user i.e.\ also for atoms that have an equivalent in the 
-other state but non--softcore atoms must still match 1:1 in both states.  
-Explicit dummy atoms are not needed as the code will only compute bonded 
-contributions for ``real'' atoms and thus ignores bonded energies involving 
-dummy atoms.  We will call this the ``implicit dummy protocol''. The code 
-cannot handle changing the lengths of bonds that are involved in constraints 
-in the perturbed group.  There is only one global $\lambda$ for parameter 
-transformation.  Protocols that couple only some parameters (separated protocols, see below) 
-must be emulated through careful construction of topologies by keeping force field parameters that are 
-not being modified constant between different files.
+atom chosen by the user which may include atoms that actually have an 
+equivalent in the other state.  Non--softcore atoms must still match 1:1 in 
+both states.  Explicit dummy atoms are not needed as the code will only compute 
+bonded contributions for ``real'' atoms and thus ignores bonded energies 
+involving dummy atoms.  We will call this the ``implicit dummy protocol''. The 
+code cannot handle bond length changes involving a constraint.  There is only 
+one global $\lambda$ for parameter transformation.  Protocols that couple only 
+some parameters (separated protocols, see below) must be emulated through 
+careful construction of topologies by keeping force field parameters that are 
+not being modified constant along $\lambda$.
 
 \paragraph{CHARMM} The PERT module duplicates the topology similar to
-\progname{sander} but the definitions for mapped atoms are given only once.
+\progname{sander} but mapped atoms are given oin the topology nly once.
 %DLM: Can we provide sample files for all of these in SI, and maybe even give 
 %topology snippets in figure(s) to illustrate the point? 
 The module requires balancing with explicit dummy atoms.  All terms are
@@ -477,10 +478,10 @@ GROMACS, SOMD and also NAMD~\cite{JCC:JCC20289} (within the
 limits of the dual topology approach).  The tool makes use of a
 maximum common substructure search algorithm to automatically compute
 atoms that can be mapped i.e.\ atoms that have a direct relationship
-to an equivalent atom in the other state.  This means atom type to
-atom type conversion and the only current limit is that rings are
-required to be preserved~\cite{doi:10.1021/acs.jcim.5b00057}.  This
-strategy achieves a maximal single topology description: any atom that
+to an equivalent atom in the other state which means atom type to
+atom type conversion.  The only current limit is that rings are
+required to be preserved~\cite{doi:10.1021/acs.jcim.5b00057}.  With this
+strategy a maximal single topology description is achieved: any atom that
 does not match will be made a dummy atom.  FESetup allows
 equilibration of the solvated simulation systems and ensures that
 ``forward'' and ``backward'' simulations have the same amount of
@@ -491,7 +492,6 @@ total atoms.  Atom masses are kept at the initial state.
 %%as this is how we make the 2fs protocol work
 % HHL: AMBER sets the masses to the initial state in the code. GROMACS let's 
 %the user do that.  Not sure about CHARMM/PERT.
-
 The tool creates all input files with control
 parameters, topologies and coordinates as required for RAFE
 simulations.  Full details on FESetup can be found in
@@ -523,7 +523,8 @@ regarded as a standard test for RAFE
 simulations~\cite{doi:10.1063/1.449208, doi:10.1021/jp981629f}.   The
 other transformations are centred around mutations from and to
 methane, and are meant to mimic typical transformations that could be attempted
-in the context of e.g. protein-ligand binding calculations. The 2--cyclopentanylindole to 7--cyclopentanylindole
+in the context of e.g.\ protein-ligand binding calculations. The 
+2--cyclopentanylindole to 7--cyclopentanylindole
 transformation has been added to include both deletion as well as
 insertion of sub--parts of the perturbed group in one simulation.  For
 neopentane $\rightarrow$ methane we point out that there are two
@@ -564,7 +565,7 @@ elsewhere, see e.g. Refs.~\citenum{doi:10.1021/ct300203w,Hu2016}.
 
 While the MD packages principally allow a ``one--step'' 
 transformation~\cite{steinbrecher_soft-core_2011}
-that is both van der Waals and Coulombic contributions vary
+that is both van der Waals and Coulombic softcore potentials vary
 simultaneously, it can be more efficient to carry out a
 separated protocol~\cite{naden_linear_2014, naden_linear_2015}. 
 In such a protocol the charges are transformed
@@ -599,9 +600,48 @@ This happened in transformations with a larger number of dummy atoms.  Water
 hydrogens (TIP3P) were constrained with SHAKE but none of the atoms in the 
 perturbed group and so the time step was set to \SI{1}{fs} (see SOMD protocol 
 below for an alternative approach).  The temperature was controlled through a 
-Langevin thermostat with a friction constant of \SI{2.0}{ps-1} and pressure 
+Langevin thermostat with a friction constant of \SI{2.0}{ps^{-1}} and pressure 
 rescaling through a Monte Carlo barostat with 100 steps between isotropic 
 volume change attempts.
+
+\paragraph{GROMACS} We used GROMACS 4.6.7 to carry out simulations for 
+the relative hydration free energies ($\Delta \Delta G_{\mathrm{hydr}}$).
+Each transformation had its Gibbs free energy calculated: (i) in a single 
+topology approach in which van der Waals energy terms were changed separately 
+from the electrostatic and bonded components; (ii) in a single topology 
+approach in which bonded, van der Waals, and electrostatic terms are changed 
+together;  and (iii) via the difference between two absolute calculations.
+In the first two cases, each alchemical transformation was described by 31 and 
+16 states, respectively, and simulated for \SI{4.2}{ns} with time steps of 
+\SI{1.0}{fs} in water and a vacuum. Atomic masses were not changed along the 
+alchemical path;
+their change affect kinetic energy only and do not contribute to the free 
+energy change. 
+%%JM Sentence needed here? Applies to all codes. Be careful about when neglect 
+%%is ok, 
+%%only true in some conditions
+We used the Langevin integrator implemented in GROMACS with a 
+default friction coefficient of \SI{1.0}{ps/m_{atom}}. 
+Absolute hydration free energies were calculated using a protocol used in 
+previous works \cite{Mobley2014, doi:10.1021/acs.jced.7b00104}.
+%%JM: Elaborate a bit, especially regarding constraints
+A Parrinello--Rahman barostat with $\tau_p =$ \SI{10}{ps} and compressibility 
+equal to \SI{4.5d-5}{bar^{-1}}.
+We used two methods to calculate electrostatic interactions: Particle Mesh 
+Ewald (PME) and Reaction Field with a dielectric of 78.3, as implemented in the 
+software. 
+%%JM : Please clarify if using an atom based or group based reaction field
+We set the non--bonded cutoff to \SI{10.0}{\angstrom}, with a switch 
+starting at \SI{9.0}{\angstrom}.  
+%%JM: switch applies to both RF and LJ ?
+PME calculations were of order 6 and had a 
+tolerance of \num{1.0d-6}, with a grid spacing of \SI{1.0}{\angstrom}. 
+All transformations required the use of softcore potentials to avoid numerical 
+problems in the free energy calculation.  We chose the 1--1--6 softcore 
+potential for Lennard-Jones terms and used the default softcore Coulomb 
+implementation in paths where charges, van der Waals, and bonded terms were 
+modified together, but no soft core potentials were applied to Coulomb 
+interactions when Coulomb interactions were modified separately.
 
 \paragraph{SOMD} All simulations were carried out with
 SOMD from the Sire 2016.1 release ~\cite{Sire-2016, doi:10.1021/ct300857j}
@@ -654,45 +694,6 @@ Eventually, the absolute free energy of hydration $\Delta G$ can be computed as:
 The same setup for relative free energy calculations was followed to compute absolute free energy of hydration. Thus, 17 evenly spaced $\lambda$ windows were used and simulations were run for \SI{2}{ns} employing a velocity-Verlet integrator with \SI{2}{fs} time step, constraining only the hydrogen bonds which are not alchemically transformed. 
 
 
-\paragraph{GROMACS} We used GROMACS 4.6.7 to carry out simulations for 
-the relative hydration free energies ($\Delta \Delta G_{\mathrm{hydr}}$).
-Each transformation had its Gibbs free energy calculated: (i) in a single 
-topology approach in which van der Waals energy terms were changed separately 
-from the electrostatic and bonded components; (ii) in a single topology 
-approach in which bonded, van der Waals, and electrostatic terms are changed 
-together;  and (iii) via the difference between two absolute calculations.
-In the first two cases, each alchemical transformation was described by 31 and 
-16 states, respectively, and simulated for \SI{4.2}{ns} with time steps of 
-\SI{1.0}{fs} in water and a vacuum. Atomic masses were not changed along the 
-alchemical path;
-their change affect kinetic energy only and do not contribute to the free 
-energy change. 
-%%JM Sentence needed here? Applies to all codes. Be careful about when neglect is ok, 
-%%only true in some conditions
-We used the Langevin integrator implemented in GROMACS with a 
-default friction coefficient of \SI{1.0}{ps/m_{atom}}. 
-Absolute hydration free energies were calculated using a protocol used in 
-previous works \cite{Mobley2014, doi:10.1021/acs.jced.7b00104}.
-%%JM: Elaborate a bit, especially regarding constraints
-A Parrinello--Rahman barostat with $\tau_p =$ \SI{10}{ps} and compressibility 
-equal to \SI{4.5d-5}{bar^{-1}}.
-We used two methods to calculate electrostatic interactions: Particle Mesh 
-Ewald (PME) and Reaction Field with a dielectric of 78.3, as implemented in the 
-software. 
-%%JM : Please clarify if using an atom based or group based reaction field
-We set the non--bonded cutoff to \SI{10.0}{\angstrom}, with a switch 
-starting at \SI{9.0}{\angstrom}.  
-%%JM: switch applies to both RF and LJ ?
-PME calculations were of order 6 and had a 
-tolerance of \num{1.0d-6}, with a grid spacing of \SI{1.0}{\angstrom}. 
-All transformations required the use of softcore potentials to avoid numerical 
-problems in the free energy calculation.  We chose the 1--1--6 softcore 
-potential for Lennard-Jones terms and used the default softcore Coulomb 
-implementation in paths where charges, van der Waals, and bonded terms were 
-modified together, but no soft core potentials were applied to Coulomb 
-interactions when Coulomb interactions were modified separately.
-
-
 \subsection{Analysis}
 \label{sec:analysis}
 
@@ -705,9 +706,10 @@ devised the exponential formula~\cite{zwanzig_high-temperature_1954}
 (EXP), also known as Free Energy Perturbation (FEP) or thermodynamic
 perturbation (TP), which calculates the free energy from the
 exponential average of the energy difference of the end states.  The
-energy difference is computed with the configuration of one end state
-being used for both end states assuming that this configuration is
-representative for either state.  As the phase--space overlap needs to
+energy difference is computed from the energy with the configuration of one end 
+state and reusing it to compute the energy with the force field parameters of 
+the other end state.  This obviously assumes that the configuration is
+representative of both state.  As the phase--space overlap needs to
 be sufficiently large~\cite{wu_phase-space_2005,
   wu_phase-space_2005-1} the EXP approach typically needs
 intermediates, controlled by $\lambda$.  However, it has been shown
@@ -740,7 +742,7 @@ where $\mathscr{H}(\vec{q},\vec{p};\lambda)$ is the Hamiltonian as a function of
 
 Results from additional estimators
 will be given where available.  We have used the alchemical analysis
-tool~\cite{klimovich_guidelines_2015} for all free energies.  This
+tool~\cite{klimovich_guidelines_2015} for analysis of all free energies.  This
 tool provides various estimators such as TI, TI with cubic splines,
 BAR and MBAR.  All data can be sub--sampled to eliminate correlated
 data.
