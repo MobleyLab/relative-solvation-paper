@@ -792,12 +792,17 @@ contributions.
 \label{sec:amber-results}
 
 Using AMBER for RAFE simulations has revealed several problems with
-the implementation.  Some bugs were identified and have been fixed for AMBER16 release
-by the developers, e.g. energy minimization in \progname{sander} led to diverged
-coordinates for mapped atoms.  For a single topology description, however, it 
-is necessary to have the same coordinates.  Other issues are that vacuum
-simulations can only be carried out with the \progname{sander} program 
-because \progname{pmemd} cannot handle AFE simulations in vacuum at the moment.  This will, however, be rectified in future versions (Ross Walker, private communication).  A disadvantage of \progname{sander} is that it cannot be used to simulate the $\lambda$ end points~\cite{doi:10.1021/ct400340s} such that the TI gradients need to be extrapolated (minimum and maximum allowed $\lambda$s are 0.005 and 0.995). 
+the implementation.  Some bugs were identified and have been fixed for AMBER16 
+release by the developers, e.g. energy minimization in \progname{sander} led to 
+diverged coordinates for mapped atoms.  For a single topology description, 
+however, it is necessary to have the same coordinates.  Other issues are that 
+vacuum simulations can only be carried out with the \progname{sander} program 
+because \progname{pmemd} cannot handle AFE simulations in vacuum at the 
+moment.  This will, however, be rectified in future 
+versions~\cite{doi:10.1021/acs.jctc.7b00102}.  A disadvantage of 
+\progname{sander} is that it cannot be used to simulate the $\lambda$ end 
+points~\cite{doi:10.1021/ct400340s} such that the TI gradients need to be 
+extrapolated (minimum and maximum allowed $\lambda$s are 0.005 and 0.995). 
 %DLM: Wait, so this means that there's no way around extrapolating the 
 %endpoints in vacuum?
 %HHL: Yes, extrapolation needs to be done with sander.
@@ -901,7 +906,7 @@ practical point of view,
 % the feedback from the SOMD calculations, we can spin this then as a benefit 
 % of having developers talk to each other :-) 
 AMBER uses an atom based mask for bond SHAKEs such that the mask must be set 
-for the hydrogens in question while the same is not possible for their 
+for the hydrogens in question while the same is not possible for their non--H
 counter--part in the other state because \emph{all} bonds emanating from this 
 atom would be affected.
 
