@@ -50,23 +50,24 @@
 \begin{document}
 
 \begin{abstract}
-  Alchemical free energy calculations are an increasingly important modern simulation
-   technique.  Contemporary Molecular Dynamics and Monte Carlo 
+  Alchemical free energy calculations are an increasingly important modern 
+  simulation technique.  Contemporary Molecular Dynamics and Monte Carlo 
   software such as AMBER, CHARMM, GROMACS and SOMD include support for the 
   method.  Implementation details vary among those codes but users expect 
   reliability and reproducibility, i.e.\ a simulation must yield a comparable 
   free energy within statistical bounds regardless of code used.  
   \emph{Relative} alchemical free energy simulation has been less well tested 
-  than its absolute counterpart.  However, relative transformations are thought to 
-  be computationally and statistically more efficient.
+  than its absolute counterpart.  However, relative transformations are thought 
+  to be computationally and statistically more efficient.
   %%JM Above two lines not necessary in abstract
   %% HHL: two lines or two sentences?
-  Thus, reproducibility of computed 
-  relative free energies across simulation packages is also crucial. Here we present the 
-  results for relative alchemical free energy (RAFE) calculations for hydration free energies of a set of small 
+  Thus, reproducibility of computed relative free energies across simulation 
+  packages is crucial. Here we present the results for relative alchemical free 
+  energy (RAFE) calculations for hydration free energies of a set of small 
   organic molecules and show that free energies can be satisfactorily 
-  reproduced with aforementioned codes, but this requires care and attention to detail.  The benchmarks and protocols reported 
-  here may be used to validate new and future versions of alchemical free energy calculations software.  
+  reproduced with aforementioned codes, but this requires care and attention to 
+  detail.  The benchmarks and protocols reported here may be used to validate 
+  new and future versions of free energy calculations software.  
 \end{abstract}
 
 \begin{tocentry}
@@ -97,8 +98,8 @@ The free energy is a fundamental function of thermodynamics and
 kinetics as it explains how processes in nature evolve.  The equilibrium balance of products and reactants in
 a hypothetical chemical reaction can be immediately determined
 from the knowledge of the free energy difference of reactants and
-product and their concentrations.  The free energy landscape of a given system, however, can be
-very complicated and rugged with barriers which impose
+products and their concentrations.  The free energy landscape of a given 
+system, however, can be very complicated and rugged with barriers which impose
 limits on how fast the process can take place.  It is therefore of
 little surprise that the determination of free energy changes is of
 utmost importance to all natural sciences e.g.\ for binding and
@@ -112,8 +113,8 @@ The calculation of free energies via molecular simulations~\cite{hansen_practica
 attractive as it promises to circumvent certain limitations of experimental
 approaches. Specifically, processes can be understood at the molecular and atomic level and 
 there is the potential that computational techniques can be more cost and time effective.  Thus, a
-multitude of methods have been devised to make reversible work%%JM I like 'free 
-%%energy changes' better
+multitude of methods have been devised to make reversible work
+%%JM I like 'free energy changes' better
 % HHL: Benoit uses this and I got tired of the same word all over
 estimates accessible through computation~\cite{hansen_practical_2014,
   doi:10.1021/jp102971x, Gallicchio201127,
@@ -130,8 +131,7 @@ in the limit of sufficient simulation time.
 % HHL: fixed
 
 One such method is the so-called \emph{alchemical} free energy
-approach whose theory is firmly rooted in statistical thermodynamics
-and is argued to be the most accurate method in quantitative
+approach which is argued to be the most accurate method in quantitative
 prediction of free energies~\cite{Beveridge-citeulike:3789890,
   straatsma:92, doi:10.1021/cr00023a004, hansen_practical_2014}.  The
 method has been applied in various forms for many decades now since
@@ -216,16 +216,15 @@ but approaches that produce the reversible work directly in one simulation
 have been proposed too~\cite{doi:10.1063/1.3519057, C3FD00125C}.
 
 Relative alchemical free energy (RAFE) calculations ``mutate'' one
-molecule into another one.
-
-RAFEs are useful for instance in ranking which one of a set of molecules binds 
-strongest to a chosen target.  This approach has recently gained more traction 
-in the context of relative free binding energies between small molecules e.g.\ 
-drug or lead like molecules and biomolecules~\cite{doi:10.1021/ja512751q, 
+molecule into another one.  RAFEs are useful for instance in ranking which one 
+of a set of molecules binds strongest to a chosen target.  This approach has 
+recently gained increased traction in the context of relative free binding 
+energies between small molecules e.g.\ drug or lead like molecules and 
+biomolecules~\cite{doi:10.1021/ja512751q, 
 doi:10.1021/acs.jctc.6b00991}.
 
-RAFEs are more readily implemented~\cite{doi:10.1021/j100056a020, Michel2010} by making use of
-the single topology method~\cite{doi:10.1063/1.449208,
+RAFEs are readily implemented~\cite{doi:10.1021/j100056a020, Michel2010} by 
+making use of the single topology method~\cite{doi:10.1063/1.449208,
 doi:10.1021/j100056a020, doi:10.1021/jp981628n}.  Single topology means that 
 there is only one representation of the molecule to be mutated, also implying a 
 single set of coordinates.
@@ -241,23 +240,22 @@ For instance the AMBER implementation
 %%JM is it both pmemd and sander?has it always been like this, or are we talking
 %%about specific versions 
 % HHL: both, probably since AMBER 7 or 8, before was DAP's GIBBS program
-is a special case as it does not require the user to define dummy atoms explicitly, i.e.\ as 
-atoms with coordinates and zero end state parameters in the topology, but only 
-to mark the disappearing and appearing atoms in the control file for the 
+is a special case as it does not require the user to define dummy atoms 
+explicitly, i.e.\ as atoms with coordinates and zero end state parameters in 
+the topology, but only 
+to mark the disappearing and appearing atoms in the control file of the 
 MD engine.  The contributions of bonded terms that involve at least one 
 dummy atom will not be factored into the free energy as it is assumed that 
 those contributions will perfectly cancel in the thermodynamic 
 cycle~\cite{doi:10.1021/acs.jcim.5b00057, doi:10.1021/jp994193s}.
 
-The single topology approach~\cite{doi:10.1021/j100056a020} requires a
-certain similarity between the two mutated states.
+The single topology approach~\cite{doi:10.1021/j100056a020} requires
+topological and structural similarity.
 %%JM a bit vague. you mean to be efficient, the method needs some topological 
 %%similarity?
-% HHL: see next sentence
-This means primarily topological and structural similarity but also chemical similarity is
-of importance e.g.\ chirality and binding modes where the relative
-three dimensional arrangement in space must be taken into account.
-Furthermore, ring breaking is technically
+But also chemical similarity is of importance e.g.\ chirality and binding modes 
+where the relative three dimensional arrangement in space must be taken into 
+account.  Furthermore, ring breaking is technically
 challenging~\cite{doi:10.1021/acs.jctc.6b00991} but it has also been
 shown that this can be done in certain 
 circumstances~\cite{doi:10.1021/acs.jcim.5b00057,
@@ -273,25 +271,22 @@ corresponds to an ideal gas molecule~\cite{doi:10.1021/jp981628n}.
 This, however, comes with additional complications as two independent
 molecules can drift apart and so suffer from the ``wandering'' ligand
 problem as in absolute transformations\cite{GILSON19971047,
-doi:10.1021/jp0217839, deng_computations_2009}.  Restraints between 
-corresponding atoms, emulating the single topology approach, can be used to 
-counter this without affecting the free energy~\cite{JCC:Axelsen-Li}.
-Topological similarity can also be exploited in the dual topology approach when 
-the charges of a common core are explicitly made equal, while the atoms are all 
-of the same type, and thus need to be present only 
-once~\cite{doi:10.1021/acs.jctc.5b00179}. This approach, however, shifts all 
-the chemistry exclusively into the dummy atoms and is thus of only limited use.
+doi:10.1021/jp0217839, deng_computations_2009}.  Technically, a dual topology 
+calculation is the same as two absolute calculations run simultaneously in 
+opposite directions.  It has been shown though that with the introduction of 
+special restraints or constraints this can be a viable 
+option~\cite{doi:10.1021/ct700081t,
+  rocklin_separated_2013, JCC:Axelsen-Li}.  Restraints between 
+corresponding atoms, thus emulating the single topology approach, can also be 
+used without affecting the free energy~\cite{JCC:Axelsen-Li}.  A recent 
+alternative~\cite{doi:10.1021/acs.jctc.5b00179} considered molecules with a
+common core where all atom types are the same and the corresponding atom 
+charges were made equal.  This means that the core does not need to be 
+duplicated.  But all the chemistry is now exclusively handled by the dummy 
+atoms such that this approach is of only limited use.
 %%JM I don't understand how this work in above sentence if all atoms are 
 %%duplicated.
 % HHL: fixed.
- 
-Technically, a dual topology calculation is the same as two absolute
-calculations run simultaneously in opposite directions.  It has been
-shown though that with the introduction of special restraints or
-constraints this can be a viable option~\cite{doi:10.1021/ct700081t,
-  rocklin_separated_2013, JCC:Axelsen-Li}.
-%%JM see also doi:10.1021/ct700081t
-% HHL: that one is right there already :-)
 A covalent link, e.g.\ as in side--chain
 mutation simulations, provides a natural restraint such that dual
 topology simulations can be applied without further problems.  Modern
@@ -842,7 +837,7 @@ deactivated for all bonds in the perturbed region in these protocols.
   backward transformation have been reverted to correspond to the forward 
   transformation.}\label{tab:amber-comp}
   \makebox[\textwidth][c]{
-  \begin{tabular}{llrrrr}
+  \begin{tabular}{llrrlrr}
     \toprule
     &                & implicit & explicit & absolute & SHAKE\footnote{implicit 
     dummy atom protocol with $\delta t =$ \SI{2}{fs} and SHAKE on all H--bonds 
@@ -864,9 +859,12 @@ toluene & methane & \num{3.24+-0.02} & \num{3.39+-0.02} &
 methane & toluene & \num{3.42+-0.03} & \num{3.52+-0.03} & & \\
 neopentane\footnote{\label{foot:cent}central mapping.} & methane & 0.32 $\pm$ 
 0.04 & \num{-0.03+-0.06} & \multirow{4}{*}{\num{-0.13+-0.02}} & 0.37 \\
-methane\footref{foot:cent} & neopentane & \num{0.25+-0.03} & \num{-0.07+-0.03} & & \\
-neopentane\footnote{\label{foot:term}terminal mapping.} & methane & \num{-0.13+-0.01} & \num{-0.12+-0.02} & & \\
-methane\footref{foot:term} & neopentane & \num{-0.13+-0.03} & \num{-0.12+-0.03} & & \\
+methane\footref{foot:cent} & neopentane & \num{0.25+-0.03} & \num{-0.07+-0.03} 
+& & \\
+neopentane\footnote{\label{foot:term}terminal mapping.} & methane & 
+\num{-0.13+-0.01} & \num{-0.12+-0.02} & & \\
+methane\footref{foot:term} & neopentane & \num{-0.13+-0.03} & \num{-0.12+-0.03} 
+& & \\
 2-methylfuran  & methane & \num{3.09+-0.01} & \num{3.10+-0.01} &
 \multirow{2}{*}{\num{2.96+-0.02}} \\
 methane & 2-methyfuran  & \num{3.10+-0.03} & \num{3.15+-0.03} & & \\
@@ -877,7 +875,8 @@ methane & 2-methylindole & \num{9.14+-0.02} & \num{9.13+-0.03} & \\
 only the charges of the appearing and the disappering 5--rings are switched.} & 
 7--cyclopentanylindole & \num{0.36+-0.03} & \num{0.63+-0.06} & 
 \multirow{2}{*}{\num{0.39+-0.04}} \\
-7--cyclopentanylindole\footref{foot:partial} & 2--cyclopentanylindole & \num{0.34+-0.05} & \num{0.50+-0.03} & & \\
+7--cyclopentanylindole\footref{foot:partial} & 2--cyclopentanylindole & 
+\num{0.34+-0.05} & \num{0.50+-0.03} & & \\
     \bottomrule
   \end{tabular}
 }
