@@ -131,9 +131,10 @@ atoms $i$ and $j$.
 
 The exponent $n$ is only used in the Coulomb softcore funtion of Sire.
 Gromacs allows additional exponents for $\lambda$ ($p = 1$ or $2$) and
-$w$ for the distance dependency with values of either $6$ or $48$.
-The Coulomb softcore parameter $\alpha_{\mathrm{Coul}}$ in Gromacs is
-the same as for the Lennard--Jones parameter $\alpha_{\mathrm{LJ}}$
+$w$ for the distance dependency with values of either $6$ or $48$.  AMBER 
+allows an exponent $p$ (namelist option \textsc{sceeorder}) for the Coulomb 
+softcore.  The Coulomb softcore parameter $\alpha_{\mathrm{Coul}}$ in Gromacs 
+is the same as for the Lennard--Jones parameter $\alpha_{\mathrm{LJ}}$
 unless the Coulomb softcore function is requested not to be used and thus 
 $\alpha_{\mathrm{Coul}} = 0$.  The
 CHARMM softcore function (PSSP) is applied to \emph{all} atoms in the
@@ -153,7 +154,8 @@ der Waals and Coulomb steps it must be ensured that charges of
 vanishing atoms are switched off before the vdW radius is scaled to
 zero.  This is to avoid that other atoms e.g.\ from solvent come in
 close contact to a charged atom without the associated excluded volume
-from the van der Walls term.
+from the van der Walls term as this could lead to large forces and 
+thus instabilities in the integrator.
 
 \begin{figure}[ht]
 \includegraphics[scale=1.0]{figures/dummies.pdf}
@@ -212,8 +214,8 @@ unless the charges of \emph{all} atoms are switched off.  Possible
 strategies would be to explicitly create topology files for each
 intermediate $\lambda$ state and distribute the diminished charges from
 the dummy atoms over to the non--dummy atoms.  MD software like CHARMM
-allows to do this through scripting although this would be just as
-extensive as scripting the aforementioned strategy.
+allows to do this through internal scripting although this would be just as
+extensive as external scripting the aforementioned strategy.
 
 \begin{figure}[ht]
 \includegraphics[scale=1.0]{figures/dummies2.pdf}
@@ -238,9 +240,9 @@ $\lambda$ vector for only a subset.  AMBER requires two such files
 with sander and three topology/two control files with pmemd for the
 three steps charge off, vdw on/off and charge on.  This is possible because
 with AMBER a subset of the perturbed group can be chosen to have zero
-charges (but AMBER does not have $\lambda$ vectors).  CHARMM has
-scripting facilities that let the user manipulate force field
-parameters of any arbitrary subset of the system such that
+charges (namelist option \textsc{crgmask}; but AMBER does not have $\lambda$ 
+vectors).  CHARMM has scripting facilities that let the user manipulate force 
+field parameters of any arbitrary subset of the system such that
 intermediate states can be defined ``on--the-fly'' with only one
 control script and one topology file.  The tool
 FESetup~\cite{loeffler_fesetup:_2015} automates most of these setup
