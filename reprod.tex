@@ -616,15 +616,17 @@ In the first two cases, each alchemical transformation was described by 31 and
 \SI{1.0}{fs} in water and a vacuum. Atomic masses were not changed along the 
 alchemical path;
 their change affect kinetic energy only and do not contribute to the free 
-energy change. 
+energy change on this case. 
 %%JM Sentence needed here? Applies to all codes. Be careful about when neglect 
 %%is ok, 
 %%only true in some conditions
+%% GDRM: Gromacs has the option to change atomic masses, though. 
 We used the Langevin integrator implemented in GROMACS with a 
 default friction coefficient of \SI{1.0}{ps/m_{atom}}. 
 Absolute hydration free energies were calculated using a protocol used in 
 previous works \cite{Mobley2014, doi:10.1021/acs.jced.7b00104}.
 %%JM: Elaborate a bit, especially regarding constraints
+%%GDRM: Sure
 A Parrinello--Rahman barostat with $\tau_p =$ \SI{10}{ps} and compressibility 
 equal to \SI{4.5d-5}{bar^{-1}}.
 We used two methods to calculate electrostatic interactions: Particle Mesh 
@@ -634,6 +636,7 @@ software.
 We set the non--bonded cutoff to \SI{10.0}{\angstrom}, with a switch 
 starting at \SI{9.0}{\angstrom}.  
 %%JM: switch applies to both RF and LJ ?
+%% LJ only. I'll clarify the text.
 PME calculations were of order 6 and had a 
 tolerance of \num{1.0d-6}, with a grid spacing of \SI{1.0}{\angstrom}. 
 All transformations required the use of softcore potentials to avoid numerical 
@@ -984,6 +987,7 @@ For instance, in split protocol simulations, these entries can be defined as the
 0.8, 0.85, 0.9, 0.95, 1.0}); if the 
 % HHL: this is too much information, we will bundle up a set of input files
 % JM: Summarises the number of windows used this gives us an idea of efficiency
+% GDRM: Sure
 transformation involves particle deletion ("forward process"), \inpopt{fep}\_\inpopt{lambdas} must correspond to 
 the first set, while \inpopt{vdw}\_\inpopt{lambdas} to the second. If the process involves particle insertion ("backward 
 process") we swap the sets between the entries. In this work, \inpopt{mass}\_\inpopt{lambdas} was specified as
