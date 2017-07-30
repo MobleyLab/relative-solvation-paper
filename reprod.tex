@@ -616,24 +616,30 @@ In the first two cases, each alchemical transformation was described by 31 and
 \SI{1.0}{fs} in water and a vacuum. Atomic masses were not changed along the 
 alchemical path;
 their change affect kinetic energy only and do not contribute to the free 
-energy change. 
+energy change on this case. 
 %%JM Sentence needed here? Applies to all codes. Be careful about when neglect 
 %%is ok, 
 %%only true in some conditions
+%% GDRM: Did everyone chose not to change atomic masses along the alchemical path?
+%% If it is the case this sentence could very well be removed.
 We used the Langevin integrator implemented in GROMACS with a 
 default friction coefficient of \SI{1.0}{ps/m_{atom}}. 
-Absolute hydration free energies were calculated using a protocol used in 
-previous works \cite{Mobley2014, doi:10.1021/acs.jced.7b00104}.
+Absolute hydration free energies were calculated from \SI{5}{ns} Langevin dynamics
+at \SI{298.15}{K}. We used the 20-step alchemical protocol where charge coupling and
+van der Waals coupling were dealt with separately along the path \cite{Mobley2014, doi:10.1021/acs.jced.7b00104}.
 %%JM: Elaborate a bit, especially regarding constraints
+%%GDRM: Which sort of constraints do you think I should mention here?
+%% From my mind I can't think of anything worth mentioning.
 A Parrinello--Rahman barostat with $\tau_p =$ \SI{10}{ps} and compressibility 
 equal to \SI{4.5d-5}{bar^{-1}}.
 We used two methods to calculate electrostatic interactions: Particle Mesh 
-Ewald (PME) and Reaction Field with a dielectric of 78.3, as implemented in the 
-software. 
+Ewald (PME) and charge group-based Reaction Field with a dielectric of 78.3, 
+as implemented in the software. 
 %%JM : Please clarify if using an atom based or group based reaction field
-We set the non--bonded cutoff to \SI{10.0}{\angstrom}, with a switch 
-starting at \SI{9.0}{\angstrom}.  
+We set the electrostatic and non--bonded cutoffs to \SI{10.0}{\angstrom};
+a switch was applied to the latter starting at \SI{9.0}{\angstrom}. 
 %%JM: switch applies to both RF and LJ ?
+%% GDRM: LJ only. I'll clarify the text.
 PME calculations were of order 6 and had a 
 tolerance of \num{1.0d-6}, with a grid spacing of \SI{1.0}{\angstrom}. 
 All transformations required the use of softcore potentials to avoid numerical 
@@ -990,6 +996,7 @@ process") we swap the sets between the entries. In this work, \inpopt{mass}\_\in
 a set of 31 zeros. Unified protocols have all \inpopt{-lambdas} entries equal to the set (\inpopt{0.0, 0.05, 
 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0}).
 % HHL: also mass-lambdas?
+% GDRM: I don't understand the question. I 
 
 
 % HHL: most of the following is the same for all codes and should be discussed 
@@ -1017,10 +1024,16 @@ require electrostatic terms to be turned off before van de Waals and bonded para
 Insertion processes, in their turn, demand bonded and van der Waals parameters to be changed before charges are turned on.
 The relative free energies of processes $A \rightarrow B$ and $B \rightarrow A$ tend to be equivalent if the protocol of the former
 is the reverse of the latter, i.e., both end states should be connected by the same path in $\lambda$-space. 
-%JM: Do you have a way to control the strength of softening of Coul and LJ in Gromacs? 
+%JM: Do you have a way to control the strength of softening of Coul and LJ in Gromacs?
 % Does the soft-core apply to ALL atoms, or only atoms that are dummies in one end-state?
 % We must delve in differences with the SOMD softcore for the discussions section.
 
+% GDRM: What do you mean by "control the strength of softening ..."? 
+%     The user is given the opportunity to choose if he/she wants to use
+%     soft-core potentials and to choose its parameters (power, alpha and sigma).
+%     Regarding sc potentials, I'm inclined to say they are applied to all atoms, but
+%     I'm not sure about it. I've checked the documentation and it is not clear as well.
+%     Perhaps I should check the code; I'll have this answered in a future pull request.
 
 % HHL: this is also in the SI
 % GDRM: But here I tried to explain the specificities of what I did.
@@ -1111,6 +1124,10 @@ relative free energy calculations.
 %      should not have any effect in vacuum, so does this come from the
 %      solution simulation only?  When a split protocol is used there is
 %      no need to use a Coulomb softcore. Please clarify.
+
+% GDRM: Yes, it comes from solution only. In vacuum there is virtually no difference between 
+%     these cases. I ran a split + sc simulation to understand why methanol~methane and 
+%     ethane~methanol ddG values differ so much between the unified and split protocol.
 
 Neopentane $\rightarrow$ methane transformations, and their reverse processes 
 also disagree with the absolute protocol, but similar differences can be seen in AMBER.
