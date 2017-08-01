@@ -282,8 +282,8 @@ used without affecting the free energy~\cite{JCC:Axelsen-Li}.  A recent
 alternative~\cite{doi:10.1021/acs.jctc.5b00179} considered molecules with a
 common core where all atom types are the same and the corresponding atom 
 charges were made equal.  This means that the core does not need to be 
-duplicated.  But all the chemistry is now exclusively handled by the dummy 
-atoms such that this approach is of only limited use.
+duplicated.  But all the chemistry is now exclusively handled by, possibly, 
+just a few non--core atoms such that this approach may only be of limited use.
 %%JM I don't understand how this work in above sentence if all atoms are 
 %%duplicated.
 % HHL: fixed.
@@ -364,9 +364,9 @@ development.
 We begin by working out the differences in the alchemical free energy
 implementations of the four MD codes AMBER, CHARMM, GROMACS and
 SOMD.  One key difference is in the softcore
-functions~\cite{beutler_avoiding_1994, zacharias_separationshifted_1994} used 
-in each code as summarised in section~\ref{S-sec:softcores} of the SI.  
-Softcore functions are used to avoid numerical and thus
+functions~\cite{beutler_avoiding_1994, zacharias_separationshifted_1994} 
+implemented in each code as summarised in section~\ref{S-sec:softcores}x of the 
+SI.  Softcore functions are used to avoid numerical and thus
 stability problems of the conventional van der Waals and Coulombic
 potentials~\cite{steinbrecher_nonlinear_2007} as they have
 singularities at zero distance (vertical asymptotes).  Direct scaling
@@ -375,7 +375,8 @@ hard--sphere potentials as $\lambda\rightarrow 0$.  This implies a
 higher probability of other atoms to penetrate into the highly
 repulsive short--range portion of the potential which can lead to
 strongly fluctuating forces/energies and to severe instabilities in
-the integrator, as well as analysis problems even when simulations do terminate 
+the integrator, as well as problems with analysis even when simulations do 
+terminate 
 normally~\cite{beutler_avoiding_1994, zacharias_separationshifted_1994, 
 steinbrecher_nonlinear_2007}.
 
@@ -404,7 +405,7 @@ are energy--scaled.
 % HHL: pmemd scales individual energy terms. fixed.
 The code allows, however, mapping of atoms in a
 single topology fashion and computes these non--softcore atoms 
-by linear scaling the energy and forces for each atom in the pair.
+by linearly scaling the energy and forces for each atom in the pair.
 %%JM atoms that are mapped cannot use a softcore potential? 
 % HHL: yes
 The perturbed group must be entirely duplicated i.e.\ for \progname{sander} 
@@ -422,12 +423,13 @@ careful construction of topologies by keeping force field parameters that are
 not being modified constant along $\lambda$.
 
 \paragraph{CHARMM} The PERT module duplicates the topology similar to
-\progname{sander} but mapped atoms are given oin the topology nly once.
+\progname{sander} but mapped atoms are given in the topology only once.
 %DLM: Can we provide sample files for all of these in SI, and maybe even give 
 %topology snippets in figure(s) to illustrate the point? 
 The module requires balancing with explicit dummy atoms.  All terms are
 energy--scaled.  The PSSP softcore potential is applied to \emph{all}
-atoms in the perturbed group (see section~\ref{S-sec:softcores} in the SI).  The 
+atoms in the perturbed group (see section~\ref{S-sec:softcores}x in the SI).  
+The 
 code can handle constraints of changing bond lengths in the perturbed group but this
 may cause incorrect results with PSSP softcores (Stefan Boresch, private
 communication).  There is only one global $\lambda$ for parameter
@@ -572,12 +574,13 @@ In such a protocol the charges are transformed
 linearly between the end states followed by a mutation of the van der
 Waals parameters using a softcore
 potential~\cite{beutler_avoiding_1994,
-  zacharias_separationshifted_1994} (see section~\ref{S-sec:softcores} in the SI for details) on the vdW
+  zacharias_separationshifted_1994} (see section~\ref{S-sec:softcores}x in the 
+  SI for details) on the vdW
 term only.  It is important to note that in the separated protocol
 charges have to be switched off before vdW parameters (and vice versa
 for the transformation in opposite direction) to avoid collapse of
 other atoms, e.g. solvents, onto a ``naked'' charge, see 
-section~\ref{S-sec:separated} in the SI.
+section~\ref{S-sec:separated}x in the SI.
 %DLM: I think there is a literature reference on the need to do this; asking Guilherme for it as I don't recall it off the top of my head.
 
 All simulations were started from the simulation box which has been 
@@ -613,7 +616,7 @@ approach in which bonded, van der Waals, and electrostatic terms are changed
 together;  and (iii) via the difference between two absolute calculations.
 In the first two cases, each alchemical transformation was described by 31 and 
 16 states, respectively, and simulated for \SI{4.2}{ns} with time steps of 
-\SI{1.0}{fs} in water and a vacuum. Atomic masses were not changed along the 
+\SI{1.0}{fs} in water and vacuum. Atomic masses were not changed along the 
 alchemical path;
 their change affect kinetic energy only and do not contribute to the free 
 energy change on this case. 
@@ -657,7 +660,9 @@ both in water and in vacuum. A velocity-Verlet integrator was
 employed with a \SI{2}{fs} time step, constraining only those hydrogen bonds
 which are not alchemically transformed.  This approach will be called 
 ``unperturbed H protocol''. The softcore parameters were set to default 
-values of n=0 and delta=2.0 for all transformations.~\cite{doi:10.1021/ct700081t}
+values of $n = 0$ and $\delta = 2.0$ for all
+% HHL: what is n, what is delta?
+transformations.~\cite{doi:10.1021/ct700081t}
 % HHL: maybe discuss this earlier in the non-code specific section?
 A shifted atom--based Barker--Watts reaction field~\cite{doi:10.1080/00268977300102101} with
 a dielectric constant of \num{78.3} was adopted for the solution phase
@@ -670,8 +675,8 @@ The reaction field was not employed in the vacuum legs, where a Coulombic potent
 cutoff was used.  This leads to an inconsistent description of the 
 intramolecular electrostatic interactions of the solute in the solvated and 
 vacuum phases.   To maintain a consistent description of intramolecular energetics across vacuum and water legs,
-a free energy correction term $G_{\mathrm{c}}$ was  evaluated ( fig.~\ref{fig:thermocycle}) as detailed in Ref.~\citenum{Bosisio2016}). 
-The
+a free energy correction term $G_{\mathrm{c}}$ was  evaluated as detailed in 
+Ref.~\citenum{Bosisio2016}).  The
 $G_{\mathrm{c}}$ term was obtained via post-processing of the end state 
 trajectories of each water phase simulation, using the Zwanzig 
 relationship~\cite{zwanzig_high-temperature_1954}:
@@ -689,7 +694,8 @@ computed in the simulation with the shifted atom-based Barker-Watts Reaction Fie
 
 To compute absolute free energy of hydration a double annihilation technique~\cite{jorgensen1988efficient,GILSON19971047,Bosisio2016}
 was adopted. 
-Initially the solute atoms'partial charges are turned off both in water and in vacuum, discharging step, giving a discharging
+Initially the solute atoms' partial charges are turned off both in water and in 
+vacuum, discharging step, giving a discharging
 free energy change $\Delta G_\mathrm{solv}^\mathrm{elec}$ and $\Delta G_\mathrm{vac}^\mathrm{elec}$ respectively. Secondly,
 the molecule is fully decoupled from the surrounding environment by switching off the van der Waals terms, vanishing step, retrieving a $\Delta G_\mathrm{solv}^\mathrm{vdW}$ in water phase and $\Delta G_\mathrm{vac}^\mathrm{vdW}$ in vacuum. 
 Eventually, the absolute free energy of hydration $\Delta G$ can be computed as:
@@ -728,7 +734,7 @@ BAR is a generalization of EXP by making explicit use of the
 ($\lambda_{i+1} \rightarrow \lambda_i$) estimates.  Later it was
 demonstrated that this can be effectively extended to incorporate all
 other $\lambda$s.  This approach has been called multi--state BAR
-(MBAR)~\cite{shirts_statistically_2008-1} method.  MBAR has been shown
+(MBAR)~\cite{shirts_statistically_2008-1}.  MBAR has been shown
 to have the lowest variance of any known
 estimator~\cite{shirts_statistically_2008}.
 %JM I don't think we need all of this at this stage of the paper, go straight to
