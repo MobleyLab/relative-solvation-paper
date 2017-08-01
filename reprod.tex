@@ -802,6 +802,89 @@ contributions.
 %% Then we can move on to relative hydration free energy calculation 
 %% results per code. 
 
+Here, we choose absolute hydration free energies as our standard point of 
+comparison 
+because these are easily calculated with considerable precision 
+\cite{doi:10.1021/acs.jced.7b00104} %check for more references 
+and are considerably simpler to set up and implement than relative calculations.
+Prior work actually compared calculated absolute hydration free energies across 
+different codes with 
+considerable success \cite{klimovich_predicting_2010} (see Fig 7 in reference), 
+further supporting this view.
+%JM above redundant
+Thus, we compared relative free energies calculated via simultaneous parameter 
+change simulations -- our ``unified protocol'' -- 
+and separated parameter change simulations -- our ``split protocol''-- to 
+relative free energy 
+calculations obtained from two absolute hydration free energies -- our 
+``absolute protocol''.
+The unified protocol changes partial charges, van der Waals parameters, and 
+bond 
+parameters simultaneously along the alchemical path, while the split protocol 
+stages the transformation in a van der Waals parameter change followed by a 
+simultaneous  
+bonded terms and charges modifications, or vice-versa. In the framework 
+of the split routine, windows without a reasonably strong counterbalancing 
+Lennard-Jones 
+component are subject to very large electrostatic forces that will often lead 
+to simulations
+which crash with standard protocols~\cite{pitera_comparison_2002, 
+anwar_robust_2005}. % HHL: see also discussion in SI
+Thus we find that for stable and effective relative free energy calculations, 
+particle deletion processes
+require electrostatic terms to be turned off before van de Waals and bonded 
+parameters are removed/modified. 
+Insertion processes, in their turn, demand bonded and van der Waals parameters 
+to be changed before charges are turned on.
+The relative free energies of processes $A \rightarrow B$ and $B \rightarrow A$ 
+tend to be equivalent if the protocol of the former
+is the reverse of the latter, i.e., both end states should be connected by the 
+same path in $\lambda$-space. 
+%JM: Do you have a way to control the strength of softening of Coul and LJ in 
+%Gromacs?
+% Does the soft-core apply to ALL atoms, or only atoms that are dummies in one 
+%end-state?
+% We must delve in differences with the SOMD softcore for the discussions 
+%section.
+
+% GDRM: What do you mean by "control the strength of softening ..."? 
+%     The user is given the opportunity to choose if he/she wants to use
+%     soft-core potentials and to choose its parameters (power, alpha and 
+%sigma).
+%     Regarding sc potentials, I'm inclined to say they are applied to all 
+%atoms, but
+%     I'm not sure about it. I've checked the documentation and it is not clear 
+%as well.
+%     Perhaps I should check the code; I'll have this answered in a future pull 
+%request.
+% HHL: IIRC Michael Shirts said that LJ softcores are applied when the 
+%      LJ parameter(s) (don't recall which) are zer0
+
+% HHL: this is also in the SI
+% GDRM: But here I tried to explain the specificities of what I did.
+% HHL: I do not see anything specific here.  I have done the same with AMBER
+%      just like the other groups.
+Transformations having simultaneous particle insertion or deletion, such as 
+2--cyclopentanylindole $\rightarrow$ 7--cyclopentanylindole and its reverse, 
+require 
+an adapted split protocol. The simulation is divided into two stages: a 
+deletion stage, 
+in which part of the molecule is transformed into dummy atoms, and an insertion 
+stage, 
+in which dummy atoms which were initially present are transformed into an 
+interacting part of the molecule. Each stage requires its own alchemical free 
+energy calculation and
+they differ from the aforementioned deletion and insertion protocols in such a 
+way
+that we first turned off the charges on atoms being deleted, then modified the 
+bonded 
+and van der Waals terms, then turned back on the charges on any atoms which 
+were 
+being inserted. This modification allows a smaller insertion stage of 16 
+windows 
+in which only charges and bonded terms of the new molecular part are modified.
+
+
 \subsection{AMBER}
 \label{sec:amber-results}
 
@@ -1012,62 +1095,6 @@ a set of 31 zeros. Unified protocols have all \inpopt{-lambdas} entries equal to
 % GDRM: I don't understand the question. I
 % HHL: What did you do with the mass-lambdas, see discussion above
 
-
-% HHL: most of the following is the same for all codes and should be discussed 
-%in a 'code-agnostic' section
-
-Here, we choose absolute hydration free energies as our standard point of comparison 
-because these are easily calculated with considerable precision 
-\cite{doi:10.1021/acs.jced.7b00104} %check for more references 
-and are considerably simpler to set up and implement than relative calculations.
-Prior work actually compared calculated absolute hydration free energies across different codes with 
-considerable success \cite{klimovich_predicting_2010} (see Fig 7 in reference), further supporting this view.
-%JM above redundant
-Thus, we compared relative free energies calculated via simultaneous parameter change simulations -- our ``unified protocol'' -- 
-and separated parameter change simulations -- our ``split protocol''-- to relative free energy 
-calculations obtained from two absolute hydration free energies -- our ``absolute protocol''.
-The unified protocol changes partial charges, van der Waals parameters, and bond 
-parameters simultaneously along the alchemical path, while the split protocol 
-stages the transformation in a van der Waals parameter change followed by a simultaneous  
-bonded terms and charges modifications, or vice-versa. In the framework 
-of the split routine, windows without a reasonably strong counterbalancing Lennard-Jones 
-component are subject to very large electrostatic forces that will often lead to simulations
-which crash with standard protocols~\cite{pitera_comparison_2002, anwar_robust_2005}. % HHL: see also discussion in SI
-Thus we find that for stable and effective relative free energy calculations, particle deletion processes
-require electrostatic terms to be turned off before van de Waals and bonded parameters are removed/modified. 
-Insertion processes, in their turn, demand bonded and van der Waals parameters to be changed before charges are turned on.
-The relative free energies of processes $A \rightarrow B$ and $B \rightarrow A$ tend to be equivalent if the protocol of the former
-is the reverse of the latter, i.e., both end states should be connected by the same path in $\lambda$-space. 
-%JM: Do you have a way to control the strength of softening of Coul and LJ in Gromacs?
-% Does the soft-core apply to ALL atoms, or only atoms that are dummies in one end-state?
-% We must delve in differences with the SOMD softcore for the discussions section.
-
-% GDRM: What do you mean by "control the strength of softening ..."? 
-%     The user is given the opportunity to choose if he/she wants to use
-%     soft-core potentials and to choose its parameters (power, alpha and sigma).
-%     Regarding sc potentials, I'm inclined to say they are applied to all atoms, but
-%     I'm not sure about it. I've checked the documentation and it is not clear as well.
-%     Perhaps I should check the code; I'll have this answered in a future pull 
-%request.
-% HHL: IIRC Michael Shirts said that LJ softcores are applied when the 
-%      LJ parameter(s) (don't recall which) are zer0
-
-% HHL: this is also in the SI
-% GDRM: But here I tried to explain the specificities of what I did.
-% HHL: I do not see anything specific here.  I have done the same with AMBER
-%      just like the other groups.
-Transformations having simultaneous particle insertion or deletion, such as 
-2--cyclopentanylindole $\rightarrow$ 7--cyclopentanylindole and its reverse, require 
-an adapted split protocol. The simulation is divided into two stages: a deletion stage, 
-in which part of the molecule is transformed into dummy atoms, and an insertion stage, 
-in which dummy atoms which were initially present are transformed into an 
-interacting part of the molecule. Each stage requires its own alchemical free energy calculation and
-they differ from the aforementioned deletion and insertion protocols in such a way
-that we first turned off the charges on atoms being deleted, then modified the bonded 
-and van der Waals terms, then turned back on the charges on any atoms which were 
-being inserted. This modification allows a smaller insertion stage of 16 windows 
-in which only charges and bonded terms of the new molecular part are modified.
-
 \todo{make a figure illustrating the idea of the previous paragraph} 
 
 Table \ref{tab:groresults} lists the relative free energies obtained from 
@@ -1162,14 +1189,19 @@ Successful simulations seem to require turning off the constraint and decreasing
 \subsection{SOMD}
 \label{sec:somd-results}
 
-Fig.~\ref{S-fig:sire_histogram} compares relative free energy of hydration $\Delta\Delta G$ according to the 'unperturbed H bond' protocol, with relative $\Delta \Delta G$ obtained from two absolute free energy calculations. Table ~\ref{tab:sire-table} summarizes all the computed relative free energy of hydration for the dataset in fig.~\ref{fig:cycles}.
+Fig.~\ref{S-fig:sire_histogram}x compares relative free energy of hydration 
+$\Delta\Delta G$ according to the 'unperturbed H bond' protocol, with relative 
+$\Delta \Delta G$ obtained from two absolute free energy calculations. 
+Table~\ref{tab:sire-table} summarizes all the computed relative free energy of 
+hydration for the dataset in Fig.~\ref{fig:cycles}.
 A very good agreement is observed between both methodologies 
 ($R^2$=\SI{0.99+-0.01}{} and 
 MAD=\SI{0.10+-0.03}{kcal.mol^{-1}}), highlighting internal consistency within 
 SOMD.
 \begin{equation}
  \label{eq:MUE}
- MUE = \frac{1}{N}\sum_\mathrm{i=1}^N \left | \Delta\Delta G^\mathrm{rel}_\mathrm{i} - \Delta\Delta G^\mathrm{abs}_\mathrm{i} \right |
+ \mathrm{MUE} = \frac{1}{N}\sum_\mathrm{i=1}^N \left | \Delta\Delta 
+ G^\mathrm{rel}_\mathrm{i} - \Delta\Delta G^\mathrm{abs}_\mathrm{i} \right |
 \end{equation}
 where $N$ is the number of samples, $\Delta\Delta G^\mathrm{rel}_\mathrm{i}$ is the $i$-th relative free energy of hydration and  $\Delta G^\mathrm{abs}_\mathrm{i}$ the $i$-th relative free energy from absolute free energy simulations.
 % HHL: MUE not defined (is this the same as MAE/MAD?)
@@ -1193,14 +1225,14 @@ This is apparent from the comparison with the absolute hydration free energy cal
 Additionally, the protocol yields relative hydration free energy extremely similar
 (MAD = \SI{0.09}{kcal.mol^{-1}}) to those computed from simulations where no
 constraints are applied on the solutes and a timestep of \SI{1}{fs} is
-used (Figure~\ref{S-fig:sire_constraints}).
+used (Figure~\ref{S-fig:sire_constraints}x).
 
 By contrast, a protocol that constrain all bonds in a solute leads to significant
 differences with the absolute hydration free energies. For instance 
 neopentane $\rightarrow$ methane (centrally mapped) gives a RAFE
 $\Delta\Delta G$=\SI{2.04 +- 0.01}{kcal.mol^{-1}}  whereas the absolute hydration free
 energy calculations give $\Delta\Delta G$=\SI{-0.19+-0.06}{kcal.mol^{-1}} as shown in 
-tab.~\ref{S-tab:sire_constraints} and fig.~\ref{S-fig:sire_constraints}.
+tab.~\ref{S-tab:sire_constraints}x and fig.~\ref{S-fig:sire_constraints}x.
 
 This discrepancy occurs because in the SOMD implementation, the energies of 
 constrained bonds are not evaluated, but the calculation of the energies of the 
