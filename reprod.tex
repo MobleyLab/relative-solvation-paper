@@ -161,6 +161,7 @@ a large biomolecule may involve many degrees of freedom while, at the
 same time, it is generally unclear along which coordinates a
 translocation simulation should take place.
 %%JM confusing to talk about reaction coordinates, rewrite given above comment.
+% HHL: still thinking about this
 
 Alchemical free energy simulations rely on the concept of thermodynamic cycles~\cite{Tembe1984281}.
 As the free energy is a state function, the sum of free energy changes
@@ -187,7 +188,7 @@ efficient alchemical calculation.
     Ref.~\citenum{doi:10.1021/acs.jced.7b00104}.}
 %%JM no the absolute alchemical free energy simulation is NOT a simulation of
 %%the physical process
-% HHK: fixed
+% HHL: fixed
   \label{fig:thermocycle}
 \end{figure}
 
@@ -253,6 +254,7 @@ The single topology approach~\cite{doi:10.1021/j100056a020} requires
 topological and structural similarity.
 %%JM a bit vague. you mean to be efficient, the method needs some topological 
 %%similarity?
+% HHL: yes, it is about topological similarity
 But also chemical similarity is of importance e.g.\ chirality and binding modes 
 where the relative three dimensional arrangement in space must be taken into 
 account.  Furthermore, ring breaking is technically
@@ -824,18 +826,23 @@ has obvious implications for performance~\cite{doi:10.1021/ct400340s}.
 
 We also found that, in contrast to the other three codes, AMBER cannot
 correctly reproduce relative free energies in a 1--step protocol i.e.\
-when all force field parameters are scaled simultaneously (see Table~\ref{S-tab:amber-onestep}).  This appears to be a problem when more than a few dummy atoms are involved while the 1--step protocol works for the smaller transformations (refer to Figure~\ref{fig:cycles}).  The separated RAFE protocol and absolute free energies, however, are very close to the other MD packages as demonstrated in Table~\ref{tab:amber-comp}.
+when all force field parameters are scaled simultaneously (see 
+Table~\ref{S-tab:amber-onestep}x).  This appears to be a problem when more than 
+a few dummy atoms are involved while the 1--step protocol works for the smaller 
+transformations (refer to Figure~\ref{fig:cycles}).  The separated RAFE 
+protocol and absolute free energies, however, are very close to the other MD 
+packages as demonstrated in Table~\ref{tab:amber-comp}.
 
 End point geometries appear to be another issue with AMBER simulations
 in both solution and vacuum.  This is most obvious in the neopentane 
 $\rightarrow$ methane test case with central mapping (see 
 \nameref{sec:rafe_setup} and Figure~\ref{fig:thermocycle}).
-As shown in Figure~\ref{S-fig:amber-dist} the methane endstate exhibits 
-incorrect distances (which are too long) between the carbon and the four 
+As shown in Figure~\ref{S-fig:amber-dist}x, the methane endstate exhibits 
+incorrect distances between the carbon and the four 
 attached hydrogens of approximately \SI{1.23}{\angstrom}.  This value is about 
 \SI{1.12}{\angstrom} for the terminal dummy atoms in the other test cases but 
 still higher than the expected \SI{1.09}{\angstrom} on average.  
-Figure~\ref{S-fig:amber-dist} demonstrates how this depends on the number of 
+Figure~\ref{S-fig:amber-dist}x demonstrates how this depends on the number of 
 dummy atoms immediately surrounding the central atom.
 %DLM: I think we need error bars on the values otherwise it's impossible to 
 %tell if the difference is significant.
@@ -876,8 +883,8 @@ methanol & ethane & \num{-6.20+-0.01} & \num{-6.25+-0.01} & & \\
 toluene & methane & \num{3.24+-0.02} & \num{3.39+-0.02} &
 \multirow{2}{*}{\num{3.19+-0.01}} & 3.29 \\
 methane & toluene & \num{3.42+-0.03} & \num{3.52+-0.03} & & \\
-neopentane\footnote{\label{foot:cent}central mapping.} & methane & 0.32 $\pm$ 
-0.04 & \num{-0.03+-0.06} & \multirow{4}{*}{\num{-0.13+-0.02}} & 0.37 \\
+neopentane\footnote{\label{foot:cent}central mapping.} & methane & \num{0.32 
++-0.04} & \num{-0.03+-0.06} & \multirow{4}{*}{\num{-0.13+-0.02}} & 0.37 \\
 methane\footref{foot:cent} & neopentane & \num{0.25+-0.03} & \num{-0.07+-0.03} 
 & & \\
 neopentane\footnote{\label{foot:term}terminal mapping.} & methane & 
@@ -917,10 +924,10 @@ practical point of view,
 %JM: You could explicitly state that this protocol was tested in response to 
 % the feedback from the SOMD calculations, we can spin this then as a benefit 
 % of having developers talk to each other :-) 
-AMBER uses an atom based mask for bond SHAKEs such that the mask must be set 
-for the hydrogens in question while the same is not possible for their non--H
-counter--part in the other state because \emph{all} bonds emanating from this 
-atom would be affected.
+AMBER uses an \emph{atom} based mask for bond SHAKEs such that the mask must be 
+set for the hydrogens in question while the same is not possible for their 
+non--H counter--part in the other state because \emph{all} bonds emanating from 
+this atom would be affected.
 
 We can also compute the cycle closure error from Table~\ref{tab:amber-comp} for the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane $\rightarrow$ ethane (see Figure~\ref{fig:cycles}).  The free energy difference within a closed thermodynamic cycle must necessarily be zero.
 %%JM sentence not necessary?
