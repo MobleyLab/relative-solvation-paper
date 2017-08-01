@@ -802,87 +802,54 @@ contributions.
 %% Then we can move on to relative hydration free energy calculation 
 %% results per code. 
 
-Here, we choose absolute hydration free energies as our standard point of 
-comparison 
-because these are easily calculated with considerable precision 
-\cite{doi:10.1021/acs.jced.7b00104} %check for more references 
+Absolute hydration free energies are our standard point of comparison 
+because these are easily calculated with considerable precision
+\cite{doi:10.1021/acs.jced.7b00104} %check for more references
 and are considerably simpler to set up and implement than relative calculations.
 Prior work actually compared calculated absolute hydration free energies across 
-different codes with 
-considerable success \cite{klimovich_predicting_2010} (see Fig 7 in reference), 
-further supporting this view.
-%JM above redundant
-Thus, we compared relative free energies calculated via simultaneous parameter 
-change simulations -- our ``unified protocol'' -- 
-and separated parameter change simulations -- our ``split protocol''-- to 
-relative free energy 
+different codes with considerable success~\cite{klimovich_predicting_2010} (see 
+Fig.~7 in the reference), further supporting this view.
+
+Thus, we compare relative free energies calculated via simultaneous parameter 
+change simulations --- our ``unified protocol'' --- and separated parameter 
+change simulations --- our ``split protocol''--- to relative free energy 
 calculations obtained from two absolute hydration free energies -- our 
 ``absolute protocol''.
+% HHL: is the absolute protocol a unified or a split protocol?  For AMBER (and 
+%      SOMD?) it is a unified protocol
 The unified protocol changes partial charges, van der Waals parameters, and 
-bond 
-parameters simultaneously along the alchemical path, while the split protocol 
-stages the transformation in a van der Waals parameter change followed by a 
-simultaneous  
-bonded terms and charges modifications, or vice-versa. In the framework 
-of the split routine, windows without a reasonably strong counterbalancing 
-Lennard-Jones 
-component are subject to very large electrostatic forces that will often lead 
-to simulations
-which crash with standard protocols~\cite{pitera_comparison_2002, 
-anwar_robust_2005}. % HHL: see also discussion in SI
-Thus we find that for stable and effective relative free energy calculations, 
-particle deletion processes
-require electrostatic terms to be turned off before van de Waals and bonded 
-parameters are removed/modified. 
-Insertion processes, in their turn, demand bonded and van der Waals parameters 
-to be changed before charges are turned on.
-The relative free energies of processes $A \rightarrow B$ and $B \rightarrow A$ 
-tend to be equivalent if the protocol of the former
-is the reverse of the latter, i.e., both end states should be connected by the 
-same path in $\lambda$-space. 
-%JM: Do you have a way to control the strength of softening of Coul and LJ in 
-%Gromacs?
-% Does the soft-core apply to ALL atoms, or only atoms that are dummies in one 
-%end-state?
-% We must delve in differences with the SOMD softcore for the discussions 
-%section.
+bond parameters simultaneously along the alchemical path, while the split 
+protocol separates the transformation of the van der Waals parameters from the 
+charge transformation.  The order in which this has to be done is detailled 
+in section~\ref{S-sec:separated} of the SI.  The scaling of the bonded terms 
+can be combined with either transformation.
 
-% GDRM: What do you mean by "control the strength of softening ..."? 
-%     The user is given the opportunity to choose if he/she wants to use
-%     soft-core potentials and to choose its parameters (power, alpha and 
-%sigma).
-%     Regarding sc potentials, I'm inclined to say they are applied to all 
-%atoms, but
-%     I'm not sure about it. I've checked the documentation and it is not clear 
-%as well.
-%     Perhaps I should check the code; I'll have this answered in a future pull 
-%request.
-% HHL: IIRC Michael Shirts said that LJ softcores are applied when the 
-%      LJ parameter(s) (don't recall which) are zer0
+Table~\ref{tab:absolute} summarizes results for relative free energies of 
+hydration obtained from absolute transformations.
 
-% HHL: this is also in the SI
-% GDRM: But here I tried to explain the specificities of what I did.
-% HHL: I do not see anything specific here.  I have done the same with AMBER
-%      just like the other groups.
-Transformations having simultaneous particle insertion or deletion, such as 
-2--cyclopentanylindole $\rightarrow$ 7--cyclopentanylindole and its reverse, 
-require 
-an adapted split protocol. The simulation is divided into two stages: a 
-deletion stage, 
-in which part of the molecule is transformed into dummy atoms, and an insertion 
-stage, 
-in which dummy atoms which were initially present are transformed into an 
-interacting part of the molecule. Each stage requires its own alchemical free 
-energy calculation and
-they differ from the aforementioned deletion and insertion protocols in such a 
-way
-that we first turned off the charges on atoms being deleted, then modified the 
-bonded 
-and van der Waals terms, then turned back on the charges on any atoms which 
-were 
-being inserted. This modification allows a smaller insertion stage of 16 
-windows 
-in which only charges and bonded terms of the new molecular part are modified.
+\begin{table}[]
+  \begin{minipage}{\linewidth}
+    \caption{Comparing free energies of hydration for various MD packages as 
+    obtained from absolute transformations.}\label{tab:absolute}
+    \makebox[\textwidth][c]{
+      \begin{tabular}{llrrrr}
+        \toprule
+        \multicolumn{2}{l}{transformation} & AMBER & CHARMM & GROMACS & SOMD 
+        \\
+        \midrule
+        ethane & methane & \num{-0.02+-0.01} & & & \\
+        methanol & methane & \num{6.20+-0.01} & & & \\
+        ethane  & methanol & \num{-6.22+-0.01} & & & \\
+        toluene & methane & \num{3.19+-0.01} & & & \\
+        neopentane & methane & \num{-0.13+-0.02} & & & \\
+        2-methylfuran & methane & \num{2.96+-0.02} & & & \\
+        2-methylindole & methane & \num{8.72+-0.01} & & & \\
+        2--cyclopentanylindole & methane & \num{0.39+-0.04} & & & \\
+        \bottomrule
+      \end{tabular}
+    }
+  \end{minipage}
+\end{table}
 
 
 \subsection{AMBER}
@@ -1095,7 +1062,26 @@ a set of 31 zeros. Unified protocols have all \inpopt{-lambdas} entries equal to
 % GDRM: I don't understand the question. I
 % HHL: What did you do with the mass-lambdas, see discussion above
 
-\todo{make a figure illustrating the idea of the previous paragraph} 
+
+%JM: Do you have a way to control the strength of softening of Coul and LJ in 
+%Gromacs?
+% Does the soft-core apply to ALL atoms, or only atoms that are dummies in one 
+%end-state?
+% We must delve in differences with the SOMD softcore for the discussions 
+%section.
+
+% GDRM: What do you mean by "control the strength of softening ..."? 
+%     The user is given the opportunity to choose if he/she wants to use
+%     soft-core potentials and to choose its parameters (power, alpha and 
+%sigma).
+%     Regarding sc potentials, I'm inclined to say they are applied to all 
+%atoms, but
+%     I'm not sure about it. I've checked the documentation and it is not clear 
+%as well.
+%     Perhaps I should check the code; I'll have this answered in a future pull 
+%request.
+% HHL: IIRC Michael Shirts said that LJ softcores are applied when the 
+%      LJ parameter(s) (don't recall which) are zer0
 
 Table \ref{tab:groresults} lists the relative free energies obtained from 
 GROMACS simulations.
