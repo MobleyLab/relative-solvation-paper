@@ -829,8 +829,8 @@ hydration obtained from absolute transformations.
 
 \begin{table}[]
   \begin{minipage}{\linewidth}
-    \caption{Comparing free energies of hydration for various MD packages as 
-    obtained from absolute transformations.}\label{tab:absolute}
+    \caption{Comparing relative free energies of hydration for various MD 
+    packages as obtained from absolute transformations.}\label{tab:absolute}
     \makebox[\textwidth][c]{
       \begin{tabular}{llrrrr}
         \toprule
@@ -844,7 +844,55 @@ hydration obtained from absolute transformations.
         neopentane & methane & \num{-0.13+-0.02} & & & \\
         2-methylfuran & methane & \num{2.96+-0.02} & & & \\
         2-methylindole & methane & \num{8.72+-0.01} & & & \\
-        2--cyclopentanylindole & methane & \num{0.39+-0.04} & & & \\
+        2--cyclopentanylindole & 7--cyclopentanylindole & \num{0.39+-0.04} & & 
+        & \\
+        \bottomrule
+      \end{tabular}
+    }
+  \end{minipage}
+\end{table}
+
+Table~\ref{tab:relative} summarizes results for relative free energies of 
+hydration obtained from relative transformations.
+
+\begin{table}[]
+  \begin{minipage}{\linewidth}
+    \caption{Comparing relative free energies of hydration for various MD 
+      packages as obtained from relative transformations.  Signs of the 
+      backward transformation have been reverted to correspond to the forward 
+      transformation.}\label{tab:relative}
+    \makebox[\textwidth][c]{
+      \begin{tabular}{llrrrrr}
+        \toprule
+        & & \multicolumn{2}{c}{AMBER} & CHARMM & GROMACS & SOMD \\
+        & & \multicolumn{1}{c}{implicit} & \multicolumn{1}{c}{explicit} & & & \\
+        \midrule
+        ethane & methane & \num{0.02+-0.01} & \num{-0.13+-0.02} & & & \\
+        methane & ethane & \num{0.00+-0.03} & \num{-0.19+-0.03} & & & \\
+        methanol & methane & \num{6.19+-0.01} & \num{6.20+-0.02} & & & \\
+        methane & methanol & \num{6.20+-0.03} & \num{-6.15+-0.01} & & & \\
+        ethane  & methanol & \num{-6.20+-0.01} & \num{-6.27+-0.01} & & & \\
+        methanol & ethane & \num{-6.20+-0.01} & \num{-6.25+-0.01} & & & \\
+        toluene & methane & \num{3.24+-0.02} & \num{3.39+-0.02} & & & \\
+        methane & toluene & \num{3.42+-0.03} & \num{3.52+-0.03} & & & \\
+        neopentane\footnote{\label{foot:cent}central mapping.} & methane & 
+        \num{0.32 +-0.04} & \num{-0.03+-0.06} & & & \\
+        methane\footref{foot:cent} & neopentane & \num{0.25+-0.03} & 
+        \num{-0.07+-0.03} & & & \\
+        neopentane\footnote{\label{foot:term}terminal mapping.} & methane & 
+        \num{-0.13+-0.01} & \num{-0.12+-0.02} & & & \\
+        methane\footref{foot:term} & neopentane & \num{-0.13+-0.03} & 
+        \num{-0.12+-0.03} & & & \\
+        2-methylfuran  & methane & \num{3.09+-0.01} & \num{3.10+-0.01} & & & \\
+        methane & 2-methyfuran  & \num{3.10+-0.03} & \num{3.15+-0.03} & & & \\
+        2-methylindole & methane & \num{8.78+-0.03} & \num{8.78+-0.04} & & & \\
+        methane & 2-methylindole & \num{9.14+-0.02} & \num{9.13+-0.03} & & & \\
+        2--cyclopentanylindole\footnote{\label{foot:partial}partial 
+        re/discharge i.e.\ only the charges of the appearing and the 
+        disappering 5--rings are switched.} & 7--cyclopentanylindole & 
+        \num{0.36+-0.03} & \num{0.63+-0.06} & & & \\
+        7--cyclopentanylindole\footref{foot:partial} & 2--cyclopentanylindole & 
+        \num{0.34+-0.05} & \num{0.50+-0.03} & & & \\
         \bottomrule
       \end{tabular}
     }
