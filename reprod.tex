@@ -525,12 +525,13 @@ simulations in both directions.  As we shall discuss in the
 The ethane $\rightarrow$ methanol transformation is traditionally
 regarded as a standard test for RAFE
 simulations~\cite{doi:10.1063/1.449208, doi:10.1021/jp981629f}.   The
-other transformations are centred around mutations from and to
+other transformations are centered around mutations from and to
 methane, and are meant to mimic typical transformations that could be attempted
 in the context of e.g.\ protein-ligand binding calculations. The 
 2--cyclopentanylindole to 7--cyclopentanylindole
 transformation has been added to include both deletion as well as
-insertion of sub--parts of the perturbed group in one simulation.  For
+insertion of sub--parts of the perturbed group in one simulation (in the 
+following CPI will stand for cyclopentanylindole).  For
 neopentane $\rightarrow$ methane we point out that there are two
 alternative mappings possible, see Figure~\ref{fig:cycles}.  One in
 which methane is mapped with a terminal methyl (green) and the other
@@ -839,21 +840,21 @@ hydration obtained from absolute transformations.
         \\
         \midrule
         ethane & methane & \num{-0.02+-0.01} & \num{-0.05} & \num{-0.04 +- 
-        0.01} & \num{-0.05} \\
+        0.01} & \num{-0.05+-0.02} \\
         methanol & methane & \num{6.20+-0.01} & \num{6.16} & \num{5.95 +- 0.01} 
-        & \num{6.21} \\
+        & \num{6.21+-0.06} \\
         ethane & methanol & \num{-6.22+-0.01} & \num{-6.21} & \num{-5.98 +- 
-        0.01} & \num{-6.26} \\
+        0.01} & \num{-6.26+-0.05} \\
         toluene & methane & \num{3.19+-0.01} & \num{3.01} & \num{3.16 +- 0.01} 
-        & \num{3.07} \\
+        & \num{3.07+-0.03} \\
         neopentane & methane & \num{-0.13+-0.02} & \num{-0.16} & \num{-0.14 +- 
-        0.01} & \num{-0.19} \\
-        2-methylfuran & methane & \num{2.96+-0.02} & \num{2.80} & \num{2.95 +- 
-        0.01} & \num{2.90} \\
-        2-methylindole & methane & \num{8.72+-0.01} & \num{8.37} & \num{8.79 +- 
-        0.02} & \num{8.57} \\
-        2--cyclopentanylindole & 7--cyclopentanylindole & \num{0.39+-0.04} & 
-        \num{-0.10} & \num{0.02 +- 0.02} & \num{0.08} \\
+        0.01} & \num{-0.19+-0.06} \\
+        2--methylfuran & methane & \num{2.96+-0.02} & \num{2.80} & \num{2.95 +- 
+        0.01} & \num{2.90+-0.03} \\
+        2--methylindole & methane & \num{8.72+-0.01} & \num{8.37} & \num{8.79 
+        +- 0.02} & \num{8.57+-0.03} \\
+        2--CPI & 7--CPI & \num{0.39+-0.04} & \num{-0.10} & \num{0.02 +- 0.05} & 
+        \num{0.08+-0.14} \\
         \bottomrule
       \end{tabular}
     }
@@ -872,35 +873,52 @@ hydration obtained from relative transformations.
     \makebox[\textwidth][c]{
       \begin{tabular}{llrrrrr}
         \toprule
-        & & \multicolumn{2}{c}{AMBER} & CHARMM & GROMACS & SOMD \\
+        & & \multicolumn{2}{c}{AMBER} & CHARMM & GROMACS\footnote{split PME.} & 
+        SOMD \\
         & & \multicolumn{1}{c}{implicit} & \multicolumn{1}{c}{explicit} & & & \\
         \midrule
-        ethane & methane & \num{0.02+-0.01} & \num{-0.13+-0.02} & & & \\
-        methane & ethane & \num{0.00+-0.03} & \num{-0.19+-0.03} & & & \\
-        methanol & methane & \num{6.19+-0.01} & \num{6.20+-0.02} & & & \\
-        methane & methanol & \num{6.20+-0.03} & \num{-6.15+-0.01} & & & \\
-        ethane  & methanol & \num{-6.20+-0.01} & \num{-6.27+-0.01} & & & \\
-        methanol & ethane & \num{-6.20+-0.01} & \num{-6.25+-0.01} & & & \\
-        toluene & methane & \num{3.24+-0.02} & \num{3.39+-0.02} & & & \\
-        methane & toluene & \num{3.42+-0.03} & \num{3.52+-0.03} & & & \\
+        ethane & methane & \num{0.02+-0.01} & \num{-0.13+-0.02} & \num{} & 
+        \num{-0.04 +- 0.02} & \num{} \\
+        methane & ethane & \num{0.00+-0.03} & \num{-0.19+-0.03} & \num{} & 
+        \num{-0.02 +- 0.01} & \num{} \\
+        methanol & methane & \num{6.19+-0.01} & \num{6.20+-0.02} & \num{} & 
+        \num{6.30 +- 0.01} & \num{} \\
+        methane & methanol & \num{6.20+-0.03} & \num{-6.15+-0.01} & \num{} & 
+        \num{6.20 +- 0.01} & \num{} \\
+        ethane  & methanol & \num{-6.20+-0.01} & \num{-6.27+-0.01} & \num{} & 
+        \num{-6.19 +- 0.01} & \num{} \\
+        methanol & ethane & \num{-6.20+-0.01} & \num{-6.25+-0.01} & \num{} & 
+        \num{-6.19+- 0.01} & \num{} \\
+        toluene & methane & \num{3.24+-0.02} & \num{3.39+-0.02} & \num{} & 
+        \num{3.21 +- 0.01} & \num{} \\
+        methane & toluene & \num{3.42+-0.03} & \num{3.52+-0.03} & \num{} & 
+        \num{3.20 +- 0.01} & \num{} \\
         neopentane\footnote{\label{foot:cent}central mapping.} & methane & 
-        \num{0.32 +-0.04} & \num{-0.03+-0.06} & & & \\
+        \num{0.32 +-0.04} & \num{-0.03+-0.06} & \num{} & \num{-0.15 +- 0.02} & 
+        \num{} \\
         methane\footref{foot:cent} & neopentane & \num{0.25+-0.03} & 
-        \num{-0.07+-0.03} & & & \\
+        \num{-0.07+-0.03} & \num{} & \num{-0.16 +- 0.05} & \num{} \\
         neopentane\footnote{\label{foot:term}terminal mapping.} & methane & 
-        \num{-0.13+-0.01} & \num{-0.12+-0.02} & & & \\
+        \num{-0.13+-0.01} & \num{-0.12+-0.02} & \num{} & \num{-0.14 +- 0.01} &
+        \num{} \\
         methane\footref{foot:term} & neopentane & \num{-0.13+-0.03} & 
-        \num{-0.12+-0.03} & & & \\
-        2-methylfuran  & methane & \num{3.09+-0.01} & \num{3.10+-0.01} & & & \\
-        methane & 2-methyfuran  & \num{3.10+-0.03} & \num{3.15+-0.03} & & & \\
-        2-methylindole & methane & \num{8.78+-0.03} & \num{8.78+-0.04} & & & \\
-        methane & 2-methylindole & \num{9.14+-0.02} & \num{9.13+-0.03} & & & \\
-        2--cyclopentanylindole\footnote{\label{foot:partial}partial 
+        \num{-0.12+-0.03} & \num{} & \num{-0.18 +- 0.03} & \num{} \\
+        2--methylfuran  & methane & \num{3.09+-0.01} & \num{3.10+-0.01} & 
+        \num{} & \num{2.93 +- 0.05} & \num{} \\
+        methane & 2-methyfuran  & \num{3.10+-0.03} & \num{3.15+-0.03} & 
+        \num{} & \num{2.96 +- 0.01} & \num{} \\
+        2--methylindole & methane & \num{8.78+-0.03} & \num{8.78+-0.04} & 
+        \num{} & \num{8.73 +- 0.03} & \num{} \\
+        methane & 2-methylindole & \num{9.14+-0.02} & \num{9.13+-0.03} & 
+        \num{} & \num{8.74 +- 0.01} & \num{} \\
+        2--CPI\footnote{\label{foot:partial}partial 
         re/discharge i.e.\ only the charges of the appearing and the 
-        disappering 5--rings are switched.} & 7--cyclopentanylindole & 
-        \num{0.36+-0.03} & \num{0.63+-0.06} & & & \\
-        7--cyclopentanylindole\footref{foot:partial} & 2--cyclopentanylindole & 
-        \num{0.34+-0.05} & \num{0.50+-0.03} & & & \\
+        disappearing 5--rings are switched.} & 7--CPI & 
+        \num{0.36+-0.03} & \num{0.63+-0.06} & \num{} & \num{-0.03 +- 0.03} &
+        \num{} \\
+        7--CPI\footref{foot:partial} & 2--CPI & 
+        \num{0.34+-0.05} & \num{0.50+-0.03} & \num{} & \num{-0.20 +- 0.04} &
+        \num{} \\
         \bottomrule
       \end{tabular}
     }
