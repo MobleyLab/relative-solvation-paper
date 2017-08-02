@@ -24,6 +24,10 @@
 
 \externaldocument[R-]{reprod}
 
+\sisetup{
+  separate-uncertainty = true
+}
+
 \renewcommand{\footnoterule}{}
 \newcommand{\hred}[1]{\textcolor{red}{#1}}
 
@@ -127,9 +131,10 @@ atoms $i$ and $j$.
 
 The exponent $n$ is only used in the Coulomb softcore funtion of Sire.
 Gromacs allows additional exponents for $\lambda$ ($p = 1$ or $2$) and
-$w$ for the distance dependency with values of either $6$ or $48$.
-The Coulomb softcore parameter $\alpha_{\mathrm{Coul}}$ in Gromacs is
-the same as for the Lennard--Jones parameter $\alpha_{\mathrm{LJ}}$
+$w$ for the distance dependency with values of either $6$ or $48$.  AMBER 
+allows an exponent $p$ (namelist option \textsc{sceeorder}) for the Coulomb 
+softcore.  The Coulomb softcore parameter $\alpha_{\mathrm{Coul}}$ in Gromacs 
+is the same as for the Lennard--Jones parameter $\alpha_{\mathrm{LJ}}$
 unless the Coulomb softcore function is requested not to be used and thus 
 $\alpha_{\mathrm{Coul}} = 0$.  The
 CHARMM softcore function (PSSP) is applied to \emph{all} atoms in the
@@ -149,7 +154,8 @@ der Waals and Coulomb steps it must be ensured that charges of
 vanishing atoms are switched off before the vdW radius is scaled to
 zero.  This is to avoid that other atoms e.g.\ from solvent come in
 close contact to a charged atom without the associated excluded volume
-from the van der Walls term.
+from the van der Walls term as this could lead to large forces and 
+thus instabilities in the integrator.
 
 \begin{figure}[ht]
 \includegraphics[scale=1.0]{figures/dummies.pdf}
@@ -208,8 +214,8 @@ unless the charges of \emph{all} atoms are switched off.  Possible
 strategies would be to explicitly create topology files for each
 intermediate $\lambda$ state and distribute the diminished charges from
 the dummy atoms over to the non--dummy atoms.  MD software like CHARMM
-allows to do this through scripting although this would be just as
-extensive as scripting the aforementioned strategy.
+allows to do this through internal scripting although this would be just as
+extensive as external scripting the aforementioned strategy.
 
 \begin{figure}[ht]
 \includegraphics[scale=1.0]{figures/dummies2.pdf}
@@ -234,9 +240,9 @@ $\lambda$ vector for only a subset.  AMBER requires two such files
 with sander and three topology/two control files with pmemd for the
 three steps charge off, vdw on/off and charge on.  This is possible because
 with AMBER a subset of the perturbed group can be chosen to have zero
-charges (but AMBER does not have $\lambda$ vectors).  CHARMM has
-scripting facilities that let the user manipulate force field
-parameters of any arbitrary subset of the system such that
+charges (namelist option \textsc{crgmask}; but AMBER does not have $\lambda$ 
+vectors).  CHARMM has scripting facilities that let the user manipulate force 
+field parameters of any arbitrary subset of the system such that
 intermediate states can be defined ``on--the-fly'' with only one
 control script and one topology file.  The tool
 FESetup~\cite{loeffler_fesetup:_2015} automates most of these setup
@@ -425,7 +431,10 @@ explicit, partial & & & & & \\
 \label{sec:sire-probs}
 
 
-Figure ~\ref{fig:sire_histogram} compare relative free energy of hydration $\Delta\Delta G$ with relative $\Delta\Delta G$ estimations from absolute free  energy calculations for all the transformation of dataset in ~\ref{R-fig:cycle}.
+Figure ~\ref{fig:sire_histogram} compare relative free energy of hydration 
+$\Delta\Delta G$ with relative $\Delta\Delta G$ estimations from absolute free  
+energy calculations for all the transformation of dataset in 
+~\ref{R-fig:cycles}.
 %JM: Better to replace labels A-H with chemical structures?
 %SB: I am afraid that substituting letters with chemical structures may result in a messy plot, but I will try
 \begin{figure}[ht]
@@ -480,7 +489,9 @@ methane        & 2-methylindole & 8.67    & 0.08 & 8.57  & 0.03\\
   \end{minipage}
 \end{table}
 
-Table~\ref{tab:sire-finalresults} shows relative free energy of hydration $\Delta\Delta G$ compared to $\Delta\Delta G$ values extracted from absolute free energy calculations, depicted in Fig~\ref{R-fig:sire_histogram} in the paper.
+Table~\ref{tab:sire-finalresults} shows relative free energy of hydration 
+$\Delta\Delta G$ compared to $\Delta\Delta G$ values extracted from absolute 
+free energy calculations, depicted in Fig~\ref{fig:sire_histogram} in the paper.
 
 Initially, Sire/SOMD RAFE protocols used all bonds constraint algorithm. In this way all the solute bonds are constrained, which results in a
 systematic offset for each RAFE predictions, compared to the RAFE from absolute free energy calculations.
@@ -547,7 +558,7 @@ changed while van der Waals parameters are fully tuned to the transformation's f
 SEM values tend to be larger when they are used.
 
 \begin{table}[]
-  \centering
+  \begin{minipage}{\linewidth}
   \caption{$\Delta \Delta G_{hydr}$ results in different scenarios with or without Coulomb softcore potentials, in kcal $\cdot$ mol$^{-1}$.}
   \label{tab:gro-sc2}
   \resizebox{\columnwidth}{!}{%
@@ -560,21 +571,32 @@ SEM values tend to be larger when they are used.
     methane & ethane & \num{-0.01 +- 0.02} & \num{-0.02 +- 0.01} & \num{-0.01+-0.04} & \num{-0.02+-0.04} &  &  \\
     methanol & methane & \num{6.163 +- 0.006} & \num{6.197 +- 0.004} & \num{7.32+-0.03} & \num{7.42+-0.04} & \num{5.77 +- 0.01} & \num{5.95 +- 0.01} \\
     methane & methanol & \num{6.168 +- 0.005} & \num{6.199 +- 0.008} & \num{7.14+-0.03} & \num{7.21+-0.03} &  &  \\
-    ethane & methanol & \num{-6.123 +- 0.007} & \num{-6.185 +- 0.006} & \num{-6.15+-0.02} & \num{-6.21+-0.02} & \num{-5.83 +- 0.01} & \num{-5.98 +- 0.01} \\
+    ethane & methanol & \num{-6.123 +- 0.007} & \num{-6.185 +- 0.006} & 
+    \num{-6.15+-0.02} & \num{-6.21+-0.02} & \num{-5.83 +- 0.01} & \num{-5.98 +- 
+    0.01} \\
     methanol & ethane & \num{-6.124 +- 0.005} & \num{-6.193+- 0.004} & \num{-6.15+-0.02} & \num{-6.21+-0.02} &  &  \\
     toluene & methane & \num{3.22 +- 0.01} & \num{3.211 +- 0.006} & \num{3.22+-0.04} & \num{3.21+-0.04} & \num{2.97 +- 0.01} & \num{3.16 +- 0.01} \\
     methane & toluene & \num{3.25 +- 0.01} & \num{3.20 +- 0.01} & \num{3.27+-0.04} & \num{3.22+-0.04} &  &  \\
-    neopentane \footnote{\label{foot:c-map}central mapping} & methane & \num{-0.103 +- 0.008} & \num{-0.15 +- 0.02} & \num{-0.13+-0.08} & \num{-0.13+-0.08} & \num{-0.18 +- 0.01} & \num{-0.14 +- 0.01} \\
-    methane  \footref{foot:c-map} & neopentane & \num{-0.11 +- 0.02} & \num{-0.16 +- 0.05} & \num{-0.12+-0.08} & \num{-0.15+-0.08} &  &  \\
-    neopentane  \footnote{\label{foot:t-map}terminal mapping} & methane & \num{-0.116 +- 0.007} & \num{-0.13 +- 0.01} & \num{-0.10+-0.04} & \num{-0.13+-0.04} &  &  \\
-    methane  \footref{t-map} & neopentane2 & \num{-0.10 +- 0.03} & \num{-0.18 +- 0.03} & \num{-0.08+-0.06} & \num{0.15+-0.06} &  &  \\
+    neopentane\footnote{\label{foot:c-map}central mapping} & methane & 
+    \num{-0.103 +- 0.008} & \num{-0.15 +- 0.02} & \num{-0.13+-0.08} & 
+    \num{-0.13+-0.08} & \num{-0.18 +- 0.01} & \num{-0.14 +- 0.01} \\
+    methane\footref{foot:c-map} & neopentane & \num{-0.11 +- 0.02} & \num{-0.16 
+    +- 0.05} & \num{-0.12+-0.08} & \num{-0.15+-0.08} &  &  \\
+    neopentane\footnote{\label{foot:t-map}terminal mapping} & methane & 
+    \num{-0.116 +- 0.007} & \num{-0.13 +- 0.01} & \num{-0.10+-0.04} & 
+    \num{-0.13+-0.04} &  &  \\
+    methane\footref{foot:t-map} & neopentane2 & \num{-0.10 +- 0.03} & 
+    \num{-0.18 +- 0.03} & \num{-0.08+-0.06} & \num{0.15+-0.06} &  &  \\
     2-methylfuran & methane & \num{2.986 +- 0.006} & \num{2.930 +- 0.05} & \num{3.07+-0.03} & \num{3.02+-0.04} & \num{2.87 +- 0.01} & \num{2.95 +- 0.01} \\
     methane & 2-methylfuran & \num{3.007 +- 0.004} & \num{2.96 +- 0.01} & \num{3.08+-0.03} & \num{3.02+-0.04} &  &  \\
     2-methylindole & methane & \num{8.71 +- 0.02} & \num{8.73 +- 0.03} & \num{8.79+-0.04} & \num{8.82+-0.05} & \num{8.44 +- 0.02} & \num{8.79 +- 0.02} \\
     methane & 2-methylindole & \num{8.73 +- 0.03} & \num{8.74 +- 0.01} & \num{8.79+-0.05} & \num{8.81+-0.06} &  &  \\
     2-cyclopentanylindole & 7-cyclopentanylindole & \num{-0.07 +- 0.02} & \num{-0.03 +- 0.03} & \num{-0.12+-0.03} & \num{-0.14+-0.05} & \num{-0.02 +- 0.05} & \num{0.02 +- 0.02} \\
-    7-cyclopentanylindole & 2-cyclopentanylindole & \num{-0.12 +- 0.06} & \num{-0.20 +- 0.04} & \num{1.2+-0.2} \footnote{\label{foot:inv} inverted sign} & \num{1.5+-0.1} \footnote{\label{foot:inv} inverted sign} &  &  \\ \bottomrule
+    7-cyclopentanylindole & 2-cyclopentanylindole & \num{-0.12 +- 0.06} & 
+    \num{-0.20 +- 0.04} & \num{1.2+-0.2}\footnote{\label{foot:inv} inverted 
+    sign} & \num{1.5+-0.1}\footref{foot:inv} &  &  \\ \bottomrule
   \end{tabular}}
+\end{minipage}
 \end{table}
 
 The effect of the Coulomb softcore potential can be seen in Figure \ref{fig:gro_sc_eff}. 
