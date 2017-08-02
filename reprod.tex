@@ -821,7 +821,7 @@ The unified protocol changes partial charges, van der Waals parameters, and
 bond parameters simultaneously along the alchemical path, while the split 
 protocol separates the transformation of the van der Waals parameters from the 
 charge transformation.  The order in which this has to be done is detailled 
-in section~\ref{S-sec:separated} of the SI.  The scaling of the bonded terms 
+in section~\ref{S-sec:separated}x of the SI.  The scaling of the bonded terms 
 can be combined with either transformation.
 
 Table~\ref{tab:absolute} summarizes results for relative free energies of 
@@ -834,18 +834,26 @@ hydration obtained from absolute transformations.
     \makebox[\textwidth][c]{
       \begin{tabular}{llrrrr}
         \toprule
-        \multicolumn{2}{l}{transformation} & AMBER & CHARMM & GROMACS & SOMD 
+        \multicolumn{2}{l}{transformation} & AMBER & CHARMM & 
+        GROMACS\footnote{PME.} & SOMD 
         \\
         \midrule
-        ethane & methane & \num{-0.02+-0.01} & & & \\
-        methanol & methane & \num{6.20+-0.01} & & & \\
-        ethane  & methanol & \num{-6.22+-0.01} & & & \\
-        toluene & methane & \num{3.19+-0.01} & & & \\
-        neopentane & methane & \num{-0.13+-0.02} & & & \\
-        2-methylfuran & methane & \num{2.96+-0.02} & & & \\
-        2-methylindole & methane & \num{8.72+-0.01} & & & \\
-        2--cyclopentanylindole & 7--cyclopentanylindole & \num{0.39+-0.04} & & 
-        & \\
+        ethane & methane & \num{-0.02+-0.01} & \num{-0.05} & \num{-0.04 +- 
+        0.01} & \num{-0.05} \\
+        methanol & methane & \num{6.20+-0.01} & \num{6.16} & \num{5.95 +- 0.01} 
+        & \num{6.21} \\
+        ethane & methanol & \num{-6.22+-0.01} & \num{-6.21} & \num{-5.98 +- 
+        0.01} & \num{-6.26} \\
+        toluene & methane & \num{3.19+-0.01} & \num{3.01} & \num{3.16 +- 0.01} 
+        & \num{3.07} \\
+        neopentane & methane & \num{-0.13+-0.02} & \num{-0.16} & \num{-0.14 +- 
+        0.01} & \num{-0.19} \\
+        2-methylfuran & methane & \num{2.96+-0.02} & \num{2.80} & \num{2.95 +- 
+        0.01} & \num{2.90} \\
+        2-methylindole & methane & \num{8.72+-0.01} & \num{8.37} & \num{8.79 +- 
+        0.02} & \num{8.57} \\
+        2--cyclopentanylindole & 7--cyclopentanylindole & \num{0.39+-0.04} & 
+        \num{-0.10} & \num{0.02 +- 0.02} & \num{0.08} \\
         \bottomrule
       \end{tabular}
     }
