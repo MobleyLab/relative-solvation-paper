@@ -837,7 +837,17 @@ can be combined with either transformation.
 
 Table~\ref{tab:absolute} summarizes results for relative free energies of 
 hydration obtained from absolute transformations.
-
+% HHL: SB can you compute MAE for this, please?
+The $\Delta\Delta G_{\mathrm{hydr}}$ obtained in this way with the various MD 
+packages agree quite well although some larger deviations are apparent as 
+well.  GROMACS predicts a smaller $\Delta\Delta G_{\mathrm{hydr}}$ for the 
+methanol transformations by about \SI{0.2}{kcal.mol^{-1}}.  Similarly, there 
+are some discrepancies in the toluene, 2--methylfuran and 2--methylindole cases 
+where it is mostly CHARMM that produces somewhat smaller $\Delta\Delta 
+G_{\mathrm{hydr}}$s with \SI{0.4}{kcal.mol^{-1}} difference between the 
+smallest and highest values.  The largest deviation can be found in the largest 
+transformation where the AMBER implicit dummy atom result is higher by 
+0.4--\SI{0.5}{kcal.mol^{-1}} than the other MD packages.
 \begin{table}[]
   \begin{minipage}{\linewidth}
     \caption{Comparing relative free energies of hydration for various MD 
@@ -873,7 +883,6 @@ hydration obtained from absolute transformations.
 
 Table~\ref{tab:relative} summarizes results for relative free energies of 
 hydration obtained from relative transformations.
-
 \begin{table}[]
   \begin{minipage}{\linewidth}
     \caption{Comparing relative free energies of hydration for various MD 
@@ -964,21 +973,10 @@ field (GROMACS RF), GROMACS with PME (GROMACS PME) and AMBER).
 The reaction fields implemented in SOMD and GROMACS differ somewhat (atom-based 
 shifted Barker Watts vs group based switched 
 Barker Watts), but nevertheless SOMD and GROMACS RF produce comparable results 
-with a MAD of 
-\SI{0.18}{kcal.mol^{-1}}.
+with a MAD of \SI{0.18}{kcal.mol^{-1}}.
 % HHL: citation for BWRF missing
 % JM: Guilherme/DLM can you double check that I described correctly the RF 
 % implemented in Gromacs?
-As regards methane $\rightarrow$ neopentane transformation SOMD is able to 
-maintain consistency between 
-central and terminal mapping, as shown in tab~\ref{S-tab:sire-finalresults}, 
-while GROMACS RF displays a $\Delta\Delta$G of \SI{-0.20 +- 
-  0.01}{kcal.mol^{-1}} for the
-centrally mapped transformation and $\Delta\Delta$G = \SI{-0.05 +- 
-  0.02}{kcal.mol^{-1}} for the terminally mapped transformation. 
-The SOMD RF calculations show a MAD = \SI{0.18}{kcal.mol^{-1}} and 
-MAD = \SI{0.23}{kcal.mol^{-1}} with GROMACS PME and AMBER respectively,
-similar to the MAD obtained with GROMACS RF.
 
 \begin{table}[]
   \begin{minipage}{\linewidth}
@@ -1401,6 +1399,15 @@ with simultaneous transformation of Lennard-Jones, charges, and bonded terms.
 This suggests that the failure of the GROMACS ''unified protocol'' in some 
 instances may be due to differences in the softcore implementations. 
 %%JM we need to elaborate here
+
+As regards methane $\rightarrow$ neopentane transformation SOMD is able to 
+maintain consistency between central and terminal mapping, as shown in 
+tab~\ref{S-tab:sire-finalresults}, while GROMACS RF displays a $\Delta\Delta$G 
+of \SI{-0.20 +-   0.01}{kcal.mol^{-1}} for the centrally mapped transformation 
+and $\Delta\Delta$G = \SI{-0.05 +- 0.02}{kcal.mol^{-1}} for the terminally 
+mapped transformation. The SOMD RF calculations show a MAD = 
+\SI{0.18}{kcal.mol^{-1}} and MAD = \SI{0.23}{kcal.mol^{-1}} with GROMACS PME 
+and AMBER respectively, similar to the MAD obtained with GROMACS RF.
 
 \todo{GROMACS RF in vacuum uses a dielectric of 1.0, this causes problems for 
 Sire vacuum simulations} %DLM: What does this mean? 
