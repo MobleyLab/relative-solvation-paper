@@ -1173,18 +1173,16 @@ A discrepancy of consistently 0.2--\SI{0.4}{kcal.mol^{-1}} is evident from every
 \subsection{GROMACS}
 \label{sec:gromacs-results}
 
-\todo{make $\partial U/\partial\lambda$ plots of states with varying electrostatic potentials with and without softcore coulomb}
-
 GROMACS has some run input options which can simplify the procedure for setting up 
-free energy calculations; however, these same options can also provide a source of error
-if used naively. Additionally, running the simulations depends on understanding how these 
+free energy calculations. Running the simulations depends on understanding how these 
 features are used because they can be a source of errors if misused. 
 % JM: shorten above
+% GDRM: done
 Specifically, \inpopt{couple-moltype} implicitly defines the initial and final states by giving a special tag
 to a molecule and controls whether intramolecular interactions of the tagged molecule are 
 retained or not along the alchemical path.
 It should be used in absolute free energy calculations to tag the molecule which will be 
-decoupled from the rest of the system. \inpopt{couple-moltype} should not be used in 
+decoupled from the rest of the system. \inpopt{couple-moltype} should not be used in
 relative transformations in GROMACS because relative calculations rely on turning off 
 interactions between only part of a molecule and the rest of the system, not the entire 
 molecule. 
@@ -1205,6 +1203,7 @@ path and should be set to \inpopt{yes} in relative transformations.
 % HHL: the point is that couple-intramol does not have any effect if 
 %      couple-moltype = none.  In other words: the user needs to make sure
 %      to set couple-moltype = none
+% GDRM: Alright. I'll make it more explicit. 
 Setting this to \inpopt{no} would mean intramolecular interactions are maintained at their existing values 
 while the free energy transformation is conducted, leading to an incomplete transformation and 
 introducing errors in computed free energies.
@@ -1221,12 +1220,14 @@ For instance, in split protocol simulations, these entries can be defined as the
 transformation involves particle deletion ("forward process"), \inpopt{fep}\_\inpopt{lambdas} must correspond to 
 the first set, while \inpopt{vdw}\_\inpopt{lambdas} to the second. If the process involves particle insertion ("backward 
 process") we swap the sets between the entries. In this work, \inpopt{mass}\_\inpopt{lambdas} was specified as
-a set of 31 zeros. Unified protocols have all \inpopt{-lambdas} entries equal to the set (\inpopt{0.0, 0.05, 
+a set of 31 zeros.
+Unified protocols have all \inpopt{-lambdas} entries equal to the set (\inpopt{0.0, 0.05, 
 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0}).
 % HHL: also mass-lambdas?
-% GDRM: I don't understand the question. I
-% HHL: What did you do with the mass-lambdas, see discussion above
-
+% GDRM: I don't understand the question. 
+% HHL: What did you do with the mass-lambdas, see discussion above.
+% GDRM: I see. I defined them as a set of zeros not to change the mass
+%    along the alchemical path. It is explained in lines 637-640.
 
 %JM: Do you have a way to control the strength of softening of Coul and LJ in 
 %Gromacs?
@@ -1310,9 +1311,10 @@ We noticed a difference of approximately \SI{1.5}{kcal.mol^{-1}} between the spl
 Coulomb softcore potentials and both protocols that use it. Data suggests that softcore use in 
 electrostatic interactions requires adjustments in the $\lambda$-distance between states in the
 rapidly varying part of the $\partial \mathcal{H}/\partial\lambda$, see Figure
-\ref{fig:ti-fep}. 
+\ref{fig:ti-fep}. This effect was observed in solution simulations.
 The split protocol without Coulomb softcore potentials is the most effective way to calculate 
 relative free energy calculations. 
+
 % HHL: This needs more detail.  It is not clear to me if the split+sc
 %      protocol gives a higher ddG because of the chosen lambda spacing or
 %      because the Coulumb softcores are switch on too.  The latter
