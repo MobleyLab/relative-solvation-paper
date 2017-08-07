@@ -808,11 +808,11 @@ the uncorrelated sample.  The SEM for component free energies is combined as
 which is appropriate if the property to be computed is a sum of
 contributions.
 
-We also make use of the mean unsigned error MUE (also called mean absolute 
-error, MAE) to compare data sets.
+We also make use of the mean absolute error MAE (also called mean unsigned 
+error, MUE) to compare data sets.
 \begin{equation}
 \label{eq:MUE}
-\mathrm{MUE} = \frac{1}{n}\sum_\mathrm{i=1}^n \left | y_\mathrm{i} - 
+\mathrm{MAE} = \frac{1}{n}\sum_\mathrm{i=1}^n \left | y_\mathrm{i} - 
 x_\mathrm{i} \right |
 \end{equation}
 where $n$ is the total number of samples, $y_\mathrm{i}$ and $x_\mathrm{i}$ are 
@@ -824,13 +824,8 @@ the $i$--th datum to be compared.
 
 \todo{what protocols did not work}
 
-%%JM: Include section on Absolute hydration free energy calculations.
-%% Do they all agree well between codes for this benchmark? 
-%% Then we can move on to relative hydration free energy calculation 
-%% results per code. 
-
-Absolute hydration free energies are our standard point of comparison 
-because these are easily calculated with considerable precision
+We will use absolute hydration free energies here as our standard point of 
+comparison because these are easily calculated with considerable precision
 \cite{doi:10.1021/acs.jced.7b00104} %check for more references
 and are considerably simpler to set up and implement than relative calculations.
 Prior work actually compared calculated absolute hydration free energies across 
@@ -842,9 +837,8 @@ change simulations --- our ``unified protocol'' --- and separated parameter
 change simulations --- our ``split protocol''--- to relative free energy 
 calculations obtained from two absolute hydration free energies -- our 
 ``absolute protocol''.
-% HHL: is the absolute protocol a unified or a split protocol?  For AMBER (and 
-%      SOMD?) it is a unified protocol
-% SB: For SOMD is a unified protocol as well
+% HHL: GDRM, is the absolute protocol a unified or a split protocol?  For
+%      AMBER, CHARMM and SOMD it is a unified protocol.
 The unified protocol changes partial charges, van der Waals parameters, and 
 bond parameters simultaneously along the alchemical path, while the split 
 protocol separates the transformation of the van der Waals parameters from the 
@@ -853,20 +847,21 @@ in section~\ref{S-sec:separated}x of the SI.  The scaling of the bonded terms
 can be combined with either transformation.
 
 Table~\ref{tab:absolute} summarizes results for relative free energies of 
-hydration obtained from absolute transformations.
-% HHL: SB can you compute MAE for this, please?
-% SB: Done
-The $\Delta\Delta G_{\mathrm{hydr}}$ obtained in this way with the various MD 
-packages agree quite well although some larger deviations are apparent as 
+hydration obtained from absolute transformations.  The table shows the data 
+from simulations with the recommended protocol as discussed in detail in the 
+following subsections for each MD code. The $\Delta\Delta G_{\mathrm{hydr}}$ 
+obtained with the various MD packages in 
+this way agree quite well, although some larger deviations are apparent as 
 well.  GROMACS predicts a smaller $\Delta\Delta G_{\mathrm{hydr}}$ for the 
 methanol transformations by about \SI{0.2}{kcal.mol^{-1}}.  Similarly, there 
 are some discrepancies in the toluene, 2--methylfuran and 2--methylindole cases 
 where it is mostly CHARMM that produces somewhat smaller $\Delta\Delta 
-G_{\mathrm{hydr}}$s with \SI{0.4}{kcal.mol^{-1}} difference between the 
+G_{\mathrm{hydr}}$ with \SI{0.4}{kcal.mol^{-1}} difference between the 
 smallest and highest values.  The largest deviation can be found in the largest 
-transformation where the AMBER implicit dummy atom result is higher by 
-0.4--\SI{0.5}{kcal.mol^{-1}} than the other MD packages.
+transformation where the AMBER result is higher by 0.4--\SI{0.5}{kcal.mol^{-1}} 
+than the other MD packages.
 %SB: Why don't we consider Gromacs Reaction Field here ?
+% HHL: we present here only the recommended protocol
 \begin{table}[]
   \begin{minipage}{\linewidth}
     \caption{Comparing relative free energies of hydration for various MD 
@@ -892,9 +887,39 @@ transformation where the AMBER implicit dummy atom result is higher by
     }
   \end{minipage}
 \end{table}
-%SB: and why we don't consider GROMACS RF also here?
-Table~\ref{tab:relative} summarizes results for relative free energies of 
-hydration obtained from relative transformations.
+
+% HHL: is this from absolute or relative simulations?
+Tab~\ref{tab:mue-absolute} shows the MAE between SOMD, GROMACS, AMBER and 
+CHARMM.
+%(alternatively: Tab~\ref{tab:muebound-comp} shows the MAE comparison with a
+%95$\%$ confidence interval). 
+The MAE appears to be fairly small generally but 
+reaches about \SI{0.3}{kcal.mol^{-1}} between CHARMM and GROMACS, and CHARMM 
+and AMBER.
+\begin{table}[]
+  \begin{minipage}{\linewidth}
+    \caption{MAE (in \si{kcal.mol^{-1}}) comparing relative free energies from 
+    absolute simulations between SOMD, GROMACS, AMBER and 
+    CHARMM.}\label{tab:mue-absolute}
+    \makebox[\textwidth][c]{
+      \begin{tabular}{lrrr}
+        \toprule
+        Package & GROMACS & AMBER & CHARMM \\
+        \midrule
+        SOMD    & 0.18 & 0.23 & 0.19 \\
+        GROMACS &      & 0.14 & 0.31 \\
+        AMBER   &      &      & 0.32 \\
+        \bottomrule
+      \end{tabular}
+    }
+  \end{minipage}
+\end{table}
+
+Having established the predictions from absolute transformations we now turn to 
+computing $\Delta\Delta G_{\mathrm{hydr}}$ from relative mutations.  
+Table~\ref{tab:relative} summarizes the results for the four MD packages.  
+Again the data is from the recommended protocol (see detailed discussions in 
+the following subsections).
 \begin{table}[]
   \begin{minipage}{\linewidth}
     \caption{Comparing relative free energies of hydration for various MD 
@@ -959,135 +984,107 @@ hydration obtained from relative transformations.
   \end{minipage}
 \end{table}
 
-Tab~\ref{tab:mue-comp} shows the MAE between SOMD, GROMACS with
-reaction field (GROMACS RF), GROMACS with PME (GROMACS PME), AMBER and CHARMM
-(alternatively: Tab~\ref{tab:muebound-comp} shows the MAE comparison with
-95$\%$ of confidence interval between SOMD, GROMACS with reaction
-field (GROMACS RF), GROMACS with PME (GROMACS PME), AMBER and CHARMM).
-% HHL: use only one of tab:mue-comp or tab:muebound-comp here, move other to SI 
-%      is this relative ddG?
-\begin{table}[]
-  \begin{minipage}{\linewidth}
-    \caption{MAE (\SI{}{kcal.mol^{-1}}) comparison between SOMD, GROMACS with Reaction Field 
-      (GROMACS RF), GROMACS with PME (GROMACS PME), AMBER and CHARMM 
-      .}\label{tab:mue-comp}
-    \makebox[\textwidth][c]{
-      \begin{tabular}{lrrrrr}
-        \toprule
-        Package & SOMD & Gromcs RF & GROMACS PME & AMBER & CHARMM \\
-        \midrule
-        SOMD    & 0.00 & 0.18    & 0.18 & 0.23 & 0.19\\
-        GROMACS RF   & 0.18 & 0.00    & 0.04 & 0.14 & 0.32\\
-        GROMACS PME  & 0.18 & 0.04    & 0.00 & 0.14 & 0.31\\
-        AMBER        & 0.23 & 0.14    & 0.14 & 0.00 & 0.32\\
-        CHARMM	     & 0.19 & 0.32    & 0.31 & 0.32 & 0.00\\
-        \bottomrule
-      \end{tabular}
-    }
-  \end{minipage}
-\end{table}
-The reaction fields implemented in SOMD and GROMACS differ somewhat (atom-based 
-shifted Barker Watts vs group based switched 
-Barker Watts), but nevertheless SOMD and GROMACS RF produce comparable results 
-with a MAD of \SI{0.18}{kcal.mol^{-1}}.
-% HHL: citation for BWRF missing
-% JM: Guilherme/DLM can you double check that I described correctly the RF 
-% implemented in Gromacs?
-% SB:  Hannes, this is the Bibtex for the BWRF citation. I can't add to bib file:
-\iffalse
-@article{barker1973monte,
-  title={Monte Carlo studies of the dielectric properties of water-like models},
-  author={Barker, JA and Watts, RO},
-  journal={Molecular Physics},
-  volume={26},
-  number={3},
-  pages={789--792},
-  year={1973},
-  publisher={Taylor \& Francis}
-}
-\fi
+Overall, the predicted $\Delta\Delta G_{\mathrm{hydr}}$ valued from the four MD 
+packages are in good agreement with each other.  CHARMM tends to show smaller 
+relative free energies in a number of transformations: toluene, neopentane, 
+2--methylfuran and 2--methylindole.  SOMD displays smaller $\Delta\Delta 
+G_{\mathrm{hydr}}$ in the methanol and toluene transformations.  The largest 
+discrepancy, however, is in the neopentane transformation with central mapping 
+where AMBER with implicit dummy atoms is about \SI{0.5}{kcal.mol^{-1}} higher 
+and CHARMM about \SI{0.3}{kcal.mol^{-1}} lower than the other two codes.  The 
+terminal mapped neopentane reveals AMBER to be in line with GROMACS and SOMD 
+while CHARMM's results is essentially the same as in the central mapped 
+transformation.  AMBER deviates also quite strongly from the other codes in the 
+cyclopentayl indole cases.
 
+%\begin{table}[]
+%  \begin{minipage}{\linewidth}
+%    \caption{MAE (\SI{}{kcal.mol^{-1}})with 95$\%$ confidence interval between 
+%SOMD, GROMACS 
+%    with 
+%      Reaction Field (GROMACS RF), GROMACS with PME (GROMACS PME), AMBER and 
+%CHARMM.}
+%      \label{tab:muebound-comp}
+%    \makebox[\textwidth][c]{
+%      \begin{tabular}{lccccc}
+%        \toprule
+%        Package & SOMD & Gromcs RF & GROMACS PME & AMBER & CHARMM\\
+%        \midrule
+%        SOMD         & 0.02< 0.04< 0.05 & 0.17< 0.19< 0.21    & 0.16< 
+%        0.18< 0.20 & 0.21< 0.23< 0.25 & 0.18< 0.19< 0.20\\
+%        GROMACS RF   	  & 0.17< 0.18< 0.19 & 0.01< 0.02< 0.03    & 0.04< 
+%0.05< 
+%        0.06 & 
+%        0.13< 0.14< 0.15 & 0.31< 0.32< 0.33\\
+%        GROMACS PME       & 0.17< 0.18< 0.19 & 0.04< 0.05< 0.06    & 0.01< 
+%        0.02< 0.03 & 
+%        0.14< 0.15< 0.16 & 0.30< 0.31< 0.32\\
+%        AMBER		  & 0.22< 0.23< 0.24 & 0.13< 0.14< 0.15    & 0.14< 0.15< 0.16 
+%& 
+%        0.01< 
+%        0.02< 0.03 & 0.31< 0.32< 0.33\\
+%        CHARMM & 0.17< 0.19< 0.21 & 0.31< 0.32< 0.33 & 0.30< 0.31< 0.32 & 
+%0.31< 0.32< 0.33 & 0.01< 0.02 <0.03\\
+%        \bottomrule
+%      \end{tabular}
+%    }
+%  \end{minipage}
+%\end{table}
+
+% HHL: is this from absolute or relative simulations?
 \begin{table}[]
   \begin{minipage}{\linewidth}
-    \caption{MAE (\SI{}{kcal.mol^{-1}})with 95$\%$ confidence interval between SOMD, GROMACS 
-    with 
-      Reaction Field (GROMACS RF), GROMACS with PME (GROMACS PME), AMBER and CHARMM.}
-      \label{tab:muebound-comp}
+    \caption{MAE (\SI{}{kcal.mol^{-1}}) comparing relative free energies from 
+    relative simulations between SOMD, GROMACS, AMBER and 
+    CHARMM.}\label{tab:mue-relative}
     \makebox[\textwidth][c]{
-      \begin{tabular}{lccccc}
+      \begin{tabular}{lrrr}
         \toprule
-        Package & SOMD & Gromcs RF & GROMACS PME & AMBER & CHARMM\\
+        Package & GROMACS & AMBER & CHARMM\\
         \midrule
-        SOMD         & 0.02< 0.04< 0.05 & 0.17< 0.19< 0.21    & 0.16< 
-        0.18< 0.20 & 0.21< 0.23< 0.25 & 0.18< 0.19< 0.20\\
-        GROMACS RF   	  & 0.17< 0.18< 0.19 & 0.01< 0.02< 0.03    & 0.04< 0.05< 
-        0.06 & 
-        0.13< 0.14< 0.15 & 0.31< 0.32< 0.33\\
-        GROMACS PME       & 0.17< 0.18< 0.19 & 0.04< 0.05< 0.06    & 0.01< 
-        0.02< 0.03 & 
-        0.14< 0.15< 0.16 & 0.30< 0.31< 0.32\\
-        AMBER		  & 0.22< 0.23< 0.24 & 0.13< 0.14< 0.15    & 0.14< 0.15< 0.16 & 
-        0.01< 
-        0.02< 0.03 & 0.31< 0.32< 0.33\\
-        CHARMM & 0.17< 0.19< 0.21 & 0.31< 0.32< 0.33 & 0.30< 0.31< 0.32 & 0.31< 0.32< 0.33 & 0.01< 0.02 <0.03\\
+        SOMD    & 0.12 & 0.09 & 0.08 \\
+        GROMACS &      & 0.13 & 0.17 \\
+        AMBER   &      &      & 0.16 \\
         \bottomrule
       \end{tabular}
     }
   \end{minipage}
 \end{table}
 
-%%
-%SB: As above, I computed the MAE with error bounds and ``simple'' MAE calculation
-%Furthermore, I added the Gromacs RF values, taken from the reproducibility spreadsheet
-\begin{table}[]
-  \begin{minipage}{\linewidth}
-    \caption{MAE (\SI{}{kcal.mol^{-1}}) comparison between SOMD, GROMACS with Reaction Field 
-      (GROMACS RF), GROMACS with PME (GROMACS PME), AMBER and CHARMM relative free energy prediction
-      computed with the absolute protocol}\label{tab:mue-abs}
-    \makebox[\textwidth][c]{
-      \begin{tabular}{lrrrrr}
-        \toprule
-        Package & SOMD & Gromcs RF & GROMACS PME & AMBER & CHARMM\\
-        \midrule
-        SOMD         & 0.00 & 0.16    & 0.12 & 0.09 & 0.08\\
-        GROMACS RF   & 0.16 & 0.00    & 0.14 & 0.24 & 0.13\\
-        GROMACS PME  & 0.12 & 0.14    & 0.00 & 0.13 & 0.17\\
-        AMBER        & 0.09 & 0.24    & 0.13 & 0.00 & 0.16\\
-        CHARMM	     & 0.08 & 0.13    & 0.17 & 0.16 & 0.00\\
-        \bottomrule
-      \end{tabular}
-    }
-  \end{minipage}
-\end{table}
-
-\begin{table}[]
-  \begin{minipage}{\linewidth}
-    \caption{MAE (\SI{}{kcal.mol^{-1}}) with 95$\%$ confidence interval between SOMD, GROMACS 
-    with 
-      Reaction Field (GROMACS RF), GROMACS with PME (GROMACS PME), AMBER and CHARMM for relative
-      free energy prediction computed with the absolute protocol}\label{tab:muebound-abs}
-    \makebox[\textwidth][c]{
-      \begin{tabular}{lccccc}
-        \toprule
-        Package & SOMD & Gromcs RF & GROMACS PME & AMBER & CHARMM\\
-        \midrule
-        SOMD         & 0.02< 0.04< 0.06 & 0.15< 0.16< 0.18    & 0.11< 
-        0.12< 0.14 & 0.08< 0.09< 0.10 &0.07< 0.08< 0.09\\
-        GROMACS RF   	  & 0.15< 0.16< 0.17 & 0.01< 0.02< 0.03    & 0.12< 0.13< 
-        0.14 & 
-        0.23< 0.24< 0.25 & 0.12< 0.13< 0.14\\
-        GROMACS PME       & 0.11< 0.13< 0.16 & 0.13< 0.14< 0.15    & 0.01< 
-        0.02< 0.03 & 
-        0.11< 0.12< 0.13 & 0.15< 0.16< 0.18\\
-        AMBER		  & 0.07< 0.10< 0.13 & 0.23< 0.24< 0.25    & 0.11< 0.12< 0.13 & 
-        0.01< 
-        0.02< 0.03 & 0.15< 0.16< 0.18\\
-        CHARMM & 0.07< 0.08< 0.09 & 0.12< 0.13< 0.14 & 0.15< 0.17< 0.18 & 0.15< 0.16 <0.17 & 0.01<0.02<0.03\\
-        \bottomrule
-      \end{tabular}
-    }
-  \end{minipage}
-  \end{table}
+%\begin{table}[]
+%  \begin{minipage}{\linewidth}
+%    \caption{MAE (\SI{}{kcal.mol^{-1}}) with 95$\%$ confidence interval 
+%between SOMD, GROMACS 
+%    with 
+%      Reaction Field (GROMACS RF), GROMACS with PME (GROMACS PME), AMBER and 
+%CHARMM for relative
+%      free energy prediction computed with the absolute 
+%protocol}\label{tab:muebound-abs}
+%    \makebox[\textwidth][c]{
+%      \begin{tabular}{lccccc}
+%        \toprule
+%        Package & SOMD & Gromcs RF & GROMACS PME & AMBER & CHARMM\\
+%        \midrule
+%        SOMD         & 0.02< 0.04< 0.06 & 0.15< 0.16< 0.18    & 0.11< 
+%        0.12< 0.14 & 0.08< 0.09< 0.10 &0.07< 0.08< 0.09\\
+%        GROMACS RF   	  & 0.15< 0.16< 0.17 & 0.01< 0.02< 0.03    & 0.12< 
+%0.13< 
+%        0.14 & 
+%        0.23< 0.24< 0.25 & 0.12< 0.13< 0.14\\
+%        GROMACS PME       & 0.11< 0.13< 0.16 & 0.13< 0.14< 0.15    & 0.01< 
+%        0.02< 0.03 & 
+%        0.11< 0.12< 0.13 & 0.15< 0.16< 0.18\\
+%        AMBER		  & 0.07< 0.10< 0.13 & 0.23< 0.24< 0.25    & 0.11< 0.12< 0.13 
+%& 
+%        0.01< 
+%        0.02< 0.03 & 0.15< 0.16< 0.18\\
+%        CHARMM & 0.07< 0.08< 0.09 & 0.12< 0.13< 0.14 & 0.15< 0.17< 0.18 & 
+%0.15< 0.16 <0.17 & 0.01<0.02<0.03\\
+%        \bottomrule
+%      \end{tabular}
+%    }
+%  \end{minipage}
+%  \end{table}
 
 
 \subsection{AMBER}
@@ -1465,6 +1462,11 @@ bond-stretching term, which introduce a free energy offset estimated as:
 \end{equation}
 where $r_{\mathrm{i}}$ and $r_{\mathrm{f}}$ are the initial and final bond 
 lengths, respectively. 
+
+The reaction fields implemented in SOMD and GROMACS differ somewhat (atom-based 
+shifted Barker Watts~\cite{doi:10.1080/00268977300102101}) vs group based 
+switched Barker Watts), but nevertheless SOMD and GROMACS RF produce comparable 
+results with a MAD of \SI{0.18}{kcal.mol^{-1}}.
 
 Overall, the SOMD free energy estimations are in good agreement with the 
 other MD packages, as the MAD suggests (see Table~XX).  Reaction field and PME 
