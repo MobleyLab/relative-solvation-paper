@@ -1049,8 +1049,12 @@ and CHARMM about \SI{0.3}{kcal.mol^{-1}} lower than the other two codes.  The
 terminal mapped neopentane reveals AMBER to be in line with GROMACS and SOMD 
 while CHARMM's results is essentially the same as in the central mapped 
 transformation.  AMBER deviates also quite strongly from the other codes in the 
-cyclopentayl indole cases.
+cyclopentanyl indole cases.
 
+The MAEs of the relative free energy simulations are presented in 
+Table~\ref{tab:mue-relative}.  These are continuously larger than the MAEs from 
+the absolute simulations (Table~\ref{tab:mue-absolute}) and reach 
+\SI{0.3}{kcal.mol^{-1}} for CHARMM compared with AMBER and GROMACS.
 \begin{table}[]
   \begin{minipage}{\linewidth}
     \caption{MAE (in \si{kcal.mol^{-1}}) comparing relative free energies from 
@@ -1164,10 +1168,10 @@ This
 has obvious implications for performance~\cite{doi:10.1021/ct400340s}.
 
 We also found that, in contrast to the other three codes, AMBER cannot
-correctly reproduce relative free energies in a 1--step protocol i.e.\
+correctly reproduce relative free energies in the unified protocol i.e.\
 when all force field parameters are scaled simultaneously (see 
 Table~\ref{S-tab:amber-onestep}x).  This appears to be a problem when more than 
-a few dummy atoms are involved while the 1--step protocol works for the smaller 
+a few dummy atoms are involved while the unified protocol works for the smaller 
 transformations (refer to Figure~\ref{fig:cycles}).  The separated RAFE 
 protocol and absolute free energies, however, are very close to the other MD 
 packages as demonstrated in Table~\ref{tab:amber-comp}.
@@ -1176,7 +1180,7 @@ End point geometries appear to be another issue with AMBER simulations
 in both solution and vacuum.  This is most obvious in the neopentane 
 $\rightarrow$ methane test case with central mapping (see 
 \nameref{sec:rafe_setup} and Figure~\ref{fig:thermocycle}).
-As shown in Figure~\ref{S-fig:amber-dist}x, the methane endstate exhibits 
+As shown in Figure~\ref{S-fig:amber-dist}x, the methane end state exhibits 
 incorrect distances between the carbon and the four 
 attached hydrogens of approximately \SI{1.23}{\angstrom}.  This value is about 
 \SI{1.12}{\angstrom} for the terminal dummy atoms in the other test cases but 
@@ -1190,19 +1194,25 @@ dummy atoms immediately surrounding the central atom.
 
 We also compare free energies obtained from the implicit dummy approach in 
 AMBER with results form explicit dummy atom simulations and results from 
-absolute transformations.  Table~\ref{tab:amber-comp} lists the free energies 
-for these three approaches together with the SEM.  SHAKE was explicitly 
-deactivated for all bonds in the perturbed region in these protocols.
+absolute transformations, see Tables~\ref{tab:absolute} and 
+\ref{tab:relative}.  The relative simulations have been carried out with the 
+separated protocol while the absolute simulations used a unified protocol 
+throughout.  SHAKE was explicitly deactivated for all bonds in the perturbed 
+region in these protocols.
+
+Table~\ref{tab:amber-comp} shows selected results for transformations with 
+SHAKE enabled for all bonds to hydrogens except those bonds that change bond 
+length during transformation. 
 \begin{table}[]
   \begin{minipage}{\linewidth}
-  \caption{Comparing AMBER results for simulations with implicit and explicit 
-  dummy atoms, and results from absolute transformation.  A few select cases 
-  with SHAKE enabled and a time step of \SI{2}{fs} are shown in addition.  
-  Simulations were carried out with the separated protocol.  Signs of the 
-  backward transformation have been reverted to correspond to the forward 
-  transformation.}\label{tab:amber-comp}
+  \caption{Comparing AMBER results for simulations with various protocols.
+    The emphasis is here on the data with SHAKE enabled and a time step of 
+    \SI{2}{fs} (last column).  Implicit, explicit and absolute protocols had 
+    SHAKE disabled and a time step of \SI{1}{fs}. Signs of the  backward 
+    transformation have been reverted to correspond to the forward   
+    transformation.}\label{tab:amber-comp}
   \makebox[\textwidth][c]{
-  \begin{tabular}{llrrlrr}
+  \begin{tabular}{llrrrr}
     \toprule
     &                & implicit & explicit & absolute & SHAKE\footnote{implicit 
     dummy atom protocol with $\delta t =$ \SI{2}{fs} and SHAKE on all H--bonds 
@@ -1210,12 +1220,6 @@ deactivated for all bonds in the perturbed region in these protocols.
     \multicolumn{2}{l}{transformation}          & $\Delta\Delta G$  & 
     $\Delta\Delta G$ & $\Delta G$ & $\Delta\Delta G$ \\
     \midrule
-ethane & methane & \num{0.02+-0.01} & \num{-0.13+-0.02}
-&\multirow{2}{*}{\num{-0.02+-0.01}} & \\
-methane & ethane & \num{0.00+-0.03} & \num{-0.19+-0.03} & & \\
-methanol & methane & \num{6.19+-0.01} & \num{6.20+-0.02} & 
-\multirow{2}{*}{\num{6.20+-0.01}} \\
-methane & methanol & \num{6.20+-0.03} & \num{-6.15+-0.01} & & \\
 ethane  & methanol & \num{-6.20+-0.01} & \num{-6.27+-0.01} &
 \multirow{2}{*}{\num{-6.22+-0.01}} & -6.20 \\
 methanol & ethane & \num{-6.20+-0.01} & \num{-6.25+-0.01} & & \\
@@ -1231,33 +1235,20 @@ neopentane\footnote{\label{foot:termA}terminal mapping.} & methane &
 methane\footref{foot:termA} & neopentane & \num{-0.13+-0.03} & 
 \num{-0.12+-0.03} 
 & & \\
-2-methylfuran  & methane & \num{3.09+-0.01} & \num{3.10+-0.01} &
-\multirow{2}{*}{\num{2.96+-0.02}} \\
-methane & 2-methyfuran  & \num{3.10+-0.03} & \num{3.15+-0.03} & & \\
-2-methylindole & methane & \num{8.78+-0.03} & \num{8.78+-0.04} &
-\multirow{2}{*}{\num{8.72+-0.01}} \\
-methane & 2-methylindole & \num{9.14+-0.02} & \num{9.13+-0.03} & \\
-2--cyclopentanylindole\footnote{\label{foot:partialA}partial re/discharge i.e.\ 
-only the charges of the appearing and the disappering 5--rings are switched.} & 
-7--cyclopentanylindole & \num{0.36+-0.03} & \num{0.63+-0.06} & 
-\multirow{2}{*}{\num{0.39+-0.04}} \\
-7--cyclopentanylindole\footref{foot:partialA} & 2--cyclopentanylindole & 
-\num{0.34+-0.05} & \num{0.50+-0.03} & & \\
     \bottomrule
   \end{tabular}
 }
   \end{minipage}
 \end{table}
-In addition, the table also shows selected results for transformations with 
-SHAKE enabled for all bonds to hydrogens except those bonds that change bond 
-length during transformation.  These free energies are computed from a single 
+These free energies are computed from a single 
 run as we generally observe very small SEM and in practice one simulation is 
 sufficient to obtain converged free energy averages for all the systems studied 
 here.  The time step has been increased from \SI{1}{fs} as used in the other 
 three protocols to \SI{2}{fs}.  As the results are essentially the same as the 
 non--SHAKE simulations, this SHAKE protocol appears to be a viable solution to 
-increase the performance of RAFE simulations (cmp.\ SOMD simulations).  From a 
-practical point of view, 
+increase the performance of RAFE simulations.  We have repeated this protocol 
+with AMBER in response to the good results obtained with SOMD using the same.  
+From a practical point of view, 
 %DLM: How much speed difference does this make?
 %HHL: I would say by a factor of two as the number of SHAKEs is practically the 
 %same.
