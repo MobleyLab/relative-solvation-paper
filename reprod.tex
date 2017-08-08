@@ -1300,6 +1300,13 @@ and explicit dummy atoms).
 \todo{make $\partial U/\partial\lambda$ plots of states with varying 
 electrostatic potentials with and without softcore coulomb}
 
+% HHL: I think this paragraph should be shortened.  There are certainly
+%      deficiencies in the manual and it is appropriate to give some basic
+%      advice to users.  But it should not be a replacement of the manual.
+%      couple-moltype should discusses as being ``necessary'' for
+%      absolute transformation but must be avoided for relative simulatiosn.
+%      The other couple-* parameters should only be discussed in context with
+%      absolute transformation or maybe skipped entirely
 GROMACS has some run input options which can simplify the procedure for setting 
 up 
 free energy calculations; however, these same options can also provide a source 
@@ -1324,8 +1331,9 @@ the entire
 molecule. 
 \inpopt{couple-lambda0} and \inpopt{couple-lambda1} control the interactions of 
 the molecule
-specified by \inpopt{couple-moltype} with its surroundings. For instance, if 
-\inpopt{couple-lambda0}
+specified by \inpopt{couple-moltype} with its surroundings.
+% HHL: The following seems redundant because explained in the manual
+For instance, if \inpopt{couple-lambda0}
 is set to \inpopt{vdw-q} and \inpopt{couple-lambda1} to \inpopt{none}, the 
 calculation will be set
 in such a way that the tagged molecule is fully coupled to its surrounding by 
@@ -1353,6 +1361,10 @@ maintained at their existing values
 while the free energy transformation is conducted, leading to an incomplete 
 transformation and 
 introducing errors in computed free energies.
+% HHL: The manual uses hyohens so vdw-lambda, etc.  This here seems to be
+%      saying that there are only these two lambdas and it is not clear what
+%      fep-lambdas actually is.  Please also remove the long lists of numbers.
+%      Just describe the lambda vectors in general terms.
 The entries \inpopt{vdw}\_\inpopt{lambdas} and \inpopt{fep}\_\inpopt{lambdas} 
 define the lambda schedule. The former
 indicates the value of the $\lambda$ vector component that modifies van der 
@@ -1367,15 +1379,16 @@ the sets
 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
 0.0, 0.0, 0.0, 0.0, 0.0, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.65, 0.7, 0.75, 
 0.8, 0.85, 0.9, 0.95, 1.0}); if the 
-% HHL: this is too much information, we will bundle up a set of input files
-% JM: Summarises the number of windows used this gives us an idea of efficiency
 transformation involves particle deletion ("forward process"), 
 \inpopt{fep}\_\inpopt{lambdas} must correspond to 
 the first set, while \inpopt{vdw}\_\inpopt{lambdas} to the second. If the 
 process involves particle insertion ("backward 
-process") we swap the sets between the entries. In this work, 
-\inpopt{mass}\_\inpopt{lambdas} was specified as
-a set of 31 zeros. Unified protocols have all \inpopt{-lambdas} entries equal 
+process") we swap the sets between the entries.
+% HHL: And setting the mass-lambdas to zero means what?  Say that masses stay
+%      the same throughout.  This is also discussed somewhere above.
+In this work, \inpopt{mass}\_\inpopt{lambdas} was specified as
+a set of 31 zeros.
+Unified protocols have all \inpopt{-lambdas} entries equal 
 to the set (\inpopt{0.0, 0.05, 
 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0}).
 % HHL: also mass-lambdas?
@@ -1403,6 +1416,8 @@ to the set (\inpopt{0.0, 0.05,
 % HHL: IIRC Michael Shirts said that LJ softcores are applied when the 
 %      LJ parameter(s) (don't recall which) are zer0
 
+% HHL: only 2 digits for all data in the table please
+%      what is footnote d good for?
 Table \ref{tab:groresults} lists the relative free energies obtained from 
 GROMACS simulations.
 \begin{sidewaystable}[]
@@ -1413,7 +1428,7 @@ GROMACS simulations.
   to correspond to the forward transformation.}
   \label{tab:groresults}
   \resizebox{\columnwidth}{!}{%
-    \begin{tabular}{@{}llllllll@{}}
+    \begin{tabular}{@{}rrrrrrrr@{}}
     \toprule
     &  & \multicolumn{2}{c}{split \footnote{\label{foot:split} results obtained 
     from alchemical transformations with electrostatic and bonded scaling 
@@ -1481,13 +1496,14 @@ GROMACS simulations.
 
 Relative free energies are in good agreement with each other and with 
 $\Delta \Delta G_{\mathrm{hydr}}$ obtained from the other software used in this 
-study. 
+study.  % HHL: refer to tables in the general section
 A noteworthy exception is the difference between the unified and split results 
-of 
-methane $\rightarrow$ methanol, its reverse process, which could be investigated
-with additional split protocol simulations using Coulomb softcore potentials 
-(Table \ref{tab:eff-sc}).
- 
+of methane $\rightarrow$ methanol ant its reverse process, which was 
+investigated with additional split protocol simulations using Coulomb softcore 
+potentials (Table \ref{tab:eff-sc}).
+
+% HHL: only 2 digits in the table
+%      last column is absolute, not unfied?  BTW, is absolute protocol split
 \begin{table}[]
 \centering
 \caption{Relative hydration free energies of methanol $\rightarrow$ methane and 
@@ -1522,7 +1538,7 @@ softcore use in
 electrostatic interactions requires adjustments in the $\lambda$-distance 
 between states in the
 rapidly varying part of the $\partial \mathcal{H}/\partial\lambda$, see Figure
-\ref{fig:ti-fep}. 
+\ref{fig:ti-fep}. % HHL: this refernce doesn;t exist
 The split protocol without Coulomb softcore potentials is the most effective 
 way to calculate 
 relative free energy calculations. 
@@ -1532,14 +1548,17 @@ relative free energy calculations.
 %      should not have any effect in vacuum, so does this come from the
 %      solution simulation only?  When a split protocol is used there is
 %      no need to use a Coulomb softcore. Please clarify.
-
 % GDRM: Yes, it comes from solution only. In vacuum there is virtually no 
 %difference between 
 %     these cases. I ran a split + sc simulation to understand why 
 %methanol~methane and 
 %     ethane~methanol ddG values differ so much between the unified and split 
 %protocol.
+% HHL: you use the bonded terms together with the Coulomb.  Could they be the
+%      problem?  What if you combine them with vdW?
 
+% HHL: The neopentane cases look quite consistent to me.  What is the problem
+%      here?
 Neopentane $\rightarrow$ methane transformations, and their reverse processes 
 also disagree with the absolute protocol, but similar differences can be seen 
 in AMBER.
@@ -1557,7 +1576,8 @@ becomes a heavy
 atom if the simulation employs hydrogen bond constraining algorithms such as 
 SHAKE or LINCS.
 Successful simulations seem to require turning off the constraint and 
-decreasing the time step.
+decreasing the time step. % HHL: but see solution for SOMD and AMBER.  Can this
+% be done with GROMACS?
 
 \subsection{SOMD}
 \label{sec:somd-results}
