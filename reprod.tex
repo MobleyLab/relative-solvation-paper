@@ -1298,16 +1298,8 @@ and explicit dummy atoms).
 \subsection{GROMACS}
 \label{sec:gromacs-results}
 
-% HHL: I think this paragraph should be shortened.  There are certainly
-%      deficiencies in the manual and it is appropriate to give some basic
-%      advice to users.  But it should not be a replacement of the manual.
-%      couple-moltype should discusses as being ``necessary'' for
-%      absolute transformation but must be avoided for relative simulatiosn.
-%      The other couple-* parameters should only be discussed in context with
-%      absolute transformation or maybe skipped entirely
 GROMACS has some run input options which can simplify the procedure 
 for setting up free energy calculations.
-% JM: shorten above
 Specifically, \inpopt{couple-moltype} implicitly defines the initial and final 
 states by giving a special tag to a molecule and controls whether 
 intramolecular interactions of the tagged molecule are retained or not 
@@ -1349,6 +1341,7 @@ with its surroundings.
 %%      saying that there are only these two lambdas and it is not clear what
 %%      fep-lambdas actually is.  Please also remove the long lists of numbers.
 %%      Just describe the lambda vectors in general terms.
+%% GDRM: done
 The entries \inpopt{vdw}\_\inpopt{lambdas} and \inpopt{fep}\_\inpopt{lambdas} 
 define the lambda schedule. The former indicates the value of the $\lambda$ 
 vector component that modifies van der Waals interactions for each state,
@@ -1387,6 +1380,13 @@ to each other.
 
 % HHL: only 2 digits for all data in the table please
 %      what is footnote d good for?
+% GDRM: About the decimal places: some of the errors would then be 
+%      rounded down to zero. That's why I left some with 3 decimal 
+%      places.
+% GDRM: footnote d was meant to avoid confusion. In a first glance, 
+% some values might seem not to be in the convention that we adopted.
+% I'll remove it if you want. 
+      
 Table \ref{tab:groresults} lists the relative free energies obtained from 
 GROMACS simulations.
 \begin{sidewaystable}[]
@@ -1473,6 +1473,7 @@ potentials (Table \ref{tab:eff-sc}).
 
 % HHL: only 2 digits in the table
 %      last column is absolute, not unfied?  BTW, is absolute protocol split
+% GDRM: yes, it has the absolute values.  The protocol is unified
 \begin{table}[]
 \centering
 \caption{Relative hydration free energies of methanol $\rightarrow$ methane and 
@@ -1484,7 +1485,7 @@ of this table is in the SI.}
 \begin{tabular}{@{}llclclcl@{}}
 \toprule
  &  & \multicolumn{2}{c}{split} & \multicolumn{2}{c}{split+sc} & 
- \multicolumn{2}{c}{unified} \\
+ \multicolumn{2}{c}{absolute} \\
  &  & RF & \multicolumn{1}{c}{PME} & RF & \multicolumn{1}{c}{PME} & RF & 
  \multicolumn{1}{c}{PME} \\
 \multicolumn{2}{c}{transformation} & $\Delta \Delta G$ & 
@@ -1501,17 +1502,13 @@ methane & methanol & \multicolumn{1}{l}{\num{6.168 +- 0.005}} & \num{6.199 +-
 \end{table}
 
 We noticed a difference of approximately \SI{1.5}{kcal.mol^{-1}} between the 
-split protocol without 
-Coulomb softcore potentials and both protocols that use it. Data suggests that 
-softcore use in 
-electrostatic interactions requires adjustments in the $\lambda$-distance 
-between states in the
+split protocol without  Coulomb softcore potentials and both protocols that 
+use it. Data suggests that softcore use in electrostatic interactions requires 
+adjustments in the $\lambda$-distance between states in the
 rapidly varying part of the $\partial \mathcal{H}/\partial\lambda$, see Figure
-\ref{fig:ti-fep}. % HHL: this refernce doesn;t exist
+\ref{fig:gro_sc_eff}. 
 The split protocol without Coulomb softcore potentials is the most effective 
-way to calculate 
-relative free energy calculations. 
-
+way to calculate relative free energy calculations. 
 % HHL: This needs more detail.  It is not clear to me if the split+sc
 %      protocol gives a higher ddG because of the chosen lambda spacing or
 %      because the Coulumb softcores are switch on too.  The latter
@@ -1526,20 +1523,17 @@ relative free energy calculations.
 %protocol.
 % HHL: you use the bonded terms together with the Coulomb.  Could they be the
 %      problem?  What if you combine them with vdW?
+% GDRM: I don't know, but I could run the simulation
+
 
 % HHL: The neopentane cases look quite consistent to me.  What is the problem
 %      here?
-Neopentane $\rightarrow$ methane transformations, and their reverse processes 
-also disagree with the absolute protocol, but similar differences can be seen 
-in AMBER.
+% GDRM: There was none. It was my mistake.
 We also find that there is no significant difference in calculated free 
 energies depending on the choice of 
 Particle Mesh Ewald or Reaction Field for calculation of long-range 
 electrostatic interactions. 
 
-% HHL: have you actually seens this happening?  I have added a comment
-% regarding this in the implementation details.
-% GDRM: Yes, we've discussed this issue very early on in the emails
 One particularity of the software worth mentioning is 
 that relative free energy simulations will blow up if a hydrogen alchemically 
 becomes a heavy 
@@ -1548,6 +1542,8 @@ SHAKE or LINCS.
 Successful simulations seem to require turning off the constraint and 
 decreasing the time step. % HHL: but see solution for SOMD and AMBER.  Can this
 % be done with GROMACS?
+% GDRM: perhaps it can, if we define a new atom type for the hydrogens that
+%      will be alchemically changed.
 
 \subsection{SOMD}
 \label{sec:somd-results}
