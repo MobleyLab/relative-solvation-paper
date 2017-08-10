@@ -55,16 +55,16 @@
 
 We describe here the softcore functions~\cite{beutler_avoiding_1994,
   zacharias_separationshifted_1994} as implemented in the MD packages
-AMBER, CHARMM, GROMACS and Sire.  Both the van der Waals,
+AMBER, CHARMM, Gromacs and Sire.  Both the van der Waals,
 $V_{\mathrm{LJ}}$ (Lennard--Jones potential) and the electrostatic
 interactions, $V_{\mathrm{Coul}}$ (Coulomb potential) as a function of
 the order parameter $\lambda$ are given for the disappearing atoms
 only.  For the appearing atoms replace $\lambda$ with $1 - \lambda$
-and \emph{vice versa}.  Eq.\ \eqref{eq:general-softcore} is the generalized
+and \emph{vice versa}.  Eq.\ \eqref{eq:general} is the generalized
 form for all codes while the specific distance dependent functions are
-outlined in eq.\,\eqref{eq:Sire-softcore} for Sire, 
-eq.\,\eqref{eq:AMBER-softcore} for AMBER, eq.\,\eqref{eq:GROMACS-softcore} for 
-GROMACS and eq.\,\eqref{eq:CHARMM-softcore} for CHARMM.
+outlined in eq.\,\eqref{eq:Sire} for Sire, eq.\,\eqref{eq:Amber} for
+AMBER, eq.\,\eqref{eq:Gromacs} for Gromacs and eq.\,\eqref{eq:CHARMM}
+for CHARMM.
 
 \begin{equation}
   V = V_{\mathrm{LJ}} + V_{\mathrm{Coul}} =
@@ -75,7 +75,7 @@ GROMACS and eq.\,\eqref{eq:CHARMM-softcore} for CHARMM.
       6} \right] +
   (1 - \lambda)^{n} \frac{q_{i}q_{j}}
   {4\pi\varepsilon_{0}\textcolor{red}{r_{\mathrm{Coul}}}}
-  \label{eq:general-softcore}
+  \label{eq:general}
 \end{equation}
 
 For Sire
@@ -84,7 +84,7 @@ For Sire
     r_{\mathrm{LJ}} &= (\alpha\sigma_{ij}\lambda + r_{ij}^2)^{\frac{1}{2}} \\
     r_{\mathrm{Coul}} &=  (\lambda + r_{ij}^2)^{\frac{1}{2}}
   \end{split}
-  \label{eq:Sire-softcore}
+  \label{eq:Sire}
 \end{equation}
 
 For AMBER
@@ -95,10 +95,10 @@ For AMBER
     r_{\mathrm{Coul}} &= (\beta\lambda + r_{ij}^{p})^{\frac{1}{p}} \\
     n &= 1
   \end{split}
-  \label{eq:AMBER-softcore}
+  \label{eq:Amber}
 \end{equation}
 
-For GROMACS
+For Gromacs
 \begin{equation}
   \begin{split}
     r_{\mathrm{LJ}} &= (\alpha \sigma_{ij}^{w} \lambda^{p} +
@@ -108,7 +108,7 @@ For GROMACS
     &\alpha_{\mathrm{Coul}} = 0,\alpha_{\mathrm{LJ}} \\
     n &= 1
   \end{split}
-  \label{eq:GROMACS-softcore}
+  \label{eq:Gromacs}
 \end{equation}
 
 For CHARMM (PSSP), applied to all ``reactant'' and all ``product'' atoms
@@ -118,7 +118,7 @@ For CHARMM (PSSP), applied to all ``reactant'' and all ``product'' atoms
     r_{\mathrm{Coul}} &= (\beta\lambda + r_{ij}^{2})^{\frac{1}{2}} \\
     n &= 1
    \end{split}
-  \label{eq:CHARMM-softcore}
+  \label{eq:CHARMM}
 \end{equation}
 
 $r_{\mathrm{vdW}}$, $r_{\mathrm{Coul}}$ and $r_{\mathrm{Coul}}$ (all in red) 
@@ -564,7 +564,7 @@ SEM values tend to be larger when they are used.
   \resizebox{\columnwidth}{!}{%
   \begin{tabular}{@{}llllllll@{}}
     \toprule
-     &  & \multicolumn{2}{l}{without Coulomb softcore} & \multicolumn{2}{l}{with Coulomb softcore} & \multicolumn{2}{l}{unified protocol} \\
+     &  & \multicolumn{2}{l}{without Coulomb softcore} & \multicolumn{2}{l}{with Coulomb softcore} & \multicolumn{2}{l}{absolute} \\
      &  & RF & PME & RF & PME & RF & PME \\
     \multicolumn{2}{l}{Transformations} & $\Delta \Delta G$ & $\Delta \Delta G$ & $\Delta \Delta G$ & $\Delta \Delta G$ & $\Delta \Delta G$ & $\Delta \Delta G$ \\ \midrule
     ethane & methane & \num{-0.025 +- 0.005} & \num{-0.035 +- 0.02} & \num{-0.03+-0.04} & \num{-0.02+-0.04} & \num{-0.06 +- 0.01} & \num{-0.04 +- 0.01} \\
