@@ -657,12 +657,6 @@ In the first two cases, each alchemical transformation was described by 31 and
 alchemical path;
 their change affect kinetic energy only and do not contribute to the free 
 energy change on this case. 
-%%JM Sentence needed here? Applies to all codes. Be careful about when neglect 
-%%is ok, 
-%%only true in some conditions
-%% GDRM: Did everyone chose not to change atomic masses along the alchemical 
-%%path?
-%% If it is the case this sentence could very well be removed.
 We used the Langevin integrator implemented in GROMACS with a 
 default friction coefficient of \SI{1.0}{ps/m_{atom}}. 
 Absolute hydration free energies were calculated from \SI{5}{ns} Langevin 
@@ -1470,6 +1464,10 @@ way to calculate relative free energy calculations.
 % GDRM: I don't know, but I could run the simulation
 % HHL: If you can run a few simulations that would be good.  But I think it
 %      is sufficient to run a single simulation, in one direction only.
+% GDRM: The problem is not in the bonded terms. It is in the electrostatic terms.
+%      I ran methane -> methanol with and without softcore with bonded term
+%      variation combined with the vdW change and this was the result.
+%      I also updated the plot in the SI 
 We also find that there is no significant difference in calculated free 
 energies depending on the choice of Particle Mesh Ewald or Reaction Field for 
 calculation of long-range electrostatic interactions. 
