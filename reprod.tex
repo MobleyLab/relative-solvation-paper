@@ -657,12 +657,6 @@ In the first two cases, each alchemical transformation was described by 31 and
 alchemical path;
 their change affect kinetic energy only and do not contribute to the free 
 energy change on this case. 
-%%JM Sentence needed here? Applies to all codes. Be careful about when neglect 
-%%is ok, 
-%%only true in some conditions
-%% GDRM: Did everyone chose not to change atomic masses along the alchemical 
-%%path?
-%% If it is the case this sentence could very well be removed.
 We used the Langevin integrator implemented in GROMACS with a 
 default friction coefficient of \SI{1.0}{ps/m_{atom}}. 
 Absolute hydration free energies were calculated from \SI{5}{ns} Langevin 
@@ -1373,41 +1367,41 @@ GROMACS simulations.
     & \multicolumn{1}{c}{$\Delta \Delta G$} & \multicolumn{1}{c}{$\Delta \Delta 
     G$} & \multicolumn{1}{c}{$\Delta \Delta G$} & \multicolumn{1}{c}{$\Delta 
     \Delta G$} & \multicolumn{1}{c}{$\Delta \Delta G$} \\ \midrule
-    ethane & methane & \num{-0.025 +- 0.005} & \num{-0.035 +- 0.02} & 
-    \num{-0.017 +- 0.003} & \num{-0.030 +- 0.001} & \num{-0.06 +- 0.01} & 
+    ethane & methane & \num{-0.03 +- 0.01} & \num{-0.04 +- 0.02} & 
+    \num{-0.02+- 0.00} & \num{-0.03 +- 0.00} & \num{-0.06 +- 0.01} & 
     \num{-0.04 +- 0.01} \\
     methane & ethane & \num{-0.01 +- 0.02} & \num{-0.02 +- 0.01} & \num{0.046 
     +- 0.02} \footnote{\label{foot:inv} inverted sign} & \num{0.01 +- 0.02} &  
     &  \\
-    methanol & methane & \num{6.163 +- 0.006} & \num{6.197 +- 0.004} & 
-    \num{7.30 +- 0.02} & \num{7.380 +- 0.007} & \num{5.77 +- 0.01} & \num{5.95 
+    methanol & methane & \num{6.16 +- 0.01} & \num{6.20 +- 0.00} & 
+    \num{7.30 +- 0.02} & \num{7.38 +- 0.01} & \num{5.77 +- 0.01} & \num{5.95 
     +- 0.01} \\
-    methane & methanol & \num{6.168 +- 0.005} & \num{6.199 +- 0.008} & 
+    methane & methanol & \num{6.17 +- 0.01} & \num{6.20 +- 0.01} & 
     \num{7.09 +- 0.02} & \num{7.17 +- 0.02} &  &  \\
-    ethane & methanol & \num{-6.123 +- 0.007} & \num{-6.185 +- 0.006} & 
-    \num{-7.117 +- 0.005} & \num{-7.21 +- 0.02} & \num{-5.83 +- 0.01} & 
+    ethane & methanol & \num{-6.12 +- 0.01} & \num{-6.19 +- 0.01} & 
+    \num{-7.12 +- 0.01} & \num{-7.21 +- 0.02} & \num{-5.83 +- 0.01} & 
     \num{-5.98 +- 0.01} \\
-    methanol & ethane & \num{-6.124 +- 0.005} & \num{-6.193+- 0.004} & 
-    \num{-7.338 +- 0.004} & \num{-7.404 +- 0.004} &  &  \\
-    toluene & methane & \num{3.22 +- 0.01} & \num{3.211 +- 0.006} & \num{3.229 
-    +- 0.008} & \num{3.22 +- 0.01} & \num{2.97 +- 0.01} & \num{3.16 +- 0.01} \\
+    methanol & ethane & \num{-6.12 +- 0.01} & \num{-6.19+- 0.00} & 
+    \num{-7.34 +- 0.00} & \num{-7.40 +- 0.00} &  &  \\
+    toluene & methane & \num{3.22 +- 0.01} & \num{3.21 +- 0.01} & \num{3.23 
+    +- 0.01} & \num{3.22 +- 0.01} & \num{2.97 +- 0.01} & \num{3.16 +- 0.01} \\
     methane & toluene & \num{3.25 +- 0.01} & \num{3.20 +- 0.01} & \num{3.22 +- 
-    0.01} & \num{3.211 +- 0.001} &  &  \\
+    0.01} & \num{3.21 +- 0.00} &  &  \\
     neopentane\footnote{\label{foot:c-map}central mapping} & methane & 
-    \num{-0.103 +- 0.008} & \num{-0.15 +- 0.02} & \num{-0.08 +- 0.02} & 
+    \num{-0.10 +- 0.01} & \num{-0.15 +- 0.02} & \num{-0.08 +- 0.02} & 
     \num{-0.18 +- 0.03} & \num{-0.18 +- 0.01} & \num{-0.14 +- 0.01} \\
     methane\footref{foot:c-map} & neopentane & \num{-0.11 +- 0.02} & \num{-0.16 
     +- 0.05} & \num{0.00 +- 0.03} & \num{-0.18 +- 0.03} &  &  \\
     neopentane\footnote{\label{foot:t-map}terminal mapping} & methane & 
-    \num{-0.116 +- 0.007} & \num{-0.13 +- 0.01} & \num{-0.14 +- 0.01} & 
+    \num{-0.12 +- 0.01} & \num{-0.13 +- 0.01} & \num{-0.14 +- 0.01} & 
     \num{-0.14 +- 0.01} &  &  \\
     methane\footref{foot:t-map} & neopentane2 & \num{-0.10 +- 0.03} & 
-    \num{-0.18 +- 0.03} & \num{-0.089 +- 0.007} & \num{-0.15 +- 0.02} &  &  \\
-    2-methylfuran & methane & \num{2.986 +- 0.006} & \num{2.930 +- 0.05} & 
+    \num{-0.18 +- 0.03} & \num{-0.09 +- 0.01} & \num{-0.15 +- 0.02} &  &  \\
+    2-methylfuran & methane & \num{2.99 +- 0.01} & \num{2.93 +- 0.05} & 
     \num{3.05 +- 0.01} & \num{3.00 +- 0.01} & \num{2.87 +- 0.01} & \num{2.95 +- 
     0.01} \\
-    methane & 2-methylfuran & \num{3.007 +- 0.004} & \num{2.96 +- 0.01} & 
-    \num{3.056 +- 0.006} & \num{3.01 +- 0.01} &  &  \\
+    methane & 2-methylfuran & \num{3.01 +- 0.00} & \num{2.96 +- 0.01} & 
+    \num{3.06 +- 0.01} & \num{3.01 +- 0.01} &  &  \\
     2-methylindole & methane & \num{8.71 +- 0.02} & \num{8.73 +- 0.03} & 
     \num{8.73 +- 0.01} & \num{8.80 +- 0.03} & \num{8.44 +- 0.02} & \num{8.79 +- 
     0.02} \\
@@ -1448,11 +1442,11 @@ of this table is in the SI.}
 \multicolumn{1}{c}{$\Delta \Delta G$} & $\Delta \Delta G$ & 
 \multicolumn{1}{c}{$\Delta \Delta G$} & $\Delta \Delta G$ & 
 \multicolumn{1}{c}{$\Delta \Delta G$} \\ \midrule
-methanol & methane & \multicolumn{1}{l}{\num{6.163 +- 0.006}} & \num{6.197 +- 
-0.004} & \multicolumn{1}{l}{\num{7.32+-0.03}} & \num{7.42+-0.04} & 
+methanol & methane & \multicolumn{1}{l}{\num{6.16 +- 0.01}} & \num{6.20 +- 
+0.00} & \multicolumn{1}{l}{\num{7.32+-0.03}} & \num{7.42+-0.04} & 
 \multicolumn{1}{l}{\num{5.77 +- 0.01}} & \num{5.95 +- 0.01} \\
-methane & methanol & \multicolumn{1}{l}{\num{6.168 +- 0.005}} & \num{6.199 +- 
-0.008} & \multicolumn{1}{l}{\num{7.14+-0.03}} & \num{7.21+-0.03} & 
+methane & methanol & \multicolumn{1}{l}{\num{6.17 +- 0.01}} & \num{6.20 +- 
+0.01} & \multicolumn{1}{l}{\num{7.14+-0.03}} & \num{7.21+-0.03} & 
 \multicolumn{1}{l}{} &  \\ \bottomrule
 \end{tabular}
 \end{table}
@@ -1470,6 +1464,10 @@ way to calculate relative free energy calculations.
 % GDRM: I don't know, but I could run the simulation
 % HHL: If you can run a few simulations that would be good.  But I think it
 %      is sufficient to run a single simulation, in one direction only.
+% GDRM: The problem is not in the bonded terms. It is in the electrostatic terms.
+%      I ran methane -> methanol with and without softcore with bonded term
+%      variation combined with the vdW change and this was the result.
+%      I also updated the plot in the SI 
 We also find that there is no significant difference in calculated free 
 energies depending on the choice of Particle Mesh Ewald or Reaction Field for 
 calculation of long-range electrostatic interactions. 
@@ -1477,15 +1475,22 @@ calculation of long-range electrostatic interactions.
 One particularity of the software worth mentioning is that relative free energy 
 simulations will blow up if a hydrogen alchemically becomes a heavy atom if the 
 simulation employs hydrogen bond constraining algorithms such as SHAKE or LINCS.
-Successful simulations seem to require turning off the constraint and 
-decreasing the time step. % HHL: but see solution for SOMD and AMBER.  Can this
-% be done with GROMACS?
+Successful simulations require turning off the constraint and decreasing 
+the time step, but there are alternatives that require some scripting and 
+changes in the topology file: the use of algorithms mentioned above and the 
+definition of a new atom type for the hydrogen atoms that will be alchemically 
+changed, or the use of \inpopt{constraint = none} and of explicit constraints 
+in the topology file.
+
+% HHL: but see solution for SOMD and AMBER.  Can this
+%      be done with GROMACS?
 % GDRM: perhaps it can, if we define a new atom type for the hydrogens that
 %      will be alchemically changed.
 % HHL: You should mention here if this is possible with Gromacs and how.  If
 %      that requires some scripting then just say so.  I would think
 %      setting constraint=none and explicitly defining the wanted constraints
 %      in the topology file should work too.
+% GDRM: Done.
 
 \subsection{SOMD}
 \label{sec:somd-results}
