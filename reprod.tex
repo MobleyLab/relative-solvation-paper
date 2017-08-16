@@ -619,16 +619,7 @@ close distance to the solute.  The production simulations were run at
 \paragraph{AMBER} The starting coordinates were usually taken directly from the
 pre--equilibrated setup step but no further $\lambda$ specific equilibration 
 was carried out, i.e.\ RAFE MD simulations were started with new velocities 
-appropriate for the 
-final simulation temperature.  In a very few cases it was necessary to use 
-coordinates from a nearby $\lambda$ state because of simulation instabilities.  
-This happened in transformations with a larger number of dummy atoms.  Water 
-hydrogens (TIP3P) were constrained with SHAKE but none of the atoms in the 
-perturbed group and so the time step was set to \SI{1}{fs} (see SOMD protocol 
-below for an alternative approach).  The temperature was controlled through a 
-Langevin thermostat with a friction constant of \SI{2.0}{ps^{-1}} and pressure 
-rescaling through a Monte Carlo barostat with 100 steps between isotropic 
-volume change attempts.
+appropriate for the  final simulation temperature.  In a very few cases it was necessary to use coordinates from a nearby $\lambda$ state because of simulation instabilities.  This happened in transformations with a larger number of dummy atoms.  Water hydrogens (TIP3P) were constrained with SHAKE but none of the atoms in the perturbed group and so the time step was set to \SI{1}{fs} (see SOMD protocol below for an alternative approach).  The temperature was controlled through a Langevin thermostat with a friction constant of \SI{2.0}{ps^{-1}} and pressure rescaling through a Monte Carlo barostat with 100 steps between isotropic volume change attempts.  Long--range electrostatics in solution was handled with PME and a cutoff of \SI{8.0}{\angstrom} for both Coulomb and vdW interactions.  In vacuum no cutoff was used.
 
 \paragraph{CHARMM} The CHARMM c40b1 molecular dynamics package was used to 
 carry out all relative hydration free energy simulations.  21 evenly spaced 
