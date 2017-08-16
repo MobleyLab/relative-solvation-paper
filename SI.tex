@@ -14,7 +14,7 @@
 
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
-\usepackage{amsmath,amssymb}
+\usepackage{amsmath,amssymb,mathrsfs}
 \usepackage{xr}
 \usepackage{booktabs}
 \usepackage{xcolor}
@@ -60,7 +60,7 @@ $V_{\mathrm{LJ}}$ (Lennard--Jones potential) and the electrostatic
 interactions, $V_{\mathrm{Coul}}$ (Coulomb potential) as a function of
 the order parameter $\lambda$ are given for the disappearing atoms
 only.  For the appearing atoms replace $\lambda$ with $1 - \lambda$
-and \emph{vice versa}.  Eq.\ \eqref{eq:general} is the generalized
+and \emph{vice versa}.  Eq.\ \eqref{eq:general-softcore} is the generalized
 form for all codes while the specific distance dependent functions are
 outlined in eq.\,\eqref{eq:Sire} for Sire, eq.\,\eqref{eq:Amber} for
 AMBER, eq.\,\eqref{eq:Gromacs} for Gromacs and eq.\,\eqref{eq:CHARMM}
@@ -75,7 +75,7 @@ for CHARMM.
       6} \right] +
   (1 - \lambda)^{n} \frac{q_{i}q_{j}}
   {4\pi\varepsilon_{0}\textcolor{red}{r_{\mathrm{Coul}}}}
-  \label{eq:general}
+  \label{eq:general-softcore}
 \end{equation}
 
 For Sire
@@ -278,10 +278,10 @@ neopentane & \num{2.71+-0.06}  & \num{2.63+-0.01}   &
 2-methylindole        & \num{-6.06+-0.04}  & \num{-5.99+-0.02} &
 \num{-6.35+-0.01}   & \num{-6.24+-0.01} & \num{-5.88+-0.01}
 \\
-2-cyclopentanylindole & \num{-6.14+-0.09}    & \num{-6.04+-0.02}   & 
+2-CPI & \num{-6.14+-0.09}    & \num{-6.04+-0.02}   & 
 \num{-6.54+-0.01}   & \num{-6.05+-0.02} & \num{-6.09+-0.03}
 \\
-7-cyclopentanylindole & \num{-6.06+-0.11}    & \num{-6.06  +-0.05}   & 
+7-CPI & \num{-6.06+-0.11}    & \num{-6.06  +-0.05}   & 
 \num{-6.52+-0.02}   & \num{-5.67+-0.03} & \num{-6.19+-0.03}
 \\
         \bottomrule
@@ -641,7 +641,8 @@ The effect of the Coulomb softcore potential can be seen in Figure \ref{fig:gro_
 
 \begin{figure}[ht]
   \includegraphics{figures/TI_plot.pdf}
-  \caption{$\langle\partial\mathcal{H}/\partial\lambda\rangle$ plot for the change in electrostatic terms in methane $\rightarrow$ methanol.}
+  \caption{$\langle\partial\mathscr{H}/\partial\lambda\rangle$ plot for the 
+  change in electrostatic terms in methane $\rightarrow$ methanol.}
   \label{fig:gro_sc_eff}
 \end{figure}
 

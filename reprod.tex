@@ -1247,7 +1247,7 @@ from the rest of the system.  \inpopt{couple-lambda0} and
 The entries \inpopt{vdw-lambdas} and \inpopt{fep-lambdas} 
 define the lambda schedule.  The former indicates the value of the $\lambda$ 
 vector component that modifies van der Waals interactions for each state,
-while the latter changed all $\lambda$ vector components that are not specified 
+while the latter changes all $\lambda$ vector components that are not specified 
 in the \inpopt{.mdp} file.  For instance, in split protocol simulations, these 
 entries are sets such that the components of the energy are modified in 
 different stages.  If the transformation involves particle deletion ("forward 
@@ -1297,12 +1297,14 @@ GROMACS simulations.
   \resizebox{\columnwidth}{!}{%
     \begin{tabular}{@{}rrrrrrrr@{}}
     \toprule
-    &  & \multicolumn{2}{c}{split \footnote{\label{foot:split} results obtained 
+    &  & \multicolumn{2}{c}{split\footnote{results obtained 
     from alchemical transformations with electrostatic and bonded scaling 
-    separate from vdW  parameter change.}} & \multicolumn{2}{c}{unified 
-    \footnote{\label{foot:uni} results obtained from alchemical transformation 
-    with all parameters scaling together.}} & \multicolumn{2}{c}{absolute 
-    \footnote{\label{foot:abs}results obtained from absolute free energy 
+    separate from vdW  parameter change.}} & 
+    \multicolumn{2}{c}{unified\footnote{results obtained from 
+    alchemical transformation 
+    with all parameters scaling together.}} & 
+    \multicolumn{2}{c}{absolute\footnote{results obtained from 
+    absolute free energy 
     calculations.}} \\
     \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{RF} & 
     \multicolumn{1}{c}{PME} & \multicolumn{1}{c}{RF} & \multicolumn{1}{c}{PME} 
@@ -1315,7 +1317,7 @@ GROMACS simulations.
     \num{-0.02+- 0.00} & \num{-0.03 +- 0.00} & \num{-0.06 +- 0.01} & 
     \num{-0.04 +- 0.01} \\
     methane & ethane & \num{-0.01 +- 0.02} & \num{-0.02 +- 0.01} & \num{0.046 
-    +- 0.02} \footnote{\label{foot:inv} inverted sign} & \num{0.01 +- 0.02} &  
+    +- 0.02}\footnote{\label{foot:inv} inverted sign} & \num{0.01 +- 0.02} &  
     &  \\
     methanol & methane & \num{6.16 +- 0.01} & \num{6.20 +- 0.00} & 
     \num{7.30 +- 0.02} & \num{7.38 +- 0.01} & \num{5.77 +- 0.01} & \num{5.95 
@@ -1351,10 +1353,10 @@ GROMACS simulations.
     0.02} \\
     methane & 2-methylindole & \num{8.73 +- 0.03} & \num{8.74 +- 0.01} & 
     \num{8.30 +- 0.02} & \num{8.77 +- 0.04} &  &  \\
-    2-cyclopentanylindole & 7-cyclopentanylindole & \num{-0.07 +- 0.02} & 
+    2-CPI & 7-CPI & \num{-0.07 +- 0.02} & 
     \num{-0.03 +- 0.03} & \num{-0.10 +- 0.05} & \num{-0.2 +- 0.1} & \num{-0.02 
     +- 0.05} & \num{0.02 +- 0.02} \\
-    7-cyclopentanylindole & 2-cyclopentanylindole & \num{-0.12 +- 0.06} & 
+    7-CPI & 2-CPI & \num{-0.12 +- 0.06} & 
     \num{-0.20 +- 0.04} & \num{-0.04 +- 0.06} & \num{-0.14 +- 0.09} &  &  \\ 
     \bottomrule
     \end{tabular}
@@ -1449,7 +1451,7 @@ hydrogen atoms, thus enabling a time
 step of \SI{2}{fs}, whilst giving essentially negligible errors due to the use 
 of constraints for perturbed bonds.  This is apparent from the comparison with 
 the absolute hydration free energy calculations.  Additionally, the protocol 
-yields relative hydration free energy extremely similar  (MAD = 
+yields relative hydration free energy extremely similar  (MAE = 
 \SI{0.09}{kcal.mol^{-1}}) to those computed from simulations where no
 constraints are applied on the solutes and a timestep of \SI{1}{fs} is
 used (See Figure~\ref{S-fig:sire_constraints}x).
@@ -1485,7 +1487,7 @@ shifted Barker Watts~\cite{doi:10.1080/00268977300102101} vs group based
 switched Barker Watts), but nevertheless SOMD and GROMACS RF produce comparable results with a MAD of \SI{0.18}{kcal.mol^{-1}}.
 
 Overall, the SOMD free energy estimations are in good agreement with the 
-other MD packages, as the MAD suggests (see Table~XX).  Reaction field and PME 
+other MD packages, as the MAE suggests (see Table~XX).  Reaction field and PME 
 results are in good agreement.  In particular, the unperturbed hydrogen bonds 
 constraint protocol allows a timestep of \SI{2}{fs}. All SOMD RAFE simulations were carried out with simultaneous transformation of Lennard-Jones, charges, and bonded terms. This suggests that the failure of the GROMACS ''unified protocol'' in some 
 instances may be due to differences in the softcore implementations. 
@@ -1532,7 +1534,7 @@ and AMBER respectively, similar to the MAD obtained with GROMACS RF.
 %codes
 % tested. However, we have iterated onto a set of protocols that SHOULD give 
 %consistent
-% results (to within MAD of ca. 0.2 kcal.mol-1). This is what we will call 
+% results (to within MAE of ca. 0.2 kcal.mol-1). This is what we will call 
 % the 'limit of reproducibility'. 
 
 % We make benchmark and protocols available as part of this work. We recommend 
