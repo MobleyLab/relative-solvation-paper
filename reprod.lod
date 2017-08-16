@@ -1,0 +1,15 @@
+\contentsline {todos}{{1. }Unify language!}{2}
+\contentsline {todos}{{2. }Objectives: Do the relative free energy results produced across different softwares agree with each other? What if they don't?}{2}
+\contentsline {todos}{{3. }Objectives: Can we outline what should be a standard procedure to calculate relative free energies of hydration alchemically?}{2}
+\contentsline {todos}{{4. }Objectives: We want to emphasize that we aim at improving codes/protocols/practices and not highlight "bad" codes }{2}
+\contentsline {todos}{{5. }Be clear on what reproducibility means here e.g. no exact numerical}{2}
+\contentsline {todos}{{6. }what protocols did not work}{18}
+\contentsline {todos}{{7. }bug in TI gradient accumulation in parallel runs (does not affect serial?, does not affect EXP)}{24}
+\contentsline {todos}{{8. }cannot handle LRC: test with larger cutoffs and/or LRC correction with arbitrary, single structure; check http://pubs.acs.org/doi/abs/10.1021/jp0735987}{24}
+\contentsline {todos}{{9. }recommended protocols}{29}
+\contentsline {todos}{{10. }protocols to avoid}{29}
+\contentsline {todos}{{11. }lessons learned}{29}
+\contentsline {todos}{{12. }2-cyclopentanylindole to 7-cyclopentanylindole: better to go through intermediates?}{29}
+\contentsline {todos}{{13. }what do we need to progress the field e.g. automation to make things easy but also consistent and thus more reproducible (FESetup also for reproducibility); GPU: GROMACS, SOMD but not AMBER (yet) and CHARMM; alternative softcore functions?; sampling?; force field improvements?; analysis? }{29}
+\contentsline {todos}{{14. }developer notes: constraints, both appearing/disappearing; lambda paths for AMBER (relative), absolute: crgmask requires vacuum corr if separated protocol }{29}
+\contentsline {todos}{{15. }further investigation required: binding RAFEs?}{29}

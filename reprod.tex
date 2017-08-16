@@ -640,7 +640,7 @@ constants of \SI{5.0}{ps^{-1}}.  A \SI{12.0}{\angstrom} atom--based cutoff was
 used for non--bonded interactions and Particle Mesh Eward (PME) with order of 6 
 was used to calculate electrostatic forces along with periodic boundary 
 condition.  SHAKE was used to constrain water hydrogens only.  The PERT module 
-in CHARMM was used to handle alchemical transformation in conunction and PSSP 
+in CHARMM was used to handle alchemical transformation in conjunction and PSSP 
 softcore potential functions were used to avoid numerical issue at the end 
 point lambdas.
 
@@ -654,38 +654,34 @@ together;  and (iii) via the difference between two absolute calculations.
 In the first two cases, each alchemical transformation was described by 31 and 
 16 states, respectively, and simulated for \SI{4.2}{ns} with time steps of 
 \SI{1.0}{fs} in water and vacuum. Atomic masses were not changed along the 
-alchemical path;
-their change affect kinetic energy only and do not contribute to the free 
-energy change on this case. 
+alchemical path; their change affect kinetic energy only and do not 
+contribute to the free energy change on this case. 
 We used the Langevin integrator implemented in GROMACS with a 
-default friction coefficient of \SI{1.0}{ps/m_{atom}}. 
-Absolute hydration free energies were calculated from \SI{5}{ns} Langevin 
-dynamics
-at \SI{298.15}{K}. We used the 20-step alchemical protocol where charge 
-coupling and
-van der Waals coupling were dealt with separately along the path 
-\cite{Mobley2014, doi:10.1021/acs.jced.7b00104}.
-%%JM: Elaborate a bit, especially regarding constraints
-%%GDRM: Which sort of constraints do you think I should mention here?
-%% From my mind I can't think of anything worth mentioning.
+default friction coefficient of \SI{1.0}{ps/m_{atom}}.  Absolute hydration 
+free energies were calculated from \SI{5}{ns} Langevin dynamics
+at \SI{298.15}{K}. We used the 20-step alchemical protocol where 
+charge coupling and van der Waals coupling were dealt with separately 
+along the path \cite{Mobley2014, doi:10.1021/acs.jced.7b00104}.
+No bond constraints were used.
 A Parrinello--Rahman barostat with $\tau_p =$ \SI{10}{ps} and compressibility 
 equal to \SI{4.5d-5}{bar^{-1}}.
 We used two methods to calculate electrostatic interactions: Particle Mesh 
 Ewald (PME) and charge group-based Reaction Field with a dielectric of 78.3, 
 as implemented in the software. 
-%%JM : Please clarify if using an atom based or group based reaction field
 We set the electrostatic and non--bonded cutoffs to \SI{10.0}{\angstrom};
 a switch was applied to the latter starting at \SI{9.0}{\angstrom}. 
-%%JM: switch applies to both RF and LJ ?
-%% GDRM: LJ only. I'll clarify the text.
+Non--bonded interactions in the vacuum legs of the simulation were calculated
+to a cutoff of \SI{50.0}{\angstrom}.
 PME calculations were of order 6 and had a 
 tolerance of \num{1.0d-6}, with a grid spacing of \SI{1.0}{\angstrom}. 
 All transformations required the use of softcore potentials to avoid numerical 
 problems in the free energy calculation.  We chose the 1--1--6 softcore 
-potential for Lennard-Jones terms and used the default softcore Coulomb 
-implementation in paths where charges, van der Waals, and bonded terms were 
-modified together, but no soft core potentials were applied to Coulomb 
-interactions when Coulomb interactions were modified separately.
+potential for Lennard-Jones terms ($\alpha$=0.5 and $\sigma$=0.3) 
+and used the default softcore Coulomb implementation in paths where 
+charges, van der Waals, and bonded terms were modified together, 
+but no soft core potentials were applied to Coulomb interactions when 
+electrostatic interactions were modified separately.
+
 
 \paragraph{SOMD} All simulations were carried out with
 SOMD from the Sire 2016.1 release ~\cite{Sire-2016, doi:10.1021/ct300857j}
