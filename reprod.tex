@@ -439,7 +439,7 @@ bonded contributions for ``real'' atoms and thus ignores bonded energies
 involving dummy atoms.  We will call this the ``implicit dummy protocol''. The 
 code cannot handle bond length changes involving a constraint.  There is only 
 one global $\lambda$ for parameter transformation.  Protocols that couple only 
-some parameters (separated protocols, see below) must be emulated through 
+some parameters (split protocols, see below) must be emulated through 
 careful construction of topologies by keeping force field parameters that are 
 not being modified constant along $\lambda$.
 
@@ -475,7 +475,7 @@ allows changing bond lengths involving constraints within the perturbed group
 but this can lead to instabilities and wrong results (Michael Shirts,
 private communication).  There are separate $\lambda$s for vdW,
 Coulomb and bonded parameters (and some other) which allows easy implementation 
-of separated protocols.
+of split protocols.
 
 \paragraph{Sire/SOMD} This code uses a single topology description.
 The final state is constructed at run time from the initial state with
@@ -590,14 +590,14 @@ While the MD packages principally allow a ``one--step''
 transformation~\cite{steinbrecher_soft-core_2011}
 that is both van der Waals and Coulombic softcore potentials vary
 simultaneously, it can be more efficient to carry out a
-separated protocol~\cite{naden_linear_2014, naden_linear_2015}. 
+split protocol~\cite{naden_linear_2014, naden_linear_2015}. 
 In such a protocol the charges are transformed
 linearly between the end states followed by a mutation of the van der
 Waals parameters using a softcore
 potential~\cite{beutler_avoiding_1994,
   zacharias_separationshifted_1994} (see section~\ref{S-sec:softcores}x in the 
   SI for details) on the vdW
-term only.  It is important to note that in the separated protocol
+term only.  It is important to note that in the split protocol
 charges have to be switched off before vdW parameters (and vice versa
 for the transformation in opposite direction) to avoid collapse of
 other atoms, e.g. solvents, onto a ``naked'' charge, see 
@@ -941,8 +941,7 @@ The MAE appears to be fairly small generally and reaches just about
   \end{minipage}
 \end{table}
 
-Having established the predictions from absolute transformations we now turn to 
-computing $\Delta\Delta G_{\mathrm{hydr}}$ from relative mutations.  
+Having established the predictive value from absolute transformations we now turn to computing $\Delta\Delta G_{\mathrm{hydr}}$ from relative mutations.  
 Table~\ref{tab:relative} summarizes the results for the four MD packages.  
 Again the data is from the recommended protocol (see detailed discussions in 
 the following subsections).
@@ -1017,10 +1016,8 @@ G_{\mathrm{hydr}}$ in the methanol and toluene transformations.  The largest
 discrepancy, however, is in the neopentane transformation with central mapping 
 where AMBER with implicit dummy atoms is about \SI{0.5}{kcal.mol^{-1}} higher 
 and CHARMM about \SI{0.3}{kcal.mol^{-1}} lower than the other two codes.  The 
-terminal mapped neopentane reveals AMBER to be in line with GROMACS and SOMD 
-while CHARMM's results is essentially the same as in the central mapped 
-transformation.  AMBER deviates also quite strongly from the other codes in the 
-cyclopentanyl indole cases.
+terminal mapped neopentane case reveals AMBER to be in line with GROMACS and SOMD while CHARMM's results are essentially the same as in the central mapped 
+transformations.  AMBER deviates also quite strongly from the other codes in the cyclopentanyl indole cases.
 
 The MAEs of the relative free energy simulations are presented in 
 Table~\ref{tab:mue-relative}.  These are continuously larger than the MAEs from 
@@ -1119,8 +1116,7 @@ the absolute simulations (Table~\ref{tab:mue-absolute}) and reach
 \label{sec:amber-results}
 
 Using AMBER for RAFE simulations has revealed several problems with
-the implementation.  Some bugs were identified and have been fixed for AMBER16 
-release by the developers, e.g. energy minimization in \progname{sander} led to 
+the implementation.  Some bugs were identified and the developers have fixed those for AMBER16, e.g.\ energy minimization in \progname{sander} led to 
 diverged coordinates for mapped atoms.  For a single topology description, 
 however, it is necessary to have the same coordinates.  Other issues are that 
 vacuum simulations can only be carried out with the \progname{sander} program 
@@ -1139,13 +1135,12 @@ This
 has obvious implications for performance~\cite{doi:10.1021/ct400340s}.
 
 We also found that, in contrast to the other three codes, AMBER cannot
-correctly reproduce relative free energies in the unified protocol i.e.\
+correctly reproduce relative free energies with the unified protocol i.e.\
 when all force field parameters are scaled simultaneously (see 
 Table~\ref{S-tab:amber-onestep}x).  This appears to be a problem when more than 
-a few dummy atoms are involved while the unified protocol works for the smaller 
-transformations (refer to Figure~\ref{fig:cycles}).  The separated RAFE 
-protocol and absolute free energies, however, are very close to the other MD 
-packages as demonstrated in Table~\ref{tab:amber-comp}.
+a few dummy atoms are involved while the protocol works for the smaller 
+transformations (refer to Figure~\ref{fig:cycles}).  The split RAFE 
+protocol and the absolute free energies, however, are very close to the other MD packages as demonstrated in Tables~\ref{tab:absolute} and \ref{tab:relative}.
 
 End point geometries appear to be another issue with AMBER simulations
 in both solution and vacuum.  This is most obvious in the neopentane 
@@ -1167,7 +1162,7 @@ We also compare free energies obtained from the implicit dummy approach in
 AMBER with results form explicit dummy atom simulations and results from 
 absolute transformations, see Tables~\ref{tab:absolute} and 
 \ref{tab:relative}.  The relative simulations have been carried out with the 
-separated protocol while the absolute simulations used a unified protocol 
+split protocol while the absolute simulations used a unified protocol 
 throughout.  SHAKE was explicitly deactivated for all bonds in the perturbed 
 region in these protocols.
 
@@ -1231,6 +1226,7 @@ set for the hydrogens in question while the same is not possible for their
 non--H counter--part in the other state because \emph{all} bonds emanating from 
 this atom would be affected.
 
+% HHL: move the following to the general results and compute for all packages
 We can also compute the cycle closure error from Table~\ref{tab:amber-comp} for 
 the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane 
 $\rightarrow$ ethane (see Figure~\ref{fig:cycles}).  The free energy difference 
@@ -1241,17 +1237,7 @@ G_\mathrm{hydr}$ of \SI{0.069+-0.041}{kcal.mol^{-1}} and for the explicit dummy
 simulation the error is \SI{-0.016+-0.047}{kcal.mol^{-1}}.
 
 In general, the free energies computed with each approach are in good agreement 
-with each other and with the results of the other MD packages.  There are, 
-however, a few notable deviations.  Neopentane $\rightarrow$ methane with 
-central mapping differs from the result with terminal mapping by about 
-\SI{0.4}{kcal.mol^{-1}} (cf.\ Table~\ref{tab:amber-comp}).
-The terminal mapping and the free energies from the explicit dummy simulations 
-are, however, consistent with the absolute transformations.  We also observe a 
-systematic deviation between forward and backward vacuum transformations in 
-particular in the 2--methylindole simulation (see Table~\ref{S-tab:amber-disc}).
-A discrepancy of consistently 0.2--\SI{0.4}{kcal.mol^{-1}} is evident from 
-every $\lambda$ step of the vdW plus bonded transformation with both implicit 
-and explicit dummy atoms).
+with each other and with the results of the other MD packages (Tables~\ref{tab:absolute} and \ref{tab:relative}).  There are, however, a few notable deviations.  Neopentane $\rightarrow$ methane with central mapping differs from the result with terminal mapping by about \SI{0.4}{kcal.mol^{-1}}.  The terminal mapping and the free energies from the explicit dummy simulations are, however, consistent with the absolute transformations (Table~\ref{tab:absolute}).  We also observe a systematic deviation between forward and backward vacuum transformations in particular in the 2--methylindole simulation (see Table~\ref{S-tab:amber-disc}).  A discrepancy of consistently 0.2--\SI{0.4}{kcal.mol^{-1}} is evident from every $\lambda$ step of the vdW plus bonded transformation with both implicit and explicit dummy atoms).
 %%JM: any hint of the problem? This suggests a bug in AMBER
 % HHL: no hints yet, only symptoms.  Strongly suspect a bug too.
 
@@ -1589,7 +1575,7 @@ intermediates?}
 \todo{%
  developer notes: constraints, both appearing/disappearing;
  lambda paths for AMBER (relative), absolute: crgmask requires
- vacuum corr if separated protocol
+ vacuum corr if split protocol
 }
 
 \todo{further investigation required: binding RAFEs?}
