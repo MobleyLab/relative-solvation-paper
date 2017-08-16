@@ -76,23 +76,6 @@
 \end{tocentry}
 
 
-\todo{Unify language!}
-
-\todo{Objectives:
- Do the relative free energy results produced across different
- softwares agree with each other? What if they don't?}
-
-\todo{Objectives:
- Can we outline what should be a standard procedure to calculate
- relative free energies of hydration alchemically?}
-
-\todo{Objectives:
- We want to emphasize that we aim at improving codes/protocols/practices and 
- not highlight "bad" codes
-}
-
-\todo{Be clear on what reproducibility means here e.g. no exact numerical}
-
 \section{Introduction}
 \label{sec:intro}
 
@@ -1237,7 +1220,7 @@ G_\mathrm{hydr}$ of \SI{0.069+-0.041}{kcal.mol^{-1}} and for the explicit dummy
 simulation the error is \SI{-0.016+-0.047}{kcal.mol^{-1}}.
 
 In general, the free energies computed with each approach are in good agreement 
-with each other and with the results of the other MD packages (Tables~\ref{tab:absolute} and \ref{tab:relative}).  There are, however, a few notable deviations.  Neopentane $\rightarrow$ methane with central mapping differs from the result with terminal mapping by about \SI{0.4}{kcal.mol^{-1}}.  The terminal mapping and the free energies from the explicit dummy simulations are, however, consistent with the absolute transformations (Table~\ref{tab:absolute}).  We also observe a systematic deviation between forward and backward vacuum transformations in particular in the 2--methylindole simulation (see Table~\ref{S-tab:amber-disc}).  A discrepancy of consistently 0.2--\SI{0.4}{kcal.mol^{-1}} is evident from every $\lambda$ step of the vdW plus bonded transformation with both implicit and explicit dummy atoms).
+with each other and with the results of the other MD packages (Tables~\ref{tab:absolute} and \ref{tab:relative}).  There are, however, a few notable deviations.  Neopentane $\rightarrow$ methane with central mapping differs from the result with terminal mapping by about \SI{0.4}{kcal.mol^{-1}}.  The terminal mapping and the free energies from the explicit dummy simulations are, however, consistent with the absolute transformations (Table~\ref{tab:absolute}).  We also observe a systematic deviation between forward and backward vacuum transformations in particular in the 2--methylindole simulation (see Table~\ref{S-tab:amber-disc}).  A discrepancy of consistently 0.2--\SI{0.4}{kcal.mol^{-1}} is evident from every $\lambda$ step of the vdW plus bonded transformation with both implicit and explicit dummy atoms.
 %%JM: any hint of the problem? This suggests a bug in AMBER
 % HHL: no hints yet, only symptoms.  Strongly suspect a bug too.
 
@@ -1271,10 +1254,10 @@ vector component that modifies van der Waals interactions for each state,
 while the latter changes all $\lambda$ vector components that are not specified 
 in the \inpopt{.mdp} file.  For instance, in split protocol simulations, these 
 entries are sets such that the components of the energy are modfied in 
-different stages.  If the transformation involves particle deletion ("forward 
-process"), \inpopt{fep-lambdas} is set to change charges and bonds
+different stages.  If the transformation involves particle deletion (``forward 
+process''), \inpopt{fep-lambdas} is set to change charges and bonds
 before \inpopt{vdw-lambdas} changes van de Waals components.
-If the process involves particle insertion ("backward process") we reverse 
+If the process involves particle insertion (``backward process'') we reverse 
 the roles.  In this work, \inpopt{mass-lambdas} were all set to zero  to not 
 included mass changes in the free energy.  Unified protocols set all $\lambda$ 
 vectors the same.
@@ -1415,7 +1398,7 @@ We noticed a difference of approximately \SI{1.5}{kcal.mol^{-1}} between the
 split protocol without  Coulomb softcore potentials and both protocols that 
 use it. Data suggests that softcore use in electrostatic interactions requires 
 adjustments in the $\lambda$-distance between states in the
-rapidly varying part of the $\partial\mathscr{H}/\partial\lambda$, see Figure
+rapidly varying part of $\partial\mathscr{H}/\partial\lambda$, see Figure
 \ref{S-fig:gro_sc_eff}x.  A test with combining the bonded terms with the vdW 
 transformation did not change this result. The split protocol without Coulomb 
 softcore potentials is the most effective way to calculate relative free energy 
@@ -1424,9 +1407,7 @@ calculated free energies depending on the choice of Particle Mesh Ewald or
 Reaction Field for calculation of long-range electrostatic interactions.
 
 One particularity of the software worth mentioning is that relative free energy 
-simulations will blow up if a hydrogen alchemically becomes a heavy atom if the 
-simulation employs hydrogen bond constraining algorithms such as SHAKE or LINCS.
-Successful simulations require turning off the constraint and decreasing 
+simulations will blow up if a hydrogen alchemically becomes a heavy atom and the simulation employs hydrogen bond constraining algorithms such as SHAKE or LINCS. Successful simulations require turning off the constraint and decreasing 
 the time step, but there are alternatives that require some scripting and 
 changes in the topology file: the use of algorithms mentioned above and the 
 definition of a new atom type for the hydrogen atoms that will be alchemically 
@@ -1476,32 +1457,26 @@ the reference $\lambda$ trajectory. This leads to a neglect of contributions of
 the bonded term (and associated coupled terms) to the free energy change. The 
 effect is more pronounced for perturbations that feature a large change in 
 equilibrium bond lengths, such as those where a hydrogen atom is perturbed 
-to/from a heavy atom.
-This problem was already discussed by Pearlman~\cite{pearlman1991overlooked} 
-and Boresch~\cite{doi:10.1021/jp981628n, doi:10.1021/jp981629f}, as a missing 
-bond-stretching term, which introduce a free energy offset estimated as:
+to/from a heavy atom. This problem has already been discussed by Pearlman~\cite{pearlman1991overlooked} and Boresch~\cite{doi:10.1021/jp981628n, doi:10.1021/jp981629f}, as a missing bond--stretching term, which introduce a free energy offset estimated as:
 \begin{equation}
  \label{eq:allbondserror}
- \Delta G= RT\ln \left ( \frac{r_{\mathrm{i}}}{r_\mathrm{f}} \right)  
+ \Delta G= RT\ln \left ( \frac{r_{\mathrm{i}}}{r_\mathrm{f}} \right)
 \end{equation}
 where $r_{\mathrm{i}}$ and $r_{\mathrm{f}}$ are the initial and final bond 
 lengths, respectively. 
 
 The reaction fields implemented in SOMD and GROMACS differ somewhat (atom-based 
-shifted Barker Watts~\cite{doi:10.1080/00268977300102101}) vs group based 
+shifted Barker Watts~\cite{doi:10.1080/00268977300102101} vs.\ group based 
 switched Barker Watts), but nevertheless SOMD and GROMACS RF produce comparable 
 results with a MAE of \SI{0.18}{kcal.mol^{-1}}.
 
 Overall, the SOMD free energy estimations are in good agreement with the 
-other MD packages, as the MAE suggests (see Table~XX).  Reaction field and PME 
-results are in good agreement.  In particular, the unperturbed hydrogen bonds 
-constraint protocol 
+other MD packages, as the MAE suggests (see Tables~\ref{tab:absolute} and \ref{tab:relative}).  Reaction field and PME results are in good agreement too.  In particular, the unperturbed hydrogen bonds constraint protocol 
 %DLM: "unperturbed hydrogen bonds constraint" is unclear.
 %JM: suggestions for a better name?
-allows a timestep of \SI{2}{fs}. All SOMD RAFE simulations were carried out 
-with simultaneous transformation of Lennard-Jones, charges, and bonded terms. 
-This suggests that the failure of the GROMACS ''unified protocol'' in some 
-instances may be due to differences in the softcore implementations. 
+allows a timestep of \SI{2}{fs}.
+
+All SOMD RAFE simulations were carried out with simultaneous transformation of Lennard-Jones, charges, and bonded terms i.e.\ the unified protocol.  This suggests that the failure of GROMACS in some instances may be due to differences in the softcore implementations.
 %%JM we need to elaborate here
 %SB: Here we could say
 % - Gromacs failes maybe for the softcore implementations
@@ -1514,13 +1489,10 @@ instances may be due to differences in the softcore implementations.
 % but could help us to say that the different softcore implementations can 
 %affect their
 % protocols
-As regards methane $\rightarrow$ neopentane transformation SOMD is able to 
+As regards the methane $\rightarrow$ neopentane transformation, SOMD is able to 
 maintain consistency between central and terminal mapping, as shown in 
-tab~\ref{S-tab:sire-finalresults}, while GROMACS RF displays a $\Delta\Delta$G 
-of \SI{-0.20 +-   0.01}{kcal.mol^{-1}} for the centrally mapped transformation 
-and $\Delta\Delta$G = \SI{-0.05 +- 0.02}{kcal.mol^{-1}} for the terminally 
-mapped transformation. The SOMD RF calculations show a MAE = 
-\SI{0.18}{kcal.mol^{-1}} and MAE = \SI{0.23}{kcal.mol^{-1}} with GROMACS PME 
+Table~\ref{S-tab:sire-finalresults}, while GROMACS RF displays a $\Delta\Delta$G of \SI{-0.20+-0.01}{kcal.mol^{-1}} for the centrally mapped transformation and $\Delta\Delta$G = \SI{-0.05 +- 0.02}{kcal.mol^{-1}} for the terminally mapped transformation.  The SOMD RF calculations show a MAE of
+\SI{0.18}{kcal.mol^{-1}} and MAE of \SI{0.23}{kcal.mol^{-1}} with GROMACS PME 
 and AMBER respectively, similar to the MAE obtained with GROMACS RF.
 
 \section{Discussion}
@@ -1560,6 +1532,8 @@ and AMBER respectively, similar to the MAE obtained with GROMACS RF.
 \todo{protocols to avoid}
 
 \todo{lessons learned}
+
+\todo{SHAKE/LINCS issues with changing bond lengths}
 
 \todo{2-cyclopentanylindole to 7-cyclopentanylindole: better to go through 
 intermediates?}
