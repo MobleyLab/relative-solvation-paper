@@ -504,13 +504,8 @@ strategy a maximal single topology description is achieved: any atom that
 does not match will be made a dummy atom.  FESetup allows
 equilibration of the solvated simulation systems and ensures that
 ``forward'' and ``backward'' simulations have the same amount of
-total atoms.  Atom masses are kept at the initial state.
-%%JM: Also the atomic masses are identical in the forward and backward 
-%%simulations, thus a hydrogen perturbed to another heavy atom is 'heavy'
-%%or does this only apply to SOMD input files? This is important to clarify 
-%%as this is how we make the 2fs protocol work
-% HHL: AMBER sets the masses to the initial state in the code. GROMACS let's 
-%the user do that.  Not sure about CHARMM/PERT.
+total atoms.  The masses of perturbed hydrogen atoms are set to the mass of the heavy atom for SOMD.  The other codes use the atom masses of the initial state (AMBER, CHARMM?) or allow the user to define how masses vary as a function of lambda (GROMACS).
+% HHL: Donghyuk, please clarify!
 The tool creates all input files with control
 parameters, topologies and coordinates as required for RAFE
 simulations.  Full details on FESetup can be found in
@@ -1280,6 +1275,8 @@ and explicit dummy atoms).
 
 \subsection{CHARMM}
 \label{sec:charmm-results}
+
+% HHL: Donghyuk, please fill in!
 
 \todo{bug in TI gradient accumulation in parallel runs (does not affect
 	serial?, does not affect EXP)}
