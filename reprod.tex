@@ -354,6 +354,12 @@ development.
 \section{Methods}
 \label{sec:methods}
 
+We will compare relative free energies calculated via simultaneous parameter 
+change simulations --- our ``unified protocol'' --- and separated parameter 
+change simulations --- our ``split protocol''--- to relative free energy 
+calculations obtained from two absolute hydration free energies -- our 
+``absolute protocol''.  The unified protocol changes partial charges, van der Waals parameters, and bond parameters simultaneously along the alchemical path, while the split protocol separates the transformation of the van der Waals parameters from the charge transformation.  The order in which this has to be done is detailed in section~\ref{S-sec:separated}x of the SI.  The scaling of the bonded terms can be combined with either transformation.
+
 \subsection{Alchemical Free Energy Implementations}
 \label{sec:afe_impl}
 
@@ -475,15 +481,8 @@ strategy a maximal single topology description is achieved: any atom that
 does not match will be made a dummy atom.  FESetup allows
 equilibration of the solvated simulation systems and ensures that
 ``forward'' and ``backward'' simulations have the same amount of
-total atoms.  Atom masses are kept at the initial state.
-%%JM: Also the atomic masses are identical in the forward and backward 
-%%simulations, thus a hydrogen perturbed to another heavy atom is 'heavy'
-%%or does this only apply to SOMD input files? This is important to clarify 
-%%as this is how we make the 2fs protocol work
-% HHL: AMBER sets the masses to the initial state in the code. GROMACS let's 
-%the user do that.  Not sure about CHARMM/PERT.
-%JM If you recall JM we modified FESetup such that for SOMD input topologies 
-% we have the atomic masses of the heaviest end-state.   
+total atoms.  The masses of perturbed hydrogen atoms are set to the mass of the heavy atom for SOMD.  The other codes use the atom masses of the initial state (AMBER, CHARMM?) or allow the user to define how masses vary as a function of lambda (GROMACS).
+% HHL: Donghyuk, please clarify!
 The tool creates all input files with control
 parameters, topologies and coordinates as required for RAFE
 simulations.  Full details on FESetup can be found in
@@ -587,17 +586,7 @@ close distance to the solute.  The production simulations were run at
 \paragraph{AMBER} The starting coordinates were usually taken directly from the
 pre--equilibrated setup step but no further $\lambda$ specific equilibration 
 was carried out, i.e.\ RAFE MD simulations were started with new velocities 
-appropriate for the 
-final simulation temperature.  In a very few cases it was necessary to use 
-coordinates from a nearby $\lambda$ state because of simulation instabilities.  
-This happened in transformations with a larger number of dummy atoms.  Water 
-hydrogens (TIP3P) were constrained with SHAKE but none of the atoms in the 
-perturbed group and so the time step was set to \SI{1}{fs} (see SOMD protocol 
-below for an alternative approach that was subsequently tested).  The temperature was controlled through a 
-Langevin thermostat with a friction constant of \SI{2.0}{ps^{-1}} and pressure 
-rescaling through a Monte Carlo barostat with 100 steps between isotropic 
-volume change attempts.
-%JM add details about electrostatics and cutoffs for the solvated and vacuum phases. 
+appropriate for the  final simulation temperature.  In a very few cases it was necessary to use coordinates from a nearby $\lambda$ state because of simulation instabilities.  This happened in transformations with a larger number of dummy atoms.  Water hydrogens (TIP3P) were constrained with SHAKE but none of the atoms in the perturbed group and so the time step was set to \SI{1}{fs} (see SOMD protocol below for an alternative approach).  The temperature was controlled through a Langevin thermostat with a friction constant of \SI{2.0}{ps^{-1}} and pressure rescaling through a Monte Carlo barostat with 100 steps between isotropic volume change attempts.  Long--range electrostatics in solution was handled with PME and a cutoff of \SI{8.0}{\angstrom} for both Coulomb and vdW interactions.  In vacuum no cutoff was used.
 
 \paragraph{CHARMM} The CHARMM c40b1 molecular dynamics package was used to 
 carry out all relative hydration free energy simulations.  21 evenly spaced 
@@ -837,18 +826,14 @@ Prior work actually compared calculated absolute hydration free energies across
 different codes with significant success~\cite{klimovich_predicting_2010} (see 
 Fig.~7 in the reference), further supporting this view.
 
-Thus, we compare relative free energies calculated via four distinct protocols. The first features simultaneous parameter change simulations (``unified protocol''). The second features separated parameter change simulations (``split protocol''). The third is obtained from differences of two absolute hydration free energies, which are themselves produced by a unified (``absolute-unified protocol'') or split (``absolute-split protocol'')  protocol depending on the package used. For some packages, several variations of such protocols were tested before comparing the results with other packages. The present section uses data produced by a 'recommended' protocol for a given package, and details about additional protocols are given in sub-sections below.
-
-The unified protocols change partial charges, van der Waals parameters, and 
-bond parameters simultaneously along the alchemical path, while the split 
-protocol separates the transformation of the van der Waals parameters from the 
-charge transformation.  The order in which this has to be done is detailed 
-in section~\ref{S-sec:separated}x of the SI.  The scaling of the bonded terms 
-can be combined with either transformation.
-
 Table~\ref{tab:absolute} summarizes results for relative free energies of 
-hydration obtained using the absolute-unified or absolute-split protocols. Overall the $\Delta\Delta G_{\mathrm{hydr}}$ 
-obtained with the various MD packages agree to within 0.1--\SI{0.5}{kcal.mol^{-1}}. Notable discrepancies include  GROMACS that predict a smaller $\Delta\Delta G_{\mathrm{hydr}}$ than the other packages for the methanol transformations by about \SI{0.2}{kcal.mol^{-1}}.  Similarly, there 
+hydration obtained from absolute transformations which are summarized in Table~\ref{S-tab:absolute-all}x.  The table shows the data 
+from simulations with the recommended protocol as discussed in detail in the 
+following subsections for each MD code. The $\Delta\Delta G_{\mathrm{hydr}}$ 
+obtained with the various MD packages in 
+this way agree quite well, although some larger deviations are apparent as 
+well.  GROMACS predicts a smaller $\Delta\Delta G_{\mathrm{hydr}}$ for the 
+methanol transformations by about \SI{0.2}{kcal.mol^{-1}}.  Similarly, there 
 are some discrepancies in the toluene, 2--methylfuran and 2--methylindole cases 
 where it is mostly CHARMM that produces somewhat smaller $\Delta\Delta 
 G_{\mathrm{hydr}}$ with \SI{0.4}{kcal.mol^{-1}} difference between the 
@@ -1224,6 +1209,8 @@ and explicit dummy atoms).
 
 \subsection{CHARMM}
 \label{sec:charmm-results}
+
+% HHL: Donghyuk, please fill in!
 
 \todo{bug in TI gradient accumulation in parallel runs (does not affect
 	serial?, does not affect EXP)}
