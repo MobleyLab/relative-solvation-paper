@@ -146,10 +146,10 @@ shorthand notation for any atom that appears or disappears during the
 course of the transformation.
 
 
-\section{Separated Protocols}
+\section{Split Protocols}
 \label{sec:separated}
 
-When the AFE (alchemical free energy) simulation is separated into van
+When the AFE (alchemical free energy) simulation is separated (split) into van
 der Waals and Coulomb steps it must be ensured that charges of
 vanishing atoms are switched off before the vdW radius is scaled to
 zero.  This is to avoid that other atoms e.g.\ from solvent come in
@@ -252,13 +252,14 @@ steps for all these MD packages.
 \section{Detailed Results}
 \label{sec:problems}
 
+Table~\ref{tab:absolute-all} summarizes the absolute free energies of hydration as obtained from the four MD packages AMBER, CHARMM, GROMACS and SOMD.  The GROMACS results include simulations with a reaction field to compare to SOMD which currently does not support PME.
 \begin{table}
   \begin{minipage}{\linewidth}
     \caption{Absolute free energies.}\label{tab:absolute-all}
     \makebox[\textwidth][c]{%
       \begin{tabular}{lrrrrr}
         \toprule
-                      & SOMD /RF & GROMACS/RF & GROMACS/PME & AMBER/PME        
+                      & SOMD/RF & GROMACS/RF & GROMACS/PME & AMBER/PME        
                       & CHARMM/PME \\
         \midrule
 methane               & \num{2.52+-0.02}  & \num{2.45+-0.01}   & 
@@ -289,6 +290,7 @@ neopentane & \num{2.71+-0.06}  & \num{2.63+-0.01}   &
     }
   \end{minipage}
 \end{table}
+The results agree very well with each other except for 2--CPI and 7--CPI and larger SEM in the SOMD results. % HHL: check this!
 
 \subsection{AMBER}
 \label{sec:amber-probs}
