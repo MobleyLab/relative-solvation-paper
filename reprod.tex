@@ -373,6 +373,12 @@ development.
 \section{Methods}
 \label{sec:methods}
 
+We will compare relative free energies calculated via simultaneous parameter 
+change simulations --- our ``unified protocol'' --- and separated parameter 
+change simulations --- our ``split protocol''--- to relative free energy 
+calculations obtained from two absolute hydration free energies -- our 
+``absolute protocol''.  The unified protocol changes partial charges, van der Waals parameters, and bond parameters simultaneously along the alchemical path, while the split protocol separates the transformation of the van der Waals parameters from the charge transformation.  The order in which this has to be done is detailed in section~\ref{S-sec:separated}x of the SI.  The scaling of the bonded terms can be combined with either transformation.
+
 \subsection{Alchemical Free Energy Implementations}
 \label{sec:afe_impl}
 
@@ -867,21 +873,6 @@ and are considerably simpler to set up and implement than relative calculations.
 Prior work actually compared calculated absolute hydration free energies across 
 different codes with considerable success~\cite{klimovich_predicting_2010} (see 
 Fig.~7 in the reference), further supporting this view.
-
-Thus, we compare relative free energies calculated via simultaneous parameter 
-change simulations --- our ``unified protocol'' --- and separated parameter 
-change simulations --- our ``split protocol''--- to relative free energy 
-calculations obtained from two absolute hydration free energies -- our 
-``absolute protocol''.
-% HHL: GDRM, is the absolute protocol a unified or a split protocol?  For
-%      AMBER, CHARMM and SOMD it is a unified protocol.
-% GDRM: Yes, it is
-The unified protocol changes partial charges, van der Waals parameters, and 
-bond parameters simultaneously along the alchemical path, while the split 
-protocol separates the transformation of the van der Waals parameters from the 
-charge transformation.  The order in which this has to be done is detailed 
-in section~\ref{S-sec:separated}x of the SI.  The scaling of the bonded terms 
-can be combined with either transformation.
 
 Table~\ref{tab:absolute} summarizes results for relative free energies of 
 hydration obtained from absolute transformations.  The table shows the data 
