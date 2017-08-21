@@ -39,8 +39,7 @@
 \renewcommand{\footnoterule}{}
 
 
-\title{Are Alchemical Free Energy Calculations Reproducible? (draft)}
-
+\title{Are Alchemical Free Energy Calculations Reproducible?}
 
 \input{affiliations}
 
@@ -109,26 +108,18 @@ framework~\cite{GILSON19971047, doi:10.1021/jp0217839,
   deng_computations_2009} and also increasingly in combination with
 non-equilibrium techniques~\cite{ytreberg_comparison_2006, JCC:JCC23804,
   doi:10.1021/ct500964e}.  The name comes from the nonphysical
-intermediates that often need to be created to obtain reliable estimates of free energy differences between physical ``end states'' and because parts or all of a molecule may ``appear'' or ``disappear'' in a transformation.  In the context of force field
-methods the transformation takes place in ``parameter space'', i.e.\ the
-various force field parameters are varied by scaling.  This can be a particularly efficient approach as it does not require translocation in configuration space.
-%%JM awkward, you still need to sample configuration space in AFE. You mean, 
-%%the 
-%%approach is efficient because it does not require sampling diffusive motions 
-%%between 
-%%phases (aqueous,protein binding site, or vacuum/solvent interface).
-For instance, the dissociation of a ligand from
-a large biomolecule may involve many degrees of freedom while, at the
-same time, it is generally unclear along which coordinates a
-translocation simulation should take place.
-%%JM confusing to talk about reaction coordinates, rewrite given above comment.
-% HHL: still thinking about this
+intermediates that often need to be created to obtain reliable estimates of 
+free energy differences between physical ``end states'' and because parts or 
+all of a molecule may ``appear'' or ``disappear'' in a transformation.  In the 
+context of force field methods the transformation takes place in ``parameter 
+space'', i.e.\ the various force field parameters are varied by scaling.  This 
+can be a particularly efficient approach as it does not require sampling of 
+diffusive motions.
 
 Alchemical free energy simulations rely on the concept of thermodynamic 
-cycles~\cite{Tembe1984281}.
-As the free energy is a state function, the sum of free energy changes
-computed around any closed cycle must be zero.  This also implies
-that the reversible work can be computed arbitrarily along
+cycles~\cite{Tembe1984281}.  As the free energy is a state function, the sum of 
+free energy changes computed around any closed cycle must be zero.  This also 
+implies that the reversible work can be computed arbitrarily along
 conveniently chosen legs of the cycle.  E.g.\ in
 Fig.~\ref{fig:thermocycle} the relative free energy of hydration can
 be computed along the vertical legs, that is, following the physical
@@ -626,40 +617,11 @@ which are not alchemically transformed.
 \label{sec:analysis}
 
 Various estimators have been proposed to obtain the free energy from AFE 
-simulations.  Early work by Kirkwood~\cite{kirkwood_statistical_1935} expresses 
-the free energy as an ensemble average of the derivative of the
-Hamiltonian with respect to the coupling parameter $\lambda$.  The
-method is now known as Thermodynamic Integration (TI).  Zwanzig
-devised the exponential formula~\cite{zwanzig_high-temperature_1954}
-(EXP), also known as Free Energy Perturbation (FEP) or thermodynamic
-perturbation (TP), which calculates the free energy from the
-exponential average of the energy difference of the end states.  The
-energy difference is computed from the energy with the configuration of one end 
-state and reusing it to compute the energy with the force field parameters of 
-the other end state.  This obviously assumes that the configuration is
-representative of both state.  As the phase--space overlap needs to
-be sufficiently large~\cite{wu_phase-space_2005,
-  wu_phase-space_2005-1} the EXP approach typically needs
-intermediates, controlled by $\lambda$.  However, it has been shown
-that EXP has an asymmetric bias depending on the directionality of
-$\lambda$~\cite{wu_asymmetric_2004} and that the Bennett Acceptance
-Ratio (BAR) method~\cite{bennett_efficient_1976} is considerably more
-effective in obtaining an accurate result~\cite{lu_appropriate_2003}.
-BAR is a generalization of EXP by making explicit use of the
-``forward'' ($\lambda_i \rightarrow \lambda_{i+1}$) and ``backward''
-($\lambda_{i+1} \rightarrow \lambda_i$) estimates.  Later it was
-demonstrated that this can be effectively extended to incorporate all
-other $\lambda$s.  This approach has been called multi--state BAR
-(MBAR)~\cite{shirts_statistically_2008-1}.  MBAR has been shown
-to have the lowest variance of any known
-estimator~\cite{shirts_statistically_2008}.
-%JM I don't think we need all of this at this stage of the paper, go straight to
-%TI and justify why we use it.
-% HHL: can go to Discussion under the title of ``recommendations''
-
-In this work we primarily focus on TI as this is supported by all MD
-packages ``out--of--the--box'', whereas BAR and MBAR are not.
-Equation~\ref{eq:ti} computes the free energy as
+simulations.  In this work we primarily focus on thermodynamic integration (TI) 
+as this is supported by all MD packages ``out--of--the--box'' and gives good 
+results provided the $\lambda$ spacing is sufficiently narrow in rapidly 
+varying parts of the gradient~\cite{JCC:JCC23229}.  Equation~\ref{eq:ti} 
+computes the free energy as
 \begin{equation}\label{eq:ti}
 	\Delta G = \int_{\lambda=0}^{\lambda=1}
 	\left\langle 
@@ -898,6 +860,15 @@ the absolute simulations (Table~\ref{tab:mue-absolute}) and reach
   \end{minipage}
 \end{table}
 
+We can also compute the cycle closure error from Table~\ref{tab:amber-comp} for 
+the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane 
+$\rightarrow$ ethane (see Figure~\ref{fig:cycles}). For the implicit dummy 
+simulation with AMBER we calculate a cycle error for $\Delta\Delta 
+G_\mathrm{hydr}$ of \SI{0.069+-0.041}{kcal.mol^{-1}} and for the explicit dummy 
+simulation the error is \SI{-0.016+-0.047}{kcal.mol^{-1}}.
+% HHL: All, please add your data here!
+
+
 %\begin{table}[]
 %  \begin{minipage}{\linewidth}
 %    \caption{MAE (\SI{}{kcal.mol^{-1}})with 95$\%$ confidence interval between 
@@ -1069,16 +1040,11 @@ set for the hydrogens in question while the same is not possible for their
 non--H counter--part in the other state because \emph{all} bonds emanating from 
 this atom would be affected.
 
-% HHL: move the following to the general results and compute for all packages
-We can also compute the cycle closure error from Table~\ref{tab:amber-comp} for 
-the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane 
-$\rightarrow$ ethane (see Figure~\ref{fig:cycles}). For the implicit dummy simulation we calculate a cycle error for $\Delta\Delta G_\mathrm{hydr}$ of \SI{0.069+-0.041}{kcal.mol^{-1}} and for the explicit dummy 
-simulation the error is \SI{-0.016+-0.047}{kcal.mol^{-1}}.
-
 In general, the free energies computed with each approach are in good agreement 
 with each other and with the results of the other MD packages (Tables~\ref{tab:absolute} and \ref{tab:relative}).  There are, however, a few notable deviations.  Neopentane $\rightarrow$ methane with central mapping differs from the result with terminal mapping by about \SI{0.4}{kcal.mol^{-1}}.  The terminal mapping and the free energies from the explicit dummy simulations are, however, consistent with the absolute transformations (Table~\ref{tab:absolute}).  We also observe a systematic deviation between forward and backward vacuum transformations in particular in the 2--methylindole simulation (see Table~\ref{S-tab:amber-disc}).  A discrepancy of consistently 0.2--\SI{0.4}{kcal.mol^{-1}} is evident from every $\lambda$ step of the vdW plus bonded transformation with both implicit and explicit dummy atoms.
 %%JM: any hint of the problem? This suggests a bug in AMBER
 % HHL: no hints yet, only symptoms.  Strongly suspect a bug too.
+
 
 \subsection{CHARMM}
 \label{sec:charmm-results}
@@ -1137,13 +1103,6 @@ vectors the same.
 %      LJ parameter(s) (don't recall which) are zer0
 %
 % JM: Please clarirfy that in the next revision
-%
-% HHL: only 2 digits for all data in the table please
-%      what is footnote d good for?
-% GDRM: About the decimal places: some of the errors would then be 
-%      rounded down to zero. That's why I left some with 3 decimal 
-%      places.
-% HHL: Yes, you will need to do rounding.
 
 Table \ref{tab:groresults} lists the relative free energies obtained from 
 GROMACS simulations.
@@ -1393,6 +1352,36 @@ different MD packages with the same force field. % discuss size/environment?
 % - compare against absolute
 % - run A-->B and B-->A
 % - compare to our benchmark
+
+%Early work by Kirkwood~\cite{kirkwood_statistical_1935} 
+%expresses 
+%the free energy as an ensemble average of the derivative of the
+%Hamiltonian with respect to the coupling parameter $\lambda$.  The
+%method is now known as Thermodynamic Integration (TI).  Zwanzig
+%devised the exponential formula~\cite{zwanzig_high-temperature_1954}
+%(EXP), also known as Free Energy Perturbation (FEP) or thermodynamic
+%perturbation (TP), which calculates the free energy from the
+%exponential average of the energy difference of the end states.  The
+%energy difference is computed from the energy with the configuration of one 
+%end 
+%state and reusing it to compute the energy with the force field parameters of 
+%the other end state.  This obviously assumes that the configuration is
+%representative of both state.  As the phase--space overlap needs to
+%be sufficiently large~\cite{wu_phase-space_2005,
+%  wu_phase-space_2005-1} the EXP approach typically needs
+%intermediates, controlled by $\lambda$.  However, it has been shown
+%that EXP has an asymmetric bias depending on the directionality of
+%$\lambda$~\cite{wu_asymmetric_2004} and that the Bennett Acceptance
+%Ratio (BAR) method~\cite{bennett_efficient_1976} is considerably more
+%effective in obtaining an accurate result~\cite{lu_appropriate_2003}.
+%BAR is a generalization of EXP by making explicit use of the
+%``forward'' ($\lambda_i \rightarrow \lambda_{i+1}$) and ``backward''
+%($\lambda_{i+1} \rightarrow \lambda_i$) estimates.  Later it was
+%demonstrated that this can be effectively extended to incorporate all
+%other $\lambda$s.  This approach has been called multi--state BAR
+%(MBAR)~\cite{shirts_statistically_2008-1}.  MBAR has been shown
+%to have the lowest variance of any known
+%estimator~\cite{shirts_statistically_2008}.
 
 \todo{recommended protocols}
 
