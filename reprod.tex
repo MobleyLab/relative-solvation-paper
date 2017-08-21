@@ -1020,11 +1020,9 @@ absolute transformations, see Tables~\ref{tab:absolute} and
 \ref{tab:relative}.  The relative simulations have been carried out with the 
 split protocol while the absolute simulations used a unified protocol 
 throughout.  SHAKE was explicitly deactivated for all bonds in the perturbed 
-region in these protocols.
-
-Table~\ref{tab:amber-comp} shows selected results for transformations with 
-SHAKE enabled for all bonds to hydrogens except those bonds that change bond 
-length during transformation. 
+region in these protocols.  Table~\ref{tab:amber-comp} shows selected results 
+for transformations with SHAKE enabled for all bonds to hydrogens except those 
+bonds that change bond length during transformation.
 \begin{table}[]
   \begin{minipage}{\linewidth}
   \caption{Comparing AMBER results for simulations with various split protocols.
@@ -1043,31 +1041,25 @@ length during transformation.
     $\Delta\Delta G$ & $\Delta G$ & $\Delta\Delta G$ \\
     \midrule
 ethane  & methanol & \num{-6.20+-0.01} & \num{-6.27+-0.01} &
-\multirow{2}{*}{\num{-6.22+-0.01}} & -6.20 \\
+\multirow{2}{*}{\num{-6.22+-0.01}} & \num{-6.18+-0.01} \\
 methanol & ethane & \num{-6.20+-0.01} & \num{-6.25+-0.01} & & \\
 toluene & methane & \num{3.24+-0.02} & \num{3.39+-0.02} &
-\multirow{2}{*}{\num{3.19+-0.01}} & 3.29 \\
+\multirow{2}{*}{\num{3.19+-0.01}} & \num{3.27+-0.03} \\
 methane & toluene & \num{3.42+-0.03} & \num{3.52+-0.03} & & \\
 neopentane\footnote{\label{foot:centA}central mapping.} & methane & \num{0.32 
-+-0.04} & \num{-0.03+-0.06} & \multirow{4}{*}{\num{-0.13+-0.02}} & 0.37 \\
++-0.04} & \num{-0.03+-0.06} & \multirow{4}{*}{\num{-0.13+-0.02}} & 
+\num{0.35+-0.02} \\
 methane\footref{foot:centA} & neopentane & \num{0.25+-0.03} & \num{-0.07+-0.03} 
 & & \\
 neopentane\footnote{\label{foot:termA}terminal mapping.} & methane & 
 \num{-0.13+-0.01} & \num{-0.12+-0.02} & & \\
 methane\footref{foot:termA} & neopentane & \num{-0.13+-0.03} & 
-\num{-0.12+-0.03} 
-& & \\
+\num{-0.12+-0.03} & & \\
     \bottomrule
   \end{tabular}
 }
   \end{minipage}
 \end{table}
-These free energies are computed from a single 
-run as we generally observe very small SEM and in practice one simulation is 
-sufficient to obtain converged free energy averages for all the systems studied 
-here.  
-%JM might as well run each 3 times to show an error estimate and 
-%then you don't have to excuse yourself !
 
 The time step has been increased from \SI{1}{fs} as used in the other 
 three protocols to \SI{2}{fs}.  As the results are essentially the same as the 
@@ -1371,6 +1363,9 @@ and AMBER respectively, similar to the MAD obtained with GROMACS RF.
 
 \section{Discussion}
 \label{sec:discuss}
+
+We have studied reproducibility under the view point of using a set of 
+different MD packages with the same force field. % discuss size/environment?
 
 % JM
 % Concretely
