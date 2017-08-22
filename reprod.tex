@@ -478,8 +478,8 @@ potential~\cite{beutler_avoiding_1994,
 term only.  It is important to note that in the split protocol
 charges have to be switched off before vdW parameters (and vice versa
 for the transformation in opposite direction) to avoid collapse of
-other atoms, e.g. solvents, onto a ``naked'' charge, see 
-section~\ref{S-sec:separated}x in the SI.
+other atoms, e.g. solvents, onto a ``naked'' charge \cite{steinbrecher_soft-core_2011} % 
+see section~\ref{S-sec:separated}x in the SI.
 %DLM: I think there is a literature reference on the need to do this; asking 
 %Guilherme for it as I don't recall it off the top of my head.
 
@@ -542,7 +542,7 @@ as implemented in the software.
 We set the electrostatic and non--bonded cutoffs to \SI{10.0}{\angstrom};
 a switch was applied to the latter starting at \SI{9.0}{\angstrom}. 
 Non--bonded interactions in the vacuum legs of the simulation were calculated
-to a cutoff of \SI{50.0}{\angstrom}.
+to a cutoff of \SI{50.0}{\angstrom}. 
 PME calculations were of order 6 and had a 
 tolerance of \num{1.0d-6}, with a grid spacing of \SI{1.0}{\angstrom}. 
 All transformations required the use of softcore potentials to avoid numerical 
@@ -1083,17 +1083,6 @@ If the process involves particle insertion (``backward process'') we reverse
 the roles.  In this work, \inpopt{mass-lambdas} were all set to zero  to not 
 included mass changes in the free energy.  Unified protocols set all $\lambda$ 
 vectors the same.
-
-%JM: Do you have a way to control the strength of softening of Coul and LJ in 
-%Gromacs?% Does the soft-core apply to ALL atoms, or only atoms that are dummies in one %end-state?% We must delve in differences with the SOMD softcore for the discussions %section.
-% GDRM: What do you mean by "control the strength of softening ..."? 
-%     The user is given the opportunity to choose if he/she wants to use
-%     soft-core potentials and to choose its parameters (power, alpha and 
-%sigma).
-%
-% JM: Can you specify in the text the values of power, alpha and sigma 
-% that you used for your calculations. We can compare to the values 
-% used in other codes then. 
 
 %     Regarding sc potentials, I'm inclined to say they are applied to all 
 %atoms, but  I'm not sure about it. I've checked the documentation and it is not clear 
