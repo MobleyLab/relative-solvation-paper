@@ -94,38 +94,29 @@ computation~\cite{hansen_practical_2014,
 reliability of estimates is still very much a matter of
 concern~\cite{doi:10.1021/jp102971x, doi:10.1021/acs.jctc.5b00179}.
 
-%DLM: Not sure I like the use of quotes in the following paragraph to introduce terms, as it seems like they are used around terms which haven't been defined but without defining those terms. If anything the quotes make it harder to read because they highlight that the terms have not been defined. I suggest either avoiding the quotes and skipping definitions, or using quotes (or italics) and making sure each term is clearly defined. 
-Here we are interested in \emph{alchemical} 
-free energy methods because they are firmly rooted in statistical 
-thermodynamics and thus give asymptotically correct free energy estimates, i.e.\
-they are correct for a given potential energy function in the limit of 
-sufficient simulation time~\cite{Beveridge-citeulike:3789890,
-  straatsma:92, doi:10.1021/cr00023a004, hansen_practical_2014}.
-The method has been applied in various forms for several decades now since
-the early days of computer simulation~\cite{doi:10.1063/1.1671118,
-  bennett_efficient_1976, doi:10.1063/1.432264, FS9821700055,
-  Tembe1984281, doi:10.1063/1.449208}.  The method has gained renewed
-attention in recent years --- concomitant with improvements in
-computer hardware design --- within the traditional equilibrium
-framework~\cite{GILSON19971047, doi:10.1021/jp0217839,
-  deng_computations_2009} and also increasingly in combination with
-non-equilibrium techniques~\cite{ytreberg_comparison_2006, JCC:JCC23804,
+Here we are interested in \emph{alchemical} free energy methods because they 
+are firmly rooted in statistical thermodynamics and thus give asymptotically 
+correct free energy estimates, i.e.\ they are correct for a given potential 
+energy function in the limit of sufficient simulation 
+time~\cite{Beveridge-citeulike:3789890, straatsma:92, doi:10.1021/cr00023a004, 
+hansen_practical_2014}.  The method has been applied in various forms for 
+several decades now since the early days of computer 
+simulation~\cite{doi:10.1063/1.1671118, bennett_efficient_1976, 
+doi:10.1063/1.432264, FS9821700055,  Tembe1984281, doi:10.1063/1.449208}.  The 
+method has gained renewed attention in recent years --- concomitant with 
+improvements in computer hardware design --- within the traditional equilibrium
+framework~\cite{GILSON19971047, doi:10.1021/jp0217839, deng_computations_2009} 
+and also increasingly in combination with non-equilibrium 
+techniques~\cite{ytreberg_comparison_2006, JCC:JCC23804,
   doi:10.1021/ct500964e}.  The name comes from the nonphysical
-intermediates that often need to be created to obtain reliable estimates of free energy differences between physical ``end states'' and because parts or all of a molecule may ``appear'' or ``disappear'' in a transformation.  In the context of force field
-methods the transformation takes place in ``parameter space'', i.e.\ the
-various force field parameters are varied by scaling.  This can be a particularly efficient approach as it does not require translocation in configuration space.
-%%JM awkward, you still need to sample configuration space in AFE. You mean, 
-%%the 
-%%approach is efficient because it does not require sampling diffusive motions 
-%%between 
-%%phases (aqueous,protein binding site, or vacuum/solvent interface).
-For instance, the dissociation of a ligand from
-a large biomolecule may involve many degrees of freedom while, at the
-same time, it is generally unclear along which coordinates a
-translocation simulation should take place.
-%%JM confusing to talk about reaction coordinates, rewrite given above comment.
-% HHL: still thinking about this
-%DLM: I think the point you are trying to make with those two sentences (which I don't like as written) is this: "This approach can be particularly helpful and easy to implement as compared to approaches which involve transitioning between states via a physical pathway. It can be harder to implement and automate physical pathway methods, and such methods can also require crossing of free energy barriers which are prohibitively large if pathways are not well chosen. " I would get rid of "This can be a ..." and "For instance...", both, and replace with something along these lines.
+intermediates that often need to be created to obtain reliable estimates of 
+free energy differences between physical end states and because parts or 
+all of a molecule may appear or disappear in a transformation.  In the 
+context of force field methods the transformation takes place in parameter 
+space, i.e.\ the various force field parameters are varied by scaling.  This 
+can be a particularly efficient approach as it does not require sampling of 
+diffusive motions, avoid crossing prohibitively large energy barriers if 
+pathways are not well chosen and is easier to automate.
 
 Alchemical free energy simulations rely on the concept of thermodynamic 
 cycles~\cite{Tembe1984281}.
@@ -175,43 +166,38 @@ simulations along the opposite edges of a quadrilateral thermodynamic cycle
 but approaches that produce the reversible work directly in one simulation
 have been proposed too~\cite{doi:10.1063/1.3519057, C3FD00125C}.
 
-Relative alchemical free energy (RAFE) calculations ``mutate'' one
-%DLM: There's that double quotes to introduce a term without giving a definition, again.
-molecule into another.  RAFEs have proven useful for instance to rank sets of related molecules according to their binding affinity for a given receptor.  This approach has 
-recently gained increased traction in the context of relative free binding 
-energies between small molecules, e.g.\ drug or lead like molecules and 
-biomolecules~\cite{doi:10.1021/ja512751q, 
-doi:10.1021/acs.jctc.6b00991}.
+Relative alchemical free energy (RAFE) calculations mutate one molecule into 
+another.  RAFEs have proven useful for instance to rank sets of related 
+molecules according to their binding affinity for a given receptor.  This 
+approach has recently gained increased traction in the context of relative free 
+binding energies between small molecules, e.g.\ drug or lead like molecules and 
+biomolecules~\cite{doi:10.1021/ja512751q, doi:10.1021/acs.jctc.6b00991}.
 
 RAFEs are readily implemented~\cite{doi:10.1021/j100056a020, Michel2010} by 
 making use of the single topology method~\cite{doi:10.1063/1.449208,
 doi:10.1021/j100056a020, doi:10.1021/jp981628n}.  Single topology means that 
 there is only one representation of the molecule to be mutated, also implying a 
-single set of coordinates.
-% Should we have a figure explaining the difference? In SI?
-Thus, atom types are directly transformed into the new type,
-typically by linearly scaling the force field parameters.
-In typical implementations, disappearing/appearing atoms need to be balanced 
-with ``dummy'' atoms to ensure 
-constant number of atoms in both end states.  Dummy atoms have no non--bonded 
-interactions in the end state but retain the bonded terms of the original atom 
-to avoid complications with unbound atoms~\cite{doi:10.1021/jp981628n} (see 
-also ``wandering'' ligand problem below).  However this need not be. 
-%DLM: quotes/wandering. Again, I think if we are going to make clear we are introducing the term (such as by putting it into quotes) we need to define it. Otherwise, we don't indicate it is new and say something like, "See also the wandering ligand problem, discussed below.)
-For instance, the AMBER implementation is a special case as it does not require the user to define dummy atoms 
-explicitly, i.e.\ as atoms with coordinates and zero end state parameters in 
-the topology, but only 
-to mark the disappearing and appearing atoms in the control file of the 
-MD engine.  The contributions of bonded terms that involve at least one 
-dummy atom will not be factored into the free energy as it is assumed that 
-those contributions will perfectly cancel out in the thermodynamic 
-cycle~\cite{doi:10.1021/acs.jcim.5b00057, doi:10.1021/jp994193s}.
+single set of coordinates.  Thus, atom types are directly transformed into the 
+new type, typically by linearly scaling the force field parameters.  In typical 
+implementations, disappearing/appearing atoms need to be balanced with 
+``dummy'' atoms to ensure constant number of atoms in both end states.  Dummy 
+atoms have no non--bonded interactions in the end state but retain the bonded 
+terms of the original atom to avoid complications with unbound 
+atoms~\cite{doi:10.1021/jp981628n} (see also wandering ligand problem, 
+discussed below).  However this need not be. For instance, the AMBER 
+implementation is a special case as it does not require the user to define 
+dummy atoms explicitly, i.e.\ as atoms with coordinates and zero end state 
+parameters in the topology, but only to mark the disappearing and appearing 
+atoms in the control file of the MD engine.  The contributions of bonded terms 
+that involve at least one dummy atom will not be factored into the free energy 
+as it is assumed that those contributions will perfectly cancel out in the 
+thermodynamic cycle~\cite{doi:10.1021/acs.jcim.5b00057, doi:10.1021/jp994193s}.
 
 The single topology approach~\cite{doi:10.1021/j100056a020} requires
-topological and structural similarity.
-But also chemical similarity is also of importance; e.g.\ chirality and binding modes 
-where the relative three dimensional arrangement of groups in space must be taken into 
-account.  Furthermore, ring breaking is technically
+topological and structural similarity.  But also chemical similarity is also of 
+importance; e.g.\ chirality and binding modes where the relative three 
+dimensional arrangement of groups in space must be taken into account.  
+Furthermore, ring breaking is technically 
 challenging~\cite{doi:10.1021/acs.jctc.6b00991} but it has also been
 shown that this can be done in certain 
 circumstances~\cite{doi:10.1021/acs.jcim.5b00057,
@@ -231,27 +217,26 @@ doi:10.1021/jp0217839, deng_computations_2009}.  Technically, a dual topology
 calculation is the same as two absolute calculations run simultaneously in 
 opposite directions.  It has been shown though that with the introduction of 
 special restraints or constraints this can be a viable 
-option~\cite{doi:10.1021/ct700081t,
-  rocklin_separated_2013, JCC:Axelsen-Li}.  Restraints between 
-corresponding atoms, thus emulating the single topology approach, can also be 
-used without affecting the free energy~\cite{JCC:Axelsen-Li}.  A recent 
+option~\cite{doi:10.1021/ct700081t,  rocklin_separated_2013, JCC:Axelsen-Li}.  
+Restraints between corresponding atoms, thus emulating the single topology 
+approach, can also be used without affecting the free 
+energy~\cite{JCC:Axelsen-Li}.  A recent 
 alternative~\cite{doi:10.1021/acs.jctc.5b00179} considered molecules with a
-common core where all atom types are the same and the corresponding atom 
-charges were made equal.  This means that the core does not need to be 
-duplicated.  But all the chemistry is now exclusively handled by, possibly, 
-just a few non--core atoms such that this approach may only be of limited use.
-%DLM: I don't follow the last three sentences of this. What does it mean that "the corresponding atom changes were made equal"? I'm not quite getting how this is different from single topology.
+common core where all atom types are the same.  The charges that would be 
+typically different in individual parameterization due to the local chemistry
+were made equal.  This means that the core does not need to be duplicated and 
+thus is not included in the mutation.  But all the chemistry is now exclusively 
+handled by, possibly, just a few non--core atoms such that this approach may 
+only be of limited use.
 
-A covalent link, e.g.\ as in side--chain
-mutation simulations, provides a natural restraint such that dual
-topology simulations can be applied without further problems.  Modern
-MD software, e.g.\ AMBER~\cite{case_amber_2005},
+A covalent link, e.g.\ as in side--chain mutation simulations, provides a 
+natural restraint such that dual topology simulations can be applied without 
+further problems.  Modern MD software, e.g.\ AMBER~\cite{case_amber_2005},
 CHARMM~\cite{JCC:JCC21287}, GROMACS~\cite{Abraham201519},
 GROMOS~\cite{doi:10.1021/jp984217f} and SOMD~\cite{Sire-2016,
-  doi:10.1021/ct300857j}, often provides
-a hybrid single/dual topology approach
-i.e.\ the user can specify which part of a perturbed group should be
-handled by which method~\cite{doi:10.1021/jp994193s}.
+  doi:10.1021/ct300857j}, often providesa hybrid single/dual topology approach
+i.e.\ the user can specify which part of a perturbed group should be handled by 
+which method~\cite{doi:10.1021/jp994193s}.
 
 As alluded to above, reliability is a principal matter of concern.  In
 particular, we need to ensure reproducibility of free energy results
@@ -259,12 +244,12 @@ among computer codes.  To the best of our knowledge this has not been
 systematically tested yet for a set of different MD packages. 
 However, there have been some recent efforts to test \emph{energy} 
 reproducibility across packages~\cite{Shirts2017} --- a necessary but not 
-sufficient prerequisite.  
-Another study went further and also compared densities across packages, revealing a variety of issues~\cite{Schappals:2017:J.Chem.TheoryComput.}.
-For free energies, given a
-predefined force field and run--time parameters we ought to be able to
-obtain comparable free energy results within statistical convergence
-limits, though this has not yet been tested.
+sufficient prerequisite.  Another study went further and also compared 
+densities across packages, revealing a variety of 
+issues~\cite{doi:10.1021/acs.jctc.7b00489}.
+For free energies, given a predefined force field and run--time parameters we 
+ought to be able to obtain comparable free energy results within statistical 
+convergence limits, though this has not yet been tested.
 
 In practice, we have the problem, however, that the methodologies
 used in one MD program are not always present in another
@@ -280,24 +265,23 @@ problems~\cite{Pronk:2011:CNP:2063384.2063465, doi:10.1021/ci8000937,
 doi:10.1021/jp505332p, loeffler_fesetup:_2015, 
 DBLP:journals/corr/Balasubramanian16g}.
 
-In this work we present the results of relative hydration free
-energies of a set of small organic molecules (see
-Fig.~\ref{fig:cycles}).  Solvation free energies have a wide range of
-uses and various methods exist to compute
-them~\cite{Skyner:2015:PCCP}.  They are also needed for calculations of a variety of important physical properties, and to calculate
-binding free energies where the simulation in solution (see
-Fig.~\ref{fig:thermocycle}) is combined with a mutation of the
-molecule bound to a partner~\cite{Skyner:2015:PCCP}.  A large database of hydration
-free energies computed from alchemical free energy (AFE) simulations, FreeSolv, 
-has been presented recently~\cite{Mobley2014} and was just 
+In this work we present the results of relative hydration free energies of a 
+set of small organic molecules (see Fig.~\ref{fig:cycles}).  Solvation free 
+energies have a wide range of uses and various methods exist to compute
+them~\cite{Skyner:2015:PCCP}.  They are also needed for calculations of a 
+variety of important physical properties, and to calculate binding free 
+energies where the simulation in solution (see Fig.~\ref{fig:thermocycle}) is 
+combined with a mutation of the molecule bound to a 
+partner~\cite{Skyner:2015:PCCP}.  A large database of hydration free energies 
+computed from alchemical free energy (AFE) simulations, FreeSolv, has been 
+presented recently~\cite{Mobley2014} and was just 
 updated~\cite{doi:10.1021/acs.jced.7b00104}. Here, we focus on the 
-reproducibility of RAFE with the simulation programs AMBER, CHARMM,
-GROMACS and SOMD.  We will discuss the reversible work results
-obtained with these packages and make recommendations
-regarding simulation protocols, setup procedures and analysis
-techniques.  We will also deliberate on what needs to be done to progress the 
-field, both from a usability perspective as well as from the view point of code 
-development.
+reproducibility of RAFE with the simulation programs AMBER, CHARMM, GROMACS and 
+SOMD.  We will discuss the reversible work results obtained with these packages 
+and make recommendations regarding simulation protocols, setup procedures and 
+analysis techniques.  We will also deliberate on what needs to be done to 
+progress the field, both from a usability perspective as well as from the view 
+point of code development.
 
 
 \section{Methods}
@@ -650,39 +634,6 @@ which are not alchemically transformed.
 
 \subsection{Free Energy Estimations}
 \label{sec:analysis}
-
-Various estimators have been proposed to obtain the free energy from AFE 
-simulations.  Early work by Kirkwood~\cite{kirkwood_statistical_1935} expresses 
-the free energy as an ensemble average of the derivative of the
-Hamiltonian with respect to the coupling parameter $\lambda$.  The
-method is now known as Thermodynamic Integration (TI).  Zwanzig
-devised the exponential formula~\cite{zwanzig_high-temperature_1954}
-(EXP), also known as Free Energy Perturbation (FEP) or thermodynamic
-perturbation (TP), which calculates the free energy from the
-exponential average of the energy difference of the end states.  The
-energy difference is computed from the energy with the configuration of one end 
-state and reusing it to compute the energy with the force field parameters of 
-the other end state.  This obviously assumes that the configuration is
-representative of both state.  As the phase--space overlap needs to
-be sufficiently large~\cite{wu_phase-space_2005,
-  wu_phase-space_2005-1} the EXP approach typically needs
-intermediates, controlled by $\lambda$.  However, it has been shown
-that EXP has an asymmetric bias depending on the directionality of
-$\lambda$~\cite{wu_asymmetric_2004} and that the Bennett Acceptance
-Ratio (BAR) method~\cite{bennett_efficient_1976} is considerably more
-effective in obtaining an accurate result~\cite{lu_appropriate_2003}.
-BAR is a generalization of EXP by making explicit use of the
-``forward'' ($\lambda_i \rightarrow \lambda_{i+1}$) and ``backward''
-($\lambda_{i+1} \rightarrow \lambda_i$) estimates.  Later it was
-demonstrated that this can be effectively extended to incorporate all
-other $\lambda$s.  This approach has been called multi--state BAR
-(MBAR)~\cite{shirts_statistically_2008-1}.  MBAR has been shown
-to have the lowest variance of any known
-estimator~\cite{shirts_statistically_2008}.
-%JM I don't think we need all of this at this stage of the paper, go straight to
-%TI and justify why we use it.
-% HHL: can go to Discussion under the title of ``recommendations''
-%DLM: I agree with these comments. Also note I think it's a provably minimum variance estimator, which is different from "lowest variance of any known estimator"
 
 In this work we primarily focus on TI as this is supported by all the tested MD
 packages ``out--of--the--box'', whereas BAR and MBAR are not.
@@ -1448,7 +1399,8 @@ different MD packages with the same force field. % discuss size/environment?
 % - compare to our benchmark
 %DLM: Where are we doing this?
 
-%Early work by Kirkwood~\cite{kirkwood_statistical_1935} 
+%Various estimators have been proposed to obtain the free energy from AFE 
+%simulations.  Early work by Kirkwood~\cite{kirkwood_statistical_1935} 
 %expresses 
 %the free energy as an ensemble average of the derivative of the
 %Hamiltonian with respect to the coupling parameter $\lambda$.  The
@@ -1474,8 +1426,7 @@ different MD packages with the same force field. % discuss size/environment?
 %($\lambda_{i+1} \rightarrow \lambda_i$) estimates.  Later it was
 %demonstrated that this can be effectively extended to incorporate all
 %other $\lambda$s.  This approach has been called multi--state BAR
-%(MBAR)~\cite{shirts_statistically_2008-1}.  MBAR has been shown
-%to have the lowest variance of any known
+%(MBAR)~\cite{shirts_statistically_2008-1}.  MBAR is a provable minimum variance
 %estimator~\cite{shirts_statistically_2008}.
 
 \todo{recommended protocols}
