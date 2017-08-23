@@ -292,8 +292,16 @@ change simulations --- our ``unified protocol'' --- and separated parameter
 change simulations --- our ``split protocol''--- to relative free energy 
 calculations obtained from two absolute hydration free energies -- our 
 ``absolute protocol''.  The unified protocol changes partial charges, van der Waals parameters, and bond parameters simultaneously along the alchemical path so that charge interactions and van der Waals interactions are varying simultaneously, while the split protocol separates the transformation of the van der Waals parameters from the charge transformation so that electrostatic interactions are modified separately from van der Waals interactions.
-%DLM: The explanation of the split protocol here doesn't mention what we're doing for bonded interactions, whereas the unified protocol does. If we're changing bond parameters at the same time as van der Waals (or charges) we should say.
-  The order in which this has to be done is detailed in section~\ref{S-sec:separated}x of the SI.  In the split protocol, the scaling of the bonded terms can be combined with either transformation.
+The order in which this has to be done is detailed in 
+section~\ref{S-sec:separated}x of the SI.  In the split protocol, the scaling 
+of the bonded terms can be combined with either transformation.
+%DLM: The explanation of the split protocol here doesn't mention what we're 
+%doing for bonded interactions, whereas the unified protocol does. If we're 
+%changing bond parameters at the same time as van der Waals (or charges) we 
+%should say.
+% HHL: we do it differently in AMBER and GROMACS, see sentence above and
+%      discussion somewhere else
+
 
 \subsection{Alchemical Free Energy Implementations}
 \label{sec:afe_impl}
@@ -305,44 +313,57 @@ functions~\cite{beutler_avoiding_1994, zacharias_separationshifted_1994}
 implemented in each code as summarised in section~\ref{S-sec:softcores}x of the 
 SI.  Softcore functions are used to avoid numerical and thus
 stability problems of the conventional van der Waals and Coulombic
-potentials~\cite{steinbrecher_nonlinear_2007} as they have
-singularities at zero distance (vertical asymptotes).  Attempting to modify interactions by 
-linearly scaling back these interaction potentials as a function of an interaction parameter, $\lambda$, causes these functions to increasingly behave like
-hard--sphere potentials as $\lambda\rightarrow 0$.  This implies a
-%DLM: I am not sure this is clear. Hard spheres can't interpenetrate, so a reader would probably ask, "Wait, why does this imply they are likely to interpenetrate?" Maybe a better phrasing would be, "This means that there is a discontinuous change between $\lambda=0$ where particles can overlap, and $\lambda=\epsilon$ (where $\epsilon$ is very small) where particles still behave like hard though minuscule spheres. This can lead to strongly fluctuating..."
-higher probability of other atoms penetrating into the highly
-repulsive short--range portion of the potential which can lead to
-strongly fluctuating forces/energies and to severe instabilities in
-the integrator, as well as numerical errors in post processing analyses even when simulations do terminate normally~\cite{beutler_avoiding_1994, zacharias_separationshifted_1994, 
-steinbrecher_nonlinear_2007}.
+potentials~\cite{steinbrecher_nonlinear_2007} as they have singularities at 
+zero distance (vertical asymptotes).  Attempting to modify interactions by 
+linearly scaling back these interaction potentials as a function of an 
+interaction parameter, $\lambda$, causes these functions to increasingly behave 
+like hard--sphere potentials as $\lambda\rightarrow 0$.  This means that there 
+is a discontinuous change between $\lambda = 0$ where particles can overlap, 
+and $\lambda = \epsilon$ (where $\epsilon$ is very small) where particles still 
+behave like hard though minuscule spheres. This can lead to strongly 
+fluctuating forces/energies and to severe instabilities in the integrator, as 
+well as numerical errors in post processing analyses even when simulations do 
+terminate normally~\cite{beutler_avoiding_1994, 
+zacharias_separationshifted_1994, steinbrecher_nonlinear_2007}.
 
 Another difference is how the codes scale force field parameters (``parameter 
 scaling'') and/or the energy (``energy 
 scaling'')~\cite{doi:10.1021/jp981628n}.  In the former case each parameter is 
 scaled individually, e.g.\ in the case of a harmonic bond or angle term,
 the force constant and the equilibrium distance/angle are scaled. In the 
-latter case, the total energy term resulting from the potential is scaled.
-%DLM: Unclear "the total energy term resulting from the potential..." Do you mean, "In the latter term, the potential energy term for that specific interaction is scaled." (?)
-The two approaches are not mathematically equivalent and so the pathway through state space or alchemical space 
-is different.  %It should be noted, however, that the non--bonded interactions 
-%are handled through softcore functions in modern codes and thus parameter 
-%scaling~\cite{doi:10.1021/j100056a020, JCROSS1986198} is now only used for 
-%bonded terms in some codes.
-%DLM: I disagree with this somewhat:, as I still prefer to use scaling for Coulomb and softcore for LJ only, so I think this should say: 
-It should be noted, however, that modification of Lennard-Jones interactions is handled through softcore functions in modern codes (as is, in some cases, that for electrostatic interactions) and thus parameter scaling~\cite{doi:10.1021/j100056a020, JCROSS1986198} is now only used for bonded terms and sometimes electrostatic interactions, at least in modern codes. 
+latter case, the total energy is scaled, all at once or, equivalently for each 
+individual force field contribution.  The two approaches are not mathematically 
+equivalent and so the pathway through state space or alchemical space 
+is different.  It should be noted, however, that modification of Lennard-Jones 
+interactions is handled through softcore functions in modern codes (as is, in 
+some cases, that for electrostatic interactions) and thus parameter 
+scaling~\cite{doi:10.1021/j100056a020, JCROSS1986198} is now only used for 
+bonded terms and sometimes electrostatic interactions, at least in modern codes.
 
-One more important issue is whether the code allows constraints to be applied to bonds which have 
-changing bond lengths.  These and other details will be outlined below.  The 
-perturbed group consists of all atoms that need to be transformed, i.e.\ any 
-atom that differs in at least one force field parameter in the other end
-state.
-%DLM: Unclear how the second sentence in that prior paragraph belongs with the first. And, what perturbed group are we talking about here? 
+One more important issue is whether the code allows constraints to be applied 
+to bonds which change bond lengths in a transformation e.g.\ C--H to C--C.  
+Changes in bond length need to account for the associated change in the free 
+energy.  These and other details will be outlined below.
 
 \paragraph{AMBER.}
-This code is strictly dual topology and all terms are energy--scaled.  The code allows, however, mapping of atoms in a single topology fashion and computes these non--softcore atoms  by linearly scaling the energy and forces for each atom in the pair.  The perturbed group must be entirely duplicated, i.e.\ for \progname{sander} this means two topology files with one end state each, and for \progname{pmemd} both end states in one topology file.  The softcore potential applies to any atom chosen by the user which may include atoms that actually have an equivalent in the other state.  Non--softcore atoms must still match 1:1 in both states.  Explicit dummy atoms are not needed as the code will only compute bonded contributions for ``real'' atoms and thus ignores bonded energies involving dummy atoms.  We will call this the ``implicit dummy protocol''. The code cannot handle bond length changes involving a constraint.  There is only one global $\lambda$ for parameter transformation.  Protocols that couple only some parameters (split protocols, see below) must be emulated through careful construction of topologies by keeping force field parameters that are not being modified constant along $\lambda$. 
-%DLM: Somewhat confusing prior sentence -- why does one have to keep constant a parameter which is not being modified? Maybe better to say, "To avoid accidentally modifying parameters with $\lambda$, topologies must be carefully constructed to ensure that (which?) parameters are deliberately held fixed" or some such?
-AMBER16 has been used for all calculations.
-%DLM: This "AMBER16 has been used..." seems out of place here since this is about implementation, not which code was used. Also, none of the paragraphs for the other implementations say which version is used. We DO need to have which version was used somewhere, but they should probably all be given in the same place?
+This code is strictly dual topology and all terms are energy--scaled.  The code 
+allows, however, mapping of atoms in a single topology fashion and computes 
+these non--softcore atoms  by linearly scaling the energy and forces for each 
+atom in the pair.  The perturbed group must be entirely duplicated, i.e.\ for 
+\progname{sander} this means two topology files with one end state each, and 
+for \progname{pmemd} both end states in one topology file.  The softcore 
+potential applies to any atom chosen by the user which may include atoms that 
+actually have an equivalent in the other state.  Non--softcore atoms must still 
+match 1:1 in both states.  Explicit dummy atoms are not needed as the code will 
+only compute bonded contributions for ``real'' atoms and thus ignores bonded 
+energies involving dummy atoms.  We will call this the ``implicit dummy 
+protocol''. The code cannot handle bond length changes involving a constraint.  
+There is only one global $\lambda$ for parameter transformation.  Protocols 
+that couple only some parameters (split protocols, see below) must be emulated 
+through careful construction of topologies e.g. by keeping fixed the vdw and 
+bonded terms at the initial state for a charge transformation.  The setup for 
+the two states must therefore use identical atom types for both end states 
+while the charges are individually assigned.
 
 \paragraph{CHARMM.} The PERT module duplicates the topology similar to
 \progname{sander} but mapped atoms are given in the topology only once.
@@ -492,32 +513,42 @@ see section~\ref{S-sec:separated}x in the SI.
 %DLM: I think there is a literature reference on the need to do this; asking 
 %Guilherme for it as I don't recall it off the top of my head.
 
-All simulations were started from simulation boxes prepared by FESetup~\cite{loeffler_fesetup:_2015}.  It should be noted, 
-however, that in constructing the system steric overlaps between the solute and 
-the solvent may happen.  This is because each unperturbed solute is 
-independently equilibrated and the perturbed system combined from those two.  
-%DLM: I don't understand the last sentence. 
-The number of atoms are always chosen to be the same for forward and backward 
-setups by using the larger box of the two unperturbed systems.  Thus, in 
-transformation from a smaller to a larger solute, water molecules may be in particularly
-close proximity to the solute.  The production simulations were run at 
-\SI{298.15}{K} and \SI{1.0}{bar}.
+All simulations were started from simulation boxes prepared by 
+FESetup~\cite{loeffler_fesetup:_2015}.  It should be noted, however, that in 
+constructing the perturbed system steric overlaps between the solute and the 
+solvent may happen.  This is because each unperturbed solute is independently 
+equilibrated but the final perturbed system combined from those, potentially 
+differently sized solutes.  To make the number of atoms the same for forward 
+and backward setups the water coordinates of the larger of the two boxes are 
+chosen.  Thus, in transformation from a smaller to a larger solute, water 
+molecules may be in close proximity to the solute.  The production simulations 
+were run at \SI{298.15}{K} and \SI{1.0}{bar}.
 
-\paragraph{AMBER.} The starting coordinates were usually taken directly from the
-pre--equilibrated setup step but no further $\lambda$ specific equilibration 
-was carried out, i.e.\ RAFE MD simulations were started with new velocities 
-appropriate for the final simulation temperature.  In a very few cases it was necessary to use coordinates from a nearby $\lambda$ state because of simulation instabilities. 
-%DLM: Do we mean "coordinates from the end of the simulation at a nearby $\lambda$ state? Otherwise, since all of the starting coordinates are identical, this would make no difference, right?
-This happened in transformations with a larger number of dummy atoms.  Water hydrogens (TIP3P) were constrained with SHAKE but none of the atoms in the perturbed group
-%None of the atoms in the perturbed group what? "None of the atoms were in the perturbed group"?? Not sure what's meant.
- and so the time step was set to \SI{1}{fs} (see SOMD protocol below for an alternative approach).  The temperature was controlled through a Langevin thermostat with a friction constant of \SI{2.0}{ps^{-1}} and pressure rescaling through a Monte Carlo barostat with 100 steps between isotropic volume change attempts.  Long--range electrostatics in solution was handled with PME and a cutoff of \SI{8.0}{\angstrom} for both Coulomb and vdW interactions.  In vacuum no cutoff was used.
+\paragraph{AMBER.} We made use of AMBER16 for all free energy calculation. The 
+starting coordinates were usually taken directly from the pre--equilibrated 
+setup step but no further $\lambda$ specific equilibration  was carried out, 
+i.e.\ RAFE MD simulations were started with new velocities appropriate for the 
+final simulation temperature.  In a very few cases it was necessary to use 
+coordinates from the end of the simulation at a nearby $\lambda$ state because 
+of simulation instabilities. This happened in transformations with a larger 
+number of dummy atoms.  Water hydrogens (TIP3P) were constrained with SHAKE. 
+None of the atoms in the perturbed group where constraint and hence the time 
+step set to \SI{1}{fs}.  We also tested a alternative protocol with 
+SHAKE also on bonds that do not change during transformation and a time step of 
+\SI{2}{fs} (see SOMD protocol below). The temperature was controlled through a 
+Langevin thermostat with a friction constant of \SI{2.0}{ps^{-1}} and pressure 
+rescaling through a Monte Carlo barostat with 100 steps between isotropic 
+volume change attempts.  Long--range electrostatics in solution was handled 
+with PME and a cutoff of \SI{8.0}{\angstrom} for both Coulomb and vdW 
+interactions.  In vacuum no cutoff was used.
 
 \paragraph{CHARMM.} The CHARMM c40b1 molecular dynamics package was used to 
 carry out all relative hydration free energy simulations.  21 evenly spaced 
 windows were used and all windows were run for \SI{1.5}{ns} with a timestep of 
 \SI{1}{fs}.  Most windows used the same pre-equilibrated configuration, but a 
 few windows were started with their own equilibration. 
-%% JM which ones? What was the reason for doing so? Same as AMBER? DLM: Agree with these questions.
+%% JM which ones? What was the reason for doing so? Same as AMBER?
+% DLM: Agree with these questions.
  Constant temperature and pressure control was done with the Berendsen weak coupling method, with a 
 compressibility of \SI{4.63e-5}{atm^{-1}} and temperature and pressure coupling 
 constants of \SI{5.0}{ps^{-1}}.  A \SI{12.0}{\angstrom} atom--based cutoff was 
@@ -653,17 +684,12 @@ out in a series of equilibrium simulations at discrete values of $\lambda$ but
 the gradient can also be evaluated with a continuously varying coupling 
 parameter as a function of the simulation time.  The free energy is finally 
 computed through a suitable numerical integration method.
-In practice, in all implementations tested here, atomic masses are not coupled to 
-$\lambda$ and the gradient of the kinetic energy with respect to $\lambda$ is not evaluated.   
-%DLM: What is this last statement based on? GROMACS DOES couple these to lambda unless you tell it not to (hence our use of "mass-lambdas" below), AND it evaluates the gradients and output them, it's just that we could ignore them in our analysis (though here we told it not to change the masses).
 
-Results from additional estimators
-will be given where available.  We have used the alchemical analysis
-tool~\cite{klimovich_guidelines_2015} for analysis of all free energies.  This
-tool provides various estimators such as TI, TI with cubic splines,
-BAR and MBAR.  All data can be sub--sampled to eliminate correlated
+Results from additional estimators will be given where available.  We have used 
+the alchemical analysis tool~\cite{klimovich_guidelines_2015} for analysis of 
+all free energies.  This tool provides various estimators such as TI, TI with 
+cubic splines, BAR and MBAR.  All data was sub--sampled to eliminate correlated 
 data.
-%DLM: "can be" doesn't make clear whether we did that; did we? 
 
 All RAFE simulations were run in triplicate in forward as well as
 backward direction for a total of 6 simulations per mutation.  The
@@ -763,7 +789,8 @@ transformation (2-CPI to 7-CPI) with the AMBER result higher by 0.3--\SI{0.5}{kc
 
 Table~\ref{tab:mue-absolute} shows the MAD between SOMD, GROMACS, AMBER and 
 CHARMM. The SOMD code produces figures that agree the most with all other MD packages (MAD ca.  \SI{0.1}{kcal.mol^{-1}}), and the MAD reaches just under 
-\SI{0.2}{kcal.mol^{-1}} for CHARMM/GROMACS, and CHARMM/AMBER. %DLM: Would be good to have error bars on those.
+\SI{0.2}{kcal.mol^{-1}} for CHARMM/GROMACS, and CHARMM/AMBER.
+%DLM: Would be good to have error bars on those.
 
 \begin{table}[]
   \begin{minipage}{\linewidth}
@@ -790,12 +817,19 @@ the following subsections).
 \begin{table}[]
   \begin{minipage}{\linewidth}
     \caption{Comparison of relative free energies of hydration for various MD 
-      packages as obtained from relative transformations via unified or split protocols.  Signs of the  backward transformation have been reverted to correspond to the forward  transformation.}\label{tab:relative}
+      packages as obtained from relative transformations via unified or split 
+      protocols.  Signs of the  backward transformation have been reverted to 
+      correspond to the forward transformation.}\label{tab:relative}
     \makebox[\textwidth][c]{
       \begin{tabular}{llrrrrr}
         \toprule
-        & & \multicolumn{2}{c}{AMBER\footnote{\label{foot:split}split protocol.}} & CHARMM\footnote{\label{foot:unified2}unified protocol.} & GROMACS\footref{foot:split} & SOMD\footref{foot:unified2} \\
-        & & \multicolumn{1}{c}{implicit} & \multicolumn{1}{c}{explicit} & & & \\
+        & & \multicolumn{2}{c}{AMBER\footnote{\label{foot:split}split 
+        protocol.}} & 
+        CHARMM\footnote{\label{foot:unified2}unified protocol.} & 
+        GROMACS\footref{foot:split} & SOMD\footref{foot:unified2} \\
+        & & \multicolumn{1}{c}{implicit\footnote{\label{foot:impl}using either 
+        the implicit or the explicit dummy atom approach.}} & 
+        \multicolumn{1}{c}{explicit\footref{foot:impl}} & & & \\
         \midrule
         ethane & methane & \num{0.02+-0.01} & \num{-0.13+-0.02} & \num{-0.11 +- 
         0.02} & \num{-0.04 +- 0.02} & \num{-0.01+-0.05} \\
@@ -847,10 +881,11 @@ the following subsections).
     }
   \end{minipage}
 \end{table}
-%DLM: Make clear somehow in the table caption what "implicit" vs "explicit" is; naively I would read this as implicit vs explicit solvent but presumably that's not what's meant.
 
-
-CHARMM tends to show smaller  relative free energies for a number of transformations: toluene, neopentane, 2--methylfuran and 2--methylindole.  SOMD displays smaller $\Delta\Delta G_{\mathrm{hydr}}$ in the methanol and toluene transformations.  The largest 
+CHARMM tends to show smaller  relative free energies for a number of 
+transformations: toluene, neopentane, 2--methylfuran and 2--methylindole.  SOMD 
+displays smaller $\Delta\Delta G_{\mathrm{hydr}}$ in the methanol and toluene 
+transformations.  The largest 
 discrepancy, however, is in the neopentane transformation with central mapping 
 where AMBER with implicit dummy atoms is about \SI{0.5}{kcal.mol^{-1}} higher 
 and CHARMM about \SI{0.3}{kcal.mol^{-1}} lower than the other two codes.  The 
@@ -982,11 +1017,12 @@ We also found that, in contrast to the other three codes, AMBER does not yield
 correct relative free energies with the unified protocol, i.e.\
 when all force field parameters are scaled simultaneously (see 
 Table~\ref{S-tab:amber-onestep}x).  This appears to be a problem when more than 
-a few dummy atoms are involved, while the unified protocol works for the smaller 
-transformations (refer to Figure~\ref{fig:cycles}).  The split RAFE 
+a few dummy atoms are involved, while the unified protocol works for the 
+smaller transformations (refer to Figure~\ref{fig:cycles}).  The split RAFE 
 protocol and absolute free energies, however, are very close to the other MD 
 packages as demonstrated in Table~\ref{tab:amber-comp} below.
-%DLM: Can we make it more clear which data shows this? 
+%DLM: Can we make it more clear which data shows this?
+% HHL: Do you mean the data from the failed protocol?
 
 End point geometries appear to be another issue with AMBER simulations
 in both solution and vacuum.  This is most obvious in the neopentane 
@@ -1056,25 +1092,41 @@ The time step has been increased from \SI{1}{fs} as used in the other
 three protocols to \SI{2}{fs}.  As the results are essentially the same as the 
 non--SHAKE simulations, this SHAKE protocol appears to be a viable solution to 
 increase the performance of RAFE simulations.  We have repeated this protocol 
-with AMBER in response to the good results obtained with SOMD using this implementation.  
-From a practical point of view, AMBER uses an \emph{atom} based mask for bond SHAKEs such that the mask must be 
-set for the hydrogens in question while the same is not possible for their 
-non--H counter--part in the other state because \emph{all} bonds emanating from 
-this atom would be affected.
+with AMBER in response to the good results obtained with SOMD using this 
+implementation.  From a practical point of view, AMBER uses an \emph{atom} 
+based mask for bond SHAKEs such that the mask must be set for the hydrogens in 
+question while the same is not possible for their non--H counter--part in the 
+other state because \emph{all} bonds emanating from this atom would be affected.
 
 In general, the free energies computed with each approach are in good agreement 
-with each other and with the results of the other MD packages (Tables~\ref{tab:absolute} and \ref{tab:relative}).  There are, however, a few notable deviations.  Neopentane $\rightarrow$ methane with central mapping differs from the result with terminal mapping by about \SI{0.4}{kcal.mol^{-1}}.  The terminal mapping and the free energies from the explicit dummy simulations are, however, consistent with the absolute transformations (Table~\ref{tab:absolute}).  We also observe a systematic deviation between forward and backward vacuum transformations in particular in the 2--methylindole simulation (see Table~\ref{S-tab:amber-disc}).  A discrepancy of consistently 0.2--\SI{0.4}{kcal.mol^{-1}} is evident from every $\lambda$ step of the vdW plus bonded transformation with both implicit and explicit dummy atoms.
+with each other and with the results of the other MD packages 
+(Tables~\ref{tab:absolute} and \ref{tab:relative}).  There are, however, a few 
+notable deviations.  Neopentane $\rightarrow$ methane with central mapping 
+differs from the result with terminal mapping by about 
+\SI{0.4}{kcal.mol^{-1}}.  The terminal mapping and the free energies from the 
+explicit dummy simulations are, however, consistent with the absolute 
+transformations (Table~\ref{tab:absolute}).  We also observe a systematic 
+deviation between forward and backward vacuum transformations in the 
+2--methylindole simulation (see Table~\ref{S-tab:amber-disc}).  The gradient 
+is consistently shifted by 0.2--\SI{0.4}{kcal.mol^{-1}} for each $\lambda$ step 
+of the vdW plus bonded transformation with both implicit and explicit dummy 
+atoms.
 %%JM: any hint of the problem? This suggests a bug in AMBER
 % HHL: no hints yet, only symptoms.  Strongly suspect a bug too.
 %DLM: Maybe we should say, "We suspect these issues reflect a bug in the AMBER package but have been unable to isolate it; we have reported the issue to the AMBER developers," or something similar. 
-%DLM: Also, the "from every lambda step" phrasing is unclear -- is the total error 0.2-0.4 * nlambda, or ... ? ( You don't want to make the reader flip to the SI to understand what you're saying.)
+%DLM: Also, the "from every lambda step" phrasing is unclear -- is the total 
+%error 0.2-0.4 * nlambda, or ... ? ( You don't want to make the reader flip to 
+%the SI to understand what you're saying.)
+% HHL: Clarification: this is really only obvious in the 2-methylindole case.
+%      Maybe there is something going on in the toluene case too but it is only
+%      0.1 kcal/mol and so maybe hard to argue it is not just within
+%      statistical error,
 
 
 \subsection{CHARMM}
 \label{sec:charmm-results}
 
 % HHL: Donghyuk, please fill in!
-% DLM: Have we been in touch with him and Benoit, or are we removing?
 
 \todo{bug in TI gradient accumulation in parallel runs (does not affect
 	serial?, does not affect EXP)}
@@ -1135,8 +1187,7 @@ GROMACS simulations.
   \centering
   \caption{Relative hydration free energies obtained from GROMACS simulations 
   in $kcal\cdot mol^{-1}$. Signs of the backward transformation have been 
-  reverted
-  to correspond to the forward transformation.}
+  reverted to correspond to the forward transformation.}
   \label{tab:groresults}
   \resizebox{\columnwidth}{!}{%
     \begin{tabular}{@{}rrrrrrrr@{}}
@@ -1339,7 +1390,8 @@ instances may be due to differences in the softcore Coulomb implementations.
 
 %%JM we need to elaborate here
 %SB: Here we could say
-% - Gromacs fails maybe for the softcore implementations %DLM: Which softcore? You mean softcore Coulomb?
+% - Gromacs fails maybe for the softcore implementations
+%DLM: Which softcore? You mean softcore Coulomb?
 % - Evidences of softcore limitations are given by Harger et al. (Tinker-OpenMM 
 %paper)
 % where the authors highligth that the use of constraint and softcore could 
