@@ -1467,7 +1467,8 @@ and AMBER respectively, similar to the MAD obtained with GROMACS RF.
 % We can point out that softcore implementations can make '1-step' protocols
 % unreliable? We need to elaborate on WHY though. I'm still not 100% convinced
 % we understand what is going on in AMBER and GROMACS calculations. 
-%DLM: Maybe we say that it indicates these are unreliable and the issue will need further investigation; at present we do not recommend these
+%DLM: Maybe we say that it indicates these are unreliable and the issue will 
+%need further investigation; at present we do not recommend these
 
 % Consequently, currently we CANNOT run the same simulation protocol in all the 
 %codes
@@ -1475,7 +1476,8 @@ and AMBER respectively, similar to the MAD obtained with GROMACS RF.
 %consistent
 % results (to within MAE of ca. 0.2 kcal.mol-1). This is what we will call 
 % the 'limit of reproducibility'. 
-%DLM: Seems like the exception to that is CHARMM, which looks like it is just consistently wrong. 
+%DLM: Seems like the exception to that is CHARMM, which looks like it is just 
+%consistently wrong. 
 
 % We make benchmark and protocols available as part of this work. We recommend 
 % new and future RAFE implementations to carry out the following checks to 
@@ -1504,8 +1506,8 @@ different MD packages with the same force field. % discuss size/environment?
 %state and reusing it to compute the energy with the force field parameters of 
 %the other end state.  This obviously assumes that the configuration is
 %representative of both state.  As the phase--space overlap needs to
-%be sufficiently large~\cite{wu_phase-space_2005,
-%  wu_phase-space_2005-1} the EXP approach typically needs
+%be sufficiently large~\cite{wu_phase-space_2005} the EXP approach typically 
+%needs
 %intermediates, controlled by $\lambda$.  However, it has been shown
 %that EXP has an asymmetric bias depending on the directionality of
 %$\lambda$~\cite{wu_asymmetric_2004} and that the Bennett Acceptance
@@ -1516,7 +1518,7 @@ different MD packages with the same force field. % discuss size/environment?
 %($\lambda_{i+1} \rightarrow \lambda_i$) estimates.  Later it was
 %demonstrated that this can be effectively extended to incorporate all
 %other $\lambda$s.  This approach has been called multi--state BAR
-%(MBAR)~\cite{shirts_statistically_2008-1}.  MBAR is a provable minimum variance
+%(MBAR)~\cite{shirts_statistically_2008}.  MBAR is a provable minimum variance
 %estimator~\cite{shirts_statistically_2008}.
 
 %\listoftodos
