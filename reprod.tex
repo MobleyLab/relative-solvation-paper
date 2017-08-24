@@ -1420,8 +1420,39 @@ and AMBER respectively, similar to the MAD obtained with GROMACS RF.
 \section{Discussion}
 \label{sec:discuss}
 
-We have studied reproducibility under the view point of using a set of 
-different MD packages with the same force field. % discuss size/environment?
+\todo{%
+  recommended protocol, protocols to avoid
+  lessons learned
+  SHAKE/LINCS issues with changing bond lengths -> unperturbed hbonds
+  split vs unified (both relative and absolute)
+}
+
+\todo{%
+  We can't do convergence tests so only discuss and explain why not done: 
+  different lambda schedules, number of windows, length of each
+  windows; codes have different speeds  (``time to answer''). Instead focus 
+  is on low errors to establish if codes are different or not.
+}
+
+\todo{%
+  what do we need to progress the field e.g. automation to make things
+  easy but also consistent and thus more reproducible (FESetup also
+  for reproducibility); GPU: GROMACS, SOMD but not AMBER (yet) and
+  CHARMM; alternative softcore functions?; sampling?; force field 
+  improvements?; analysis e.g.\ BAR/MBAR?
+}
+
+\todo{%
+  developer notes: constraint issues
+  both appearing/disappearing: 
+    charge balancing, discharge all to save on another recip PME evluation?, 
+    2-cyclopentanylindole to 7-cyclopentanylindole: better to go through 
+    intermediates?;
+  lambda paths for AMBER (relative), AMBER absolute: crgmask requires
+  vacuum corr if split protocol
+}
+
+\todo{further investigation required: convergence, softcore, binding RAFEs?}
 
 % JM
 % Concretely
@@ -1455,6 +1486,9 @@ different MD packages with the same force field. % discuss size/environment?
 % - compare to our benchmark
 %DLM: Where are we doing this?
 
+We have studied reproducibility under the view point of using a set of 
+different MD packages with the same force field. % discuss size/environment?
+
 %Various estimators have been proposed to obtain the free energy from AFE 
 %simulations.  Early work by Kirkwood~\cite{kirkwood_statistical_1935} 
 %expresses 
@@ -1485,40 +1519,7 @@ different MD packages with the same force field. % discuss size/environment?
 %(MBAR)~\cite{shirts_statistically_2008-1}.  MBAR is a provable minimum variance
 %estimator~\cite{shirts_statistically_2008}.
 
-\todo{recommended protocols}
-
-\todo{protocols to avoid}
-
-\todo{lessons learned}
-
-\todo{We can't do convergence tests so only discuss and explain why not done: 
-different lambda schedules, number of windows, length of each
-windows; codes have different speeds  (``time to answer''). Instead focus is on 
-low errors to establish if codes are different or not.}
-
-\todo{SHAKE/LINCS issues with changing bond lengths}
-
-\todo{2-cyclopentanylindole to 7-cyclopentanylindole: better to go through 
-intermediates?}
-
-\todo{%
- what do we need to progress the field e.g. automation to make things
- easy but also consistent and thus more reproducible (FESetup also
- for reproducibility); GPU: GROMACS, SOMD but not AMBER (yet) and
- CHARMM; alternative softcore functions?; sampling?; force field improvements?; 
- analysis?
-}
-
-\todo{%
- developer notes: constraints, both appearing/disappearing;
- lambda paths for AMBER (relative), absolute: crgmask requires
- vacuum corr if split protocol
-}
-
-\todo{further investigation required: binding RAFEs?}
-
-
-\listoftodos
+%\listoftodos
 
 
 \begin{acknowledgement}
