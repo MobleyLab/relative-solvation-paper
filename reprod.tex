@@ -1419,10 +1419,61 @@ and AMBER respectively, similar to the MAD obtained with GROMACS RF.
 \section{Discussion}
 \label{sec:discuss}
 
+In this study we have addressed the question if the current MD packages AMBER, 
+CHARMM, GROMACS and SOMD are able to reproduce relative alchemical free 
+energies of hydration for a set of neutral small organic molecules given a 
+pre--defined force field.  We have found that arriving at a simulation protocol 
+that (mostly?) does this, has been a cumbersome and long--winded process.  The 
+MD codes have a wide range of options and setup features which makes it 
+difficult for the user to decide on the most appropriate ones.
+
+The free energies we have computed appear to be in reasonable good agreement 
+with each other (see Tables~\ref{tab:absolute} and \ref{tab:relative}).  The 
+MAE is \SI{0.2}{kcal/mol} for absolute free energies and \SI{0.3}{kcal/mol} for 
+relative free energies.  This is what we call the ``limit of 
+reproducibility''.  We have found viable protocols for each MD code to achieve 
+this level of reproducibility.
+% HHL: discuss how happy we are with the CHARMM results/
+
+However, we have not arrived at a \emph{single} protocol that could be 
+recommended for use with all four codes.  Unified protocols dp not appear to 
+work universally for AMBER and GROMACS while SOMD and CHARMM(?) had no problem 
+in this regard.  This may be a consequence of the different softcore functions 
+used in these MD packages (see Eq.~S\ref{S-eq:general-softcore}x) but clearly 
+needs further, detailled investifations.  We can therefore not recommed using 
+this protocol without the user performing careful tests of their own.  The 
+unpertubed H bond protocol is an interesting alternative that at least 
+partially applies contraints on non--transforming bond and thus allows 
+increasing the time step to \SI{2}{fs}.  The split protocol was found to work 
+well for all codes (also SOMD/CHARMM?) and appears to be the most efficient as 
+shown with the methanol to methane case and AMBER as the unified protocol 
+produces a less smooth function~\cite{shirts_chapter_2007}. % HHL: @DLM what 
+%are you really saying there?
+A complete separation may not be necessary though and a certain degree of 
+overlap between vdW and Coulumb $\lambda$ a viable 
+solution~\cite{procacci_fast_2014} for equilibrium AFEs too. % HHL: is this 
+%really true?  Procacci discusses this in the context of fast switching.
+
+Comparison between codes is hampered by several factors.  There is the 
+principal problem that the codes use different simulation algorithms.  But the 
+data here suggest that, if there are any systematic errors introduced through 
+this, then they are very small.  The electrostatics are handled differently in 
+vacuum i.e.\ infinite cutoff vs.\ reaction field. % HHL: what else?
+
+As part of this work we make our input data and protocols available.  These can 
+serve as a test and benchmark set for new and future RAFE implementations but 
+also to ensure reproducibility in current MD packages.  Running our test set 
+will help to check for and avoid errors, etc.  For a complete high level system 
+test we recommend to compare against results from absolute transformation.  The 
+relative transformation should be run in both forward and backward 
+transformation.  The results we have presented here serve as a benchmark 
+developers can compare to.
+
 \todo{%
-  recommended protocol, protocols to avoid
-  lessons learned
-  SHAKE/LINCS issues with changing bond lengths -> unperturbed hbonds
+  recommended protocol, protocols to avoid;
+  lessons learned;
+  applicability to receptor systems?;
+  SHAKE/LINCS issues with changing bond lengths -> unperturbed hbonds;
   split vs unified (both relative and absolute)
 }
 
@@ -1442,53 +1493,17 @@ and AMBER respectively, similar to the MAD obtained with GROMACS RF.
 }
 
 \todo{%
-  developer notes: constraint issues
+  developer notes: constraint issues;
   both appearing/disappearing: 
     charge balancing, discharge all to save on another recip PME evluation?, 
     2-cyclopentanylindole to 7-cyclopentanylindole: better to go through 
     intermediates?;
-  lambda paths for AMBER (relative), AMBER absolute: crgmask requires
+  lambda paths for AMBER (relative), AMBER absolute: crgmask requires;
   vacuum corr if split protocol
 }
 
 \todo{further investigation required: convergence, softcore, binding RAFEs?}
 
-% JM
-% Concretely
-
-% we can recommend 'unperturbed hbonds' as it seems to work in at
-% least SOMD and AMBER
-
-% We can point out that comparison must be done carefully because of the way 
-%electrostatics 
-% are handled in vacuum differ between the codes
-
-% We can point out that softcore implementations can make '1-step' protocols
-% unreliable? We need to elaborate on WHY though. I'm still not 100% convinced
-% we understand what is going on in AMBER and GROMACS calculations. 
-%DLM: Maybe we say that it indicates these are unreliable and the issue will 
-%need further investigation; at present we do not recommend these
-
-% Consequently, currently we CANNOT run the same simulation protocol in all the 
-%codes
-% tested. However, we have iterated onto a set of protocols that SHOULD give 
-%consistent
-% results (to within MAE of ca. 0.2 kcal.mol-1). This is what we will call 
-% the 'limit of reproducibility'. 
-%DLM: Seems like the exception to that is CHARMM, which looks like it is just 
-%consistently wrong. 
-
-% We make benchmark and protocols available as part of this work. We recommend 
-% new and future RAFE implementations to carry out the following checks to 
-%avoid 
-% introducing errors etc...:
-% - compare against absolute
-% - run A-->B and B-->A
-% - compare to our benchmark
-%DLM: Where are we doing this?
-
-We have studied reproducibility under the view point of using a set of 
-different MD packages with the same force field. % discuss size/environment?
 
 %Various estimators have been proposed to obtain the free energy from AFE 
 %simulations.  Early work by Kirkwood~\cite{kirkwood_statistical_1935} 
@@ -1521,6 +1536,9 @@ different MD packages with the same force field. % discuss size/environment?
 %estimator~\cite{shirts_statistically_2008}.
 
 %\listoftodos
+
+\section{Conclusions}
+\label{sec:conclusions}
 
 
 \begin{acknowledgement}
