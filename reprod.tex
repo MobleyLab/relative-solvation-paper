@@ -1115,15 +1115,8 @@ is consistently shifted by 0.2--\SI{0.4}{kcal.mol^{-1}} for each $\lambda$ step
 of the vdW plus bonded transformation with both implicit and explicit dummy 
 atoms.
 %%JM: any hint of the problem? This suggests a bug in AMBER
-% HHL: no hints yet, only symptoms.  Strongly suspect a bug too.
-%DLM: Maybe we should say, "We suspect these issues reflect a bug in the AMBER package but have been unable to isolate it; we have reported the issue to the AMBER developers," or something similar. 
-%DLM: Also, the "from every lambda step" phrasing is unclear -- is the total 
-%error 0.2-0.4 * nlambda, or ... ? ( You don't want to make the reader flip to 
-%the SI to understand what you're saying.)
-% HHL: Clarification: this is really only obvious in the 2-methylindole case.
-%      Maybe there is something going on in the toluene case too but it is only
-%      0.1 kcal/mol and so maybe hard to argue it is not just within
-%      statistical error,
+% HHL: I call it a bug for the moment whose origin we do not understmnd,
+%      see Discussion.
 
 
 \subsection{CHARMM}
@@ -1321,10 +1314,10 @@ simulation employs hydrogen bond constraining algorithms such as SHAKE or LINCS.
 Successful simulations require turning off the constraint and decreasing 
 the time step. Alternative protocols that require some scripting and 
 changes in the topology file could be pursued in the future. For instance 2-fs 
-constraints protocols similar to those used in SOMD or AMBER in this study could 
-be implemented via the definition of a new atom type for the hydrogen atoms 
-that will be alchemically changed, or the use of \inpopt{constraint = none} and 
-of explicit constraints in the topology file.
+constraints protocols similar to those used in SOMD or AMBER in this study 
+could be implemented via the definition of a new atom type for the hydrogen 
+atoms that will be alchemically changed, or the use of \inpopt{constraint = 
+none} and of explicit constraints in the topology file.
 
 \subsection{SOMD}
 \label{sec:somd-results}
@@ -1432,8 +1425,13 @@ with each other (see Tables~\ref{tab:absolute} and \ref{tab:relative}).  The
 MAE is \SI{0.2}{kcal/mol} for absolute free energies and \SI{0.3}{kcal/mol} for 
 relative free energies.  This is what we call the ``limit of 
 reproducibility''.  We have found viable protocols for each MD code to achieve 
-this level of reproducibility.
-% HHL: discuss how happy we are with the CHARMM results/
+this level of reproducibility.  There is some doubt, however, over the AMBER 
+results because that software cannot reproduce the correct end-point 
+geometries.  This is particularly evident in the neopentane to methane case 
+with central mapping where also the relative free energies are clearly 
+different from the other packages.  We suspect these issues reflect a bug in 
+the AMBER package but have been unable to isolate it; we have reported the 
+issue to the AMBER developers.
 
 However, we have not arrived at a \emph{single} protocol that could be 
 recommended for use with all four codes.  Unified protocols dp not appear to 
@@ -1445,8 +1443,8 @@ this protocol without the user performing careful tests of their own.  The
 unpertubed H bond protocol is an interesting alternative that at least 
 partially applies contraints on non--transforming bond and thus allows 
 increasing the time step to \SI{2}{fs}.  The split protocol was found to work 
-well for all codes (also SOMD/CHARMM?) and appears to be the most efficient as 
-shown with the methanol to methane case and AMBER as the unified protocol 
+well for all codes (also SOMD/CHARMM?).  It appears to be the most efficient as 
+shown with the methanol to methane case as the unified protocol 
 produces a less smooth function~\cite{shirts_chapter_2007}. % HHL: @DLM what 
 %are you really saying there?
 A complete separation may not be necessary though and a certain degree of 
@@ -1469,6 +1467,41 @@ relative transformation should be run in both forward and backward
 transformation.  The results we have presented here serve as a benchmark 
 developers can compare to.
 
+Developers may be advised to look into various issues with current code bases.  
+We have found that constraints in connection with varying bond length can cause 
+problems with GROMACS just as masses must not be allowed to vary in RAFE 
+simulations, both to avoid crashes and wrong results in the 
+software.  CHARMM has issues with constraints and the PSSP softcores, and the 
+PERT module cannot make use force switches as it is now standard for CHARMM 
+force fields (refernce!).  AMBER's problem with end point geometries has been 
+pointed out below.
+
+Another question is the degree of usability of the softwares.  For example, 
+when a mutation entails both appearing and disappearing parts in split 
+protocols there is the problem of intermediates causing non--integral total 
+charge on the molecule.  An alternative would be to totally discharge and then 
+recharge the whole molecule (but this is not attractive because\ldots) which 
+would have the advantage of eliminating one additional evaluation of the 
+reciprocal sum in PME~\cite{doi:10.1021/ct400340s}.  Another practical issue is 
+the complex setup of this protocol even for GROMACS which has lambda paths but 
+needs to run two separate simulations per lambda because discharging and 
+recharging groups cannot be selected separately.  In a unified protocol this 
+is, however, not be a problem and it may be beneficial to go through an 
+additional intermediate, e.g. indole in the case of the 2-- and 
+7--cyclopentanylindole, to enhance efficiency.  % HHL: pure speculation without 
+%merit :-)
+
+Lambda paths as implemented in GROMACS would be beneficial for other codes as 
+well to make the setup of split protocol much easier.  The current solution to 
+this is essentially to mimick this protocol through careful constructions of 
+topologies through scripting.  The setup of absolute free energy is nowadays as 
+simple as instructing the MD software to mutation to ``nothing''.  For split 
+protocols, however, stil extra care must be taken to ensure inclusion of all 
+terms.  E.g.\ in the case of AMBER the solution for the charge transformation 
+would be to set all charges of the end state to zero but this also means that 
+intramolecule charge--charge contributions would not be calculated and thus an 
+additional simulation in vacuo is required to correct for this.
+
 The primary focus of this work was to achieve low statistical errors to 
 establish if codes are able to reproduce free energies.  We have not 
 investigated convergences as this would require further, complex 
@@ -1480,27 +1513,27 @@ processor is CPU or GPU, and the most efficient protocol is still an open
 question, also due to the fact that some protocols don't seem to work in all 
 cases as outlined above.
 
-\todo{applicability to receptor systems?}
+We believe our study will improve the methodology and quality of relative 
+alchemical free energy simulations.  Reproducibility is certainly a central 
+corner stone of future applications.  However, RAFE simulation will need 
+further improvements to progress the field and increase reliability.  One 
+current concern is usability as alluded to above.  Further automation will 
+surely enhance consistency and thus also reproducibility.  Various attempts in 
+this direction are currently underway for both absolute and relative 
+setups~\cite{christ_accuracy_2013, JCC:JCC23804, Liu2013, 
+doi:10.1021/jp505332p, doi:10.1021/acs.jcim.6b00162, 
+doi:10.1021/acs.jctc.6b00979}, including 
+FESetup~\cite{loeffler_fesetup:_2015} which has been 
+specifially designed to address RAFE simulation of small organic molecules.
 
 \todo{%
-  what do we need to progress the field, usability e.g. automation to make 
-  things easy but also consistent and thus more reproducible (FESetup also
-  for reproducibility); GPU: GROMACS, SOMD but not AMBER (yet) and
+  GPU: GROMACS, SOMD but not AMBER (yet) and
   CHARMM; alternative softcore functions?; sampling?; force field 
   improvements?; analysis e.g.\ BAR/MBAR?
 }
 
-\todo{%
-  developer notes: constraint issues;
-  both appearing/disappearing, usability: 
-    charge balancing, discharge all to save on another recip PME evluation?, 
-    2-cyclopentanylindole to 7-cyclopentanylindole: better to go through 
-    intermediates?;
-  lambda paths for AMBER (relative), AMBER absolute: crgmask requires;
-  vacuum corr if split protocol
-}
-
-\todo{further investigation required: convergence, softcore, binding RAFEs?}
+\todo{discuss softcores and their improvements, discuss estimators, binding 
+RAFEs?}
 
 
 %Various estimators have been proposed to obtain the free energy from AFE 

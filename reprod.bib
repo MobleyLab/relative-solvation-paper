@@ -578,6 +578,52 @@
   timestamp    = "2016-05-02T20:31:36Z"
 )
 
+@Article(Liu2013,
+  author       = "Liu, Shuai and Wu, Yujie and Lin, Teng and Abel,
+                  Robert and Redmann, Jonathan P.  and Summa,
+                  Christopher M.  and Jaber, Vivian R.  and Lim,
+                  Nathan M.  and Mobley, David L.",
+  title	       = "Lead optimization mapper: automating free energy
+                  calculations for lead optimization",
+  journal      = "Journal of Computer-Aided Molecular Design",
+  year	       = 2013,
+  month	       = "Sep",
+  day	       = 01,
+  volume       = 27,
+  number       = 9,
+  pages	       = "755--770",
+  abstract     = "Alchemical free energy calculations hold increasing
+                  promise as an aid to drug discovery
+                  efforts. However, applications of these techniques
+                  in discovery projects have been relatively few,
+                  partly because of the difficulty of planning and
+                  setting up calculations. Here, we introduce lead
+                  optimization mapper, LOMAP, an automated algorithm
+                  to plan efficient relative free energy calculations
+                  between potential ligands within a substantial
+                  library of perhaps hundreds of compounds. In this
+                  approach, ligands are first grouped by structural
+                  similarity primarily based on the size of a (loosely
+                  defined) maximal common substructure, and then
+                  calculations are planned within and between sets of
+                  structurally related compounds. An emphasis is
+                  placed on ensuring that relative free energies can
+                  be obtained between any pair of compounds without
+                  combining the results of too many different relative
+                  free energy calculations (to avoid accumulation of
+                  error) and by providing some redundancy to allow for
+                  the possibility of error and consistency checking
+                  and provide some insight into when results can be
+                  expected to be unreliable. The algorithm is
+                  discussed in detail and a Python implementation,
+                  based on both Schr{\"o}dinger's and OpenEye's APIs,
+                  has been made available freely under the BSD
+                  license.",
+  issn	       = "1573-4951",
+  doi	       = "10.1007/s10822-013-9678-y",
+  url	       = "https://doi.org/10.1007/s10822-013-9678-y"
+)
+
 @Article(Michel2010,
   title	       = "Prediction of protein--ligand binding affinity by
                   free energy simulations: assumptions, pitfalls and
@@ -2935,6 +2981,57 @@
   url	       = " http://dx.doi.org/10.1021/acs.jcim.5b00057 "
 )
 
+@Article(doi:10.1021/acs.jcim.6b00162,
+  author       = "Ramadoss, Vijayaraj and Dehez, François and Chipot,
+                  Christophe",
+  title	       = "AlaScan: A Graphical User Interface for Alanine
+                  Scanning Free-Energy Calculations",
+  journal      = "Journal of Chemical Information and Modeling",
+  volume       = 56,
+  number       = 6,
+  pages	       = "1122-1126",
+  year	       = 2016,
+  doi	       = "10.1021/acs.jcim.6b00162",
+  note	       = "PMID: 27214306",
+  url	       = " http://dx.doi.org/10.1021/acs.jcim.6b00162 ",
+  eprint       = " http://dx.doi.org/10.1021/acs.jcim.6b00162 "
+,
+  abstract     = " Computation of the free-energy changes that
+                  underlie molecular recognition and association has
+                  gained significant importance due to its
+                  considerable potential in drug discovery. The
+                  massive increase of computational power in recent
+                  years substantiates the application of more accurate
+                  theoretical methods for the calculation of binding
+                  free energies. The impact of such advances is the
+                  application of parent approaches, like computational
+                  alanine scanning, to investigate in silico the
+                  effect of amino-acid replacement in protein–ligand
+                  and protein–protein complexes, or probe the
+                  thermostability of individual proteins. Because
+                  human effort represents a significant cost that
+                  precludes the routine use of this form of
+                  free-energy calculations, minimizing manual
+                  intervention constitutes a stringent prerequisite
+                  for any such systematic computation. With this
+                  objective in mind, we propose a new plug-in,
+                  referred to as AlaScan, developed within the popular
+                  visualization program VMD to automate the major
+                  steps in alanine-scanning calculations, employing
+                  free-energy perturbation as implemented in the
+                  widely used molecular dynamics code NAMD. The
+                  AlaScan plug-in can be utilized upstream, to prepare
+                  input files for selected alanine mutations. It can
+                  also be utilized downstream to perform the analysis
+                  of different alanine-scanning calculations and to
+                  report the free-energy estimates in a user-friendly
+                  graphical user interface, allowing favorable
+                  mutations to be identified at a glance. The plug-in
+                  also assists the end-user in assessing the
+                  reliability of the calculation through rapid visual
+                  inspection. "
+)
+
 @Article(doi:10.1021/acs.jctc.5b00179,
   title	       = "Rapid, Precise, and Reproducible Prediction of
                   Peptide--MHC Binding Affinities from Molecular
@@ -2978,6 +3075,48 @@
   doi	       = "10.1021/acs.jctc.5b00179",
   eprint       = " http://dx.doi.org/10.1021/acs.jctc.5b00179 ",
   url	       = " http://dx.doi.org/10.1021/acs.jctc.5b00179 "
+)
+
+@Article(doi:10.1021/acs.jctc.6b00979,
+  author       = "Bhati, Agastya P. and Wan, Shunzhou and Wright,
+                  David W. and Coveney, Peter V.",
+  title	       = "Rapid, Accurate, Precise, and Reliable Relative Free
+                  Energy Prediction Using Ensemble Based Thermodynamic
+                  Integration",
+  journal      = "Journal of Chemical Theory and Computation",
+  volume       = 13,
+  number       = 1,
+  pages	       = "210-222",
+  year	       = 2017,
+  doi	       = "10.1021/acs.jctc.6b00979",
+  note	       = "PMID: 27997169",
+  url	       = " http://dx.doi.org/10.1021/acs.jctc.6b00979 ",
+  eprint       = " http://dx.doi.org/10.1021/acs.jctc.6b00979 "
+,
+  abstract     = " The accurate prediction of the binding affinities
+                  of ligands to proteins is a major goal in drug
+                  discovery and personalized medicine. The time taken
+                  to make such predictions is of similar importance to
+                  their accuracy, precision, and reliability. In the
+                  past few years, an ensemble based molecular dynamics
+                  approach has been proposed that provides a route to
+                  reliable predictions of free energies based on the
+                  molecular mechanics Poisson–Boltzmann surface area
+                  method which meets the requirements of speed,
+                  accuracy, precision, and reliability. Here, we
+                  describe an equivalent methodology based on
+                  thermodynamic integration to substantially improve
+                  the speed, accuracy, precision, and reliability of
+                  calculated relative binding free energies. We report
+                  the performance of the method when applied to a
+                  diverse set of protein targets and ligands. The
+                  results are in very good agreement with experimental
+                  data (90\% of calculations agree to within 1
+                  kcal/mol), while the method is reproducible by
+                  construction. Statistical uncertainties of the order
+                  of 0.5 kcal/mol or less are achieved. We present a
+                  systematic account of how the uncertainty in the
+                  predictions may be estimated. "
 )
 
 @Article(doi:10.1021/acs.jctc.6b00991,
