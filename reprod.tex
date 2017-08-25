@@ -1423,9 +1423,9 @@ In this study we have addressed the question if the current MD packages AMBER,
 CHARMM, GROMACS and SOMD are able to reproduce relative alchemical free 
 energies of hydration for a set of neutral small organic molecules given a 
 pre--defined force field.  We have found that arriving at a simulation protocol 
-that (mostly?) does this, has been a cumbersome and long--winded process.  The 
-MD codes have a wide range of options and setup features which makes it 
-difficult for the user to decide on the most appropriate ones.
+that (mostly?) does this, has been a cumbersome due to technical difficulties 
+encounted.  The MD codes have a wide range of options and setup features which 
+makes it difficult for the user to decide on the most appropriate ones.
 
 The free energies we have computed appear to be in reasonable good agreement 
 with each other (see Tables~\ref{tab:absolute} and \ref{tab:relative}).  The 
@@ -1469,24 +1469,22 @@ relative transformation should be run in both forward and backward
 transformation.  The results we have presented here serve as a benchmark 
 developers can compare to.
 
-\todo{%
-  recommended protocol, protocols to avoid;
-  lessons learned;
-  applicability to receptor systems?;
-  SHAKE/LINCS issues with changing bond lengths -> unperturbed hbonds;
-  split vs unified (both relative and absolute)
-}
+The primary focus of this work was to achieve low statistical errors to 
+establish if codes are able to reproduce free energies.  We have not 
+investigated convergences as this would require further, complex 
+investigations.  To achieve reproducibility in each code we have experimented 
+with different $\lambda$ schedules, and number and length of each window.  We 
+also to not address the crucial ``time to answer'' perspective because the MD 
+codes have different performance characteristics, also depending on whether the 
+processor is CPU or GPU, and the most efficient protocol is still an open 
+question, also due to the fact that some protocols don't seem to work in all 
+cases as outlined above.
+
+\todo{applicability to receptor systems?}
 
 \todo{%
-  We can't do convergence tests so only discuss and explain why not done: 
-  different lambda schedules, number of windows, length of each
-  windows; codes have different speeds  (``time to answer''). Instead focus 
-  is on low errors to establish if codes are different or not.
-}
-
-\todo{%
-  what do we need to progress the field e.g. automation to make things
-  easy but also consistent and thus more reproducible (FESetup also
+  what do we need to progress the field, usability e.g. automation to make 
+  things easy but also consistent and thus more reproducible (FESetup also
   for reproducibility); GPU: GROMACS, SOMD but not AMBER (yet) and
   CHARMM; alternative softcore functions?; sampling?; force field 
   improvements?; analysis e.g.\ BAR/MBAR?
@@ -1494,7 +1492,7 @@ developers can compare to.
 
 \todo{%
   developer notes: constraint issues;
-  both appearing/disappearing: 
+  both appearing/disappearing, usability: 
     charge balancing, discharge all to save on another recip PME evluation?, 
     2-cyclopentanylindole to 7-cyclopentanylindole: better to go through 
     intermediates?;
