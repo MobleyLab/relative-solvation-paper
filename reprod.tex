@@ -572,8 +572,6 @@ together;  and (iii) via the difference between two absolute calculations.
 In the first two cases, each alchemical transformation was described by 31 and 
 16 states, respectively, and simulated for \SI{4.2}{ns} with time steps of 
 \SI{1.0}{fs} in water and vacuum. Atomic masses were not changed along the 
-%DLM: 1 fs for the absolute calculations, too? Or did those use two fs? And where do we say how many lambda values used for the absolute claculations/ Your sentence only addresses the first two cases, there is no sentence on the third case.
-%GDRM: addressed in line 568
 alchemical path; their change affect kinetic energy only and do not 
 contribute to the free energy change on this case. 
 We used the Langevin integrator implemented in GROMACS with a 
@@ -597,14 +595,12 @@ PME calculations were of order 6 and had a
 tolerance of \num{1.0d-6}, with a grid spacing of \SI{1.0}{\angstrom}. 
 All transformations required the use of softcore potentials to avoid numerical 
 problems in the free energy calculation.  We chose the 1--1--6 softcore 
-potential for Lennard-Jones terms ($\alpha$=0.5 and $\sigma$=0.3) 
+potential for Lennard-Jones terms ($\alpha$=0.5 and $\sigma$=0.3) for
+atoms whose parameters were being perturbed
 and used the default softcore Coulomb implementation in paths where 
 charges, van der Waals, and bonded terms were modified together, 
 but no soft core potentials were applied to Coulomb interactions when 
-electrostatic interactions were modified separately.
-%JM how do you handle non bonded interactions in the vacuum legs?
-%DLM: This is important; please explain, GDRM. 
-%GDRM: Explained in lines 576 and 577.
+electrostatic interactions were modified separately. 
 
 \paragraph{SOMD.} All simulations were carried out with
 SOMD from the Sire 2016.1 release ~\cite{Sire-2016, doi:10.1021/ct300857j}
@@ -1168,6 +1164,7 @@ vectors the same.
 % DLM: GDRM, you're going to have to check the manual and users lists. The question is, when you modify the LJ interactions between atoms using the soft core functional form, are you modifying ALL LJ interactions, or only those between atoms whose parameters are being perturbed? My vague recollection is that it is 
 % between all atoms, but this may only have been an older version of the setup. If you still don't understand the question, come talk to me.
 % GDRM: The manual is not very clear -- it seems it applies to all atoms, but I'll have to run a short test to confirm it. I'll add this in a future PR.
+% GDRM: Update! Only LJ interactions in atoms whose parameters are being perturbed are in the soft core form 
 
 % HHL: only 2 digits for all data in the table please
 %      what is footnote d good for?
