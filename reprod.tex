@@ -545,7 +545,9 @@ interactions.  In vacuum no cutoff was used.
 carry out all relative hydration free energy simulations.  21 evenly spaced 
 windows were used and all windows were run for \SI{1.5}{ns} with a timestep of 
 \SI{1}{fs}.  Most windows used the same pre-equilibrated configuration, but a 
-few windows were started with their own equilibration. 
+few windows (simulations involving perturbing hydrogen to heavy atom or vice
+versa) at end-point lambdas were started with their own equilibration using
+\SI{0.1}{fs^{-1}} ~ \SI{0.5}{fs^{-1}}.
 %% JM which ones? What was the reason for doing so? Same as AMBER?
 % DLM: Agree with these questions.
  Constant temperature and pressure control was done with the Berendsen weak coupling method, with a 
@@ -555,12 +557,13 @@ used for non--bonded interactions and Particle Mesh Eward (PME) with order of 6
 was used to calculate electrostatic forces along with periodic boundary 
 condition.  SHAKE was used to constrain water hydrogens only.  The PERT module 
 in CHARMM was used to handle alchemical transformations and PSSP 
-softcore potential functions were used to avoid numerical instabilities.
-%JM clarify how non-bonded interactions are handled in the vacuum legs
+softcore potential functions were used to avoid numerical instabilities.  In
+vacuum, no cutoff was used.
 
-% HHL: mention that CHARMM does not support force switching for LJ with %   
-%      softcore but which is nowa fixed part of the CHARMM force fields 
-%     (Stefand Boresch: ``this is the actual elephant in the room''.)
+The PERT module can currently not use force switching (option \inpopt{VFSwitch})
+for Lennard-Jones potentials with softcores.  Current CHARMM force fields,
+however, are parameterized to use force switching. % citation needed
+In this work we have used potential switching only (option \inpopt{VSwitch}).
 
 \paragraph{GROMACS.} We used GROMACS 4.6.7 to carry out simulations for 
 the relative hydration free energies ($\Delta \Delta G_{\mathrm{hydr}}$).
@@ -1118,14 +1121,35 @@ atoms.
 \subsection{CHARMM}
 \label{sec:charmm-results}
 
-% HHL: Donghyuk, please fill in!
+CHARMM for alchemical free energy calculation (AFE) has been widely used with PERT module, but few bugs not previously reported in CHARMM c40b1 are found and careful AFE setup is needed to get robust and accurate result. Bugs regarding TI gradient accumulation on parallel version (not on serial one) were identified and fixed by Dr. Stefan Boresch.
 
-\todo{bug in TI gradient accumulation in parallel runs (does not affect
-	serial?, does not affect EXP)}
+PERT module does not allow hydrogen bond constraint (SHAKE) applied on
+the perturbed region, and this requires end point lambdas to be equilibrated
+carefully. These windows at end-point lambda were started with their own equilibration using \SI{0.1}{fs^{-1}} ~ \SI{0.5}{fs^{-1}} before the run. VSwitch option which is a switching function applied for potential is used, since PERT module is not compatible with VFSwitch option that is a switching function applied to force.
 
-\todo{cannot handle LRC: test with larger cutoffs and/or LRC correction
-	with arbitrary, single structure; check 
-	http://pubs.acs.org/doi/abs/10.1021/jp0735987}
+PSSP softcore potential function cannot handle Long-Range Correction (LRC) correctly. This effect is not clearly shown when initial state and the final state are comparable in size, but the deviation gets larger when they are not (e.g absolute alchemical free energy calcaultion). Only when LRC is turned off, $\Delta\Delta$G from AAFE and RAFE results will be well matched and accurate.
+
+Figure~\ref{fig:LRC} shows the effect of turning LRC on/off and reasonable
+cut--off setup. Top graph describes absolute solvation free energy of methane
+based on LRC and cutoff values where switching function is effective
+\SI{2}{\angstrom} before the cut-off value. Any value greather than
+\SI{10}{\angstrom} of cutoff without LRC would be considered to reproduce
+the results from other packages, and we employed \SI{12}{\angstrom} of cut-off
+as suggested in CHARMM tutorial. Bottom graph shows relative solvation
+free energy of 2--methylindole to methane from direct RAFE and from AAFEs
+of methane and 2--methylindole with LRC on/off. The graph clearly shows
+that LRC off is the key condition for self-consistency(when comparing RAFE
+vs. difference in each AAFE) in CHARMM, and for the reproduciblitiy considering other packages showed ~\SI{8.7}{kcal.mol^{-1}} for the same calculation.
+\begin{figure}[ht]
+\includegraphics[scale=1.0]{figures/LRC}
+\caption{(top) Absolute solvation free energy of methane based on LRC on/off
+and different cut--off values. (bottom) Relative solvation free energy of
+2--methylindole to methane from direct RAFE and from AAFE of methane
+and 2--methylindole with LRC on/off. }
+\label{fig:LRC}
+\end{figure}
+
+
 
 \subsection{GROMACS}
 \label{sec:gromacs-results}
