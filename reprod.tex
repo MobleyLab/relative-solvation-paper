@@ -1437,7 +1437,7 @@ In this study we have addressed the question if the current MD packages AMBER,
 CHARMM, GROMACS and SOMD are able to reproduce relative alchemical free 
 energies of hydration for a set of neutral small organic molecules given a 
 pre--defined force field.  We have found that arriving at a simulation protocol 
-that (mostly?) does this, has been a cumbersome due to technical difficulties 
+that (mostly?) does this, has been cumbersome due to technical difficulties 
 encounted.  The MD codes have a wide range of options and setup features which 
 makes it difficult for the user to decide on the most appropriate ones.
 
@@ -1459,17 +1459,16 @@ recommended for use with all four codes.  Unified protocols dp not appear to
 work universally for AMBER and GROMACS while SOMD and CHARMM(?) had no problem 
 in this regard.  This may be a consequence of the different softcore functions 
 used in these MD packages (see Eq.~S\ref{S-eq:general-softcore}x) but clearly 
-needs further, detailled investifations.  We can therefore not recommed using 
+needs further, detailed investigations.  We can therefore not recommend using 
 this protocol without the user performing careful tests of their own.  The 
-unpertubed H bond protocol is an interesting alternative that at least 
-partially applies contraints on non--transforming bond and thus allows 
-increasing the time step to \SI{2}{fs}.  The split protocol was found to work 
+unpertubed H bond protocol is an interesting alternative which 
+applies contraints on all non--transforming bonds and thus allowed us to
+increase the time step to \SI{2}{fs}.  The split protocol was found to work 
 well for all codes (also SOMD/CHARMM?).  It appears to be the most efficient as 
-shown with the methanol to methane case as the unified protocol 
-produces a less smooth function~\cite{shirts_chapter_2007}. % HHL: @DLM what 
-%are you really saying there?
-A complete separation may not be necessary though and a certain degree of 
-overlap between vdW and Coulumb $\lambda$ a viable 
+shown with the methanol to methane case because the unified protocol 
+produces a less smooth function~\cite{shirts_chapter_2007}.
+A complete separation of lambdas may not be necessary though as a certain 
+degree of overlap between vdW and Coulumb $\lambda$ may be a viable 
 solution~\cite{procacci_fast_2014} for equilibrium AFEs too. % HHL: is this 
 %really true?  Procacci discusses this in the context of fast switching.
 
@@ -1479,12 +1478,13 @@ data here suggest that, if there are any systematic errors introduced through
 this, then they are very small.  The electrostatics are handled differently in 
 vacuum i.e.\ infinite cutoff vs.\ reaction field. % HHL: what else?
 
-As part of this work we make our input data and protocols available.  These can 
-serve as a test and benchmark set for new and future RAFE implementations but 
+As part of this work we make our input data and protocols available (see SI).  
+These data can serve as a test and benchmark set for new and future RAFE 
+implementations but 
 also to ensure reproducibility in current MD packages.  Running our test set 
 will help to check for and avoid errors, etc.  For a complete high level system 
-test we recommend to compare against results from absolute transformation.  The 
-relative transformation should be run in both forward and backward 
+test we recommend to compare against results from absolute transformations.  
+The relative transformation should be run in both forward and backward 
 transformation.  The results we have presented here serve as a benchmark 
 developers can compare to.
 
@@ -1493,9 +1493,9 @@ We have found that constraints in connection with varying bond length can cause
 problems with GROMACS just as masses must not be allowed to vary in RAFE 
 simulations, both to avoid crashes and wrong results in the 
 software.  CHARMM has issues with constraints and the PSSP softcores, and the 
-PERT module cannot make use force switches as it is now standard for CHARMM 
-force fields (refernce!).  AMBER's problem with end point geometries has been 
-pointed out below.
+PERT module cannot make use of the force switch as it is now standard for 
+CHARMM force fields (refernce!).  AMBER's problem with end point geometries and 
+unified protocols has been pointed out.
 
 Another question is the degree of usability of the softwares.  For example, 
 when a mutation entails both appearing and disappearing parts in split 
@@ -1506,21 +1506,20 @@ would have the advantage of eliminating one additional evaluation of the
 reciprocal sum in PME~\cite{doi:10.1021/ct400340s}.  Another practical issue is 
 the complex setup of this protocol even for GROMACS which has lambda paths but 
 needs to run two separate simulations per lambda because discharging and 
-recharging groups cannot be selected separately.  In a unified protocol this 
-is, however, not be a problem and it may be beneficial to go through an 
-additional intermediate, e.g. indole in the case of the 2-- and 
-7--cyclopentanylindole, to enhance efficiency.  % HHL: pure speculation without 
+recharging groups cannot be selected separately.  Introducing an additional 
+intermediate, e.g. indole in the case of the 2-- and 7--cyclopentanylindole, 
+may enhance efficiency.  % HHL: pure speculation without 
 %merit :-)
 
-Lambda paths as implemented in GROMACS would be beneficial for other codes as 
-well to make the setup of split protocol much easier.  The current solution to 
-this is essentially to mimick this protocol through careful constructions of 
+Lambda paths as implemented in GROMACS would also be beneficial for other codes 
+to make the setup of split protocols much easier.  The current solution to 
+this is to mimick this protocol through careful constructions of 
 topologies through scripting.  The setup of absolute free energy is nowadays as 
-simple as instructing the MD software to mutation to ``nothing''.  For split 
-protocols, however, stil extra care must be taken to ensure inclusion of all 
+simple as instructing the MD software to mutate to ``nothing''.  For split 
+protocols, however, extra care must be undertaken to ensure inclusion of all 
 terms.  E.g.\ in the case of AMBER the solution for the charge transformation 
 would be to set all charges of the end state to zero but this also means that 
-intramolecule charge--charge contributions would not be calculated and thus an 
+intramolecule charge--charge contributions are calculated and thus an 
 additional simulation in vacuo is required to correct for this.
 
 The primary focus of this work was to achieve low statistical errors to 
