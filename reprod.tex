@@ -1479,19 +1479,19 @@ software.  CHARMM has issues with constraints and the PSSP softcores, and the PE
 
 Another question is the degree of usability of the softwares.
 
- For example, 
-when a mutation entails both appearing and disappearing parts in split 
-protocols there is the problem of intermediates having a non--integral total 
-charge on the molecule.  An alternative would be to totally discharge and then 
-recharge the whole molecule (but this is not attractive because\ldots) which 
-would have the advantage of eliminating one additional evaluation of the 
-reciprocal sum in PME~\cite{doi:10.1021/ct400340s}.  Another practical issue is 
-the complex setup of this protocol, even for GROMACS which has lambda paths but 
-still needs to run two separate simulations per lambda because discharging and 
-recharging groups cannot be selected separately.  Introducing an additional 
-intermediate, e.g. indole in the case of the 2-- and 7--cyclopentanylindole, 
-may be an interesting choice of path way and possibly be of reasonable 
-efficiency.  % HHL: pure speculation without %merit :-)
+% For example, 
+%when a mutation entails both appearing and disappearing parts in split 
+%protocols there is the problem of intermediates having a non--integral total 
+%charge on the molecule.  An alternative would be to totally discharge and then 
+%recharge the whole molecule (but this is not attractive because\ldots) which 
+%would have the advantage of eliminating one additional evaluation of the 
+%reciprocal sum in PME~\cite{doi:10.1021/ct400340s}.  Another practical issue is 
+%the complex setup of this protocol, even for GROMACS which has lambda paths but 
+%still needs to run two separate simulations per lambda because discharging and 
+%recharging groups cannot be selected separately.  Introducing an additional 
+%intermediate, e.g. indole in the case of the 2-- and 7--cyclopentanylindole, 
+%may be an interesting choice of path way and possibly be of reasonable 
+%efficiency.  % HHL: pure speculation without %merit :-)
 %JM suggests removing above paragraph, a bit long and speculative
 
 Lambda paths as implemented in GROMACS would also be beneficial for other codes as they make the setup of split protocols much easier.  The current solution to 
