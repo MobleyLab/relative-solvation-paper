@@ -391,7 +391,9 @@ The code allows changing bond lengths involving constraints within the perturbed
 Coulomb and bonded parameters (and some other) which allows easy implementation 
 of split protocols.
 
-\paragraph{SOMD.} This code uses a single topology description.
+\paragraph{SOMD.} SOMD is a software built by linking  Sire~\cite{Sire-2016}
+and OpenMM~\cite{doi:10.1021/ct300857j} molecular simulation libraries. 
+This code uses a single topology description.
 The final state is constructed at run time from the initial state with
 a ``patch'' (list of force field parameters to be modified). All dummy atoms
 needed to describe the transformation must be present in the initial state. 
@@ -401,10 +403,7 @@ energy--scaled.  The softcore potential applies to atoms that become dummy atoms
 The code cannot handle constraints of changing bond lengths in the
 perturbed group.  There is only one global $\lambda$ for parameter
 scaling.  Separated protocols (see below) must be emulated through
-careful construction of the patch file.  SOMD is software built by linking of
-the Sire~\cite{Sire-2016} and OpenMM~\cite{doi:10.1021/ct300857j} molecular
-simulation libraries.
-%DLM: Last sentence seems out of place.
+careful construction of the patch file. 
 
 
 \subsection{RAFE Setup}
@@ -1383,9 +1382,8 @@ shifted Barker Watts~\cite{doi:10.1080/00268977300102101} vs group based
 switched Barker Watts), but nevertheless SOMD and GROMACS RF produce comparable results with a MAD of \SI{0.18}{kcal.mol^{-1}}.
 
 Overall, the SOMD free energy estimations are in good agreement with the 
-other MD packages, as the MAE suggests (see Table XX). 
-%DLM: Missing table reference here
- Reaction field and PME 
+other MD packages, as the MAE suggests (see Table~\ref{tab:mue-relative}). 
+Reaction field and PME 
 results are in good agreement.  In particular, the unperturbed hydrogen bonds 
 constraint protocol allows a timestep of \SI{2}{fs}. All SOMD RAFE simulations were carried out with simultaneous transformation of Lennard-Jones, charges, and bonded terms. This suggests that the failure of the GROMACS ``unified protocol'' in some 
 instances may be due to differences in the softcore Coulomb implementations. 
@@ -1394,6 +1392,10 @@ instances may be due to differences in the softcore Coulomb implementations.
 %SB: Here we could say
 % - Gromacs fails maybe for the softcore implementations
 %DLM: Which softcore? You mean softcore Coulomb?
+%SB: I mean the entire functional form used in Gromacs:
+%The way the softcore is implemented, or the functional form of the softcore itself
+%could cause problems, which obliged you to use a two step protocol rather than one-step protocol.
+%SB:
 % - Evidences of softcore limitations are given by Harger et al. (Tinker-OpenMM 
 %paper)
 % where the authors highligth that the use of constraint and softcore could 
@@ -1406,7 +1408,6 @@ instances may be due to differences in the softcore Coulomb implementations.
 
 For the methane $\rightarrow$ neopentane transformations SOMD yields consistent results between central and terminal mappings, as shown in 
 Table~\ref{S-tab:sire-finalresults}, while GROMACS RF displays a $\Delta\Delta$G 
-%DLM: Table reference isn't showing up
 of \SI{-0.20 +-   0.01}{kcal.mol^{-1}} for the centrally mapped transformation 
 and $\Delta\Delta$G = \SI{-0.05 +- 0.02}{kcal.mol^{-1}} for the terminally 
 mapped transformation. The SOMD RF calculations show a MAD = 
