@@ -1443,7 +1443,7 @@ issue to the AMBER developers.
 
 However, we have not arrived at a \emph{single} protocol that could be 
 recommended for use with all four codes.  Unified protocols do not appear to 
-work universally for AMBER and GROMACS while SOMD and CHARMM(?) had no problem 
+work universally for AMBER and GROMACS while SOMD and CHARMM had no problem 
 in this regard.  We cannot rule out that the problem may lie e.g. only with the 
 vacuum leg of the thermodynamic cycle.  In the case of AMBER the vacuum 
 simulation has currently been done with the separately developed sander module.  
@@ -1453,7 +1453,7 @@ The problem may be a consequence of the different softcore functions
 The unpertubed H bond protocol is an interesting alternative which 
 applies contraints to all non--transforming bonds and thus allowed us to
 increase the time step to \SI{2}{fs}. 
- The split protocol was found to work  well for all codes (also CHARMM?).
+ The split protocol was found to work  well for all codes.
   It appears to be the most efficient 
 approach for GROMACS as shown with the methanol to methane case because the 
 unified protocol produces a less smooth function~\cite{shirts_chapter_2007}.
@@ -1478,22 +1478,16 @@ We have found that constraints in connection with varying bond length can cause 
 simulations, both to avoid crashes and wrong results in the 
 software.  CHARMM has issues with constraints and the PSSP softcores, and the PERT module cannot make use of the force switch as it is now standard for CHARMM force fields. Care must be taken when using the LRC long range correction keyword to avoid producing inconsistent results.  AMBER's problem with end point geometries and unified protocols has been pointed out above.
 
-Another question is the degree of usability of the softwares.
-
-% For example, 
-%when a mutation entails both appearing and disappearing parts in split 
-%protocols there is the problem of intermediates having a non--integral total 
-%charge on the molecule.  An alternative would be to totally discharge and then 
-%recharge the whole molecule (but this is not attractive because\ldots) which 
-%would have the advantage of eliminating one additional evaluation of the 
-%reciprocal sum in PME~\cite{doi:10.1021/ct400340s}.  Another practical issue is 
-%the complex setup of this protocol, even for GROMACS which has lambda paths but 
-%still needs to run two separate simulations per lambda because discharging and 
-%recharging groups cannot be selected separately.  Introducing an additional 
-%intermediate, e.g. indole in the case of the 2-- and 7--cyclopentanylindole, 
-%may be an interesting choice of path way and possibly be of reasonable 
-%efficiency.  % HHL: pure speculation without %merit :-)
-%JM suggests removing above paragraph, a bit long and speculative
+Another question is the eas of use of the softwares.  For example, 
+when a mutation entails both appearing and disappearing parts in split 
+protocols there is the problem of intermediates having a non--integral total 
+charge on the molecule.  An alternative would be to totally discharge and then 
+recharge the whole molecule (but this is not attractive because\ldots) which 
+would have the advantage of eliminating one additional evaluation of the 
+reciprocal sum in PME~\cite{doi:10.1021/ct400340s}.  Another practical issue is 
+the complex setup of this protocol, even for GROMACS which has lambda paths but 
+still needs to run two separate simulations per lambda because discharging and 
+recharging groups cannot be selected separately.
 
 Lambda paths as implemented in GROMACS would also be beneficial for other codes as they make the setup of split protocols much easier.  The current solution to 
 this is to mimick this protocol through careful constructions of 
@@ -1515,53 +1509,7 @@ setups~\cite{christ_accuracy_2013, JCC:JCC23804, Liu2013,
 doi:10.1021/jp505332p, doi:10.1021/acs.jcim.6b00162, 
 doi:10.1021/acs.jctc.6b00979,loeffler_fesetup:_2015}.
 
-
-%To achieve reproducibility in each code we have experimented 
-%with different $\lambda$ schedules, and number and length of each %window.  We  also to not address the crucial ``time to answer'' %perspective because the MD  codes have different performance %characteristics, also depending on whether the  processor is CPU or %GPU, and the most efficient protocol is still an open 
-%question, also due to the fact that some protocols don't seem to %work in all  codes as outlined above.
-% JM suggests removing as does not add much
-
 To conclude, we hope this study will stimulate the field to strengthen the transferability of alchemical free energy calculation protocols across software.  Reproducibility is crucial to enable robust use of alchemical free energy methods in molecular design. 
-
-%\todo{%
- % GPU: GROMACS, SOMD but not AMBER (yet) and
-%  CHARMM; alternative softcore functions?; sampling?; force field 
-  %improvements?; analysis e.g.\ BAR/MBAR?
-%}
-%
-%\todo{discuss softcores and their improvements, discuss estimators, binding 
-%RAFEs?}
-
-
-%Various estimators have been proposed to obtain the free energy from AFE 
-%simulations.  Early work by Kirkwood~\cite{kirkwood_statistical_1935} 
-%expresses 
-%the free energy as an ensemble average of the derivative of the
-%Hamiltonian with respect to the coupling parameter $\lambda$.  The
-%method is now known as Thermodynamic Integration (TI).  Zwanzig
-%devised the exponential formula~\cite{zwanzig_high-temperature_1954}
-%(EXP), also known as Free Energy Perturbation (FEP) or thermodynamic
-%perturbation (TP), which calculates the free energy from the
-%exponential average of the energy difference of the end states.  The
-%energy difference is computed from the energy with the configuration of one 
-%end 
-%state and reusing it to compute the energy with the force field parameters of 
-%the other end state.  This obviously assumes that the configuration is
-%representative of both state.  As the phase--space overlap needs to
-%be sufficiently large~\cite{wu_phase-space_2005} the EXP approach typically 
-%needs
-%intermediates, controlled by $\lambda$.  However, it has been shown
-%that EXP has an asymmetric bias depending on the directionality of
-%$\lambda$~\cite{wu_asymmetric_2004} and that the Bennett Acceptance
-%Ratio (BAR) method~\cite{bennett_efficient_1976} is considerably more
-%effective in obtaining an accurate result~\cite{lu_appropriate_2003}.
-%BAR is a generalization of EXP by making explicit use of the
-%``forward'' ($\lambda_i \rightarrow \lambda_{i+1}$) and ``backward''
-%($\lambda_{i+1} \rightarrow \lambda_i$) estimates.  Later it was
-%demonstrated that this can be effectively extended to incorporate all
-%other $\lambda$s.  This approach has been called multi--state BAR
-%(MBAR)~\cite{shirts_statistically_2008}.  MBAR is a provable minimum variance
-%estimator~\cite{shirts_statistically_2008}.
 
 %\listoftodos
 
