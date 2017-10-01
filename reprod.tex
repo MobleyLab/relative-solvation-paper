@@ -360,16 +360,10 @@ while the charges are individually assigned.
 
 \paragraph{CHARMM.} The PERT module duplicates the topology similar to
 \progname{sander} but mapped atoms are given in the topology only once.
-%DLM: Can we provide sample files for all of these in SI, and maybe even give 
-%topology snippets in figure(s) to illustrate the point? 
 The module requires balancing with explicit dummy atoms.  All terms are
 energy--scaled.  The PSSP softcore potential is applied to \emph{all}
 atoms in the perturbed group (see section~\ref{S-sec:softcores}x in the SI).  
-The 
-code can handle constraints of changing bond lengths in the perturbed group but 
-this
-may cause incorrect results with PSSP softcores (Stefan Boresch, private
-communication).  There is only one global $\lambda$ for parameter
+The code can handle constraints of changing bond lengths in the perturbed group but this may cause incorrect results with PSSP softcores (Stefan Boresch, private communication).  There is only one global $\lambda$ for parameter
 transformation, however, the scripting facilities in CHARMM allow run time
 modification of topologies e.g.\ by setting charges or LJ parameters
 to arbitrary values.
@@ -416,10 +410,7 @@ strategy a maximal single topology description is achieved: any atom that
 does not match will be made a dummy atom.  FESetup allows
 equilibration of the solvated simulation systems and ensures that
 ``forward'' and ``backward'' simulations have the same number of
-total atoms.  With SOMD the mass of each perturbed atom is taken as the mass of the heavier end-state atom (e.g. a hydrogen atom that is perturbed to a carbon atom has an atomic mass of 12 amu at all lambda values)  The masses of perturbed atoms are set to the mass of the heavier atom description  they are being perturbed to for SOMD.
-%DLM: Wait, set to the mass of the heavy atom? I don't understand. Are you saying that all hydrogens being perturbed get the mass of the heavy atom they are connected to? Can you clarify why? (May also want to say that it doesn't matter!).
-%JM clarified
-  The other codes use the atom masses of the initial state (AMBER, CHARMM?) or allow the user to define how masses vary as a function of lambda (GROMACS).
+total atoms.  With SOMD the mass of each perturbed atom is taken as the mass of the heavier end-state atom (e.g. a hydrogen atom that is perturbed to a carbon atom has an atomic mass of 12 amu at all lambda values)  The masses of perturbed atoms are set to the mass of the heavier atom description  they are being perturbed to for SOMD.  The other codes use the atom masses of the initial state (AMBER, CHARMM) or allow the user to define how masses vary as a function of lambda (GROMACS).
 % HHL: Donghyuk, please clarify!
 The tool creates all input files with control
 parameters, topologies and coordinates as required for RAFE
@@ -497,9 +488,7 @@ linearly between the end states followed by a mutation of the van der
 Waals parameters using a softcore
 potential~\cite{beutler_avoiding_1994,
   zacharias_separationshifted_1994} (see section~\ref{S-sec:softcores}x in the 
-  SI for details) on the LJ
-term only.  It is important to note that in the split protocol
-charges have to be switched off before LJ parameters (and vice versa
+SI for details) on the LJ term only.  It is important to note that in the split protocol charges have to be switched off before LJ parameters (and vice versa
 for the transformation in opposite direction) to avoid collapse of
 other atoms, e.g. solvents, onto a ``naked'' 
 charge\cite{pitera_comparison_2002, anwar_robust_2005, 
@@ -916,76 +905,6 @@ simulation the error is \SI{-0.016+-0.047}{kcal.mol^{-1}}.
 % HHL: All, please add your data here!
 
 
-%\begin{table}[]
-%  \begin{minipage}{\linewidth}
-%    \caption{MAE (\SI{}{kcal.mol^{-1}})with 95$\%$ confidence interval between 
-%SOMD, GROMACS 
-%    with 
-%      Reaction Field (GROMACS RF), GROMACS with PME (GROMACS PME), AMBER and 
-%CHARMM.}
-%      \label{tab:muebound-comp}
-%    \makebox[\textwidth][c]{
-%      \begin{tabular}{lccccc}
-%        \toprule
-%        Package & SOMD & Gromcs RF & GROMACS PME & AMBER & CHARMM\\
-%        \midrule
-%        SOMD         & 0.02< 0.04< 0.05 & 0.17< 0.19< 0.21    & 0.16< 
-%        0.18< 0.20 & 0.21< 0.23< 0.25 & 0.18< 0.19< 0.20\\
-%        GROMACS RF   	  & 0.17< 0.18< 0.19 & 0.01< 0.02< 0.03    & 0.04< 
-%0.05< 
-%        0.06 & 
-%        0.13< 0.14< 0.15 & 0.31< 0.32< 0.33\\
-%        GROMACS PME       & 0.17< 0.18< 0.19 & 0.04< 0.05< 0.06    & 0.01< 
-%        0.02< 0.03 & 
-%        0.14< 0.15< 0.16 & 0.30< 0.31< 0.32\\
-%        AMBER		  & 0.22< 0.23< 0.24 & 0.13< 0.14< 0.15    & 0.14< 0.15< 0.16 
-%& 
-%        0.01< 
-%        0.02< 0.03 & 0.31< 0.32< 0.33\\
-%        CHARMM & 0.17< 0.19< 0.21 & 0.31< 0.32< 0.33 & 0.30< 0.31< 0.32 & 
-%0.31< 0.32< 0.33 & 0.01< 0.02 <0.03\\
-%        \bottomrule
-%      \end{tabular}
-%    }
-%  \end{minipage}
-%\end{table}
-
-%\begin{table}[]
-%  \begin{minipage}{\linewidth}
-%    \caption{MAE (\SI{}{kcal.mol^{-1}}) with 95$\%$ confidence interval 
-%between SOMD, GROMACS 
-%    with 
-%      Reaction Field (GROMACS RF), GROMACS with PME (GROMACS PME), AMBER and 
-%CHARMM for relative
-%      free energy prediction computed with the absolute 
-%protocol}\label{tab:muebound-abs}
-%    \makebox[\textwidth][c]{
-%      \begin{tabular}{lccccc}
-%        \toprule
-%        Package & SOMD & Gromcs RF & GROMACS PME & AMBER & CHARMM\\
-%        \midrule
-%        SOMD         & 0.02< 0.04< 0.06 & 0.15< 0.16< 0.18    & 0.11< 
-%        0.12< 0.14 & 0.08< 0.09< 0.10 &0.07< 0.08< 0.09\\
-%        GROMACS RF   	  & 0.15< 0.16< 0.17 & 0.01< 0.02< 0.03    & 0.12< 
-%0.13< 
-%        0.14 & 
-%        0.23< 0.24< 0.25 & 0.12< 0.13< 0.14\\
-%        GROMACS PME       & 0.11< 0.13< 0.16 & 0.13< 0.14< 0.15    & 0.01< 
-%        0.02< 0.03 & 
-%        0.11< 0.12< 0.13 & 0.15< 0.16< 0.18\\
-%        AMBER		  & 0.07< 0.10< 0.13 & 0.23< 0.24< 0.25    & 0.11< 0.12< 0.13 
-%& 
-%        0.01< 
-%        0.02< 0.03 & 0.15< 0.16< 0.18\\
-%        CHARMM & 0.07< 0.08< 0.09 & 0.12< 0.13< 0.14 & 0.15< 0.17< 0.18 & 
-%0.15< 0.16 <0.17 & 0.01<0.02<0.03\\
-%        \bottomrule
-%      \end{tabular}
-%    }
-%  \end{minipage}
-%  \end{table}
-
-
 \subsection{AMBER}
 \label{sec:amber-results}
 
@@ -1103,9 +1022,6 @@ deviation between forward and backward vacuum transformations in the
 is consistently shifted by 0.2--\SI{0.4}{kcal.mol^{-1}} for each $\lambda$ step 
 of the vdW plus bonded transformation with both implicit and explicit dummy 
 atoms.
-%%JM: any hint of the problem? This suggests a bug in AMBER
-% HHL: I call it a bug for the moment whose origin we do not understmnd,
-%      see Discussion.
 
 
 \subsection{CHARMM}
@@ -1156,25 +1072,6 @@ If the process involves particle insertion (``backward process'') we reverse
 the roles.  In this work, \inpopt{mass-lambdas} were all set to zero  to not 
 included mass changes in the free energy.  Unified protocols set all $\lambda$ 
 vectors the same.
-
-%JM: Do you have a way to control the strength of softening of Coul and LJ in 
-%Gromacs?% Does the soft-core apply to ALL atoms, or only atoms that are dummies in one %end-state?% We must delve in differences with the SOMD softcore for the discussions %section.
-% GDRM: What do you mean by "control the strength of softening ..."? 
-%     The user is given the opportunity to choose if he/she wants to use
-%     soft-core potentials and to choose its parameters (power, alpha and 
-%sigma).
-% DLM: GDRM, you're going to have to check the manual and users lists. The question is, when you modify the LJ interactions between atoms using the soft core functional form, are you modifying ALL LJ interactions, or only those between atoms whose parameters are being perturbed? My vague recollection is that it is 
-% between all atoms, but this may only have been an older version of the setup. If you still don't understand the question, come talk to me.
-% GDRM: The manual is not very clear -- it seems it applies to all atoms, but I'll have to run a short test to confirm it. I'll add this in a future PR.
-% GDRM: Update! Only LJ interactions in atoms whose parameters are being perturbed are in the soft core form 
-
-% HHL: only 2 digits for all data in the table please
-%      what is footnote d good for?
-% GDRM: About the decimal places: some of the errors would then be 
-%      rounded down to zero. That's why I left some with 3 decimal 
-%      places.
-% HHL: Yes, you will need to do rounding.
-%DLM: Uncertainties should never be zero; one needs additional precision when this is the case (though I realize it does not look as nice).
 
 Table \ref{tab:groresults} lists the relative free energies obtained from 
 GROMACS simulations.
