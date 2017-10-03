@@ -1279,24 +1279,6 @@ results are in good agreement.  In particular, the unperturbed hydrogen bonds
 constraint protocol allows a timestep of \SI{2}{fs}. All SOMD RAFE simulations were carried out with simultaneous transformation of Lennard-Jones, charges, and bonded terms. This suggests that the failure of the GROMACS ``unified protocol'' in some 
 instances may be due to differences in the softcore Coulomb implementations. 
 
-%%JM we need to elaborate here
-%SB: Here we could say
-% - Gromacs fails maybe for the softcore implementations
-%DLM: Which softcore? You mean softcore Coulomb?
-%SB: I mean the entire functional form used in Gromacs:
-%The way the softcore is implemented, or the functional form of the softcore itself
-%could cause problems, which obliged you to use a two step protocol rather than one-step protocol.
-%SB:
-% - Evidences of softcore limitations are given by Harger et al. (Tinker-OpenMM 
-%paper)
-% where the authors highligth that the use of constraint and softcore could 
-%give a problem
-% This is different from what's happening in Somd (maybe a compensation 
-%effect?) 
-% but could help us to say that the different softcore implementations can 
-%affect their
-% protocols
-
 For the methane $\rightarrow$ neopentane transformations SOMD yields consistent results between central and terminal mappings, as shown in 
 Table~\ref{S-tab:sire-finalresults}, while GROMACS RF displays a $\Delta\Delta$G 
 of \SI{-0.20 +-   0.01}{kcal.mol^{-1}} for the centrally mapped transformation 
