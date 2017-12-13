@@ -1,0 +1,40 @@
+
+
+1) The early part of the text where the single and dual topology are described is a little old fashion. In reality, this distinction is not completely how things are done in practice.  We end up stating this: modern MD softwares support a hybrid approach that combines aspects of single and dual topology. And we return to this with the FESetup where we say that "The tool makes use of a maximum common substructure search algorithm to automatically compute atoms that can be mapped.  ...a maximal single topology description is achieved..."
+
+
+2) I am confused by many statements regarding dummy atoms with respect to AMBER:
+
+Explicit dummy atoms are not needed as the code will only compute bonded contributions for ``real'' atoms and thus ignores bonded energies involving dummy atoms.  We will call this the ``implicit dummy protocol''. 
+
+In MD simulations, particles do not disappear! The only thing that can happen is that the interaction terms affecting them are modified. So, if an atom is real in one end state but is not needed to make the other end state, then it necessarily becomes a dummy.  I also do notunderstand the difference between implicit and explicit dummy atoms (this is shown in Table 3).  
+
+
+3) I think that we are not being consistent with what we call decoupling versus annihilation. There is one sentence (“We distinguish decoupling from annihilation, as the latter often includes a scaling of the \emph{intra}--molecular interactions in addition to the 
+inter--molecular interactions. “) where we seem to say that annihilation turns off the intramolecular, hence, turn the molecule into an ideal gas of particles. But later in the discussion of absolute solvation we talk about double annihilation, which is not consistent with the earlier part of the manuscript.
+
+4) Since you use the same force field for all models, could you report the electrostatic coefficient of all these program?  Just compare the energy of two charges +1 separated by 1 angstrom to see what the coefficient is.  It may be small, but if anything this deserves a comment in the paper because not all codes use the same coefficient. In CHARMM I know that several values are in the common blocks:
+(CCELEC=332.0636D0)! old value of dubious origin
+(CCELEC=331.843D0) ! value from 1986-1987 CRC Handbook
+(CCELEC=332.0522173D0)
+(CCELEC=332.054D0)
+(CCELEC=332.0716D0)
+
+
+5) I proposed to change Table 1 and Table 3. The absolute free energies that were used for Table 1 should be shown rather than differences. The relative free energy difference calculated from absolute free energy data that is in Table 1 should be transferred to Table 3. Also I think that we need to have more information about the thermodynamic state that is produced by the different codes. We should show the mean volume and mean potential energy at lambda=0 and lambda=1 from these AFE simulations.  By the way, the lambda=0 should match the normal TIP3P water box because the solute is decoupled. If there are noticeable differences, then we should run a true pure TIP3P water box to see if even this is different or not.
+
+I also think that discussing the internal consistency of the program would be important.  
+For example, even though the 2–methylindole to methane transformation is about 8.34 or 8.42 kcal/mol from CHARMM in Table 3, smaller than that of AMBER, the relative delta G is consistent with the result of Table 2. Same for AMBER. This is interesting. On the other hand, the methanol-methane and the ethanol-ethane values do not look internally consistent with SOMD (see Table 3).
+
+
+6) Unless I am mistaken, all the calculations were executed with a truncated VDW potential. The issue of long range correction is discussed, but this was not included in any of the calculations, isn’t this correct? So I find that the rather lengthy discussion of LRC in CHARMM and the figure 3 is a bit too much. It is worth mentioning that the LRC “option” does not work with PERT, but this is using one page to dwell on this. In my own application with CHARMM, we always calculated a long range corrections as an end-point correction, we did not try to run the FEP itself with the LRC. My impression is that this is an option that was put in hastily and was not used by many people (if any).
+
+
+
+7) On page 28, there is a discussion of how SOMD handles the masses (“Specifically, bonds that involve unperturbed hydrogen atoms are constrained. Bonds involving hydrogen atoms that are perturbed to a heavy element are unconstrained. Additionally the atomic mass of the perturbed hydrogen atom is set to the mass of the heavy atom it is perturbed to. “). We should make it clear that the correct free energy should not depend on masses.
+
+8) The issue with holonomic constraints arises mostly because we are using TI, i.e., we are suppose to integrate <dU/d(lambda)> correctly. This is what gave rise to the so-called PMF correction of Pearlman, and so on.  In fact, these issues essentially go away when using a windowing method based on <exp(-delta U/kT)> because derivatives are not involved. Maybe this deserves to be stated in the discussion. 
+
+9) the paper contains too many acronyms to my own taste. I don’t like RAFE, AFE, MAD, MAE… Yet the most common acronym in the field (as far as I know) is FEP for free energy perturbation, and this one is never mentioned!  I have never seen RAFE or AFE in a paper, are these absolutely necessary to use?
+
+
