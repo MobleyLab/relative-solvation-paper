@@ -915,6 +915,11 @@ $\rightarrow$ ethane (see Figure~\ref{fig:cycles}). For the implicit dummy
 simulation with AMBER we calculate a cycle error for $\Delta\Delta 
 G_\mathrm{hydr}$ of \SI{0.069+-0.041}{kcal.mol^{-1}} and for the explicit dummy 
 simulation the error is \SI{-0.016+-0.047}{kcal.mol^{-1}}.
+Split and unified protocols in GROMACS yielded \SI{0.05+-0.02}{kcal.mol^{-1}}
+and \SI{0.13+-0.03}{kcal.mol^{-1}} using Reaction Field to calculate electrostatic
+interactions, respectively. PME electrostatic treatment led to cycle errors of
+\SI{0.04+-0.01}{kcal.mol^{-1}} (split protocol) and \SI{0.18+-0.03}{kcal.mol^{-1}} 
+(unified protocol).
 % HHL: All, please add your data here!
 
 
@@ -1168,8 +1173,9 @@ study (cmp.\ Tables~\ref{tab:absolute} and \ref{tab:relative}).  A noteworthy
 exception is the difference between the unified and split results of methane 
 $\rightarrow$ methanol and its reverse process, which was investigated with 
 additional split protocol simulations using Coulomb softcore potentials (Table 
-\ref{tab:eff-sc}).
+\ref{tab:eff-sc}):
 %DLM: This wording may need adjusting because it sounds like we've resolved the issue by this additional investigation, but in fact the additional investigation does nothing to resolve it, unless I'm missing something.
+%GDRM: Can you explain? I wrote the paragraph under this table to address it. Or have I misunderstood the question?
 
 \begin{table}[]
 \centering
@@ -1197,25 +1203,16 @@ methane & methanol & \multicolumn{1}{l}{\num{6.168 +- 0.005}} & \num{6.199 +-
 \multicolumn{1}{l}{} &  \\ \bottomrule
 \end{tabular}
 \end{table}
-%DLM: Uncertainties should never be +/-0.00; you need more precision if that's the case.
 
 We noticed a difference of approximately \SI{1.5}{kcal.mol^{-1}} between the 
 split protocol without Coulomb softcore potentials and both protocols that 
-use it. Our data suggests that softcore use in electrostatic interactions requires 
-%DLM: Which data? "Our data"? But specifically which data? Maybe you mean, "The data shown in Figure () suggests that..."
-%GDRM: ref{S-fig:gro_sc_eff}
-adjustments in the $\lambda$-distance between states in the
-rapidly varying part of the $\partial \mathcal{H}/\partial\lambda$, see Figure
-\ref{S-fig:gro_sc_eff}. A test with combining the bonded terms with the vdW 
+use it. The data shown in Figure \ref{S-fig:gro_sc_eff} suggests that softcore use in 
+electrostatic interactions requires  adjustments in the $\lambda$-distance between 
+states in the rapidly varying part of the $\partial \mathcal{H}/\partial\lambda$, see 
+Figure \ref{S-fig:gro_sc_eff}. A test with combining the bonded terms with the vdW 
 transformation did not change this result.  Thus, we find that the split protocol 
 without Coulomb softcore potentials is the most effective way to calculate 
-relative free energy calculations.  We also find that there is no significant 
-difference in calculated free energies depending on the choice of Particle 
-Mesh Ewald or Reaction Field for calculation of long-range electrostatic interactions.
-%JM quantity this in term of MAD for the dataset.
-%GDRM: I'll add it in the next PR.
-%DLM: On this last sentence about "no significant difference", isn't this exactly the opposite of what's shown for methanol-> methane in Table 7? It looks like RF and PME DO have differences there! At least in the absolute case.
-%GDRM: These are the standard deviations of the mean, DLM, not the uncertainties calculated by alchemical analysis; those are larger. I'll prepare another table.
+relative free energy calculations. 
 
 One peculiarity of the software worth mentioning is that relative free energy 
 simulations will crash if a hydrogen alchemically becomes a heavy atom if the 
