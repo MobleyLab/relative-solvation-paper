@@ -55,30 +55,30 @@
 
 We describe here the softcore functions~\cite{beutler_avoiding_1994,
   zacharias_separationshifted_1994} as implemented in the MD packages
-AMBER, CHARMM, Gromacs and Sire/SOMD.  Both the van der Waals,
+AMBER, CHARMM, Gromacs and SOMD.  Both the van der Waals,
 $V_{\mathrm{LJ}}$ (Lennard--Jones potential) and the electrostatic
 interactions, $V_{\mathrm{Coul}}$ (Coulomb potential) as a function of
 the order parameter $\lambda$ are given for the disappearing atoms
 only.  For the appearing atoms replace $\lambda$ with $1 - \lambda$
 and \emph{vice versa}.  Eq.\ \eqref{eq:general-softcore} is the generalized
 form for all codes while the specific distance dependent functions are
-outlined in eq.\,\eqref{eq:Sire} for Sire/SOMD, eq.\,\eqref{eq:Amber} for
+outlined in eq.\,\eqref{eq:Sire} for SOMD, eq.\,\eqref{eq:Amber} for
 AMBER, eq.\,\eqref{eq:Gromacs} for Gromacs and eq.\,\eqref{eq:CHARMM}
 for CHARMM.
 
 \begin{equation}
   V = V_{\mathrm{LJ}} + V_{\mathrm{Coul}} =
   4\epsilon_{\mathrm{ij}}(1 - \lambda) \left[ \left(
-      \frac{\sigma_{ij}}{\textcolor{red}{r_{\mathrm{LJ}}}}
+      \frac{\sigma_{ij}}{{r_{\mathrm{LJ}}}}
     \right)^{12} - \left(
-      \frac{\sigma_{ij}}{\textcolor{red}{r_{\mathrm{LJ}}}} \right)^{
+      \frac{\sigma_{ij}}{{r_{\mathrm{LJ}}}} \right)^{
       6} \right] +
   (1 - \lambda)^{n} \frac{q_{i}q_{j}}
-  {4\pi\varepsilon_{0}\textcolor{red}{r_{\mathrm{Coul}}}}
+  {4\pi\varepsilon_{0}{r_{\mathrm{Coul}}}}
   \label{eq:general-softcore}
 \end{equation}
 
-For Sire/SOMD
+For SOMD
 \begin{equation}
   \begin{split}
     r_{\mathrm{LJ}} &= (\alpha\sigma_{ij}\lambda + r_{ij}^2)^{\frac{1}{2}} \\
@@ -129,7 +129,7 @@ $\alpha$ and $\beta$ are the softcore tuning parameters determining
 the softness of the potential, and $r_{ij}$ the distance between
 atoms $i$ and $j$.
 
-The exponent $n$ is only used in the Coulomb softcore funtion of Sire.
+The exponent $n$ is only used in the Coulomb softcore funtion of SOMD.
 Gromacs allows additional exponents for $\lambda$ ($p = 1$ or $2$) and
 $w$ for the distance dependency with values of either $6$ or $48$.  AMBER 
 allows an exponent $p$ (namelist option \textsc{sceeorder}) for the Coulomb 
@@ -467,22 +467,20 @@ explicit, partial & & & & & \\
 \end{table}
 
 
-\subsection{Sire/SOMD}
+\subsection{SOMD}
 \label{sec:sire-probs}
 
 
-Figure ~\ref{fig:sire_histogram} compare relative free energy of hydration 
-$\Delta\Delta G$ with relative $\Delta\Delta G$ estimations from absolute free  
-energy calculations for all the transformation of dataset in 
-~\ref{R-fig:cycles}.
+Figure ~\ref{fig:sire_histogram} compare relative free energy of hydration $\Delta\Delta G$ with relative $\Delta\Delta G$ estimations from absolute free  
+energy calculations for all the transformation of the dataset.
+
+% in ~\ref{R-fig:cycles}.
 %JM: Better to replace labels A-H with chemical structures?
 %SB: I am afraid that substituting letters with chemical structures may result in a messy plot, but I will try
+
 \begin{figure}[ht]
   \includegraphics[width=\textwidth]{figures/sire_histogram.pdf}
-  \caption{Relative free energy of hydration $\Delta\Delta G$, computed with 
-  RAFE calculations, compared with $\Delta\Delta G$ derived from absolute free 
-  energy calculations for A: methane to ethane, B: ethane to methanol, C: 
-  methane to methanol, D: methane to 2-methylfuran, E: methane to toluene,
+  \caption{Relative free energy of hydration $\Delta\Delta G$, computed with RAFE calculations, compared with $\Delta\Delta G$ derived from absolute free  energy calculations for A: methane to ethane, B: ethane to methanol, C: methane to methanol, D: methane to 2-methylfuran, E: methane to toluene,
     F: methane to 2-methylindole, G: methane to neopentane, H: 
     2-cyclopentanylindole to 7-cyclopentanylindole.}
   \label{fig:sire_histogram}
@@ -531,11 +529,11 @@ methane        & 2-methylindole & 8.67    & 0.08 & 8.57  & 0.03\\
 
 Table~\ref{tab:sire-finalresults} shows relative free energy of hydration 
 $\Delta\Delta G$ compared to $\Delta\Delta G$ values extracted from absolute 
-free energy calculations, depicted in Fig~\ref{fig:sire_histogram} in the paper.
+free energy calculations, depicted in Fig~\ref{fig:sire_histogram}.
 
-Initially, Sire/SOMD RAFE protocols used all bonds constraint algorithm. In this way all the solute bonds are constrained, which results in a
+Initially, SOMD RAFE protocols used all bonds constraint algorithm. In this way all the solute bonds are constrained, which results in a
 systematic offset for each RAFE predictions, compared to the RAFE from absolute free energy calculations.
-Figure ~\ref{fig:sire_allbonds} show the discrepancy between RAFE computed with all bond constraints and RAFE from absolute free energy calculations.
+Figure ~\ref{fig:sire_allbonds} shows the discrepancy between RAFE computed with all bond constraints and RAFE from absolute free energy calculations.
 
 
 \begin{figure}[ht]
@@ -544,7 +542,7 @@ Figure ~\ref{fig:sire_allbonds} show the discrepancy between RAFE computed with 
   \label{fig:sire_allbonds}
 \end{figure}
 
-Finally, figure~\ref{fig:sire_constraints} and tab.~\ref{tab:sire_constraints} compare relative free energy of hydration $\Delta \Delta G$ estimated with RAFE using all bonds constraints, no constraints and unperturbed hydrogen bond constraints.
+Finally, figure~\ref{fig:sire_constraints} and table .~\ref{tab:sire_constraints} compare relative free energy of hydration $\Delta \Delta G$ estimated with RAFE using all bonds constraints, no constraints and unperturbed hydrogen bond constraints.
 
 \begin{figure}[ht]
   \includegraphics[width=\textwidth]{figures/SI_sire_constraints.pdf}
@@ -647,6 +645,19 @@ The effect of the Coulomb softcore potential can be seen in Figure \ref{fig:gro_
   change in electrostatic terms in methane $\rightarrow$ methanol.}
   \label{fig:gro_sc_eff}
 \end{figure}
+
+\subsection{CHARMM}
+\label{sec:charmm-probs}
+
+Figure~\ref{fig:LRC} shows the effect of turning LRC on/off as function of the cut--off values on the absolute solvation free energy of methane. The switching function starts \SI{2}{\angstrom} before the cut-off value. The figure shows that cutoff values greater than \SI{10}{\angstrom} give consistent results, if the LRC has been disabled. The bottom graph shows the relative solvation
+free energy of 2--methylindole to methane from direct RAFE and from AAFEs of methane and 2--methylindole with LRC on/off. This shows that the protocols will be inconsistent by ca. 0.8 $kcal.mol^{-1}$ if the LRC is not disabled.
+
+\begin{figure}[ht]
+\includegraphics[scale=1.0]{figures/LRC}
+\caption{(top) Absolute solvation free energy of methane as a function of different cut--off values and presence or absence of a Long Range Correction term. (bottom) Relative solvation free energy between 2--methylindole and methane from relative or absolute alchemical free energy protocols and with/out a LRC term.}
+\label{fig:LRC}
+\end{figure}
+
 
 \bibliography{journal-abbrev,reprod}
 
