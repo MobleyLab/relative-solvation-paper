@@ -2,16 +2,21 @@
 
 1) The early part of the text where the single and dual topology are described is a little old fashion. In reality, this distinction is not completely how things are done in practice.  We end up stating this: modern MD softwares support a hybrid approach that combines aspects of single and dual topology. And we return to this with the FESetup where we say that "The tool makes use of a maximum common substructure search algorithm to automatically compute atoms that can be mapped.  ...a maximal single topology description is achieved..."
 
+%JM I think it is ok as it stands, I find it helpful to explain dual and single topology separately before introducing the various implementations.
 
 2) I am confused by many statements regarding dummy atoms with respect to AMBER:
 
 Explicit dummy atoms are not needed as the code will only compute bonded contributions for ``real'' atoms and thus ignores bonded energies involving dummy atoms.  We will call this the ``implicit dummy protocol''. 
 
-In MD simulations, particles do not disappear! The only thing that can happen is that the interaction terms affecting them are modified. So, if an atom is real in one end state but is not needed to make the other end state, then it necessarily becomes a dummy.  I also do notunderstand the difference between implicit and explicit dummy atoms (this is shown in Table 3).  
+In MD simulations, particles do not disappear! The only thing that can happen is that the interaction terms affecting them are modified. So, if an atom is real in one end state but is not needed to make the other end state, then it necessarily becomes a dummy.  I also do not understand the difference between implicit and explicit dummy atoms (this is shown in Table 3).  
+
+%JM I have rewritten this section to clarify what HL meant and what is different between ‘implicit’ and ‘explicit’ dummy protocols.
 
 
 3) I think that we are not being consistent with what we call decoupling versus annihilation. There is one sentence (“We distinguish decoupling from annihilation, as the latter often includes a scaling of the \emph{intra}--molecular interactions in addition to the 
 inter--molecular interactions. “) where we seem to say that annihilation turns off the intramolecular, hence, turn the molecule into an ideal gas of particles. But later in the discussion of absolute solvation we talk about double annihilation, which is not consistent with the earlier part of the manuscript.
+
+%JM I have fixed the manuscript to clarify the meaning of annihilation in the present context (decoupling== scaling intermolecular non bonded only ; annihilation == scaling intermolecular non bonded + intramolecular non bonded + possibly torsions)
 
 4) Since you use the same force field for all models, could you report the electrostatic coefficient of all these program?  Just compare the energy of two charges +1 separated by 1 angstrom to see what the coefficient is.  It may be small, but if anything this deserves a comment in the paper because not all codes use the same coefficient. In CHARMM I know that several values are in the common blocks:
 (CCELEC=332.0636D0)! old value of dubious origin
@@ -20,21 +25,99 @@ inter--molecular interactions. “) where we seem to say that annihilation turns
 (CCELEC=332.054D0)
 (CCELEC=332.0716D0)
 
+%JM added a sentence to the intro in the manuscript to cite Shirts et al. JCAMD 2017 that compiled Coulomb’s constant in a reproducibility of single point energies study. I added a footnote to give the Coulomb’s constant used by SOMD since that one is not reported in the Shirts et al. paper. 
+
 
 5) I proposed to change Table 1 and Table 3. The absolute free energies that were used for Table 1 should be shown rather than differences. The relative free energy difference calculated from absolute free energy data that is in Table 1 should be transferred to Table 3. Also I think that we need to have more information about the thermodynamic state that is produced by the different codes. We should show the mean volume and mean potential energy at lambda=0 and lambda=1 from these AFE simulations.  By the way, the lambda=0 should match the normal TIP3P water box because the solute is decoupled. If there are noticeable differences, then we should run a true pure TIP3P water box to see if even this is different or not.
 
 I also think that discussing the internal consistency of the program would be important.  
 For example, even though the 2–methylindole to methane transformation is about 8.34 or 8.42 kcal/mol from CHARMM in Table 3, smaller than that of AMBER, the relative delta G is consistent with the result of Table 2. Same for AMBER. This is interesting. On the other hand, the methanol-methane and the ethanol-ethane values do not look internally consistent with SOMD (see Table 3).
 
+%JM I have rejigged these sections
+It looks like SOMD statistical errors are systematically higher which may cloud internal consistency checks. It is hard to figure out why, each code used a different lambda schedule and varied in the length of each lambda simulation.
+
+%JM I am working on this. I agree it’s a good idea to present absolute energies in Table 1, and then ‘relative from absolute’ in Table 3.
+For additional characterisation of thermodynamic states, I propose to focus efforts on volume/densities because potential energies are more tricky (we all use different potential energy functions mostly because of the way cutoffs and long-range electrostatics are handled). 
+I have started converting the volume data supplied so far into densities. This has raised a number of issues and I need more info to progress.
+
+* Starting with absolute hydration free energies
+The data for AMBER, CHARMM, SOMD is here
+https://docs.google.com/spreadsheets/d/1UUw49F9VDOARsi_38VExEQ4ND0gKgIJQXTxQTl3HJ9M/edit#gid=1761024825
+
+HL, DS: Is it possible to add standard errors of the mean volume values for AMBER & CHARMM? 
+DS: Can you add the missing volume data for ethanol in cells P45 and R45 ? 
+
+HL: We discovered that the ethanol and methane SOMD input files have a different number of atoms than the other codes. Any idea why?  
+
+GDRM: Can you add the data for GROMACS?
+
+So far, the preliminary analysis suggest that all codes give an internally consistent density for the pure TIP3P end-state to within +/-2 sigma. There are some small systematic differences (CHARMM 0.973+/-0.002 g/cm3 AMBER 0.980 +/- 0.002 SOMD 0.976 +/- 0.003 ) which are probably due to differences in the potential energy functions and timesteps. I looked up some TIP3P densities calculated in a recent paper with OpenMM J. Phys. Chem. Lett. 2014, 5, 1885−189. This work reports 0.980 g/cm3 for TIP3P.
+
+There are similar systematic differences in the densities computed with a solute in the box, but generally the density changes seem relatively consistent across codes.
+
+* Moving on to relative hydration free energies
+
+DL: Could you add the volume data for CHARMM here:
+
+HL: Could you add the missing volume data for methane—>2-methylfuran
+Could you check if the labels in B56/C56 have not been swapped with B57/C57 by mistake?
+
+https://docs.google.com/spreadsheets/d/1UUw49F9VDOARsi_38VExEQ4ND0gKgIJQXTxQTl3HJ9M/edit#gid=0
+
+HL and GDRM: If you could add the SEM for the volumes that would be convenient.
+
+
+Preliminary analysis.
+There seems to be inconsistencies between codes. The number of atoms in the simulations (column D) comes from SOMD. However this gives 
+crazy densities for some AMBER sims (highlighted in red in column L and P). 
+
+HL: Could you check whether some input files for different codes have a different number of water molecules? I was under the impression this was consistent across codes. 
+
+Focussing on volume changes for now, GROMACS is very consistent, SOMD a bit less and AMBER not at all. 
+For GROMACS vs SOMD I think part of the difference may be down to the shorter end-state trajectories (2ns SOMD vs 5ns GROMACS). Other factors could play a role (different Barostats). 
+For AMBER I don’t understand why the V1 volume values seem to always be Lower than the V0 values. You would expect a sign changes when swapping the end-states. To illustrate methane—>ethane gives V1-V0=-37 A^3 but ethane->methane gives V1-V0=-29 A^3 ; by contrast GROMACS is consistent 31A^3 and -28 A^3; SOMD gives 61+/-25 A^3 vs -50+/-30 A^3. Again having SEM on the V0/V1 values with CHARMM/GROMACS/AMBER would be helpful.
+
+HL: Could you double check the AMBER volumes ? 
+
+Also I would like to be sure we capture some protocol details as this has an influence on the precision of the reported free energies.
+
+HL: AMBER)  How many windows? How many ns/window ?
+
+DK: CHARMM) 21 windows. 1.5ns/window. Is that correct?
+
+GDRM: GROMACS) 31 windows+16 windows. 4.2ns/window (relative). Or 20+20 windows, 5ns/window (absolute). Correct?
+
+SB: SOMD) 17 windows, 2ns/window (relative). 17+17 windows, 2ns/window (absolute). Correct ?
+
 
 6) Unless I am mistaken, all the calculations were executed with a truncated VDW potential. The issue of long range correction is discussed, but this was not included in any of the calculations, isn’t this correct? So I find that the rather lengthy discussion of LRC in CHARMM and the figure 3 is a bit too much. It is worth mentioning that the LRC “option” does not work with PERT, but this is using one page to dwell on this. In my own application with CHARMM, we always calculated a long range corrections as an end-point correction, we did not try to run the FEP itself with the LRC. My impression is that this is an option that was put in hastily and was not used by many people (if any).
 
+%JM. For SOMD we didn’t apply LRC to our free energies, we do that as end-point correction in other studies. (check with HL and GRDM whether LRC was applied). I have cut down the discussion around LRC and CHARMM as suggested and I have moved Figure 3 to the SI. 
+
+I have updated the manuscript to clarify the approach to LRC for VdW truncation for the different codes.
+
+Could you all please verify the below statements are correct:
+
+
+SB) SOMD: Not included in the MD simulations; we added a LRC as an end-point correction
+
+DK) CHARMM: Not included in the MD simulations ; not added as end-point correction 
+It might be worth checking if you can easily calculate an end-point correction term by post-processing the CHARMM trajectories.
+
+GDRM) GROMACS: Included in the MD simulations 
+
+HL) AMBER: Not included in the MD simulations ; not added as end-point correction 
 
 
 7) On page 28, there is a discussion of how SOMD handles the masses (“Specifically, bonds that involve unperturbed hydrogen atoms are constrained. Bonds involving hydrogen atoms that are perturbed to a heavy element are unconstrained. Additionally the atomic mass of the perturbed hydrogen atom is set to the mass of the heavy atom it is perturbed to. “). We should make it clear that the correct free energy should not depend on masses.
 
+%JM I clarified this in the text
+
 8) The issue with holonomic constraints arises mostly because we are using TI, i.e., we are suppose to integrate <dU/d(lambda)> correctly. This is what gave rise to the so-called PMF correction of Pearlman, and so on.  In fact, these issues essentially go away when using a windowing method based on <exp(-delta U/kT)> because derivatives are not involved. Maybe this deserves to be stated in the discussion. 
+
+%JM unfortunately it is still a problem with SOMD because the potential energy of the constrained bond are not evaluated at any perturbed state, so contributions due to changes in bond lengths are missed. That is we still see the same effect when using MBAR. I have revised the text to simplify the discussion because in all honesty we don’t know whether this is exactly the same issue as that flagged previously by Pearlman et al.
+
 
 9) the paper contains too many acronyms to my own taste. I don’t like RAFE, AFE, MAD, MAE… Yet the most common acronym in the field (as far as I know) is FEP for free energy perturbation, and this one is never mentioned!  I have never seen RAFE or AFE in a paper, are these absolutely necessary to use?
 
-
+%JM this was used by HL to be consistent with the terminology introduced by Mobley et al. a few years ago to clarify differences between relative and absolute alchemical free energy protocols. I feel we can stick to it since it is important to clarify when we are talking about relative or absolute hydration free energy calculations. 

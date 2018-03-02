@@ -553,29 +553,21 @@ Langevin thermostat with a friction constant of \SI{2.0}{ps^{-1}} and pressure
 rescaling through a Monte Carlo barostat with 100 steps between isotropic 
 volume change attempts.  Long--range electrostatics in solution was handled 
 with PME and a cutoff of \SI{8.0}{\angstrom} for both Coulomb and vdW 
-interactions.  In vacuum no cutoff was used.
+interactions.  In vacuum no cutoff was used.  {\color{red} Specify the number of windows and the length of each simulation of each window. Clarify whether a LRC correction term was used for the truncated VdW interactions during the simulations. If not, clarify whether a LRC VdW correction term added by post-processing of the end-states.}
 
 \paragraph{CHARMM.} The CHARMM c40b1 molecular dynamics package was used to 
 carry out all relative hydration free energy simulations.  21 evenly spaced 
-windows were used and all windows were run for \SI{1.5}{ns} with a timestep of 
-\SI{1}{fs}.  Most windows used the same pre-equilibrated configuration, but a 
-few windows (simulations involving perturbing hydrogen to heavy atom or vice
-versa) at end-point lambdas were started with their own equilibration using
+windows were used and all windows were run for \SI{1.5}{ns} with a timestep of \SI{1}{fs}.  Most windows used the same pre-equilibrated configuration, but a few windows (simulations involving perturbing hydrogen to heavy atom or vice versa) at end-point lambdas were started with their own equilibration using
 \SI{0.1}{fs^{-1}} ~ \SI{0.5}{fs^{-1}} to avoid numerical instabilities.
  Constant temperature and pressure control was done with the Berendsen weak coupling method, with a 
 compressibility of \SI{4.63e-5}{atm^{-1}} and temperature and pressure coupling 
-constants of \SI{5.0}{ps^{-1}}.  A \SI{12.0}{\angstrom} atom--based cutoff was 
-used for non--bonded interactions and Particle Mesh Eward (PME) with order of 6 
-was used to calculate electrostatic forces along with periodic boundary 
-condition.  SHAKE was used to constrain water hydrogens only.  The PERT module 
+constants of \SI{5.0}{ps^{-1}}.  A \SI{12.0}{\angstrom} atom--based cutoff was used for non--bonded interactions and Particle Mesh Eward (PME) with order of 6 was used to calculate electrostatic forces along with periodic boundary condition.  SHAKE was used to constrain water hydrogens only.  The PERT module 
 in CHARMM was used to handle alchemical transformations and PSSP 
 softcore potential functions were used to avoid numerical instabilities.  In
 vacuum, no cutoff was used.
 %
-The PERT module can currently not use force switching (option \inpopt{VFSwitch})
-for LJ potentials with softcores.  Current CHARMM force fields,
-however, are parameterized to use force switching. % citation needed
-In this work we have used potential switching only (option \inpopt{VSwitch}).
+The PERT module can not currently not use force switching (option \inpopt{VFSwitch}) for LJ potentials with softcores.  Current CHARMM force fields, however, are parameterized to use force switching. % citation needed
+In this work we have used potential switching only (option \inpopt{VSwitch}).{\color{red} clarify the value of the inner cutoff used with the potential switching}
 
 \paragraph{GROMACS.} We used GROMACS 4.6.7 to carry out simulations for 
 the relative hydration free energies ($\Delta \Delta G_{\mathrm{hydr}}$).
@@ -602,7 +594,7 @@ equal to \SI{4.5d-5}{bar^{-1}}.
 We used two methods to calculate electrostatic interactions: Particle Mesh 
 Ewald (PME) and charge group-based Reaction Field with a dielectric of 78.3, 
 as implemented in the software. 
-We set the electrostatic and non--bonded cutoffs to \SI{10.0}{\angstrom};
+We set the electrostatic and VdW cutoffs to \SI{10.0}{\angstrom};
 a switch was applied to the latter starting at \SI{9.0}{\angstrom}. 
 Non--bonded interactions in the vacuum legs of the simulation were calculated
 to a cutoff of \SI{50.0}{\angstrom}. 
@@ -616,6 +608,7 @@ and used the default softcore Coulomb implementation in paths where
 charges, LJ, and bonded terms were modified together, 
 but no soft core potentials were applied to Coulomb interactions when 
 electrostatic interactions were modified separately. 
+{\color{red} clarify whether  a VdW LRC term was used in the simulations, if not was an end-point correction made?}
 
 \paragraph{SOMD.} All simulations were carried out with
 SOMD from the Sire 2016.1 release ~\cite{Sire-2016, doi:10.1021/ct300857j}
@@ -650,6 +643,8 @@ term as
 computed in the simulation with the shifted atom-based Barker-Watts Reaction 
 Field cutoff.
 
+Additionally, an end-point correction for truncated VdW potentials was applied as described previously elsewhere.~\cite{shirtsLRC,BosisioHG}
+
 %BR: Why is this not called double decoupling rather than double annihilation? 
 % Aren't you turning off only the nonbonded interactions, and keeping the intramolecular terms?
 To compute absolute free energy of hydration a double annihilation 
@@ -671,18 +666,13 @@ G_\mathrm{solv}^\mathrm{LJ}) - (\Delta G_\mathrm{vac}^\mathrm{elec} + \Delta
 G_\mathrm{vac}^\mathrm{LJ}) + \Delta G_c
 \end{equation}
 
-The same setup for relative free energy calculations was followed to compute 
-absolute free energies of hydration. Thus, 17 evenly spaced $\lambda$ windows 
-were used and simulations were run for \SI{2}{ns} employing a velocity-Verlet 
-integrator with \SI{2}{fs} time step, constraining only the hydrogen bonds 
-which are not alchemically transformed. 
+The same setup for relative free energy calculations was followed to compute absolute free energies of hydration. Thus, 17 evenly spaced $\lambda$ windows were used and simulations were run for \SI{2}{ns} employing a velocity-Verlet integrator with \SI{2}{fs} time step, constraining only the hydrogen bonds which are not alchemically transformed. 
 
 
 \subsection{Free Energy Estimations}
 \label{sec:analysis}
 
-In this work we primarily focus on TI as this is supported by all the tested MD
-packages ``out--of--the--box'', whereas BAR and MBAR are not.
+In this work we primarily focus on TI as this is supported by all the tested MD packages ``out--of--the--box'', whereas BAR and MBAR are not.
 Equation~\ref{eq:ti} computes the free energy as
 \begin{equation}\label{eq:ti}
 	\Delta G = \int_{\lambda=0}^{\lambda=1}
@@ -737,6 +727,11 @@ where $n$ is the total number of samples, $y_\mathrm{i}$ and $x_\mathrm{i}$ are
 the $i$--th datum to be compared.
 
 
+All input files setup, simulation and analysis of the dataset with the above mentioned packages are freely available at 
+https://github.com/halx/relative-solvation-inputs .
+{\color{red} CHECK COMPLETE SET OF INPUT}
+
+
 \section{Results}
 \label{sec:results}
 
@@ -753,14 +748,12 @@ Table~\ref{tab:absolute} summarizes results for relative free energies of
 hydration obtained from absolute transformations which are given in more detail in Table~\ref{S-tab:absolute-all}x.  The table shows the data 
 from simulations with the recommended protocol for each MD code, as discussed in detail in the 
 following subsections. 
-The  calculated free energies 
+The  precision of the calculated free energies is similar between AMBER, CHARMM and GROMACS, whereas the SOMD free energies are  ca. 3 fold less precise. This may reflect differences in the lambda schedules and length of trajectories between the different codes. Nonetheless the standard errors are typically well under 0.1 kcal/mol, thus it becomes meaningful to investigate small differences of a few tenth of kcal/mol between codes. 
+
 The $\Delta\Delta G_{\mathrm{hydr}}$ 
 obtained with the various MD packages in 
 this way agree quite well given statistical errors, although some larger deviations are apparent as 
-well.  GROMACS predicts a smaller $\Delta\Delta G_{\mathrm{hydr}}$ for the 
-methanol transformations by about \SI{+0.2}{kcal.mol^{-1}}.  Similarly, there 
-are some small discrepancies in the toluene, 2--methylfuran and 2--methylindole cases, 
-where CHARMM produces slightly smaller $\Delta\Delta G_{\mathrm{hydr}}$.
+well.  GROMACS predicts a smaller $\Delta\Delta G_{\mathrm{hydr}}$ for the methanol transformations by about \SI{+0.2}{kcal.mol^{-1}}.  Similarly, there are some small discrepancies in the toluene, 2--methylfuran and 2--methylindole cases, where CHARMM produces slightly smaller $\Delta\Delta G_{\mathrm{hydr}}$.
 % BR: NO, the maximum difference from CHARMM is not 0.4 kcal/mol, it is 0.19 for toluene, 0.17 for 2Ðmethylfuran, 2Ðmethylindole -0.36 
 %JM I think is is addressed in the text now
 
@@ -877,24 +870,16 @@ Again the data is from the recommended protocol (see detailed discussions in the
   \end{minipage}
 \end{table}
 
-CHARMM tends to show smaller  relative free energies for a number of 
-transformations: toluene, neopentane, 2--methylfuran and 2--methylindole.  
-{\color{red} The internal consistency of the program is also important to consider.  
-For example, even though the 2Ðmethylindole to methane transformation is about 8.34 or 8.42 kcal/mol from CHARMM in Table 3, smaller than that of AMBER, 
-the relative delta G is consistent with the result of Table 2. Same for AMBER. This is interesting. It seems that these small but systematic deviations must arise
-from something inherent to the code: either the global scale of energy (see the CCELEC=332.06 coefficient), from the mean density of the system, the long-range corrections (if they are included here), 
-the truncation of the LJ potential (switch, etc...).  Did you check the mean volume of the boxes?
-}
 %JM TODO generalise discussion of internal consistency
 % taking into account statistical uncertainties 
 % and then across-codes consistency
-SOMD  displays smaller $\Delta\Delta G_{\mathrm{hydr}}$ in the methanol and toluene 
-transformations.  The largest 
-discrepancy, however, is in the neopentane transformation with central mapping 
-where AMBER with implicit dummy atoms is about \SI{0.5}{kcal.mol^{-1}} higher 
-and CHARMM about \SI{0.3}{kcal.mol^{-1}} lower than the other two codes.  The 
-terminal mapped neopentane case reveals AMBER to be in line with GROMACS and SOMD while CHARMM's results are essentially the same as in the central mapped 
-transformations.  AMBER deviates also quite strongly from the other codes in the cyclopentanyl indole cases.
+We reviewed firstly internal consistency of the different codes with the computed absolute hydration free energies. For each implementation we counted the number of times a calculated relative free energy deviates from the differences in reference absolute hydration free energies by more than 0.1 kcal/mol. This is significantly above the estimated uncertainties in calculated free energies in most instances (apart from some SOMD results). According to this criterion, the AMBER explicit implementation is the least consistent (10 deviations), followed by AMBER implicit (6 deviations), SOMD (6 deviations), CHARMM (5 deviations), GROMACS (5 deviations). The perturbations that give a discrepancy are not the same across codes, for instance methane->toluene with AMBER explicit deviates from the reference absolute hydration free energies by 0.33 kcal/mol, but at most 0.04 kcal/mol with other codes. SOMD and GROMACS show deviations of ca. 0.25 kcal/mol for methanol->methane but this is not the case for AMBER (implicit or explicit) or CHARMM.
+
+We next reviewed consistency between forwards and backwards relative hydration free energies. Again counting the number of deviations that exceed 0.1 kcal/mol indicates that AMBER explicit is the least consistent (3 deviations), followed by AMBER implicit (2 deviations), CHARMM (2 deviations), GROMACS (1 deviation), SOMD (1 deviation). The largest deviation is observed with AMBER implicit for 2-methylindole <-> methane (0.36 kcal/mol). 
+
+Next we compared relative free energies across packages. 
+CHARMM tends to show smaller  relative free energies for a number of transformations: toluene, neopentane, 2--methylfuran and 2--methylindole. SOMD  displays smaller $\Delta\Delta G_{\mathrm{hydr}}$ in the methanol and toluene transformations.  The largest discrepancy, however, is in the neopentane transformation with central mapping where AMBER with implicit dummy atoms is about \SI{0.5}{kcal.mol^{-1}} higher and CHARMM about \SI{0.3}{kcal.mol^{-1}} lower than the other two codes.  The 
+terminal mapped neopentane case reveals AMBER to be in line with GROMACS and SOMD while CHARMM's results are essentially the same as in the central mapped transformations.  AMBER deviates also quite strongly from the other codes in the cyclopentanyl indole cases.
 
 The MADs of the relative free energy simulations are presented in 
 Table~\ref{tab:mue-relative}.  They tend to be larger than the MADs from 
@@ -925,13 +910,14 @@ We can also compute the cycle closure error from Table~\ref{tab:amber-comp} for
 the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane 
 $\rightarrow$ ethane (see Figure~\ref{fig:cycles}). For the implicit dummy 
 simulation with AMBER we calculate a cycle error for $\Delta\Delta 
-G_\mathrm{hydr}$ of \SI{0.069+-0.041}{kcal.mol^{-1}} and for the explicit dummy 
-simulation the error is \SI{-0.016+-0.047}{kcal.mol^{-1}}.
+G_\mathrm{hydr}$ of \SI{0.07+-0.04}{kcal.mol^{-1}} and for the explicit dummy 
+simulation the error is \SI{-0.02+-0.05}{kcal.mol^{-1}}.
 Split and unified protocols in GROMACS yielded \SI{0.05+-0.02}{kcal.mol^{-1}}
 and \SI{0.13+-0.03}{kcal.mol^{-1}} using Reaction Field to calculate electrostatic
 interactions, respectively. PME electrostatic treatment led to cycle errors of
 \SI{0.04+-0.01}{kcal.mol^{-1}} (split protocol) and \SI{0.18+-0.03}{kcal.mol^{-1}} 
 (unified protocol).
+{\color{red} DK and SB to report cycle closure errors for CHARMM and SOMD}
 % HHL: All, please add your data here!
 %JM: ask Stefano to add data for SOMD. Convert figures into 
 % a histogram plot.
