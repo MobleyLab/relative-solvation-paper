@@ -270,7 +270,7 @@ convergence limits. This comparison has not yet been carried out.
 In practice, one challenge to carry out such a comparison is that the methodologies
 used in one MD program are not always available in another
 package, or the same functionality is provided via different algorithms (e.g. algorithms for pressure and temperature 
-scaling, integrators, etc).  In addition there may be difference in the  choice of physical constants used for evaluating potential energies. A previous study noted that variations in the hardcoded values of Couomb's constant lead to detectable differences in single point energies calculated by CHARMM, AMBER or GROMACS.\cite{Shirts2017,SOMDcoulomb}  
+scaling, integrators, etc).  In addition there may be difference in the  choice of physical constants used for evaluating potential energies. A previous study noted that variations in the hardcoded values of Coulomb's constant lead to detectable differences in single point energies calculated by CHARMM, AMBER or GROMACS.\cite{Shirts2017,SOMDcoulomb}  
 
 Nevertheless, it is critical that free energy 
 changes computed with different simulation software should be reproducible 
@@ -283,12 +283,12 @@ problems~\cite{Pronk:2011:CNP:2063384.2063465, doi:10.1021/ci8000937,
 doi:10.1021/jp505332p, loeffler_fesetup:_2015, 
 DBLP:journals/corr/Balasubramanian16g}.
 
-In this work we present the results of relative hydration free energies of a 
-set of small organic molecules (see Fig.~\ref{fig:cycles}).  Solvation free 
+In this work we compute the relative hydration free energies of a 
+set of small organic molecules using several software and protocols (see Fig.~\ref{fig:cycles}).  Solvation free 
 energies have a wide range of uses and various methods exist to compute
 them~\cite{Skyner:2015:PCCP}.  They are also needed for calculations of a 
 variety of important physical properties, and to calculate binding free 
-energies where the simulation in solution (see Fig.~\ref{fig:thermocycle}) is 
+energies where the solution simulation  (see Fig.~\ref{fig:thermocycle}) is 
 combined with a mutation of the molecule bound to a 
 partner~\cite{Skyner:2015:PCCP}.  A large database of hydration free energies 
 computed from alchemical free energy (AFE) simulations, FreeSolv, has been 
@@ -305,11 +305,9 @@ point of code development.
 \section{Methods}
 \label{sec:methods}
 
-We will compare relative free energies calculated via simultaneous parameter 
-change simulations --- our ``unified protocol'' --- and separated parameter 
-change simulations --- our ``split protocol''--- to relative free energy 
-calculations obtained from two absolute hydration free energies -- our 
-``absolute protocol''.  The unified protocol changes partial charges, van der Waals parameters, and bond parameters simultaneously along the alchemical path so that charge interactions and van der Waals interactions are varying simultaneously, while the split protocol separates the transformation of the van der Waals parameters from the charge transformation so that electrostatic interactions are modified separately from van der Waals interactions.
+We will compare relative free energies calculated via three protocols. In the ``unified protocol'' we calculate relative free energies by scaling together all forcefields parameter. In the  ``split protocol'' we calculate relative free energies by  scaling separately different forcefield parameters.. In the ``absolute protocol'' we calculate relative free hydration free energies as the difference between two calculated absolute hydration free energies.
+
+The unified protocol changes partial charges, van der Waals parameters, and bond parameters simultaneously along the alchemical path so that charge interactions and van der Waals interactions are varying simultaneously, while the split protocol separates the transformation of the van der Waals parameters from the charge transformation so that electrostatic interactions are modified separately from van der Waals interactions.
 The order in which this has to be done is detailed in 
 section~\ref{S-sec:separated}x of the SI.  In the split protocol, the scaling of the bonded terms can be combined with either transformation.
 
@@ -363,7 +361,7 @@ This code uses a hybrid dual/single topology approach.  All terms are energy sca
 The perturbed group must be entirely duplicated, i.e.\ for 
 \progname{sander} this means two topology files with one end state each, and for \progname{pmemd} both end states in one topology file. 
 
- The code loads two separate input topologies that describe the end states of interest and allows users to map atoms between the two end-states that will share the same coordinates for the free energy calculation. Evaluation of the interactions involving these atoms as a function of the coupling parameter is done by default via  linear scaling of the energy and forces of the end-states. Alternatively the user can request that softcore potential be used. The non-bonded interactions of atoms that are not paired between the end-states are handled with a softcore potential. In addition, bonded terms involving different unpaired atoms are ignored. This in effect amounts to defining unpaired atoms as dummy atoms in one of the end-states. We call this the ''implicit dummy protocol'' since the procedure is handled automatically by the software through analysis of the end-state topologies rather than via explicit definition of dummy atoms in an input topology. 
+ The code loads two separate input topologies that describe the end states of interest and allows users to map atoms between the two end-states that will share the same coordinates for the free energy calculation. Evaluation of the interactions involving these atoms as a function of the coupling parameter is done by default via  linear scaling of the energy and forces of the end-states. Alternatively the user can request that a softcore potential be used. The non-bonded interactions of atoms that are not paired between the end-states are handled with a softcore potential. In addition, bonded terms involving different unpaired atoms are ignored. This in effect amounts to defining unpaired atoms as dummy atoms in one of the end-states. We call this the ''implicit dummy protocol'' since the procedure is handled automatically by the software through analysis of the end-state topologies rather than via explicit definition of dummy atoms in an input topology. 
 
 
 %allows, however, mapping of atoms in a single topology fashion %and computes 
@@ -411,7 +409,7 @@ of split protocols.
 \paragraph{SOMD.} SOMD is a software built by linking  Sire~\cite{Sire-2016}
 and OpenMM~\cite{doi:10.1021/ct300857j} molecular simulation libraries. 
 This code uses a single topology description.
-The final state is constructed at run time from the initial state with
+The alchemical state is constructed at run time from an input topology together with
 a ``patch'' (list of force field parameters to be modified). All dummy atoms
 needed to describe the transformation must be present in the initial state. 
 Bond and angle terms are parameter--scaled while the dihedral term is
@@ -580,7 +578,7 @@ In the first two cases, each alchemical transformation was described by 31 and
 16 states, respectively, and simulated for \SI{4.2}{ns} with time steps of 
 \SI{1.0}{fs} in water and vacuum. Atomic masses were not changed along the 
 alchemical path; their change affect kinetic energy only and do not 
-contribute to the free energy change on this case. 
+contribute to the free energy change. 
 We used the Langevin integrator implemented in GROMACS with a 
 default friction coefficient of \SI{1.0}{ps/m_{atom}}, where $m_{atom}$
 is the the mass of the atom.  Absolute hydration 
@@ -873,7 +871,7 @@ Again the data is from the recommended protocol (see detailed discussions in the
 %JM TODO generalise discussion of internal consistency
 % taking into account statistical uncertainties 
 % and then across-codes consistency
-We reviewed firstly internal consistency of the different codes with the computed absolute hydration free energies. For each implementation we counted the number of times a calculated relative free energy deviates from the differences in reference absolute hydration free energies by more than 0.1 kcal/mol. This is significantly above the estimated uncertainties in calculated free energies in most instances (apart from some SOMD results). According to this criterion, the AMBER explicit implementation is the least consistent (10 deviations), followed by AMBER implicit (6 deviations), SOMD (6 deviations), CHARMM (5 deviations), GROMACS (5 deviations). The perturbations that give a discrepancy are not the same across codes, for instance methane->toluene with AMBER explicit deviates from the reference absolute hydration free energies by 0.33 kcal/mol, but at most 0.04 kcal/mol with other codes. SOMD and GROMACS show deviations of ca. 0.25 kcal/mol for methanol->methane but this is not the case for AMBER (implicit or explicit) or CHARMM.
+We reviewed firstly internal consistency of the different codes with the computed absolute hydration free energies. For each implementation we counted the number of times a calculated relative free energy deviates from the difference in reference absolute hydration free energies by more than 0.1 kcal/mol. This is significantly above the estimated uncertainties in calculated free energies in most instances (apart from some SOMD results). According to this criterion, the AMBER explicit implementation is the least consistent (10 deviations), followed by AMBER implicit (6 deviations), SOMD (6 deviations), CHARMM (5 deviations), GROMACS (5 deviations). The perturbations that give a discrepancy are not the same across codes, for instance methane->toluene with AMBER explicit deviates from the reference absolute hydration free energies by 0.33 kcal/mol, but at most 0.04 kcal/mol with other codes. SOMD and GROMACS show deviations of ca. 0.25 kcal/mol for methanol->methane but this is not the case for AMBER (implicit or explicit) or CHARMM.
 
 We next reviewed consistency between forwards and backwards relative hydration free energies. Again counting the number of deviations that exceed 0.1 kcal/mol indicates that AMBER explicit is the least consistent (3 deviations), followed by AMBER implicit (2 deviations), CHARMM (2 deviations), GROMACS (1 deviation), SOMD (1 deviation). The largest deviation is observed with AMBER implicit for 2-methylindole <-> methane (0.36 kcal/mol). 
 
@@ -1208,10 +1206,10 @@ We noticed a difference of approximately \SI{1.5}{kcal.mol^{-1}} between the
 split protocol without Coulomb softcore potentials and both protocols that 
 use it. The data shown in Figure \ref{S-fig:gro_sc_eff} 
 % JM ix broken referencing 
-suggests that softening of the 
+ suggests that softening of the 
 electrostatic interactions requires  adjustments in the $\lambda$-distance between 
 states in the rapidly varying part of the $\partial \mathcal{H}/\partial\lambda$, see 
-Figure \ref{S-fig:gro_sc_eff}. A variant that combined the bonded terms with the vdW transformation did not change this result.  Thus, we find that the split protocol without Coulomb softcore potentials is the most effective way to calculate relative free energies with the current GROMACS implementation.
+Figure \ref{S-fig:gro_sc_eff}  .  A variant that combined the bonded terms with the vdW transformation did not change this result.  Thus, we find that the split protocol without Coulomb softcore potentials is the most effective way to calculate relative free energies with the current GROMACS implementation.
 
 Additionally it is worth mentioning is that relative free energy 
 simulations that feature alchemical transformations of a hydrogen atom into a heavy atom will crash if the bond involving the hydrogen atom is constrained with algorithms such as SHAKE or LINCS.
@@ -1253,7 +1251,7 @@ tab.~\ref{S-tab:sire_constraints}x and fig.~\ref{S-fig:sire_constraints}x.
 
 This discrepancy occurs because in the SOMD implementation, the energies of constrained bonds are not evaluated, but the calculation of the energies of the solute at perturbed $\lambda$ values is carried out using the coordinates of the reference $\lambda$ trajectory. This leads to a neglect of contributions of 
 the bonded term (and associated coupled terms) to the free energy change. The effect is more pronounced for perturbations that feature a large change in equilibrium bond lengths, such as those where a hydrogen atom is perturbed 
-to/from a heavy atom. This problem has already been discussed by Pearlman et al.~\cite{pearlman1991overlooked} and Boresch et al.~\cite{doi:10.1021/jp981628n, doi:10.1021/jp981629f}.
+to/from a heavy atom. 
 
 %, as a missing bond--stretching term
 %JM
