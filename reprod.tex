@@ -801,9 +801,9 @@ CHARMM. The SOMD code produces figures that agree the most with all other MD pac
         \toprule
         Package & GROMACS & AMBER & CHARMM\\
         \midrule
-        SOMD    & 0.12 & 0.09 & 0.08 \\
-        GROMACS &      & 0.13 & 0.17 \\
-        AMBER   &      &      & 0.16 \\
+        SOMD    & \num{0.12+-0.01} & \num{0.09+-0.01} & \num{0.08+-0.01} \\
+        GROMACS &      		   & \num{0.12+-0.01} & \num{0.17+-0.01} \\
+        AMBER   &      		   &      	      & \num{0.17+-0.01} \\
         \bottomrule
       \end{tabular}
     }
@@ -893,15 +893,14 @@ the absolute simulations (Table~\ref{tab:mue-absolute}) and reach
         \toprule
         Package & GROMACS & AMBER & CHARMM \\
         \midrule
-        SOMD    & 0.18 & 0.23 & 0.19 \\
-        GROMACS &      & 0.14 & 0.31 \\
-        AMBER   &      &      & 0.32 \\
+        SOMD    & \num{0.11+-0.01} & \num{0.23+-0.01} & \num{0.18+-0.01} \\
+        GROMACS &      		   & \num{0.19+-0.01} & \num{0.19+-0.01} \\
+        AMBER   &      		   & 		      & \num{0.32+-0.01} \\
         \bottomrule
       \end{tabular}
     }
   \end{minipage}
 \end{table}
-
 %JM TODO compute uncertainties on MAD for Table4
 % xsmake plot instead of Table
 We can also compute the cycle closure error from Table~\ref{tab:amber-comp} for 
