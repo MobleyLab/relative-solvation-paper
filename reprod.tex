@@ -802,14 +802,15 @@ CHARMM. The SOMD code produces figures that agree the most with all other MD pac
         \toprule
         Package & GROMACS & AMBER & CHARMM\\
         \midrule
-        SOMD    & 0.12 & 0.09 & 0.08 \\
-        GROMACS &      & 0.13 & 0.17 \\
-        AMBER   &      &      & 0.16 \\
+        SOMD    & \num{0.12+-0.01} & \num{0.09+-0.01} & \num{0.08+-0.01} \\
+        GROMACS &      		   & \num{0.12+-0.01} & \num{0.17+-0.01} \\
+        AMBER   &      		   &      	      & \num{0.17+-0.01} \\
         \bottomrule
       \end{tabular}
     }
   \end{minipage}
 \end{table}
+
 
 Having established the predictive value from absolute transformations we now turn to computing $\Delta\Delta G_{\mathrm{hydr}}$ from relative mutations.  
 Table~\ref{tab:relative} summarizes the results for the four MD packages.  
@@ -889,7 +890,7 @@ transformations.  AMBER deviates also quite strongly from the other codes in the
 The MADs of the relative free energy simulations are presented in 
 Table~\ref{tab:mue-relative}.  They tend to be larger than the MADs from 
 the absolute simulations (Table~\ref{tab:mue-absolute}) and reach 
-\SI{0.3}{kcal.mol^{-1}} for CHARMM compared with AMBER and GROMACS.
+\SI{0.3}{kcal.mol^{-1}} for CHARMM compared with AMBER.
 \begin{table}[]
   \begin{minipage}{\linewidth}
     \caption{MAD (in \si{kcal.mol^{-1}}) comparing relative free energies from 
@@ -900,9 +901,9 @@ the absolute simulations (Table~\ref{tab:mue-absolute}) and reach
         \toprule
         Package & GROMACS & AMBER & CHARMM \\
         \midrule
-        SOMD    & 0.18 & 0.23 & 0.19 \\
-        GROMACS &      & 0.14 & 0.31 \\
-        AMBER   &      &      & 0.32 \\
+        SOMD    & \num{0.11+-0.01} & \num{0.23+-0.01} & \num{0.18+-0.01} \\
+        GROMACS &      		   & \num{0.19+-0.01} & \num{0.19+-0.01} \\
+        AMBER   &      		   & 		      & \num{0.32+-0.01} \\
         \bottomrule
       \end{tabular}
     }
