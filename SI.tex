@@ -32,7 +32,7 @@
 \newcommand{\hred}[1]{\textcolor{red}{#1}}
 
 
-\title{Are Alchemical Free Energy Calculations Reproducible?}
+\title{Are FEP Calculations Reproducible?}
 
 \input{affiliations}
 
@@ -291,6 +291,37 @@ neopentane & \num{2.71+-0.06}  & \num{2.63+-0.01}   &
   \end{minipage}
 \end{table}
 The results agree very well with each other except for 2--CPI and 7--CPI and larger SEM in the SOMD results. % HHL: check this!
+
+
+\begin{table}
+  \begin{minipage}{\linewidth}
+    \caption{Changes in volumes (in cubic angstrom) for selected perturbations across packages}\label{tab:volumes-relative}
+    \makebox[\textwidth][c]{%
+    \begin{tabular}{llrrrrr}
+      \toprule
+   transformation  &  & AMBER & CHARMM & GROMACS & SOMD \\
+        \midrule
+      methane       & ethane        & 38$\pm$6  & 24$\pm$3  & 31$\pm$X  & 61$\pm$25   \\
+      ethane       & methane        & -29$\pm$7  & -30$\pm$4  & -28$\pm$X  & -50$\pm$30  \\
+      ethane       & methanol        & -33$\pm$9  & -36$\pm$2  & -36$\pm$X  & -66$\pm$36  \\
+      methanol       & ethane        & 38$\pm$8  & 37$\pm$3  & 36$\pm$X  & 46$\pm$31  \\
+      methane       & methanol        & -5$\pm$11  & -9$\pm$2  & -3$\pm$X  & 11$\pm$20 \\
+      methanol       & methane        & 8$\pm$10  & 1$\pm$2  & 4$\pm$X  & 27$\pm$16  \\
+      methane       & toluene        & 93$\pm$11  & 89$\pm$3  & 110$\pm$X  & 120$\pm$56 \\
+       toluene      & methane        & -106$\pm$8  & -89$\pm$8  & -113$\pm$X  & -145$\pm$23  \\
+      methane       & 2-methylindole        & 164$\pm$11  & 64$\pm$3  & 142$\pm$X  & 140$\pm$22 \\
+       2-methylindole      & methane        & -138$\pm$8  & -120$\pm$7  & -139$\pm$X  & -166$\pm$45  \\
+      methane       & neopentane        & 99$\pm$9  & 90$\pm$2  & 115$\pm$X  & 117$\pm$50\\
+       neopentane      & methane        & -105$\pm$11  & -100$\pm$2  & -114$\pm$X  & -68$\pm$43  \\
+     
+       
+     \bottomrule
+    \end{tabular}
+}
+  \end{minipage}
+\end{table}
+
+
 
 \subsection{AMBER}
 \label{sec:amber-probs}
