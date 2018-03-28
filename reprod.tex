@@ -731,7 +731,7 @@ and are considerably simpler to set up and implement than relative calculations.
 Prior work has successfully compared calculated absolute hydration free energies across GROMACS and DESMOND
 codes.~\cite{klimovich_predicting_2010} 
 % That is stretching this a bit too much. Only GROMACS and DESMOND were compared. And DESMOND is not even considered in the present study. Could we rephrase this ?
-% CAPTION OF FIGURE 7: Hydration free energies computed with DESMOND versus those from this study (GROMACS). Shown are hydration free energies computed using the same force field parameters and TIP3P water model (but slightly different AM1-BCC partial charges) in DESMOND plotted versus those computed here. The diagonal gray line denotes differences of ± 1 kcal/mol
+% CAPTION OF FIGURE 7: Hydration free energies computed with DESMOND versus those from this study (GROMACS). Shown are hydration free energies computed using the same force field parameters and TIP3P water model (but slightly different AM1-BCC partial charges) in DESMOND plotted versus those computed here. The diagonal gray line denotes differences of ¬± 1 kcal/mol
 %JM I have toned down above claims to address comment
 
 Table~\ref{tab:absolute2} summarizes results for relative free energies of 
@@ -744,7 +744,7 @@ The $\Delta G_{\mathrm{hydr}}$
 obtained with the various MD packages in 
 this way agree quite well given statistical errors, although some larger deviations are apparent as 
 well.  GROMACS predicts a smaller $\Delta G_{\mathrm{hydr}}$ for methanol by about \SI{+0.2}{kcal.mol^{-1}}.  Similarly, there are some small discrepancies in the toluene, 2--methylfuran and 2--methylindole cases, where CHARMM produces slightly smaller $\Delta G_{\mathrm{hydr}}$. These small discrepancies may be due to the differences in calculated densities between CHARMM and other codes (typically smaller by ca. 0.01 g/cm3). 
-% BR: NO, the maximum difference from CHARMM is not 0.4 kcal/mol, it is 0.19 for toluene, 0.17 for 2–methylfuran, 2–methylindole -0.36 
+% BR: NO, the maximum difference from CHARMM is not 0.4 kcal/mol, it is 0.19 for toluene, 0.17 for 2√êmethylfuran, 2√êmethylindole -0.36 
 %JM I think is is addressed in the text now
 The largest deviation can be found for one of the largest
 molecule (7-CPI) with the AMBER result less negative than with the other MD packages by higher by 0.4--\SI{0.8}{kcal.mol^{-1}}. This particular discrepancy does not correlate with significant variations in density between AMBER and other codes. 
@@ -874,6 +874,7 @@ CHARMM. The SOMD code produces figures that agree the most with all other MD pac
     }
   \end{minipage}
 \end{table}
+
 
 Having established the predictive value from absolute transformations we now turn to computing $\Delta\Delta G_{\mathrm{hydr}}$ from relative mutations.  
 Table~\ref{tab:relative} summarizes the results for the four MD packages.  
