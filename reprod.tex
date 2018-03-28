@@ -546,8 +546,7 @@ Langevin thermostat with a friction constant of \SI{2.0}{ps^{-1}} and pressure
 rescaling through a Monte Carlo barostat with 100 steps between isotropic 
 volume change attempts.  Long--range electrostatics in solution was handled 
 with PME and a cutoff of \SI{8.0}{\angstrom} for both Coulomb and vdW 
-interactions.  In vacuum no cutoff was used. Typically 11 windows were used for charge mutations and 21 windows for VdW mutations. In some instances steep variations in gradients were observed with this protocol and additional windows were added to obtain smoother integration profiles. A Long Range Correction (LRC) term for truncated VdW interactions is applied during the MD simulations. 
-  {\color{red} still need some minor details such as ns per windows, number of windows for the one step protocol}
+interactions.  In vacuum no cutoff was used. Typically 11 windows were used for charge mutations and 21 windows for VdW mutations. In some instances steep variations in gradients were observed with this protocol and additional windows were added to obtain smoother integration profiles. A Long Range Correction (LRC) term for truncated VdW interactions is applied during the MD simulations. Absolute transformations were carried out using a one step protocol featuring 21 windows initially. For some perturbations additional windows were run in regions where the free energy gradients varied sharply. Each window was simulated for 2.5 ns, with the first 0.2 ns discarded prior analysis.
 
 \paragraph{CHARMM.} The CHARMM c40b1 molecular dynamics package was used to 
 carry out all relative hydration free energy simulations.  21 evenly spaced 
