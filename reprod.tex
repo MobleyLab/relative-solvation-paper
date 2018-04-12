@@ -194,9 +194,12 @@ molecules and biomolecules~\cite{doi:10.1021/ja512751q,
 
 RAFEs can be calculated by making use of either the so--called single or dual topology method.
 % BR: We should introduce dual topology before single topology, as it is conceptually simpler.
-Dual topology means that \emph{all} atoms of the end states are
+Dual topology means that groups of atoms of the end states are
 duplicated and thus both sets are present at all
-times but do not interact with each other \cite{doi:10.1021/j100056a020, doi:10.1021/jp981628n}.  Only non--bonded
+times but do not interact with each other \cite{doi:10.1021/j100056a020, doi:10.1021/jp981628n}.  The atom types are not changed, and, in principal, the groups
+of both states would need to have the same total charge to avoid partially
+charged intermediates.  In practice this may mean, depending on force field,
+to duplicate all atoms of the end states.  Only non--bonded
 interactions need to be scaled such that the disappearing end state
 corresponds to an ideal gas molecule~\cite{doi:10.1021/jp981628n}.
 The dual topology method is the most straightforward approach to compute RAFEs when the two molecules are structurally dissimilar.
@@ -953,7 +956,8 @@ Again the data is from the recommended protocol (see detailed discussions in the
   \begin{minipage}{\linewidth}
     \caption{Comparison of relative free energies of hydration for various MD
       packages as obtained from absolute (AFE) and relative (RAFE) transformations via unified or split
-      protocols.  The values from AFE absolute (given first) were taken from Table 1. Signs of the  backward transformation have been reversed to
+      protocols.  The values from AFE absolute (given first) were
+      taken from Table 1.  Signs of the  backward transformation have been reversed to
       correspond to the forward transformation for easier comparison. }\label{tab:relative}
     \makebox[\textwidth][c]{
       \begin{tabular}{llrrrrr}
