@@ -33,6 +33,7 @@
 
 
 \title{Are FEP Calculations Reproducible?}
+% REMEMBER TO UPDATE TITLE
 
 \input{affiliations}
 
@@ -501,6 +502,17 @@ explicit, partial & & & & & \\
 \subsection{SOMD}
 \label{sec:sire-probs}
 
+As discussed in the main tex, the presend SOMD calculations used a shifted atom-based Barker-Watts reaction field cutoff to handle electrostatic interactions in solutions and a Coulomb laws without cutoffs to handle electrostatic interactions in vacuum. 
+This leads to an inconsistent description of the intramolecular electrostatic interactions of the solute in the solvated and vacuum phases.   
+To maintain a consistent description of intramolecular energetics across vacuum and water legs, 
+a free energy correction term $\Delta G_{\mathrm{c}}$ was  evaluated as detailed in Ref.~\citenum{Bosisio2016}.  
+The $\Delta G_{\mathrm{c}}$ term was obtained via post-processing of the end state trajectories of each water phase simulation, using the Zwanzig relationship~\cite{zwanzig_high-temperature_1954}:
+\begin{equation}
+ \label{eq:ZwanzigDGfunc}
+ \Delta G_{\mathrm{c}} = -\beta^{-1} \ln \langle \exp  \left[-\beta(U_{\mathrm{ic,nc}}(\mathbf{r}) -  U_{\mathrm{ic,sim}}(\mathbf{r}))\right]\rangle_{\mathrm{sim}}
+\end{equation}
+where $U_{\mathrm{ic,nc}}(\mathbf{r})$ is the solute intramolecular electrostatic-no cutoff potential that depends on the coordinates $\mathbf{r}$ of the solute and is given by Coulomb's law computed without cutoffs. 
+$U_{\mathrm{ic,sim}}(\mathbf{r})$ is the intramolecular electrostatic potential term as computed in the simulation with the shifted atom-based Barker-Watts Reaction Field cutoff. 
 
 Figure ~\ref{fig:sire_histogram} compare relative free energy of hydration $\Delta\Delta G$ with relative $\Delta\Delta G$ estimations from absolute free  
 energy calculations for all the transformation of the dataset.
