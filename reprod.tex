@@ -48,14 +48,14 @@
 \renewcommand\thefigure{{\bf \arabic{figure}}}
 \renewcommand{\figurename}{{\bf Figure}}
 
+\title{\color{red}Reproducibility Limit of Free Energy Perturbation (FEP) Calculations}
+% OPTIONS
+%\title{Comparison of Free Energy Calculations Between Different Molecular Simulation Software}
 %\title{Are FEP Calculations Reproducible?}
-\title{\color{red}Comparison of Free Energy Calculations Between Different Molecular Simulation Softwares}
 
 \input{affiliations}
 
 \keywords{Free Energy, Hydration, Alchemical, Reproducibility, Automation}
-
-
 
 \begin{document}
 
@@ -73,7 +73,7 @@
   well tested than its absolute counterpart.  Here we present the
   results for RAFE calculations for hydration free energies of a set
   of small organic molecules and demonstrate that free energies can be
-  reproduced to within 0.2--\SI{0.3}{kcal/mol} with aforementioned
+  reproduced to within about \SI{0.2}{kcal/mol} with aforementioned
   codes.  Achieving this level of reproducibility requires considerable
   attention to detail and package--specific simulation protocols. The
   benchmarks and protocols reported here should be useful for the
@@ -181,16 +181,17 @@ not.
 {\color{red}
 {\footnotesize [BR: The distinction between decoupling (DDM) and annihilation (DAM) here is not quite how I would put it (most annihilation calculations do not turn off intramolecular interactions as far as I know). 
 The formal difference has more to do with the introduction of a ligand restraint to deal with the standard state business than with intramolecular interactions, no?]}}
-The term \emph{decoupling} typically means the scaling of the non--bonded
-\emph{inter}--molecular interactions between the perturbed group (all atoms
+{\color{blue}
+{\footnotesize [JM: Added reference to reviews that use this terminology. The confusion is that 'double decoupling' and 'decoupling' refer to different things.]
+}}
+The term \emph{decoupling} here is taken as meaning the scaling of the non--bonded \emph{inter}--molecular interactions between the perturbed group (all atoms
 that differ in at least one force field parameter between the end states) and
 its environment.  We distinguish decoupling from \emph{annihilation},
 as the latter also includes a scaling of
 the \emph{intra}--molecular non-bonded interactions in addition to the
-inter--molecular interactions.  Torsional interactions may also be scaled in a double annihilation protocol, but bond and angle terms are usually not scaled as this leads to poorly converging free energy changes.~\cite{doi:10.1021/jp981628n}
-% BR: This protocol turns a set of atoms into an ideal gas (no LJ, no bonds...). Is there any one who is rigorously this kind of annihilation? 
-% I thought maybe only Bill Jorgensen in the early days was doing this with Monte Carlo... It literally cannot be done with MD.
-%JM: clarified that annihilation means the intramolecular non-bonded interactions are also turned off (and possibly torsions). We do that in SOMD.
+inter--molecular interactions.~\cite{shirtsmobleyreview_2013} {\color{blue}{\footnotesize [JM: added a reference to review from Shirts and Mobley Methods in Mol. Biol. 924:271-311 (2013) where this is introduced  ]}}  Torsional interactions may also be scaled in a double annihilation protocol, but bond and angle terms are usually not scaled as this leads to poorly converging free energy changes.~\cite{doi:10.1021/jp981628n}
+% BR: This protocol turns a set of atoms into an ideal gas (no LJ, no bonds...). Is there any one who is rigorously this kind of annihilation? I thought maybe only Bill Jorgensen in the early days was doing this with Monte Carlo... It literally cannot be done with MD.
+%JM: clarified that annihilation means the intramolecular non-bonded interactions are also turned off (and possibly torsions). We do that in SOMD. (RESOLVED)
 These schemes may require two
 simulations along the opposite edges of a quadrilateral thermodynamic cycle
 but approaches that produce the reversible work directly in one simulation
@@ -198,19 +199,18 @@ have been proposed as well~\cite{doi:10.1063/1.3519057, C3FD00125C}.
 
 Relative alchemical free energy (RAFE) calculations transform or
 mutate one molecule into another. 
-{\color{blue}
-The most appealing aspect of RAFE calculations is the hope that they may be somewhat less demanding computationally
-or converge better than the more ambitious approaches that require a complete decoupling of a ligand from its environment.} 
+An appealing aspect of RAFE calculations is the hope that they may be somewhat less demanding computationally
+or converge better than the more ambitious approaches that require a complete decoupling of a ligand from its environment.
 RAFEs have proven useful for
 instance to rank sets of related molecules according to their binding
-affinity for a given receptor. For instance, has this approach
+affinity for a given receptor. This approach has
 recently gained increased traction in the context of relative free
 binding energies between small molecules, e.g.\ drug or lead like
 molecules and biomolecules~\cite{doi:10.1021/ja512751q,
   doi:10.1021/acs.jctc.6b00991}.
 
 RAFEs can be calculated by making use of either the so--called single or dual topology method.
-% BR: We should introduce dual topology before single topology, as it is conceptually simpler.
+% BR: We should introduce dual topology before single topology, as it is conceptually simpler. (RESOLVED)
 Dual topology means that groups of atoms of the end states are
 duplicated and thus both sets are present at all
 times but do not interact with each other \cite{doi:10.1021/j100056a020, doi:10.1021/jp981628n}.  The atom types are not changed, and, in principal, the groups
@@ -218,18 +218,17 @@ of both states would need to have the same total charge to avoid partially
 charged intermediates.  In practice this may mean, depending on force field,
 to duplicate all atoms of the end states.  Only non--bonded
 interactions need to be scaled such that the disappearing end state
-{\color{blue} is fully decoupled from its environment~\cite{doi:10.1021/jp981628n}.}
-%corresponds to an ideal gas molecule~\cite{doi:10.1021/jp981628n}.
+is fully decoupled from its environment~\cite{doi:10.1021/jp981628n}.
 The dual topology method is the most straightforward approach to compute RAFEs when the two molecules are structurally dissimilar.
 Technically, a dual topology calculation is the same as two absolute calculations, executed simultaneously in opposite directions.
 This, however, comes with additional complications as the two independent
 molecules can drift apart and sample completely different environments (e.g., binding site versus bulk solution).
 %BR: This has some similarity with the wandering ligand problem, but adding too much here may lead to confusion.
-%so suffer from the ``wandering'' ligand problem, as in absolute transformations\cite{Hermans-1986,Roux-bR-1996,GILSON19971047,Hermans-1997, doi:10.1021/jp0217839, deng_computations_2009}.
+%so suffer from the ``wandering'' ligand problem, as in absolute transformations\cite{Hermans-1986,Roux-bR-1996,GILSON19971047,Hermans-1997, doi:10.1021/jp0217839, deng_computations_2009}. (RESOLVED)
 It has been shown though that with the introduction of
 special restraints or constraints this can be a viable
 option~\cite{doi:10.1021/ct700081t, rocklin_separated_2013, JCC:Axelsen-Li}.
-%BR: Actually, this procedure can be incorrect if the intramolecular terms are retained between the dummies. Then, there is double counting of those terms.
+%BR: Actually, this procedure can be incorrect if the intramolecular terms are retained between the dummies. Then, there is double counting of those terms. (RESOLVED -not discussing merits of other papers)
 Restraints between corresponding atoms can also be used without affecting the free
 energy~\cite{JCC:Axelsen-Li}.  A recent
 alternative~\cite{doi:10.1021/acs.jctc.5b00179} considered molecules with a
@@ -244,7 +243,7 @@ Single topology means that there is only one connected representation of the mol
 % deleted: also implying a  single set of coordinates.
 % BR This is not true: in dual topology too there is a single set of coordinates
 % JM  in some codes there are two sets of coordinates but I think
-% we don't have to go in that level of details
+% we don't have to go in that level of details (RESOLVED)
 Atoms of a given type are directly transformed, typically by linearly scaling the force field parameters, into atoms of a different type.
 The single topology method \cite{doi:10.1021/j100056a020, Michel2010,doi:10.1063/1.449208,doi:10.1021/j100056a020, doi:10.1021/jp981628n}
 offers a straightforward route to implement RAFE calculations~\cite{doi:10.1021/j100056a020, Michel2010}.
@@ -257,19 +256,14 @@ However, it is important to stress that a dummy atom should retain at most only
 one angle term (Atom1--Atom2--Dummy) and one dihedral term
 (Atom1--Atom2--Atom3--Dummy) with respect to real atoms
 to yield correct results \cite{doi:10.1021/jp981628n,doi:10.1021/jp994193s}.
+{color{red} JM: HL mark as resolved discussion in comments in the tex source if the issue is resolved }
 %DLM: I don't actually understand why this is; clarify slightly? What's wrong with having a second angle term of a second dihedral? And what exactly is meant by "angle term"? e.g. if I have a benzene proton I am turning into a dummy atom, it has two different angle terms running in different directions around the ring; do these comprise two different "angle terms"?
 %DLM: What I had THOUGHT was the issue was that if your dummy atoms formed a closed loop, then you'd have problems, but otherwise the situation was OK.
+%HL CAN YOU CLARIFY IF RESOLVED ?
 %
 % BR: I cannot make sense of the rest of the paragraph. Also, you seem to ascribe this method only to AMBER and yet one reference is from me (with CHARMM).
-%JM removed paragraph as that level of details is better discussed  when the AMBER implementation is explained.
-%Dummy atoms are typically explicitly listed in topologies as atoms %with null nonbonded parameters. AMBER is a notable exception %where the user only flags the  disappearing and appearing
-%atoms in topologies of the respective end-states in the control
-%file of the MD engine.
-%
-%The contributions of bonded terms that involve at least one %dummy atom are not factored into the free energy
-%as it is assumed that those contributions will perfectly cancel out %in the
-%thermodynamic cycle~\cite{doi:10.1021/acs.jcim.5b00057, doi:%10.1021/jp994193s}.
-%
+%JM removed paragraph as that level of details is better discussed  when the AMBER implementation is explained. (RESOLVED)
+
 The single topology approach~\cite{doi:10.1021/j100056a020} seeks to exploit the
 topological and structural similarity of the two end states.
 Chemical similarity is also of
@@ -344,12 +338,11 @@ point of code development.
 \section{Methods}
 \label{sec:methods}
 
-{\color{blue}
 One practical challenge is that the free energy methodologies
 used in one MD program are not always available in another
 package, or the same functionality is provided via different algorithms (e.g. algorithms for pressure and temperature 
 scaling, integrators, etc).  In addition there may be difference in the  choice of physical constants used for evaluating potential energies. A previous study noted that variations in the hardcoded values of Coulomb's constant lead to detectable differences in single point energies calculated by CHARMM, AMBER or GROMACS.\cite{Shirts2017,SOMDcoulomb}  
-To circumvent some of these practical problems, }
+To circumvent some of these practical problems, 
 we will compare relative free energies calculated via three
 protocols.  In the ``unified protocol'' we calculate relative free
 energies by scaling together all force field parameters i.e.\ partial
@@ -358,10 +351,7 @@ simultaneously along the alchemical path.  In the ``split protocol''
 we calculate relative free energies by scaling separately the van der
 Waals parameters and the partial charges parameters.  The order in
 which this has to be done is detailed in
-section~\ref{S-sec:separated}x of the SI.  The scaling of the bonded
-terms can be combined with either transformation.  In the ``absolute
-protocol'' we calculate relative hydration free energies as the
-difference between two calculated absolute hydration free energies.
+section~\ref{S-sec:separated}x of the SI.  The scaling of the bonded terms can be combined with either transformation.  In the ``absolute protocol'' we calculate relative hydration free energies as the difference between two calculated absolute hydration free energies.
 
 \subsection{Alchemical Free Energy Implementations}
 \label{sec:afe_impl}
@@ -396,12 +386,6 @@ latter case, the total energy is scaled, all at once, or, equivalently for each
 individual force field contribution.  While free energy is a state function that
 depends only on the end points, the mathematical pathways taken by the
 two methods through state space or alchemical space are different.
-% BR: Need to state this?
-%It should be noted, however, that modification of Lennard-Jones
-%interactions is handled through softcore functions in modern codes (as is, in
-%some cases, that for electrostatic interactions) and thus parameter
-%scaling~\cite{doi:10.1021/j100056a020, JCROSS1986198} is now only used for
-%bonded terms and sometimes electrostatic interactions, at least in modern codes.
 
 One more important issue is whether the code allows holonomic constraints to be applied
 to bonds, which change bond lengths in a transformation e.g.\ C--H to C--C.
@@ -428,21 +412,7 @@ end--states.  We call this the ``implicit dummy protocol'' since the
 procedure is handled automatically by the software through analysis of
 the end--state topologies rather than via explicit definition of dummy
 atoms in an input topology.
-%
-%allows, however, mapping of atoms in a single topology fashion %and computes 
-%these non--softcore atoms  by linearly scaling the energy and %forces for each 
-%atom in the pair. 
-%
-% The softcore 
-%potential applies to any atom chosen by the user which may %include atoms that 
-%actually have an equivalent in the other state.  Non--softcore %atoms must still 
-%match 1:1 in both states.  
-% BR: I do not understand what this means. It sounds very odd. 
-%Explicit dummy atoms are not needed as the code will 
-%only compute bonded contributions for ``real'' atoms and thus %ignores bonded 
-%energies involving dummy atoms.  We will call this the ``implicit %dummy 
-%protocol''. 
-%
+
 The code cannot handle bond length changes involving a constraint.
 There is only one global $\lambda$ for parameter transformation.
 Protocols that couple only some parameters (split protocols, see
@@ -453,7 +423,7 @@ Alternatively it is possible for the user to construct an input
 topology of a single molecule that explicitly contains dummy atoms
 such that the desired end--states can be simulated.  This is a similar approach to that employed by SOMD and GROMACS, and we call this the ``explicit dummy protocol''.
 
-% BR: Personally, I would not call PERT a dual topology. In fact, it is neither completely dual nor single. It depends on the user.
+% BR: Personally, I would not call PERT a dual topology. In fact, it is neither completely dual nor single. It depends on the user.(RESOLVED)
 \paragraph{CHARMM.} The PERT module duplicates the topology similar to
 \progname{sander} but mapped atoms are given in the topology only once.
 The module requires balancing with explicit dummy atoms.  All energy terms are
@@ -507,7 +477,6 @@ does not match is made a dummy atom.  FESetup allows
 equilibration of the solvated simulation systems and ensures that
 ``forward'' and ``backward'' simulations have the same number of
 total atoms.  With SOMD the mass of each perturbed atom is taken as the mass of the heavier end--state atom (e.g.\ a hydrogen atom that is perturbed to a carbon atom has an atomic mass of 12 amu at all lambda values).  The masses of perturbed atoms are set to the mass of the heavier atom description they are being perturbed to for SOMD.  The other codes use the atom masses of the initial state (AMBER, CHARMM) or allow the user to define how masses vary as a function of lambda (GROMACS).
-% HHL: Donghyuk, please clarify!
 The tool creates all input files with control
 parameters, topologies and coordinates as required for RAFE
 simulations.  Full details on FESetup can be found in
@@ -547,7 +516,7 @@ neopentane (blue).  The first approach will be called ``terminally mapped'' and
 the second one ``centrally mapped''.
 
 
-\subsection{Free Energy Simulation Protocols}   %BR: NOT ONLY ABOUT RAFE IN THE FOLLOWING...
+\subsection{Free Energy Simulation Protocols}   %BR: NOT ONLY ABOUT RAFE IN THE FOLLOWING...(RESOLVED)
 \label{sec:rafe_protocols}
 
 One of the major goals of the present study is to ensure
@@ -611,10 +580,11 @@ differently sized solutes.  To make the number of atoms the same for forward
 and backward setups the water coordinates of the larger of the two boxes are
 chosen.  Thus, in transformation from a smaller to a larger solute, water
 molecules may be in close proximity to the solute.  The production simulations
-were run at \SI{298.15}{K} and \SI{1.0}{bar}.
-{\color{red} \footnotesize \bf [BR: This is true for all programs, yes?]}
-{\color{blue} Atomic masses were not changed along the alchemical transformations (this would affect only the kinetic energy and would not contribute to the free energy change). 
-}
+were run at \SI{298}{K} and \SI{1.0}{bar}.
+{\color{red} \footnotesize \bf [BR: This is true for all programs, yes?}
+{\color{blue} \footnotesize \bf [JM: I dug up the input files on the git repository and it looks like AMBER and SOMD used 298.0 K, but  GROMACS and CHARMM used 298.15 K]}
+Atomic masses were not changed along the alchemical transformations (this would affect only the kinetic energy and would not contribute to the free energy change). 
+
 
 %BR: I SUGGEST TO ORDER ALL THE ITEMS SIMILARLY FOR ALL THE PROGRAMS...
 %\paragraph{PROGRAM.} 
@@ -629,7 +599,7 @@ were run at \SI{298.15}{K} and \SI{1.0}{bar}.
 %Cutoff for the vacuum simulations
 %Soft-core?
 %Long Range Correction (LRC) term 
-{\color{blue}
+
 \paragraph{AMBER.} 
 The AMBER16 program was used for this set of free energy calculations.  
 %
@@ -658,8 +628,6 @@ A Long Range Correction (LRC) term for truncated VdW interactions is applied dur
 %
 {\color{red} Not a word about the soft-core here, what about this? }
 
-
-
 \paragraph{CHARMM.} 
 The version c40b1 was used for this set of free energy calculations.  
 The PERT module was used to handle the alchemical transformations. 
@@ -683,8 +651,6 @@ The PERT module currently does not currently support the force switching (option
 The CHARMM PARAM27 force fields, however, is parameterized to use force switching \cite{JCC:JCC21287}. 
 Accordingly, we used potential switching only (option \inpopt{VSwitch}) with an inner cutoff of \SI{10}{\angstrom} and outer cutoff of \SI{12}{\angstrom}.
 
-
-
 \paragraph{GROMACS.} 
 GROMACS version 4.6.7 was used to carry out this set of free energy calculations. 
 %
@@ -693,7 +659,6 @@ Each transformation had its Gibbs free energy calculated:
 (ii) in a single topology approach in which bonded, LJ, and electrostatic terms are changed together; and 
 (iii) via the difference between two absolute calculations.
 In the first two cases, each alchemical transformation was described by 31 and 16 states, respectively, and simulated for \SI{4.2}{ns} with time steps of \SI{1.0}{fs} in water and vacuum. 
-%Atomic masses were not changed along the alchemical path; their change affect kinetic energy only and do not contribute to the free energy change. 
 We used a 20-step alchemical protocol where charge coupling and LJ coupling were dealt with separately along the path \cite{Mobley2014, doi:10.1021/acs.jced.7b00104}.
 %
 The free energies were calculated from \SI{5}{ns} Langevin dynamics at \SI{298.15}{K}. 
@@ -705,7 +670,6 @@ Two methods were used to calculate electrostatic interactions:
 Particle Mesh Ewald (PME) and charge group-based Reaction Field with a dielectric of 78.3, as implemented in the software. 
 PME calculations were of order 6 and had a tolerance of \num{1.0d-6}, with a grid spacing of \SI{1.0}{\angstrom}. 
 We set the real-space electrostatic and VdW cutoffs to \SI{10.0}{\angstrom}; a switch was applied to the latter starting at \SI{9.0}{\angstrom}. 
-%Non--bonded interactions in the vacuum legs of the simulation were calculated to a cutoff of \SI{50.0}{\angstrom}. 
 A cutoff \SI{50.0}{\angstrom} was used for the vacuum simulations.
 %
 A Long Range Correction (LRC) term for truncated VdW interactions was applied during the MD simulations. 
@@ -715,197 +679,29 @@ We chose the 1--1--6 softcore potential for LJ terms ($\alpha$=0.5 and $\sigma$=
 and used the default softcore Coulomb implementation in paths where charges, LJ, and bonded terms were modified together, 
 but no soft core potentials were applied to Coulomb interactions when electrostatic interactions were modified separately.  
 
-
-
 \paragraph{SOMD.} 
-{\footnotesize \bf \color{red}[BR: this section is messy with too much detail put in random order...]}
+%Program and module used.
 This set of free energy calculations was carried out with SOMD from the Sire 2016.1 release ~\cite{Sire-2016, doi:10.1021/ct300857j}.
-%
-Each alchemical transformation was divided into 17 evenly spaced windows and simulated for \SI{2}{ns} each both in water and in vacuum. 
-%
-A velocity-Verlet integrator was employed with a \SI{2}{fs} time step, constraining only bonds involving hydrogens which are not alchemically transformed.  
-This approach will be called the ``unperturbed H bond constraint protocol''. 
-Referring to Eq.~S\ref{S-eq:general-softcore}, the softcore parameters were set to default values for all the transformations, 
-specifically $n = 0$ for Coulombic interactions and $\alpha = 2.0$ for the LJ potential~\cite{doi:10.1021/ct700081t}.  
-%
-A shifted atom--based Barker--Watts reaction field~\cite{doi:10.1080/00268977300102101} with a dielectric constant of \num{78.3} was adopted for the solution phase simulations with a cutoff of \SI{10}{\angstrom}. 
-A similar cutoff was used for LJ interactions. 
-%
+%Number of windows
+Each alchemical transformation was divided into 17 evenly spaced windows and simulated for \SI{2}{ns} each both in water and in vacuum. The absolute hydration free energies were computed by annihilating non-bonded interactions of the solute in two steps. In the first step the free energy change for discharging the solute was computed. In the second step the free energy change for turning off the Lennard-Jones terms of the discharged solute was computed. Each step was carried out using 17 evenly spaced windows. 
+%Starting coordinates of the windows
+The starting coordinates for each window were obtained by energy minimization of the same pre-equilibrated configuration generated by FESetup. 
+%Simulation length timestep
+A velocity-Verlet integrator was employed with a \SI{2}{fs} time step.  
+%SHAKE and CONSTRAINTS
+Only bonds involving hydrogens which are not alchemically transformed were constrained. This approach is referred as the ``unperturbed H bond constraint protocol''.
+%Temperature and pressure
 Temperature control was achieved with the Andersen thermostat~\cite{doi:10.1063/1.439486} with a coupling constant of \SI{10}{ps^{-1}}.  
 A Monte Carlo barostat assured pressure control, with isotropic box edge scaling moves attempted every 25 time steps.
-%
-The reaction field was not employed in the vacuum legs, where a Coulombic potential without cutoff was used.  
-This leads to an inconsistent description of the intramolecular electrostatic interactions of the solute in the solvated and vacuum phases.   
-{\footnotesize \bf \color{red}[BR: I do not understand why proceed this way.... You mean that you ran the vacuum with the same short cutoff as in solution? But then why not simply running the
-vaccum simulation with a large enough cutoff to avoid all this?]}
-To maintain a consistent description of intramolecular energetics across vacuum and water legs, 
-a free energy correction term $\Delta G_{\mathrm{c}}$ was  evaluated as detailed in Ref.~\citenum{Bosisio2016}.  
-The $\Delta G_{\mathrm{c}}$ term was obtained via post-processing of the end state trajectories of each water phase simulation, using the Zwanzig relationship~\cite{zwanzig_high-temperature_1954}:
-\begin{equation}
- \label{eq:ZwanzigDGfunc}
- \Delta G_{\mathrm{c}} = -\beta^{-1} \ln \langle \exp  \left[-\beta(U_{\mathrm{ic,nc}}(\mathbf{r}) -  U_{\mathrm{ic,sim}}(\mathbf{r}))\right]\rangle_{\mathrm{sim}}
-\end{equation}
-where $U_{\mathrm{ic,nc}}(\mathbf{r})$ is the solute intramolecular electrostatic-no cutoff potential that depends on the coordinates $\mathbf{r}$ of the solute and is given by Coulomb's law computed without cutoffs. 
-$U_{\mathrm{ic,sim}}(\mathbf{r})$ is the intramolecular electrostatic potential term as computed in the simulation with the shifted atom-based Barker-Watts Reaction Field cutoff. 
+%PME and cutoff of real-space ELEC part and vdW, swithing-shifting-truncation?
+A shifted atom--based Barker--Watts reaction field~\cite{doi:10.1080/00268977300102101} with a dielectric constant of \num{78.3} was adopted for the solution phase simulations with a cutoff of \SI{10}{\angstrom}. A similar cutoff was used for LJ interactions. 
+%Cutoff for the vacuum simulations
+The reaction field was not employed in the vacuum legs, where a Coulombic potential without cutoff was used.  A protocol to account for the different treatment of intramolecular electrostatics in vacuum and solution is described in the supporting information.
+%Soft-core?
+Referring to Eq.~S\ref{S-eq:general-softcore}, the softcore parameters were set to default values for all the transformations, 
+specifically $n = 0$ for Coulombic interactions and $\alpha = 2.0$ for the LJ potential~\cite{doi:10.1021/ct700081t}.  
+%Long Range Correction (LRC) term 
 Additionally, an end-point correction for truncated VdW potentials was applied by post-processing of end-state trajectories as described previously elsewhere.~\cite{shirtsLRC,BosisioHG}
-%
-To compute absolute free energy of hydration a double annihilation technique~\cite{jorgensen1988efficient,GILSON19971047,Bosisio2016} was adopted. 
-{\footnotesize \bf \color{red}[BR: Why is this not called double decoupling rather than double annihilation? Aren't you turning off just the nonbonded interactions, and keeping the intramolecular terms?]}
-Initially the solute atoms' partial charges are turned off both in water and in vacuum (discharging step), giving a discharging
-free energy change $\Delta G_\mathrm{solv}^\mathrm{elec}$ and $\Delta G_\mathrm{vac}^\mathrm{elec}$ respectively. 
-Secondly, the molecule is fully decoupled from the surrounding environment by switching  off the Lennard-Jones terms (vanishing step), 
-giving a $\Delta G_\mathrm{solv}^\mathrm{LJ}$ free energy change in water phase and $\Delta G_\mathrm{vac}^\mathrm{LJ}$ free energy change in vacuum. 
-Next, the absolute free energy of hydration $\Delta G_\mathrm{wat}$ is computed as:
-\begin{equation}
-\label{eq:absolutehyd}
-\Delta G_\mathrm{wat} = (\Delta G_\mathrm{solv}^\mathrm{elec} + \Delta G_\mathrm{solv}^\mathrm{LJ}) - (\Delta G_\mathrm{vac}^\mathrm{elec} + \Delta G_\mathrm{vac}^\mathrm{LJ}) + \Delta G_c
-\end{equation}
-The same setup for relative free energy calculations was followed to compute absolute free energies of hydration. 
-{\footnotesize \bf \color{red}[BR: why so much detail about this standard stuff here? All the other programs also had a similar leg of vacuum alchemical simulation yielding a free energy that needed to be subtracted.... ]}
-Thus, 17 evenly spaced $\lambda$ windows were used and simulations were run for \SI{2}{ns},
-each employing a velocity-Verlet integrator with \SI{2}{fs} time step, constraining only the hydrogen bonds which are not alchemically transformed. 
-}
-\iffalse
-\paragraph{AMBER.} We made use of AMBER16 for all free energy calculations. The
-starting coordinates were usually taken directly from the pre--equilibrated
-setup step but no further $\lambda$ specific equilibration was carried out,
-i.e.\ RAFE MD simulations were started with new velocities appropriate for the
-final simulation temperature.  In a very few cases it was necessary to use
-coordinates from the end of the simulation at a nearby $\lambda$ state because
-of simulation instabilities.  This happened in transformations with a larger
-number of dummy atoms.  Water hydrogens (TIP3P) were constrained with SHAKE.
-None of the atoms in the perturbed group where constraint and hence the time
-step set to \SI{1}{fs}.  We also tested an alternative protocol with
-SHAKE also on bonds that do not change during transformation and a time step of
-\SI{2}{fs} (see SOMD protocol below).  The temperature was controlled through a
-Langevin thermostat with a friction constant of \SI{2.0}{ps^{-1}} and pressure
-rescaling through a Monte Carlo barostat with 100 steps between isotropic
-volume change attempts.  Long--range electrostatics in solution was handled
-with PME and a cutoff of \SI{8.0}{\angstrom} for both Coulomb and vdW
-interactions.  In vacuum no cutoff was used.  Typically 11 windows
-were used for charge mutations and 21 windows for VdW mutations.  In
-some instances steep variations in gradients were observed with this
-protocol and additional windows were added to obtain smoother
-integration profiles.  A Long Range Correction (LRC) term for
-truncated VdW interactions is applied during the MD simulations.
-Absolute transformations were carried out using a one step protocol
-featuring 21 windows initially.  For some perturbations additional
-windows were run in regions where the free energy gradients varied
-sharply.  Each window was simulated for 2.5 ns, with the first 0.2 ns
-discarded prior to analysis.
-
-\paragraph{CHARMM.} The CHARMM c40b1 molecular dynamics package was used to
-carry out all relative hydration free energy simulations.  21 evenly spaced
-windows were used and all windows were run for \SI{1.5}{ns} with a timestep of \SI{1}{fs}.  Most windows used the same pre-equilibrated configuration, but a few windows (simulations involving perturbing hydrogen to heavy atom or vice versa) at end--point lambdas were started with their own equilibration using
-\SI{0.1}{fs^{-1}}--\SI{0.5}{fs^{-1}} time steps to avoid numerical instabilities.
- Constant temperature and pressure control was done with the Berendsen weak coupling method with a
-compressibility of \SI{4.63e-5}{atm^{-1}} and temperature and pressure coupling
-constants of \SI{5.0}{ps^{-1}}.  A \SI{12.0}{\angstrom} atom--based cutoff was used for non--bonded interactions and Particle Mesh Eward (PME) with order of 6 was used to calculate electrostatic forces along with periodic boundary condition.  SHAKE was used to constrain water hydrogens only.  The PERT module
-in CHARMM was used to handle alchemical transformations and PSSP
-softcore potential functions were used to avoid numerical instabilities.  In
-vacuum, no cutoff was used.
-The PERT module can not currently use force switching (option \inpopt{VFSwitch}) for LJ potentials with softcores.  Current CHARMM force fields, however, are parameterized to use force switching. % citation needed
-In this work we have used potential switching only (option \inpopt{VSwitch}) with an inner cutoff of \SI{10}{\angstrom} and outer cutoff of \SI{12}{\angstrom}.
-
-\paragraph{GROMACS.} We used GROMACS 4.6.7 to carry out simulations for
-the relative hydration free energies ($\Delta \Delta G_{\mathrm{hydr}}$).
-Each transformation had its Gibbs free energy calculated: (i) split
-protocol; (ii) unified protocol;  and (iii) via the difference between
-two absolute calculations.
-In the first two cases, each alchemical transformation was described by 31 and
-16 states, respectively, and simulated for \SI{4.2}{ns} with time steps of
-\SI{1.0}{fs} in water and vacuum.  Atomic masses were not changed along the
-alchemical path; their change affect kinetic energy only and do not
-contribute to the free energy change.
-We used the Langevin integrator implemented in GROMACS with a
-default friction coefficient of \SI{1.0}{ps/m_{atom}}, where $m_{atom}$
-is the the mass of the atom.  Absolute hydration
-free energies were calculated from \SI{5}{ns} Langevin dynamics
-at \SI{298.15}{K}. We used the 20--step alchemical protocol where
-charge coupling and LJ coupling were dealt with separately
-along the path \cite{Mobley2014, doi:10.1021/acs.jced.7b00104}.
-No bond constraints were used.
-A Parrinello--Rahman barostat with $\tau_p =$ \SI{10}{ps} and compressibility
-equal to \SI{4.5d-5}{bar^{-1}}.
-We used two methods to calculate electrostatic interactions: Particle Mesh
-Ewald (PME) and charge group--based Reaction Field with a dielectric of 78.3,
-as implemented in the software.
-We set the electrostatic and VdW cutoffs to \SI{10.0}{\angstrom};
-a switch was applied to the latter starting at \SI{9.0}{\angstrom}.
-Non--bonded interactions in the vacuum legs of the simulation were calculated
-to a cutoff of \SI{50.0}{\angstrom}.
-PME calculations were of order 6 and had a
-tolerance of \num{1.0d-6}, with a grid spacing of \SI{1.0}{\angstrom}.
-All transformations required the use of softcore potentials to avoid numerical
-problems in the free energy calculation.  We chose the 1--1--6 softcore
-potential for LJ terms ($\alpha$=0.5 and $\sigma$=0.3) for
-atoms whose parameters were being perturbed
-and used the default softcore Coulomb implementation in paths where
-charges, LJ, and bonded terms were modified together,
-but no soft core potentials were applied to Coulomb interactions when
-electrostatic interactions were modified separately.  A LRC term for
-truncated VdW interactions was applied during the MD simulations.
-
-\paragraph{SOMD.} All simulations were carried out with
-SOMD from the Sire 2016.1 release ~\cite{Sire-2016, doi:10.1021/ct300857j}
-Each alchemical transformation was
-divided into 17 evenly spaced windows and simulated for \SI{2}{ns}
-each both in water and in vacuum.  A velocity--Verlet integrator was
-employed with a \SI{2}{fs} time step, constraining only bonds
-involving hydrogens which are not alchemically transformed.  This
-approach will be called the ``unperturbed H bond constraint
-protocol''.  Referring to eq.~S\ref{S-eq:general-softcore}, the softcore parameters were set to default values for all the transformations, specifically $n = 0$ for Coulombic interactions and $\alpha = 2.0$ for the LJ potential~\cite{doi:10.1021/ct700081t}.  A shifted atom--based Barker--Watts reaction field~\cite{doi:10.1080/00268977300102101} with
-a dielectric constant of \num{78.3} was adopted for the solution phase
-simulations with a cutoff of \SI{10}{\angstrom}. A similar cutoff was used for
-Lennard--Jones interactions.  Temperature control was achieved with the Andersen
-thermostat~\cite{doi:10.1063/1.439486} with a coupling constant of
-\SI{10}{ps^{-1}}.  A Monte Carlo barostat assured pressure control,
-with isotropic box edge scaling moves attempted every 25 time steps.
-The reaction field was not employed in the vacuum legs, where a Coulombic
-potential without cutoff was used.  This leads to an inconsistent description of the intramolecular electrostatic interactions of the solute in the solvated and vacuum phases.  To maintain a consistent description of intramolecular
-energetics across vacuum and water legs, a free energy correction term $\Delta G_{\mathrm{c}}$ was evaluated as detailed in Ref.~\citenum{Bosisio2016}).  The
-$\Delta G_{\mathrm{c}}$ term was obtained via post--processing of the end state
-trajectories of each water phase simulation, using the Zwanzig
-relationship~\cite{zwanzig_high-temperature_1954}:
-\begin{equation}
- \label{eq:ZwanzigDGfunc}
- \Delta G_{\mathrm{c}} = -\beta^{-1} \ln \langle exp
- \left[-\beta(U_{\mathrm{ic,nc}}(\mathbf{r}) -
- U_{\mathrm{ic,sim}}(\mathbf{r}))\right]\rangle_{\mathrm{sim}}
-\end{equation}
-where $U_{\mathrm{ic,nc}}(\mathbf{r})$ is the solute intramolecular
-electrostatic--no cutoff
-potential that depends on the coordinates $\mathbf{r}$ of the solute and is
-given by Coulomb's law computed without cutoffs.
-$U_{\mathrm{ic,sim}}(\mathbf{r})$ is the intramolecular electrostatic potential
-term as
-computed in the simulation with the shifted atom--based Barker--Watts reaction
-field cutoff.  Additionally, an end--point correction for truncated vdW potentials was applied by post--processing of end--state trajectories as described previously elsewhere.~\cite{shirtsLRC,BosisioHG}
-
-%BR: Why is this not called double decoupling rather than double annihilation?
-% Aren't you turning off only the nonbonded interactions, and keeping the intramolecular terms?
-To compute absolute free energy of hydration a double annihilation
-technique~\cite{jorgensen1988efficient,GILSON19971047,Bosisio2016}
-was adopted.
-Initially the solute atoms' partial charges are turned off both in water and in
-vacuum (discharging step), giving a discharging
-free energy change $\Delta G_\mathrm{solv}^\mathrm{elec}$ and $\Delta
-G_\mathrm{vac}^\mathrm{elec}$ respectively. Secondly,
-the molecule is fully decoupled from the surrounding environment by switching
-off the Lennard-Jones terms (vanishing step), giving a $\Delta
-G_\mathrm{solv}^\mathrm{LJ}$ free energy change in water phase and $\Delta
-G_\mathrm{vac}^\mathrm{LJ}$ free energy change in vacuum.
-Next, the absolute free energy of hydration $\Delta G_\mathrm{wat}$ is computed as:
-\begin{equation}
-\label{eq:absolutehyd}
-\Delta G_\mathrm{wat} = (\Delta G_\mathrm{solv}^\mathrm{elec} + \Delta
-G_\mathrm{solv}^\mathrm{LJ}) - (\Delta G_\mathrm{vac}^\mathrm{elec} + \Delta
-G_\mathrm{vac}^\mathrm{LJ}) + \Delta G_c
-\end{equation}
-
-The same setup for relative free energy calculations was followed to
-compute absolute free energies of hydration.  Thus, 17 evenly spaced $\lambda$ windows were used and simulations were run for \SI{2}{ns} each employing a velocity--Verlet integrator with \SI{2}{fs} time step, constraining only the hydrogen bonds which are not alchemically transformed.
-\fi
 
 \subsection{Free Energy Estimations}
 \label{sec:analysis}
@@ -974,8 +770,7 @@ https://github.com/halx/relative-solvation-inputs .
 \section{Results}
 \label{sec:results}
 
-We will use absolute hydration free energies here as our standard point of
-comparison because for the present dataset these are easily calculated with high precision~\cite{doi:10.1021/acs.jced.7b00104} %check for more references
+We will use absolute hydration free energies here as our standard point of comparison because for the present dataset these are easily calculated with high precision~\cite{doi:10.1021/acs.jced.7b00104} %check for more references
 and are considerably simpler to set up and implement than relative calculations.
 Prior work has successfully compared calculated absolute hydration
 free energies across GROMACS and DESMOND codes.~\cite{klimovich_predicting_2010}
@@ -986,9 +781,11 @@ from simulations with the recommended protocol for each MD code, as
 discussed in detail in the following subsections.
 The  precision of the calculated free energies is similar between
 AMBER, CHARMM and GROMACS, whereas the SOMD free energies are less
-precise{\color{blue}
+precise{\color{red}Moved this to discussion to elaborate}{\color{blue}
 with an average deviation of about +0.06 kcal/mol for all solutes compared to the other programs.
-}.  This may reflect differences in the lambda schedules and
+}.
+
+  This may reflect differences in the lambda schedules and
 length of trajectories between the different codes.  Nonetheless the
 standard errors are typically well under \SI{0.1}{kcal/mol}, thus it
 becomes meaningful to investigate small differences of a few tenths of
@@ -1004,8 +801,6 @@ cases, where CHARMM produces slightly smaller $\Delta
 G_{\mathrm{hydr}}$.  These small discrepancies may be due to the
 differences in calculated densities between CHARMM and other codes
 (typically smaller by ca.\ \SI{0.01}{g/cm^3}).
-% BR: NO, the maximum difference from CHARMM is not 0.4 kcal/mol, it is 0.19 for toluene, 0.17 for 2Ðmethylfuran, 2Ðmethylindole -0.36
-%JM I think is is addressed in the text now
 The largest deviation can be found for one of the largest
 molecules (7--CPI) with the AMBER result being less negative than with
 the other MD packages by higher by 0.4--\SI{0.8}{kcal.mol^{-1}}.  This
@@ -1023,6 +818,8 @@ simulations, whereas {\color{blue}LRC terms of SOMD and CHARMM are only applied 
 post-processing of trajectories.}  For reference, a recent study from Lee--Ping et al.\ reports a
 TIP3P water density of \SI{0.980}{g/cm^3}~\cite{doi:10.1021/jz500737m}.
 
+    %DLM: In terms of the density, should we note that this INCLUDES (i think) the contribution of the mass of the non-interacting dummy atoms? Specifically, it bothered me at first that, say, GROMACS does not give the same density for all boxes after the solute is disappeared, and that the density goes up with the size of the solute, but then I realized this is because the solute mass goes into the density calculation. In other words, if the final box ends up the same size the density will be higher because the solute is counted.
+  %JM clarified in email how densities are evaluated  
 \begin{table}[]
 {\footnotesize\color{red}
   \begin{minipage}{\linewidth}
@@ -1097,75 +894,77 @@ TIP3P water density of \SI{0.980}{g/cm^3}~\cite{doi:10.1021/jz500737m}.
 }
 \end{table}
 
-\iffalse
-%BR: I think that Table 1 should only report absolute free energy and that we should put all the differences in Table 3 for direct comparison (otherwise I keep jumping from one table to the other...).
-\begin{table}[]
-  \begin{minipage}{\linewidth}
-    \caption{Absolute hydration free energies (in \si{kcal/mol}) and
-      end-state densities  (in g/cm3) as obtained from AFE
-      calculations. Uncertainties on the last decimal are given in
-      parenthesis.}\label{tab:absolute2}
-    %DLM: In terms of the density, should we note that this INCLUDES (i think) the contribution of the mass of the non-interacting dummy atoms? Specifically, it bothered me at first that, say, GROMACS does not give the same density for all boxes after the solute is disappeared, and that the density goes up with the size of the solute, but then I realized this is because the solute mass goes into the density calculation. In other words, if the final box ends up the same size the density will be higher because the solute is counted.
-    \makebox[\textwidth][c]{
-      \begin{tabular}{lrrrrrrrr}
-        \toprule
-        \multicolumn{1}{c}{Solute}
-        & \multicolumn{2}{c}{AMBER}
-        & \multicolumn{2}{c}{CHARMM}
-        & \multicolumn{2}{c}{GROMACS}
-        & \multicolumn{2}{c}{SOMD} \\
-        \midrule
-        methane  &
-         2.47(1) & 0.986(1) &
-         2.48(1) & 0.977(1) &
-         2.44(1) & 0.987(1) &
-         2.52(2) & 0.982(1) \\
-        methanol  &
-        -3.73(1) & 0.988(1) &
-        -3.68(1) & 0.980(1) &
-        -3.51(1) & 0.988(1) &
-        -3.70(5) & 0.987(1) \\
-        ethane  &
-         2.50(1) & 0.988(1) &
-         2.55(1) & 0.979(1) &
-         2.48(1) & 0.988(1) &
-         2.56(1) & 0.984(1) \\
-        toluene  &
-        -0.72(1) & 0.991(1) &
-        -0.52(1) & 0.983(1) &
-        -0.72(1) & 0.991(1) &
-        -0.55(2) & 0.989(1) \\
-        neopentane  &
-         2.61(1) & 0.990(1) &
-         2.65(2) & 0.981(1) &
-         2.58(1) & 0.990(1) &
-         2.71(6) & 0.987(1) \\
-        2-methylfuran  &
-        -0.49(2) & 0.991(1) &
-        -0.31(1) & 0.983(1) &
-        -0.51(1) & 0.991(1) &
-        -0.39(2) & 0.989(1) \\
-        2-methylindole  &
-        -6.24(1) & 0.993(1) &
-        -5.88(1) & 0.984(1) &
-        -6.35(1) & 0.993(1) &
-        -6.06(4) & 0.990(1) \\
-        2-CPI  &
-        -6.05(2) & 0.995(1) &
-        -6.09(4) & 0.992(1) &
-        -6.54(1) & 0.994(1) &
-        -6.14(9) & 0.991(1) \\
-        7-CPI  &
-        -5.66(3) & 0.995(1) &
-        -6.19(3) & 0.982(1) &
-        -6.52(2) & 0.995(1) &
-        -6.1(1) & 0.992(1) \\
-     \bottomrule
-      \end{tabular}
-    }
-  \end{minipage}
-\end{table}
-\fi
+%This is an older table. I presume the above one has the newest
+%CHARMM values
+%\iffalse
+%
+%\begin{table}[]
+% \begin{minipage}{\linewidth}
+%    \caption{Absolute hydration free energies (in \si{kcal/mol}) and
+%      end-state densities  (in g/cm3) as obtained from AFE
+%      calculations. Uncertainties on the last decimal are given in
+%      parenthesis.}\label{tab:absolute2}
+%
+%    \makebox[\textwidth][c]{
+%      \begin{tabular}{lrrrrrrrr}
+%        \toprule
+%       \multicolumn{1}{c}{Solute}
+%        & \multicolumn{2}{c}{AMBER}
+%        & \multicolumn{2}{c}{CHARMM}
+%        & \multicolumn{2}{c}{GROMACS}
+%        & \multicolumn{2}{c}{SOMD} \\
+%        \midrule
+%        methane  &
+%         2.47(1) & 0.986(1) &
+%         2.48(1) & 0.977(1) &
+%         2.44(1) & 0.987(1) &
+%         2.52(2) & 0.982(1) \\
+%        methanol  &
+%        -3.73(1) & 0.988(1) &
+%        -3.68(1) & 0.980(1) &
+%        -3.51(1) & 0.988(1) &
+%        -3.70(5) & 0.987(1) \\
+%        ethane  &
+%         2.50(1) & 0.988(1) &
+%         2.55(1) & 0.979(1) &
+%         2.48(1) & 0.988(1) &
+%         2.56(1) & 0.984(1) \\
+%        toluene  &
+%        -0.72(1) & 0.991(1) &
+%       -0.52(1) & 0.983(1) &
+%       -0.72(1) & 0.991(1) &
+%        -0.55(2) & 0.989(1) \\
+%        neopentane  &
+%         2.61(1) & 0.990(1) &
+%         2.65(2) & 0.981(1) &
+%         2.58(1) & 0.990(1) &
+%         2.71(6) & 0.987(1) \\
+%        2-methylfuran  &
+%        -0.49(2) & 0.991(1) &
+%        -0.31(1) & 0.983(1) &
+%        -0.51(1) & 0.991(1) &
+%        -0.39(2) & 0.989(1) \\
+%        2-methylindole  &
+%        -6.24(1) & 0.993(1) &
+%        -5.88(1) & 0.984(1) &
+%        -6.35(1) & 0.993(1) &
+%        -6.06(4) & 0.990(1) \\
+%        2-CPI  &
+%        -6.05(2) & 0.995(1) &
+%        -6.09(4) & 0.992(1) &
+%        -6.54(1) & 0.994(1) &
+%        -6.14(9) & 0.991(1) \\
+%       7-CPI  &
+%        -5.66(3) & 0.995(1) &
+%       -6.19(3) & 0.982(1) &
+%       -6.52(2) & 0.995(1) &
+%        -6.1(1) & 0.992(1) \\
+%     \bottomrule
+%      \end{tabular}
+%    }
+%  \end{minipage}
+%\end{table}
+%\fi
 % Table 2 should have the following information:
 %  Transformation       Absolute free energy             Average volume at lambda=0      Average volume at lambda=1   Average energy at lambda=0    Average energy at lambda=1
 %                     AMBER CHARMM GROMACS SOMD          AMBER CHARMM GROMACS SOMD       AMBER CHARMM GROMACS SOMD    AMBER CHARMM GROMACS SOMD     AMBER CHARMM GROMACS SOMD
@@ -1200,45 +999,40 @@ TIP3P water density of \SI{0.980}{g/cm^3}~\cite{doi:10.1021/jz500737m}.
 %  \end{minipage}
 %\end{table}
 
-Table~\ref{tab:mue-absolute} shows the MAD between SOMD, GROMACS, AMBER and
-CHARMM.  The SOMD code produces figures that agree the most with all other MD packages (MAD ca.\ \SI{0.1}{kcal.mol^{-1}}), and the MAD reaches just under
-\SI{0.2}{kcal.mol^{-1}} for CHARMM/GROMACS, and CHARMM/AMBER.  Variabilities between the codes may be partly explained by differences in densities due to different treatments of long range electrostatics and vdW interactions.
+Table~\ref{tab:mue-absolute} shows the MAD between SOMD, GROMACS, AMBER and CHARMM. {\color{blue} CHARMM produces figures that agree the most with other MD packages. The largest difference reaches \SI{0.2}{kcal.mol^{-1}} for SOMD and GROMACS. Variabilities between the codes may be partly explained by differences in densities due to different treatments of long range electrostatics and vdW interactions.}
 
+%{\footnotesize \bf \color{red} [BR: I am not sure how Table~%\ref{tab:mue-absolute} was generated. I insert my own table below based on Table \ref{tab:absolute2} and the deviations are not smaller for SOMD.]}
+%JM resolved this as using previous CHARMM and GROMACS-reaction field values  
 
-{\footnotesize \bf \color{red} [BR: I am not sure how Table~\ref{tab:mue-absolute} was generated. I insert my own table below based on Table \ref{tab:absolute2} and the deviations are not smaller for SOMD.]}
+%\begin{table}[h!]
+%{\color{red}
+%    \caption{\color{red} BR: MATRIX OF ABSOLUTE DEVIATIONS %BETWEEN PROGRAMS}
+%      \begin{tabular}{l|cccc}
+%        & AMBER  &  CHARMM  & GROMACS &  SOMD  \\ \hline
+%AMBER   & 0.000  &   0.126  &  0.198  &  0.136 \\
+%CHARMM  & 0.126  &   0.000  &  0.148  &  0.066 \\
+%GROMACS & 0.198  &   0.148  &  0.000  &  0.209 \\
+%SOMD    & 0.136  &   0.066  &  0.209  &  0.000 \\
+%      \end{tabular}
+%}
+%\end{table}
 
-%DLM: Would be good to have error bars on those.
-% BR: The smallest deviation is between SOMD and the other codes. What this is saying is that SOMD gives results that are always within the spread of {AMBER, CHARMM, GROMACS}.
-% The tables are nice, but a plot would allow one to visualize this immediately.
-
-\begin{table}[h!]
-{\color{red}
-    \caption{\color{red} BR: MATRIX OF ABSOLUTE DEVIATIONS BETWEEN PROGRAMS}
-      \begin{tabular}{l|cccc}
-        & AMBER  &  CHARMM  & GROMACS &  SOMD  \\ \hline
-AMBER   & 0.000  &   0.126  &  0.198  &  0.136 \\
-CHARMM  & 0.126  &   0.000  &  0.148  &  0.066 \\
-GROMACS & 0.198  &   0.148  &  0.000  &  0.209 \\
-SOMD    & 0.136  &   0.066  &  0.209  &  0.000 \\
-      \end{tabular}
-}
-\end{table}
 
 \begin{table}[]
-  \begin{minipage}{\linewidth}
-    \caption{Mean Absolute Deviations (MAD) (\SI{}{kcal.mol^{-1}}) between relative free energies obtained with the absolute protocol for the SOMD, GROMACS, AMBER and CHARMM packages.}\label{tab:mue-absolute}
-    \makebox[\textwidth][c]{
-      \begin{tabular}{lrrr}
-        \toprule
-        Package & GROMACS & AMBER & CHARMM\\
-        \midrule
-        SOMD    & \num{0.12+-0.01} & \num{0.09+-0.01} & \num{0.08+-0.01} \\
-        GROMACS &      		   & \num{0.12+-0.01} & \num{0.17+-0.01} \\
-        AMBER   &      		   &      	      & \num{0.17+-0.01} \\
-        \bottomrule
-      \end{tabular}
-    }
-  \end{minipage}
+ \begin{minipage}{\linewidth}
+   \caption{Mean Absolute Deviations (MAD) (\SI{}{kcal.mol^{-1}}) between relative free energies obtained with the absolute protocol for the SOMD, GROMACS, AMBER and CHARMM packages.}\label{tab:mue-absolute}
+   \makebox[\textwidth][c]{
+     \begin{tabular}{lrrr}
+       \toprule
+       Package & GROMACS & AMBER & CHARMM\\
+       \midrule
+       SOMD    & \num{0.20+-0.03} & \num{0.13+-0.04} & \num{0.08+-0.02} \\
+       GROMACS &                 & \num{0.19+-0.01} & \num{0.15+-0.01} \\
+       AMBER   &                 &                & \num{0.12+-0.01} \\
+       \bottomrule
+     \end{tabular}
+   }
+ \end{minipage}
 \end{table}
 
 Having established the predictive value from absolute transformations we now turn to computing $\Delta\Delta G_{\mathrm{hydr}}$ from relative mutations.
@@ -1250,7 +1044,7 @@ Again the data is from the recommended protocol (see detailed discussions in the
   \begin{minipage}{\linewidth}
     \caption{Comparison of relative free energies of hydration for various MD 
       packages as obtained from absolute (AFE) and relative (RAFE) transformations via unified or split 
-      protocols.  The values deduced from AFE transformations (given first) were taken from Table 1. 
+      protocols.  The values deduced from AFE transformations (given in the first row) were taken from Table 1. 
       Signs of the  backward transformation have been reverted to 
       correspond to the forward transformation. }\label{tab:relative}
     \makebox[\textwidth][c]{
@@ -1261,12 +1055,12 @@ Again the data is from the recommended protocol (see detailed discussions in the
         & & \multicolumn{1}{c}{implicit\footnote{\label{foot:impl}using either the implicit or the explicit dummy atom approach.}} & \multicolumn{1}{c}{explicit\footref{foot:impl}} & & & \\
         \midrule
         ethane & methane &                  & \num{-0.02+-0.01} & \num{-0.03+-0.01} & \num{-0.04  +- 0.01} & \num{-0.05+-0.02} \\
-        ethane & methane & \num{0.02+-0.01} & \num{-0.13+-0.02} & \num{-0.09 +-         0.02} & \num{-0.04 +- 0.02} & \num{-0.01+-0.05} \\
-        methane & ethane & \num{0.00+-0.03} & \num{-0.19+-0.03} & \num{-0.04 +-         0.01} & \num{-0.02 +- 0.01} & \num{-0.04+-0.02} \\ \hdashline
+        ethane & methane & \num{0.02+-0.01} & \num{-0.13+-0.02} & \num{-0.09 +-         0.02} & \num{-0.04 +- 0.02} & \num{0.05+-0.02} \\
+        methane & ethane & \num{0.00+-0.03} & \num{-0.19+-0.03} & \num{-0.04 +-         0.01} & \num{-0.02 +- 0.01} & \num{0.01+-0.06} \\ \hdashline
         
         methanol & methane &                  & \num{6.20+-0.01} & \num{6.20+-0.02} & \num{5.95 +- 0.01} & \num{6.21+-0.06} \\
         methanol & methane & \num{6.19+-0.01} & \num{6.20+-0.02} & \num{6.18 +-         0.01} &         \num{6.20 +- 0.01} & \num{5.99+-0.05} \\
-        methane & methanol & \num{6.20+-0.03} & \num{6.15+-0.01} & \num{6.21 +-         0.01} & \num{6.20 +- 0.01} & \num{5.96+-0.04} \\     \hdashline 
+        methane & methanol & \num{6.20+-0.03} & \num{6.15+-0.01} & \num{6.21 +-         0.01} & \num{6.20 +- 0.01} & \num{5.97+-0.04} \\     \hdashline 
 
         ethane & methanol &                  & \num{-6.22+-0.01} & \num{-6.22+-0.02} & \num{-5.98  +- 0.01} & \num{-6.26+-0.05} \\
         ethane  & methanol & \num{-6.20+-0.01} & \num{-6.27+-0.01} & \num{-6.25         +- 0.01} & \num{-6.19 +- 0.01} & \num{-6.09+-0.03} \\
@@ -1303,10 +1097,6 @@ Again the data is from the recommended protocol (see detailed discussions in the
 \end{table}
 
 
-
-%JM TODO generalise discussion of internal consistency
-% taking into account statistical uncertainties
-% and then across-codes consistency
 We reviewed firstly internal consistency of the different codes with the computed absolute hydration free energies. For each implementation we counted the number of times a calculated relative free energy deviates from the difference in reference absolute hydration free energies by more than 0.1 kcal/mol. This is significantly above the estimated uncertainties in calculated free energies in most instances (apart from some SOMD results). According to this criterion, the AMBER explicit implementation is the least consistent (10 deviations), followed by AMBER implicit (6 deviations), SOMD (6 deviations), CHARMM (5 deviations), GROMACS (5 deviations). The perturbations that give a discrepancy are not the same across codes, for instance methane->toluene with AMBER explicit deviates from the reference absolute hydration free energies by 0.33 kcal/mol, but at most 0.04 kcal/mol with other codes. SOMD and GROMACS show deviations of ca. 0.25 kcal/mol for methanol->methane but this is not the case for AMBER (implicit or explicit) or CHARMM.
 
 We next reviewed consistency between forwards and backwards relative hydration free energies. Again counting the number of deviations that exceed 0.1 kcal/mol indicates that AMBER explicit is the least consistent (3 deviations), followed by AMBER implicit (2 deviations), CHARMM (2 deviations), GROMACS (1 deviation), SOMD (1 deviation). The largest deviation is observed with AMBER implicit for 2-methylindole <-> methane (0.36 kcal/mol).
@@ -1316,32 +1106,29 @@ CHARMM tends to show relative free energies with smaller magnitudes for a number
 terminal mapped neopentane case reveals AMBER to be in line with GROMACS and SOMD while CHARMM's results are essentially the same as in the central mapped transformations.  AMBER deviates also quite strongly from the other codes in the cyclopentanyl indole cases.
 
 The MADs of the relative free energy simulations are presented in
-Table~\ref{tab:mue-relative}.  They tend to be larger than the MADs from
-the absolute simulations (Table~\ref{tab:mue-absolute}) and reach
-\SI{0.3}{kcal.mol^{-1}} for CHARMM compared with AMBER and GROMACS.
+Table~\ref{tab:mue-relative}.  They are on average slightly larger than the MADs from the absolute simulations (Table~\ref{tab:mue-absolute}) and reach \SI{0.26}{kcal.mol^{-1}} for AMBER compared with CHARMM.
 
 \begin{table}[]
-  \begin{minipage}{\linewidth}
-    \caption{MAD (in \si{kcal.mol^{-1}}) comparing relative free energies from
-      relative simulations between SOMD, GROMACS, AMBER and
-      CHARMM.}\label{tab:mue-relative}
-    \makebox[\textwidth][c]{
-      \begin{tabular}{lrrr}
-        \toprule
-        Package & GROMACS & AMBER & CHARMM \\
-        \midrule
-        SOMD    & \num{0.11+-0.01} & \num{0.23+-0.01} & \num{0.18+-0.01} \\
-        GROMACS &      		   & \num{0.19+-0.01} & \num{0.19+-0.01} \\
-        AMBER   &      		   & 		      & \num{0.32+-0.01} \\
-        \bottomrule
-      \end{tabular}
-    }
-  \end{minipage}
+ \begin{minipage}{\linewidth}
+   \caption{MAD (in \si{kcal.mol^{-1}}) comparing relative free energies from
+     relative simulations between SOMD, GROMACS, AMBER and
+     CHARMM.}\label{tab:mue-relative}
+   \makebox[\textwidth][c]{
+     \begin{tabular}{lrrr}
+       \toprule
+       Package & GROMACS & AMBER & CHARMM \\
+       \midrule
+       SOMD    & \num{0.11+-0.01} & \num{0.23+-0.01} & \num{0.15+-0.01} \\
+       GROMACS &                 & \num{0.16+-0.01} & \num{0.13+-0.01} \\
+       AMBER   &                 &               & \num{0.26+-0.01} \\
+       \bottomrule
+     \end{tabular}
+   }
+ \end{minipage}
 \end{table}
-%JM TODO compute uncertainties on MAD for Table4
-% xsmake plot instead of Table
+
 We also computed cycle closure errors from Table~\ref{tab:amber-comp} for
-the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane $\rightarrow$ ethane (see Figure~\ref{fig:cycles}). The results are shown in Table~\ref{tab:cycle-closure}. Uncertainties were estimated by propagating uncertaines from the individual perturbations. AMBER explicit dummy is the only protocol consistent within uncertainty estimates, but the deviations observed with the other protocols are small. The largest discrepancy is observed with the GROMACS unified PME protocol, but the error remains under \SI{0.2}{kcal/mol}.
+the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane $\rightarrow$ ethane (see Figure~\ref{fig:cycles}). The results are shown in Table~\ref{tab:cycle-closure}. Uncertainties were estimated by propagating uncertainties from the individual perturbations. AMBER explicit dummy is the only protocol consistent within uncertainty estimates, but the deviations observed with the other protocols are small. The largest discrepancy is observed with the GROMACS unified PME protocol, but the error remains under \SI{0.2}{kcal/mol}.
 
 \begin{table}[]
   \begin{minipage}{\linewidth}
@@ -1358,7 +1145,7 @@ $\rightarrow$ ethane}\label{tab:cycle-closure}
         GROMACS unified reaction field  &  0.13 $\pm$ 0.03  \\
         GROMACS split PME  &  0.04 $\pm$ 0.01  \\
         GROMACS unified PME  &  0.18 $\pm$ 0.03  \\
-        CHARMM            &     \color{red}X.XX $\pm$ 0.XX   \\
+        CHARMM            &   0.01 $\pm$ 0.03   \\
         SOMD                &  -0.11 $\pm$ 0.08 \\
         \bottomrule
       \end{tabular}
@@ -1380,7 +1167,6 @@ versions~\cite{doi:10.1021/acs.jctc.7b00102}.  A disadvantage of
 \progname{sander} is that it cannot be used to simulate the $\lambda$ end
 points~\cite{doi:10.1021/ct400340s} such that the TI gradients need to be
 extrapolated (minimum and maximum allowed $\lambda$s are 0.005 and 0.995).
-
 Also, \progname{sander} considers the whole system as the perturbed
 region while \progname{pmemd} restricts this to a user chosen atom selection.
 This has obvious implications for performance~\cite{doi:10.1021/ct400340s}.
@@ -1670,7 +1456,7 @@ highlighting internal consistency within SOMD.
 % We should make it clear that free energy do not depend on masses....
 %JM clarified below
 To achieve this level of reproducibility within SOMD it was crucial to pay close attention to constraints. Specifically, bonds that involve unperturbed hydrogen atoms are constrained. Bonds involving hydrogen atoms that are perturbed to a heavy element are unconstrained.  Additionally the atomic mass of the perturbed hydrogen atom is set to the mass of the heavy atom it is
-perturbed to.  Bonds involving hydrogen atoms that are perturbed to another hydrogen atom type are constrained. We note that it is acceptable to artificially increase the atomic mass of hydrogen atoms because the calculated excess free energy changes do not depend on atomic masses.
+perturbed to.  Bonds involving hydrogen atoms that are perturbed to another hydrogen atom type are constrained. We stress that it is acceptable to artificially increase the atomic mass of hydrogen atoms because the calculated excess free energy changes do not depend on atomic masses.
 
 This protocol suppresses high frequency vibrations in flexible bonds involving hydrogen atoms, thus enabling a time
 step of \SI{2}{fs}, whilst giving essentially negligible errors due to the use of constraints for perturbed bonds.  This is apparent from the comparison with the absolute hydration free energy calculations.  Additionally, the protocol
@@ -1689,18 +1475,6 @@ This discrepancy occurs because in the SOMD implementation, the energies of cons
 the bonded term (and associated coupled terms) to the free energy change. The effect is more pronounced for perturbations that feature a large change in equilibrium bond lengths, such as those where a hydrogen atom is perturbed
 to/from a heavy atom.
 
-%, as a missing bond--stretching term
-%JM
-% do we need to mention this equation? We don't use it
-%anywhere in the manuscript as far as I can tell
-%, which introduce a free energy offset estimated as:
-%\begin{equation}
-% \label{eq:allbondserror}
-% \Delta G= RT\ln \left ( \frac{r_{\mathrm{i}}}{r_\mathrm{f}} %\right)
-%\end{equation}
-%where $r_{\mathrm{i}}$ and $r_{\mathrm{f}}$ are the initial and %final bond
-%lengths, respectively.
-%
 The reaction fields implemented in SOMD and GROMACS differ somewhat (atom-based
 shifted Barker Watts~\cite{doi:10.1080/00268977300102101} vs group based
 switched Barker Watts), but nevertheless SOMD and GROMACS RF produce comparable results with a MAD of \SI{0.18}{kcal.mol^{-1}}.
@@ -1718,8 +1492,6 @@ mapped transformation. The SOMD RF calculations show a MAD =
 \SI{0.18}{kcal.mol^{-1}} and MAD = \SI{0.23}{kcal.mol^{-1}} with GROMACS PME
 and AMBER respectively, similar to the MAD obtained with GROMACS RF.
 
-
-
 \section{Discussion and Conclusions}
 \label{sec:discuss}
 
@@ -1728,8 +1500,7 @@ pre--defined force field.
 We have found that establishing a simulation protocol that leads to consistent results across codes has been cumbersome due to technical difficulties encountered with every code.  The MD codes have a wide range of options and setup features which makes it difficult for the unexperienced user to decide on the most
 appropriate ones.
 
-The free energies we have computed appear to be in reasonably good agreement with each other (see Tables~\ref{tab:absolute2} and \ref{tab:relative}).  The MAE is \SI{0.2}{kcal/mol} for absolute free energies and \SI{0.3}{kcal/mol} for
-relative free energies.  This can be interpreted as the current ``limit of reproducibility'' for the field.  We have found viable protocols for each MD code to achieve
+The free energies we have computed appear to be in reasonably good agreement with each other (see Tables~\ref{tab:absolute2} and \ref{tab:relative}).  The average MAE between all codes \SI{0.14}{kcal/mol} for absolute free energies and \SI{0.17}{kcal/mol} for relative free energies.  This can be interpreted as the current ``limit of reproducibility'' for the field.  We have found viable protocols for each MD code to achieve
 this level of reproducibility.  There is some doubt, however, over the AMBER
 results because the particular version of the software we tested  cannot reproduce the correct end-point
 geometries.  This is particularly evident in the neopentane to methane case
@@ -1742,7 +1513,7 @@ We were unable to define  a \emph{universal} protocol that could be recommended 
 vacuum leg of the thermodynamic cycle.  In the case of AMBER the vacuum simulation has currently been done with the separately developed sander module.  The problem may be a consequence of the different softcore functions (see Eq.~S\ref{S-eq:general-softcore}x) used in these MD packages but further investigations are needed to resolve this issue.
 
 The unperturbed H bond protocol is an interesting alternative which
-applies contraints to all non--transforming bonds and thus allowed us toincrease the time step to \SI{2}{fs}.
+applies constraints to all non--transforming bonds and thus allowed us to increase the time step to \SI{2}{fs}.
  The split protocol was found to work  well for all codes.
   It appears to be the most efficient
 approach for GROMACS as shown with the methanol to methane case because the unified protocol produces a less smooth function~\cite{shirts_chapter_2007}.
@@ -1779,7 +1550,22 @@ topologies via scripting.
 %intramolecular charge--charge contributions will all be zero, and %an additional simulation in vacuo is needed to correct for this.
 %
 
-The primary focus of this work was to achieve low statistical errors to establish if codes are able to reproduce free energies.  We have not investigated rate of convergences as this would require further, complex investigations.  Beyond careful protocol validation,  further automation of alchemical free energy studies will also decrease user errors, and thus increases  reproducibility.  Various attempts in
+The primary focus of this work was to achieve low statistical errors to establish if codes are able to reproduce free energies.  We have not investigated in detail the efficiency of the respective protocols as this would require further, complex investigations. {\color{blue}For relative calculations CHARMM used the lowest aggregate sampling time per compound (17*1.5ns) and yet achieved the lowest average standard mean error (0.015 kcal/mol). For absolute calculations GROMACS gives the lowest average standard mean error (0.011 kcal/mol) but the aggregate sampling time is the largest (40*5ns). Further work should be pursued to understand what algorithmic details in the various implementations are important for the efficiency of a free energy calculation.}
+
+%average SEM for absolute calcs in table 2
+% AMBER 0.014 kcal/mol
+% CHARMM 0.017 kcal/mol
+% GROMACS 0.011 kcal/mol
+% SOMD 0.045 kcal/mol
+
+%average SEM for relative calcs in table 4
+% AMBER implicit 0.024 kcal/mol
+% AMBER explicit  0.027 kcal/mol
+% CHARMM 0.015  kcal/mol
+% GROMACS 0.020 kcal/mol
+% SOMD 0.048 kcal/mol
+
+ Beyond careful protocol validation,  further automation of alchemical free energy studies will also decrease user errors, and thus increases  reproducibility.  Various attempts in
 this direction are currently underway for both absolute and relative
 setups~\cite{christ_accuracy_2013, JCC:JCC23804, Liu2013,
 doi:10.1021/jp505332p, doi:10.1021/acs.jcim.6b00162,
