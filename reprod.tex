@@ -177,20 +177,13 @@ referred to as \emph{relative} (see below).  It should be emphasized that the
 ``absolute'' approach still results in a \emph{relative} free energy
 between the state where the solute fully interacts with its environment and the state where it does
 not.  
-{\color{red}
-{\footnotesize [BR: The distinction between decoupling (DDM) and annihilation (DAM) here is not quite how I would put it (most annihilation calculations do not turn off intramolecular interactions as far as I know). 
-The formal difference has more to do with the introduction of a ligand restraint to deal with the standard state business than with intramolecular interactions, no?]}}
-{\color{blue}
-{\footnotesize [JM: Added reference to reviews that use this terminology. The confusion is that 'double decoupling' and 'decoupling' refer to different things.]
-}}
 The term \emph{decoupling} here is taken as meaning the scaling of the non--bonded \emph{inter}--molecular interactions between the perturbed group (all atoms
 that differ in at least one force field parameter between the end states) and
 its environment.  We distinguish decoupling from \emph{annihilation},
 as the latter also includes a scaling of
 the \emph{intra}--molecular non-bonded interactions in addition to the
-inter--molecular interactions.~\cite{shirtsmobleyreview_2013} {\color{blue}{\footnotesize [JM: added a reference to review from Shirts and Mobley Methods in Mol. Biol. 924:271-311 (2013) where this is introduced  ]}}  Torsional interactions may also be scaled in an annihilation protocol, but bond and angle terms are usually not scaled as this leads to poorly converging free energy changes.~\cite{doi:10.1021/jp981628n}
-% BR: This protocol turns a set of atoms into an ideal gas (no LJ, no bonds...). Is there any one who is rigorously this kind of annihilation? I thought maybe only Bill Jorgensen in the early days was doing this with Monte Carlo... It literally cannot be done with MD.
-%JM: clarified that annihilation means the intramolecular non-bonded interactions are also turned off (and possibly torsions). We do that in SOMD. (RESOLVED)
+inter--molecular interactions.~\cite{shirtsmobleyreview_2013}\footnote{It is worth noting that the terms ``double decoupling method'' and ``double annihilation method'' also employ the words ``decoupling'' and ``annihilation'' but used in an entirely different sense in the context of binding free energy calculations.} 
+Torsional interactions may also be scaled in an annihilation protocol, but bond and angle terms are usually not scaled as this leads to poorly converging free energy changes.~\cite{doi:10.1021/jp981628n}
 These schemes may require two
 simulations along the opposite edges of a quadrilateral thermodynamic cycle
 but approaches that produce the reversible work directly in one simulation
