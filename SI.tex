@@ -32,7 +32,7 @@
 \newcommand{\hred}[1]{\textcolor{red}{#1}}
 
 
-\title{Are FEP Calculations Reproducible?}
+\title{Reproducibility of Free Energy Calculations Across Different Molecular Simulation Software}
 % REMEMBER TO UPDATE TITLE
 
 \input{affiliations}
@@ -336,7 +336,7 @@ softcore functions.
 \begin{table}
   \begin{minipage}{\linewidth}
     \caption{Comparison between separated and 1--step protocol in
-      AMBER.  The data for the 1--step protocol highlights problems in
+      AMBER.  The data for the 1--step protocol highlights inconsistencies in
       the code in red. $\Delta G_\mathrm{sol}$ has been computed with pmemd.  
       $\Delta G_\mathrm{vac}$ has been computed with 
       sander.}\label{tab:amber-onestep}
@@ -358,10 +358,10 @@ softcore functions.
       methane\footref{foot:cent}        & neopentane     & -70.171            & -69.921 & -0.250 & -65.824 & -58.779 & \hred{-7.045} \\
       neopentane\footnote{\label{foot:term}terminal mapping.}    & methane        & 11.411             & 11.544  & -0.132 & 4.424   & 3.480   & \hred{0.944}  \\
       methane\footref{foot:term}        & neopentane    & -11.426            & -11.550 & 0.125  & -4.447  & -3.485  & \hred{-0.962} \\
-      2-methylfuran  & methane        & 14.622             & 11.533  & 3.089  & 2.205   & \hred{-0.943}  & 3.148  \\
-      methane        & 2-methylfuran   & -14.604            & -11.504 & -3.100 & -2.216  & \hred{-0.063}  & \hred{-2.153} \\
-      2-methylindole & methane        & 24.251             & 15.473  & 8.778  & 7.113   & \hred{-4.021}  & \hred{11.135} \\
-      methane        & 2-methylindole & -24.312            & -15.174 & -9.138 & -7.128  & \hred{1.858}   & -8.986 \\
+      2-methylfuran  & methane        & 14.622             & 11.533  & 3.089  & 2.205   & -0.943  & \hred{3.148}  \\
+      methane        & 2-methylfuran   & -14.604            & -11.504 & -3.100 & -2.216  & -0.063  & \hred{-2.153} \\
+      2-methylindole & methane        & 24.251             & 15.473  & 8.778  & 7.113   & -4.021  & \hred{11.135} \\
+      methane        & 2-methylindole & -24.312            & -15.174 & -9.138 & -7.128  & 1.858   & -8.986 \\
       \bottomrule
     \end{tabular}
 }
@@ -505,8 +505,9 @@ explicit, partial & & & & & \\
 As discussed in the main tex, the presend SOMD calculations used a shifted atom-based Barker-Watts reaction field cutoff to handle electrostatic interactions in solutions and a Coulomb laws without cutoffs to handle electrostatic interactions in vacuum. 
 This leads to an inconsistent description of the intramolecular electrostatic interactions of the solute in the solvated and vacuum phases.   
 To maintain a consistent description of intramolecular energetics across vacuum and water legs, 
-a free energy correction term $\Delta G_{\mathrm{c}}$ was  evaluated as detailed in Ref.~\citenum{Bosisio2016}.  
+a free energy correction term $\Delta G_{\mathrm{c}}$ was  evaluated as detailed in Ref.~\cite{Bosisio2016}.  
 The $\Delta G_{\mathrm{c}}$ term was obtained via post-processing of the end state trajectories of each water phase simulation, using the Zwanzig relationship~\cite{zwanzig_high-temperature_1954}:
+
 \begin{equation}
  \label{eq:ZwanzigDGfunc}
  \Delta G_{\mathrm{c}} = -\beta^{-1} \ln \langle \exp  \left[-\beta(U_{\mathrm{ic,nc}}(\mathbf{r}) -  U_{\mathrm{ic,sim}}(\mathbf{r}))\right]\rangle_{\mathrm{sim}}
@@ -585,7 +586,7 @@ Figure ~\ref{fig:sire_allbonds} shows the discrepancy between RAFE computed with
   \label{fig:sire_allbonds}
 \end{figure}
 
-Finally, figure~\ref{fig:sire_constraints} and table .~\ref{tab:sire_constraints} compare relative free energy of hydration $\Delta \Delta G$ estimated with RAFE using all bonds constraints, no constraints and unperturbed hydrogen bond constraints.
+Finally, figure~\ref{fig:sire_constraints} and table ~\ref{tab:sire_constraints} compare relative free energy of hydration $\Delta \Delta G$ estimated with RAFE using all bonds constraints, no constraints and unperturbed hydrogen bond constraints.
 
 \begin{figure}[ht]
   \includegraphics[width=\textwidth]{figures/SI_sire_constraints.pdf}
@@ -701,6 +702,7 @@ free energy of 2--methylindole to methane from direct RAFE and from AAFEs of met
 \label{fig:LRC}
 \end{figure}
 
+\clearpage
 
 \bibliography{journal-abbrev,reprod}
 
