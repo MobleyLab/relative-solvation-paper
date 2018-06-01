@@ -266,25 +266,25 @@ Table~\ref{tab:absolute-all} summarizes the absolute free energies of hydration 
 methane               & \num{2.52+-0.02}  & \num{2.45+-0.01}   & 
 \num{2.44+-0.01} & \num{2.47+-0.01} & \num{2.48+-0.01} \\
 methanol              & \num{-3.70+-0.05}  & \num{-3.32+-0.01}   & 
-\num{-3.51+-0.01}   & \num{-3.73+-0.01} & \num{-3.68+-0.01} \\
+\num{-3.51+-0.01}   & \num{-3.73+-0.01} & \num{-3.71+-0.01} \\
 ethane                & \num{2.56+-0.01}  & \num{2.51+-0.01} &
-\num{2.48+-0.01}   & \num{2.50+-0.01} & \num{2.55+-0.01} \\
+\num{2.48+-0.01}   & \num{2.50+-0.01} & \num{2.50+-0.01} \\
 toluene               & \num{-0.55+-0.02}  & \num{-0.52+-0.01} &
-\num{-0.72+-0.01} & \num{-0.72+-0.01} & \num{-0.52+-0.01} 
+\num{-0.72+-0.01} & \num{-0.72+-0.01} & \num{-0.64+-0.01} 
 \\
 neopentane & \num{2.71+-0.06}  & \num{2.63+-0.01}   & 
-\num{2.58+-0.01}   & \num{2.61+-0.01} & \num{2.65+-0.02} \\
+\num{2.58+-0.01}   & \num{2.61+-0.01} & \num{2.58+-0.02} \\
 2-methylfuran         & \num{-0.39+-0.02}  & \num{-0.42+-0.01} &
-\num{-0.51+-0.01}   & \num{-0.49+-0.02} & \num{-0.31+-0.01}
+\num{-0.51+-0.01}   & \num{-0.49+-0.02} & \num{-0.42+-0.01}
 \\
 2-methylindole        & \num{-6.06+-0.04}  & \num{-5.99+-0.02} &
-\num{-6.35+-0.01}   & \num{-6.24+-0.01} & \num{-5.88+-0.01}
+\num{-6.35+-0.01}   & \num{-6.24+-0.01} & \num{-6.05+-0.01}
 \\
 2-CPI & \num{-6.14+-0.09}    & \num{-6.04+-0.02}   & 
-\num{-6.54+-0.01}   & \num{-6.05+-0.02} & \num{-6.09+-0.03}
+\num{-6.54+-0.01}   & \num{-6.05+-0.02} & \num{-6.17+-0.03}
 \\
 7-CPI & \num{-6.06+-0.11}    & \num{-6.06  +-0.05}   & 
-\num{-6.52+-0.02}   & \num{-5.67+-0.03} & \num{-6.19+-0.03}
+\num{-6.52+-0.02}   & \num{-5.67+-0.03} & \num{-6.28+-0.03}
 \\
         \bottomrule
       \end{tabular}
@@ -693,7 +693,7 @@ The effect of the Coulomb softcore potential can be seen in Figure \ref{fig:gro_
 \label{sec:charmm-probs}
 
 Figure~\ref{fig:LRC} shows the effect of turning LRC on/off as function of the cut--off values on the absolute solvation free energy of methane. The switching function starts \SI{2}{\angstrom} before the cut-off value. The figure shows that cutoff values greater than \SI{10}{\angstrom} give consistent results, if the LRC has been disabled. The bottom graph shows the relative solvation
-free energy of 2--methylindole to methane from direct RAFE and from AAFEs of methane and 2--methylindole with LRC on/off. This shows that the protocols will be inconsistent by ca. 0.8 $kcal.mol^{-1}$ if the LRC is not disabled.
+free energy of 2--methylindole to methane from direct RAFE and from AAFEs of methane and 2--methylindole with LRC on/off. This shows that the protocols will be inconsistent by ca. 0.8 $kcal.mol^{-1}$ if the LRC is not disabled. By post-processing LRC, RAFE result was more comparable to the results from other MD packages.
 
 \begin{figure}[ht]
 \includegraphics[scale=1.0]{figures/LRC}

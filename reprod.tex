@@ -611,6 +611,8 @@ A Long Range Correction (LRC) term for truncated VdW interactions is applied dur
 The version c40b1 was used for this set of free energy calculations.
 The PERT module was used to handle the alchemical transformations.
 %
+Three different approaches were used to calculate the relative Gibbs free energy: (i) RAFE simulation where electrostatic and VdW interactions were changed separately (split-protocol) , (ii) RAFE simulation where electrostatic and VdW interactions were changed together (unified-protocol) , and (iii) difference between free energies from two AFE simulations where AFE simulations followed unified-protocol.
+%
 In total, 21 evenly spaced windows were used and all windows were run for \SI{1.5}{ns} with a timestep of \SI{1}{fs}.
 Most windows used the same pre-equilibrated configuration.
 A few windows at the end-points (involving hydrogen being transformed to heavy atom or vice versa) were unstable due to steric clashes with starting coordinates and were equilibrated using \SI{0.1}{fs^{-1}} to \SI{0.5}{fs^{-1}}.
@@ -1131,16 +1133,49 @@ atoms.
 \label{sec:charmm-results}
 
 CHARMM for alchemical free energy calculation (AFE) has been widely used with PERT module, but few bugs not previously reported in CHARMM c40b1 were found and careful AFE setup is needed to get robust and accurate result. Bugs regarding TI gradient accumulation in the parallel version were identified and fixed by Dr. Stefan Boresch.
-The PERT module does not allow a hydrogen bond constraint (SHAKE) to be applied on the perturbed region, and this requires end point lambdas to be equilibrated
-carefully. These windows at end-point lambda were started with their own equilibration using \SI{0.1}{fs^{-1}} ~ \SI{0.5}{fs^{-1}} before the run. The VSwitch option was used to apply a switching function to the potential.
+The PERT module does not allow a hydrogen bond constraint (SHAKE) to be applied on the perturbed region, and this requires end point lambdas to be equilibrated carefully. These windows at end-point lambda were started with their own equilibration using \SI{0.1}{fs^{-1}} ~ \SI{0.5}{fs^{-1}} before the run. The VSwitch option was used to apply a switching function to the potential since VFSwitch option that is a switching function applied to force is not compatible with PERT module.
 
 %, since the PERT module is not compatible with the VFSwitch %option that is a switching function applied to force.
 %JM do we need to mention the above sentence?
 
 The PSSP softcore potential function cannot handle Long-Range Correction (LRC) correctly. This effect is not clearly shown when the initial and final states are comparable in size, but the deviation becomes larger for perturbations that involve large changes in solute size, or for absolute alchemical free energy calculations. It is necessary to disable the LRC to obtain consistent free energies from relative and absolute alchemical free energy calculation protocols (see SI for details).
 
-
-
+Table \ref{tab:charmm-results} shows the relative free energies obtained from CHARMM simulations.
+\begin{table}[]
+  \begin{minipage}{\linewidth}
+  \caption{Comparing CHARMM results for simulations with various split protocols. Signs of the  backward
+    transformation have been reverted to correspond to the forward
+    transformation.}\label{tab:charmm-results}
+  \makebox[\textwidth][c]{
+  \begin{tabular}{llrrr}
+    \toprule
+     \multicolumn{2}{c}{\multirow{2}{*}{transformation}}  & \multicolumn{1}{c}{split} & \multicolumn{1}{c}{unified} & \multicolumn{1}{c}{absolute(unified)}  \\
+     & &  \multicolumn{1}{c}{$\Delta\Delta G$}  & \multicolumn{1}{c}{$\Delta\Delta G$} & \multicolumn{1}{c}{$\Delta\Delta G$} \\
+    \midrule
+ethane  & methane & \num{-0.09+-0.01} & \num{-0.09+-0.02} & \multirow{2}{*}{\num{-0.03+-0.01}}  \\
+methane & ethane & \num{-0.04+-0.01} & \num{-0.04+-0.01} &  \\
+methanol & methane & \num{6.20+-0.01} & \num{6.18+-0.01} & \multirow{2}{*}{\num{6.20+-0.01}}  \\
+methane & methanol & \num{6.30+-0.01} & \num{6.21+-0.01} &  \\
+ethane  & methanol & \num{-6.21+-0.01} & \num{-6.25+-0.01} & \multirow{2}{*}{\num{-6.22+-0.02}}  \\
+methanol & ethane & \num{-6.25+-0.01} & \num{-6.28+-0.01} &  \\
+toluene & methane & \num{3.22+-0.01} & \num{3.04+-0.02} & \multirow{2}{*}{\num{3.12+-0.01}}  \\
+methane & toluene & \num{3.28+-0.01} & \num{3.09+-0.02} &  \\
+neopentane\footnote{\label{foot:centA}central mapping.} & methane & \num{-0.29 +-0.01} & \num{-0.35+-0.01} & \multirow{4}{*}{\num{-0.11+-0.02}}  \\
+methane\footref{foot:centA} & neopentane & \num{-0.15+-0.01} & \num{-0.24+-0.02} &  \\
+neopentane\footnote{\label{foot:termA}terminal mapping.} & methane & \num{-0.42+-0.01} & \num{-0.56+-0.02} &  \\
+methane\footref{foot:termA} & neopentane & \num{-0.31+-0.01} & \num{-0.40+-0.02} &  \\
+2-methylfuran & methane & \num{2.87+-0.01} & \num{2.84+-0.03} & \multirow{2}{*}{\num{2.90+-0.01}}  \\
+methane & 2-methylfuran & \num{2.93+-0.01} & \num{2.84+-0.02} &  \\
+2-methylindole & methane & \num{8.88+-0.01} & \num{8.49+-0.01} & \multirow{2}{*}{\num{8.53+-0.02}}  \\
+methane & 2-methylindole & \num{8.81+-0.01} & \num{8.56+-0.02} &  \\
+2-CPI & 7-CPI & \num{-0.02+-0.01} & \num{-0.01+-0.01} & \multirow{2}{*}{\num{-0.11+-0.04}}  \\
+7-CPI & 2-CPI & \num{-0.01+-0.01} & \num{0.04+-0.01} &  \\
+    \bottomrule
+  \end{tabular}
+}
+  \end{minipage}
+\end{table}
+While results from all three protocols (split, unified, absolute) seem to be in good agreement with each other, split-protocol result exhibits less standard error of the mean due to double amount of data. It is notable that split-protocol result is more similar to the ones from other MD packages (i.e. neopentane and toluene), but relative-unified result is more consistent with difference from CHARMM absolute simulation (2-methylindole, etc). This could be the result of AFE simulations done with unified protocol. Overall, the relative free energies obtained by three different protocols are in good agreement with other MD packages (Tables 1 and 3). 
 
 \subsection{GROMACS}
 \label{sec:gromacs-results}
@@ -1458,7 +1493,8 @@ To conclude, we hope this study will stimulate the field to improve the transfer
   Borders program (BEX 3932-13-3).  DLM appreciates support from the
   National Science Foundation (CHE 1352608), and computing support
   from the UCI GreenPlanet cluster, supported in part by NSF Grant
-  CHE-0840513.
+  CHE-0840513. DS and BR appreciate support from the National Science Foundation (NSF) through grant MCB-1517221 and additional computational resources were provided by the University of Chicago Research Computing Center.
+  
 
   We thank Prof.\ Stefan Boresch for valuable discussions and making code
   modifications to CHARMM.  We thank Dr.\ Ross Walker and Daniel Mermelstein
