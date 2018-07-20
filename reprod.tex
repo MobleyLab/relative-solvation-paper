@@ -23,10 +23,7 @@
 \usepackage{siunitx}
 \usepackage{nameref}
 \usepackage{easy-todo}
-
 \usepackage{arydshln}
-
-
 \usepackage{footref}
 
 
@@ -677,6 +674,45 @@ The softcore parameters (Eq.~S\ref{S-eq:general-softcore}x) were set to default 
 specifically $n = 0$ for Coulombic interactions and $\alpha = 2.0$ for the LJ potential~\cite{doi:10.1021/ct700081t}.
 %Long Range Correction (LRC) term
 Additionally, an end-point correction for truncated VdW potentials was applied by post-processing of end-state trajectories as described previously elsewhere.~\cite{shirtsLRC,BosisioHG}
+
+
+\begin{table}[]
+\centering
+\caption{Summary of the technical details for the relative hydration free energy calculations carried out with the various codes.}
+\label{tab:resumeSpecifications}
+\makebox[\textwidth][c]{
+\resizebox{0.7\width}{!}{
+\begin{tabular}{lllll}
+\hline 
+ &  AMBER & CHARMM & GROMACS & SOMD  \\                                                                                                                                             \hline
+Version & AMBER16   & c40b1  & 4.6.7 & 2016.1 \\  
+Module  & \progname{pmemd, sander}  & \progname{PERT} & \progname{gmx} & \progname{somd-freenrg}\\                                                                                                                      
+Protocol& Split protocol  & Unified protocol & Split protocol & Unified protocol\\                                                                                                                                        
+Number of $\lambda$ windows  
+	& \begin{tabular}[c]{@{}l@{}}11 (charge mutations)\\ 21 (vdW mutations)\end{tabular}                                                                            & 21 evenly spaced                                                                                                                                    & \begin{tabular}[c]{@{}l@{}}31 (charge mutations)\\ 31 (vdW mutations)\end{tabular}                                                      
+	& 17 evenly spaced\\
+Starting coordinates  & FESetup pre-equilibration   & FESetup pre-equilibration   & FESetup pre-equilibration   & FESetup pre-equilibration  \\ 
+Simulation length per window & 2.5 ns  & 1.5 ns &  4.2 ns & 2 ns\\ 
+Timestep& 1 fs  & 1 fs & 1fs & 2fs\\ 
+Electrostatic method & PME   & PME & PME & atom-based RF\\                                                                                          
+Solvated phase cutoff& 8 \AA{} & 12 \AA{} & 10 \AA{} & 10 \AA{}\\ 
+Vacuum phase cutoff  & no cutoff & no cutoff & 50 \AA{} & no cutoff\\
+Constraint  & none  & none & none & H-bonds not perturbed\\                                                                                                                                
+LRC corrections   & during MD  & post-processing & during MD & post-processing\\ 
+Barostat  & Monte Carlo & Berendsen & Parrinello-Rahman & Monte Carlo \\
+Thermostat & Langevin   & Berendsen & Langevin          & Andersen \\
+\\
+Soft core parameters         & \begin{tabular}[c]{@{}l@{}}$r_{LJ}=(2\sigma_{ij}^6 \lambda + r_{ij}^6)^{1/6}$\\ \\ \\ $r_{Coul} = (\beta \lambda + r^p_{ij})^{1/p}$\\ \\ \\ $n=1$\end{tabular} 
+			     & \begin{tabular}[c]{@{}l@{}}$r_{LJ}=(2\lambda + r^2_{ij})^{1/2}$\\ \\ \\ $r_{Coul} = (\beta \lambda + r_{ij}^2)^{1/2}$\\ \\ \\ $n=1$\end{tabular} 
+			     & \begin{tabular}[c]{@{}l@{}}$r_{LJ} = (2\sigma_{ij}^{6}\lambda + r_{ij}^6)^{1/6}$\\ \\ \\ $r_{coul} = r_{LJ}$\\ \\ \\ $n=1$\end{tabular} 
+			     & \begin{tabular}[c]{@{}l@{}}$r_{LJ} = (2\sigma_{ij}\lambda +  r^2_{ij})^{1/2}$\\ \\ \\ $r_{Coul} = (\lambda + r^2_{ij} )^{1/2}$\\ \\ \\ $n=1$\end{tabular} \\
+                             &                                                                                                                                                                &                                                                                                                                                     &                                                                                                                                         &                                                                                                                                                           \\ \hline
+\end{tabular}%
+}
+}
+\end{table}
+
+\newpage
 
 \subsection{Free Energy Estimations}
 \label{sec:analysis}
