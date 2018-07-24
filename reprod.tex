@@ -661,7 +661,7 @@ The starting coordinates for each window were obtained by energy minimization of
 %Simulation length timestep
 A velocity-Verlet integrator was employed with a \SI{2}{fs} time step.
 %SHAKE and CONSTRAINTS
-Only bonds involving hydrogens which are not alchemically transformed were constrained. This approach is referred as the ``unperturbed H bond constraint protocol''.
+Water hydrogens (TIP3P) were constrained with SHAKE. For the alchemical solute, only bonds involving hydrogens which are not alchemically transformed were constrained. This approach is referred as the ``unperturbed H bond constraint protocol''. Given the number of the perturbed hydrogen bonds in the solutes (fig.~\ref{fig:cycles}, this constraint allows to use a \SI{2}{fs} time-step.
 %Temperature and pressure
 Temperature control was achieved with the Andersen thermostat,~\cite{doi:10.1063/1.439486} with a stochastic collision frequency of \SI{10}{ps^{-1}}.
 A Monte Carlo barostat assured pressure control, with isotropic box edge scaling moves attempted every 25 time steps.
