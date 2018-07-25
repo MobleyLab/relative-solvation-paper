@@ -757,9 +757,9 @@ defined as
   \label{eq:sem}
   \mathrm{err}(\Delta\Delta G_{\mathrm{hydr}}) = \frac{\sigma}{\sqrt{n}}
 \end{equation}
-where $\sigma$ is the sample standard deviation and $n$ is the number of uncorrelated samples, as computed by the \texttt{pymbar} module.
+where $\sigma$ is the sample standard deviation of the three $\Delta \Delta G_{\mathrm{hydr}}$ values, and $n=3$.
 %DLM: Add ref
-  The SEM for component free energies is combined as:
+For each free energy change the SEM was evaluated as:
 \begin{equation}
   \label{eq:sem-comb}
   \mathrm{err}(\mathrm{combined}) = \sqrt{\sum_i \sigma_i^2}.
@@ -769,10 +769,10 @@ We also make use of the mean absolute error MAE (also called mean unsigned
 error, MUE) to compare data sets.
 \begin{equation}
 \label{eq:MUE}
-\mathrm{MAE} = \frac{1}{n}\sum_\mathrm{i=1}^n \left | y_\mathrm{i} -
+\mathrm{MAE} = \frac{1}{N}\sum_\mathrm{i=1}^N \left | y_\mathrm{i} -
 x_\mathrm{i} \right |
 \end{equation}
-where $n$ is the total number of samples, $y_\mathrm{i}$ and $x_\mathrm{i}$ are
+where $N$ is the total number of samples, $y_\mathrm{i}$ and $x_\mathrm{i}$ are
 the $i$--th datum to be compared.
 
 
@@ -894,7 +894,7 @@ TIP3P water density of \SI{0.980}{g/cm^3}~\cite{doi:10.1021/jz500737m}.
   \end{minipage}
 \end{table}
 
-Table~\ref{tab:mue-absolute} shows the MAD between SOMD, GROMACS, AMBER and CHARMM. CHARMM produces figures that agree the most with other MD packages. The largest difference reaches \SI{0.2}{kcal.mol^{-1}} for SOMD and GROMACS. Variabilities between the codes may be partly explained by differences in densities due to different treatments of long range electrostatics and vdW interactions.
+Table~\ref{tab:mue-absolute} shows the MAE between SOMD, GROMACS, AMBER and CHARMM. CHARMM produces figures that agree the most with other MD packages. The largest difference reaches \SI{0.2}{kcal.mol^{-1}} for SOMD and GROMACS. Variabilities between the codes may be partly explained by differences in densities due to different treatments of long range electrostatics and vdW interactions.
 
 %{\footnotesize \bf \color{red} [BR: I am not sure how Table~%\ref{tab:mue-absolute} was generated. I insert my own table below based on Table \ref{tab:absolute2} and the deviations are not smaller for SOMD.]}
 %JM resolved this as using previous CHARMM and GROMACS-reaction field values
@@ -915,7 +915,7 @@ Table~\ref{tab:mue-absolute} shows the MAD between SOMD, GROMACS, AMBER and CHAR
 
 \begin{table}[]
  \begin{minipage}{\linewidth}
-   \caption{Mean Absolute Deviations (MAD) (\SI{}{kcal.mol^{-1}}) between relative free energies obtained with the absolute protocol for the SOMD, GROMACS, AMBER and CHARMM packages.}\label{tab:mue-absolute}
+   \caption{Mean Absolute Error (MAE) (\SI{}{kcal.mol^{-1}}) between relative free energies obtained with the absolute protocol for the SOMD, GROMACS, AMBER and CHARMM packages.}\label{tab:mue-absolute}
    \makebox[\textwidth][c]{
      \begin{tabular}{lrrr}
        \toprule
@@ -999,12 +999,12 @@ Next we compared relative free energies across packages.
 CHARMM tends to show relative free energies with smaller values for a number of transformations:  neopentane, 2--methylfuran and 2--methylindole. SOMD displays smaller values $\Delta\Delta G_{\mathrm{hydr}}$ for the methanol and toluene transformations.  The largest discrepancy, however, is in the neopentane transformation with central mapping where AMBER with implicit dummy atoms is about \SI{0.5}{kcal.mol^{-1}} higher and CHARMM about \SI{0.2}{kcal.mol^{-1}} lower than the other two codes.  The
 terminal mapped neopentane case reveals AMBER to be in line with GROMACS and SOMD while CHARMM's results deviate further.  AMBER deviates also quite strongly from the other codes in the cyclopentanyl indole cases.
 
-The MADs of the relative free energy simulations are presented in
-Table~\ref{tab:mue-relative}.  They are on average slightly larger than the MADs from the absolute simulations (Table~\ref{tab:mue-absolute}) and reach \SI{0.26}{kcal.mol^{-1}} for AMBER compared with CHARMM.
+The MAEs of the relative free energy simulations are presented in
+Table~\ref{tab:mue-relative}.  They are on average slightly larger than the MAEs from the absolute simulations (Table~\ref{tab:mue-absolute}) and reach \SI{0.26}{kcal.mol^{-1}} for AMBER compared with CHARMM.
 
 \begin{table}[]
  \begin{minipage}{\linewidth}
-   \caption{MAD (in \si{kcal.mol^{-1}}) comparing relative free energies from
+   \caption{MAE (in \si{kcal.mol^{-1}}) comparing relative free energies from
      relative simulations between SOMD, GROMACS, AMBER and
      CHARMM.}\label{tab:mue-relative}
    \makebox[\textwidth][c]{
@@ -1378,7 +1378,7 @@ $\Delta \Delta G$ obtained from two absolute free energy calculations.
 Table~\ref{tab:relative} summarizes all the computed relative free energy of
 hydration for the dataset in Fig.~\ref{fig:cycles}.
 A very good agreement is observed between both methodologies
-($R^2$=\SI{0.99+-0.01}{} and MAD = \SI{0.10+-0.03}{kcal.mol^{-1}}),
+($R^2$=\SI{0.99+-0.01}{} and MAE = \SI{0.10+-0.03}{kcal.mol^{-1}}),
 highlighting internal consistency within SOMD.
 
 %BR: The foolling around with masses of dummy atoms is mostly a technical trick. The whole thing could have been run with a mass of 5 AMU on everyone....
@@ -1405,7 +1405,7 @@ the bonded term (and associated coupled terms) to the free energy change. The ef
 to/from a heavy atom.
 
 The reaction fields implemented in SOMD and GROMACS differ somewhat (atom-based
-shifted Barker Watts,~\cite{doi:10.1080/00268977300102101} vs group based switched Barker Watts), but nevertheless SOMD and GROMACS RF produce comparable results with a MAD of \SI{0.18}{kcal.mol^{-1}}. Overall, the SOMD free energy estimations are in good agreement with the other MD packages, as the MAD suggests (see Table~\ref{tab:mue-relative}). For the methane $\rightarrow$ neopentane transformations SOMD yields consistent results between central and terminal mappings, as shown in Table~\ref{S-tab:sire-finalresults}x. 
+shifted Barker Watts,~\cite{doi:10.1080/00268977300102101} vs group based switched Barker Watts), but nevertheless SOMD and GROMACS RF produce comparable results with a MAE of \SI{0.18}{kcal.mol^{-1}}. Overall, the SOMD free energy estimations are in good agreement with the other MD packages, as the MAE suggests (see Table~\ref{tab:mue-relative}). For the methane $\rightarrow$ neopentane transformations SOMD yields consistent results between central and terminal mappings, as shown in Table~\ref{S-tab:sire-finalresults}x. 
 Reaction field and PME results are in good agreement.  All SOMD RAFE simulations were carried out with simultaneous transformation of Lennard-Jones, charges, and bonded terms. This suggests that the failure of the GROMACS ``unified protocol'' in some instances may be due to differences in the softcore Coulomb implementations.
 
 
