@@ -173,7 +173,7 @@ thus instabilities in the integrator.
 \label{fig:dummies}
 \end{figure}
 
-Figure~\ref{fig:dummies} depicts how force field parameters vary for a
+Fig.~\ref{fig:dummies} depicts how force field parameters vary for a
 transformation carried out in the direction of disappearing atoms.
 The mutation is shown with the charge step first followed by the vdW
 step but each step can really be run independently.  Please note that
@@ -185,26 +185,26 @@ switched on in opposite order if atoms are to be ``created''.  The
 intermediate state b has the vdW parameters from state a but the
 charges from state c.
 
-Figure~\ref{fig:dummies} shows how topology files may be created in
+Fig.~\ref{fig:dummies} shows how topology files may be created in
 cases where the MD software does not allow independent $\lambda$s
 for electrostatic and vdW mutations.  With Gromacs, for instance, the
 transformation only requires a single topology file with both A and B
 states (in single topology fashion, see main text) and a single
 simulation control file with separate $\lambda$ vectors for charge and
 vdW transformations.  Any intermediate state from
-Figure~\ref{fig:dummies} is thus created ``on--the-fly'' i.e.\
+Fig.~\ref{fig:dummies} is thus created ``on--the-fly'' i.e.\
 implicitly during the simulation run.  With AMBER (up to version 16 as
 of this writing), however, three explicit topology files (with sander,
 two with pmemd) and two control files would need to be created.  The
-state b in Figure~\ref{fig:dummies} would be created from state a with
+state b in Fig.~\ref{fig:dummies} would be created from state a with
 the charges from state c.  The bonded terms can be combined with
 either mutation step or run separately.  For AMBER the easiest way is to
 combine vdW with bonded terms because charges are independent of atom
 types.
 
-Figure~\ref{fig:dummies2} illustrates explicit topologies for
+Fig.~\ref{fig:dummies2} illustrates explicit topologies for
 transformations with both appearing and disappearing atoms in one simulation.  
-The principle is essentially the same as in Figure~\ref{fig:dummies}:
+The principle is essentially the same as in Fig.~\ref{fig:dummies}:
 charges of dummy atoms must be switched off before vdW parameters are
 set to zero to avoid interactions of ``naked'' charge sites with other
 atoms possibly leading to very close contact, large energies and
@@ -286,7 +286,7 @@ steps for all these MD packages.
 \subsection{AMBER}
 \label{sec:amber-probs}
 
-Table~\ref{tab:amber-onestep} compares the split protocol with the
+Tab.~\ref{tab:amber-onestep} compares the split protocol with the
 unified protocol.  The split protocol transforms Coulomb force
 field parameters separately from the Lennard--Jones and all bonded
 parameters.  The unified protocol transforms all force field
@@ -338,7 +338,7 @@ simulations.
 It is not clear, however, if the inconsistencies can be attributed to
 the vacuum transformations only.
 
-Figure~\ref{fig:amber-dist} shows a problem with end point geometries.  This is demonstrated with the average distance between the
+Fig.~\ref{fig:amber-dist} shows a problem with end point geometries.  This is demonstrated with the average distance between the
 carbon atom and the four attached hydrogens atoms in the neopentane to
 methane case.  The methane carbon atom is mapped here to the central atom
 of neopentane.  The distances are recorded for the vdW plus bonded
@@ -374,7 +374,7 @@ three test cases, however, displays the expected end point distance.
 
 To further test this hypothesis methyl and ethyl groups are added to
 all terminal methyl groups of neopentane, see cyan and green lines in
-Figure~\ref{fig:amber-dist}.  In both cases the end point distance is
+Fig.~\ref{fig:amber-dist}.  In both cases the end point distance is
 about \SI{1.12}{\angstrom} with a slightly lower value for the ethyl
 substitution but which are still too high.
 
@@ -389,7 +389,7 @@ will repel each other and thus not allow to reach the final distance.
 Only after the final vdW (only) mutation had been carried out, were the final 
 distances of \SI{1.09}{\angstrom} reached.
 
-Table~\ref{tab:amber-disc} summarizes the free energy components for the 
+Tab.~\ref{tab:amber-disc} summarizes the free energy components for the 
 2--methylindole to methane case for both forward and backward transformations.  
 The electrostatic contributions display a very small SEM and the averages from 
 both directions agree with each other up to the second digit after the comma.  
@@ -417,7 +417,7 @@ methane        & 2-methyindole & -4.90 & 0.02 & \hred{-3.18} & 0.01 &
 
 In sum, this indicates a problem of the RAFE code in AMBER.  Whether that is a bug or a conceptual issue with the particular implementation can not be explained at the moment.
 
-Table~\ref{tab:amber-5ring} summarizes the free energies obtained from forward 
+Tab.~\ref{tab:amber-5ring} summarizes the free energies obtained from forward 
 and backward simulations of the cyclopentanyl transfer from position 2 to 
 position 7 on indole and \emph{vice versa}.  Results from three different 
 protocols are shown: 1) implicit dummy atoms and partial re/discharge of the 
@@ -478,7 +478,7 @@ The $\Delta G_{\mathrm{c}}$ term was obtained via post-processing of the end sta
 where $U_{\mathrm{ic,nc}}(\mathbf{r})$ is the solute intramolecular electrostatic-no cutoff potential that depends on the coordinates $\mathbf{r}$ of the solute and is given by Coulomb's law computed without cutoffs. 
 $U_{\mathrm{ic,sim}}(\mathbf{r})$ is the intramolecular electrostatic potential term as computed in the simulation with the shifted atom-based Barker-Watts Reaction Field cutoff. 
 
-Figure ~\ref{fig:sire_histogram} compare relative free energy of hydration $\Delta\Delta G$ with relative $\Delta\Delta G$ estimations from absolute free  
+Fig. ~\ref{fig:sire_histogram} compare relative free energy of hydration $\Delta\Delta G$ with relative $\Delta\Delta G$ estimations from absolute free  
 energy calculations for all the transformation of the dataset.
 
 \begin{figure}[h!]
@@ -532,13 +532,13 @@ methane        & 2-methylindole & 8.67    & 0.08 & 8.57  & 0.03\\
   \end{minipage}
 \end{table}
 
-Table~\ref{tab:sire-finalresults} shows relative free energy of hydration 
+Tab.~\ref{tab:sire-finalresults} shows relative free energy of hydration 
 $\Delta\Delta G$ compared to $\Delta\Delta G$ values extracted from absolute 
-free energy calculations, depicted in Fig~\ref{fig:sire_histogram}.
+free energy calculations, depicted in Fig.~\ref{fig:sire_histogram}.
 
 Initially, SOMD RAFE protocols used all bonds constraint algorithm. In this way all the solute bonds are constrained, which results in a
 systematic offset for each RAFE predictions, compared to the RAFE from absolute free energy calculations.
-Figure ~\ref{fig:sire_allbonds} shows the discrepancy between RAFE computed with all bond constraints and RAFE from absolute free energy calculations.
+Fig. ~\ref{fig:sire_allbonds} shows the discrepancy between RAFE computed with all bond constraints and RAFE from absolute free energy calculations.
 
 
 \begin{figure}[ht]
@@ -550,7 +550,7 @@ Figure ~\ref{fig:sire_allbonds} shows the discrepancy between RAFE computed with
 
 \newpage
 
-Finally, figure~\ref{fig:sire_constraints} and table ~\ref{tab:sire_constraints} compare relative free energy of hydration $\Delta \Delta G$ estimated with RAFE using all bonds constraints, no constraints and unperturbed hydrogen bond constraints.
+Finally, Fig.~\ref{fig:sire_constraints} and Tab. ~\ref{tab:sire_constraints} compare relative free energy of hydration $\Delta \Delta G$ estimated with RAFE using all bonds constraints, no constraints and unperturbed hydrogen bond constraints.
 
 \begin{figure}[ht]
   \includegraphics[width=\textwidth]{figures/SI_sire_constraints.pdf}
@@ -602,7 +602,7 @@ methane        & 2-methylindole & 9.10 & 0.04 & 8.61 & 0.04 & 8.67  & 0.08\\
 \subsection{GROMACS}
 \label{sec:gromacs-probs}
 
-Table~\ref{tab:gro-sc2} compares RAFE results subject to the use of Coulomb softcore potentials.
+Tab.~\ref{tab:gro-sc2} compares RAFE results subject to the use of Coulomb softcore potentials.
 In principle, the use of softcore functions is redundant in the split protocol because charges are
 changed while van der Waals parameters are fully tuned to the transformation's final state parameters.
 SEM values tend to be larger when they are used.
@@ -650,7 +650,7 @@ SEM values tend to be larger when they are used.
 \end{minipage}
 \end{table}
 
-The effect of the Coulomb softcore potential can be seen in Figure \ref{fig:gro_sc_eff}. 
+The effect of the Coulomb softcore potential can be seen in Fig. \ref{fig:gro_sc_eff}. 
 
 \begin{figure}[ht]
   \includegraphics{figures/TI_plot.pdf}
@@ -665,7 +665,7 @@ The effect of the Coulomb softcore potential can be seen in Figure \ref{fig:gro_
 \subsection{CHARMM}
 \label{sec:charmm-probs}
 
-Figure~\ref{fig:LRC} shows the effect of turning long range corrections (LRC) on/off as function of the cut--off values on the absolute solvation free energy of methane. The switching function starts \SI{2}{\angstrom} before the cut-off value. The figure shows that cutoff values greater than \SI{10}{\angstrom} give consistent results, if the LRC has been disabled. The bottom graph shows the relative solvation
+Fig.~\ref{fig:LRC} shows the effect of turning long range corrections (LRC) on/off as function of the cut--off values on the absolute solvation free energy of methane. The switching function starts \SI{2}{\angstrom} before the cut-off value. The figure shows that cutoff values greater than \SI{10}{\angstrom} give consistent results, if the LRC has been disabled. The bottom graph shows the relative solvation
 free energy of 2--methylindole to methane from direct RAFE and from AAFEs of methane and 2--methylindole with LRC on/off. This shows that the protocols will be inconsistent by ca. 0.8 $kcal.mol^{-1}$ if the LRC is not disabled. By post-processing LRC, RAFE result was more comparable to the results from other MD packages.
 
 \begin{figure}[ht]
