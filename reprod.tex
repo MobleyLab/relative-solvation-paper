@@ -1421,7 +1421,10 @@ Reaction field and PME results are in good agreement.  All SOMD RAFE simulations
 
 This study addressed whether contemporary MD packages such as AMBER, CHARMM, GROMACS and SOMD are able to reproduce relative alchemical free energies of hydration for a set of neutral small organic molecules, given a
 pre--defined force field.
-We have found that establishing a simulation protocol that leads to consistent results across codes has been cumbersome due to technical difficulties encountered with every code.  The MD codes have a wide range of options and setup features which makes it difficult for the unexperienced user to decide on the most
+We have found that establishing a simulation protocol that leads to consistent results across codes has been cumbersome due to technical difficulties encountered with every code.
+This was the case despite our best efforts to maintain a consistent protocol across codes; for example, the codes compared nominally use the same functional form of soft core potentials, and implementations of many other algorithms which should be the same or are thought to be equivalent.
+Still, we encountered numerous difficulties.
+Overall, the MD codes have a wide range of options and setup features which makes it difficult for the unexperienced user to decide on the most
 appropriate ones.
 
 The free energies we have computed appear to be in reasonably good agreement with each other (see Tab.~\ref{tab:absolute2} and \ref{tab:relative}).  The average MAE between all codes \SI{0.14}{kcal/mol} for absolute free energies and \SI{0.17}{kcal/mol} for relative free energies.  This can be interpreted as the current ``limit of reproducibility'' for the field.  We have found viable protocols for each MD code to achieve
