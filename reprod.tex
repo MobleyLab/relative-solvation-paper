@@ -412,13 +412,18 @@ such that the desired end--states can be simulated.  This is a similar approach 
 
 \paragraph{CHARMM.} The PERT module duplicates the topology similarly to
 \progname{sander} but mapped atoms are given in the topology only once.
-The module requires balancing with explicit dummy atoms.  All energy terms are
-linearly scaled by the coupling parameter $\lambda$.  The PSSP softcore potential is applied to \emph{all}
-atoms in the perturbed group (see section~\ref{S-sec:softcores}x in the SI).
-The code can handle constraints of changing bond lengths in the perturbed group but this may cause incorrect results with PSSP softcores (Stefan Boresch, private communication).  There is only one global $\lambda$ for parameter
-transformation, however, the scripting facilities in CHARMM allow run time
-modification of topologies e.g.\ by setting charges or LJ parameters
-to arbitrary values.
+The module requires balancing with explicit dummy atoms.  All energy
+terms are linearly scaled by the coupling parameter $\lambda$.  The softcore
+potential (activated with the PSSP keyword and used here as identifier
+in the further discussion, see the SI for implementation details) is
+applied to \emph{all} atoms in the perturbed group (see
+section~\ref{S-sec:softcores}x in the SI).  The code can handle
+constraints of changing bond lengths in the perturbed group but this
+may cause incorrect results with PSSP softcores (Stefan Boresch,
+private communication).  There is only one global $\lambda$ for
+parameter transformation, however, the scripting facilities in CHARMM
+allow run time modification of topologies e.g.\ by setting charges or
+LJ parameters to arbitrary values.
 
 \paragraph{GROMACS.} This code uses a single topology description.
 Bonded terms are strictly parameter--scaled, which requires proper
@@ -534,12 +539,14 @@ TIP3P for the solvent.~\cite{jorgensen_comparison_1983-1}
 % REF: Durell, S. R.; Brooks, B. R.; Ben-Naim, A. J Phys Chem 1994, 98, 2198.
 % REF Pettitt, B. M.; Karplus, M. Chem Phys Lett 1985, 121, 194.
 %
-Charges were
-computed with the \progname{antechamber} program and missing bonded and vdW
-terms were generated with the \progname{parmchk2} program, both from the
-AmberTools16 distribution.  The quality of free energies of various small
-molecule force fields has been discussed
-elsewhere, see e.g. Refs.~\citenum{doi:10.1021/ct300203w,Hu2016}.
+Charges were computed with the \progname{antechamber} program and
+missing bonded and vdW terms were generated with the
+\progname{parmchk2} program, both from the AmberTools16 distribution.
+All parameters are compiled at
+https://github.com/halx/relative-solvation-inputs.
+The quality of free energies of various small molecule force fields
+has been discussed elsewhere, see
+e.g.\ Refs.~\citenum{doi:10.1021/ct300203w, Hu2016}.
 
 While the MD packages principally allow a ``one--step''
 transformation~\cite{steinbrecher_soft-core_2011},
@@ -1513,7 +1520,10 @@ doi:10.1021/acs.jctc.6b00979,loeffler_fesetup:_2015}. To conclude, we hope this 
 \end{acknowledgement}
 
 \begin{suppinfo}
-Additional tables and details on the different free energy implementations are listed in the supporting information. All input files, setup, simulations and analysis of the dataset with the above mentioned packages are also freely available at
+Additional tables and details on the different free energy
+implementations are listed in the supporting information.  All input
+files, setup, simulations and analysis of the dataset with the above
+mentioned packages are also freely available at
 https://github.com/halx/relative-solvation-inputs .
 
 \end{suppinfo}
