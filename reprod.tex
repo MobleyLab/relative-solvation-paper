@@ -299,20 +299,37 @@ point of code development.
 \section{Methods}
 \label{sec:methods}
 
-One practical challenge is that the free energy methodologies
-used in one MD program are not always available in another
-package, or the same functionality is provided via different algorithms (e.g. algorithms for pressure and temperature
-scaling, integrators, etc).  In addition there may be difference in the  choice of physical constants used for evaluating potential energies. A previous study noted that variations in the hardcoded values of Coulomb's constant lead to detectable differences in single point energies calculated by CHARMM, AMBER or GROMACS.\cite{Shirts2017,SOMDcoulomb}
-To circumvent some of these practical problems,
-we will compare relative free energies calculated via three
-protocols.  In the ``unified protocol'' we calculate relative free
-energies by scaling together all force field parameters i.e.\ partial
-charges, van der Waals parameters, and bonded parameters vary
-simultaneously along the alchemical path.  In the ``split protocol''
-we calculate relative free energies by scaling separately the van der
-Waals parameters and the partial charges parameters.  The order in
-which this has to be done is detailed in
-section~\ref{S-sec:separated}x of the SI.  The scaling of the bonded terms can be combined with either transformation.  In the ``absolute protocol'' we calculate relative hydration free energies as the difference between two calculated absolute hydration free energies.
+One practical challenge is that the free energy methodologies used in
+one MD program are not always available in another package, or the
+same functionality is provided via different algorithms
+(e.g.\ algorithms for pressure and temperature scaling, integrators,
+cufoffs for Coulomb and vdW interactions, etc).  We also note, that
+the implementation of alchemical free energy calculations is very
+different among the simulation codes (see~\ref{sec:afe_impl} for
+details).  This implies that setting the parameters specific to the
+free energy protocol, in parituclar the lambda schedule,  the same for
+all codes will not automatically lead to the free energy reproduced in
+the same fashion.  In the SI we show various TI curves to demonstrate this.
+Hence, these parameters were adjusted individually for each code based
+on previous experience of the researchers involved.  In addition there
+may be differences in the choice of physical constants used for
+evaluating potential energies.  A previous study noted that variations
+in the hardcoded values of Coulomb's constant lead to detectable
+differences in single point energies calculated by CHARMM, AMBER or
+GROMACS~\cite{Shirts2017, SOMDcoulomb}.
+
+To circumvent some of these practical problems, we will compare
+relative free energies calculated via three protocols.  In the
+``unified protocol'' we calculate relative free energies by scaling
+together all force field parameters i.e.\ partial charges, van der
+Waals parameters, and bonded parameters vary simultaneously along the
+alchemical path.  In the ``split protocol'' we calculate relative free
+energies by scaling separately the van der Waals parameters and the
+partial charges parameters.  The order in which this has to be done is
+detailed in section~\ref{S-sec:separated}x of the SI.  The scaling of
+the bonded terms can be combined with either transformation.  In the
+``absolute protocol'' we calculate relative hydration free energies as
+the difference between two calculated absolute hydration free energies.
 
 \subsection{Alchemical Free Energy Implementations}
 \label{sec:afe_impl}
