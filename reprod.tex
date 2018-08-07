@@ -377,7 +377,7 @@ energy.  These and other details will be outlined below.
 approach.  All terms are energy scaled. The perturbed group must be
 entirely duplicated, i.e.\ for \progname{sander} this means two
 topology files with one end state each, and for \progname{pmemd} both
-end states in one topology file. In AMBER16 \progname{sander} and
+end states in one topology file.  In AMBER16 \progname{sander} and
 \progname{pmemd} implement free energy simulation in an equivalent
 fashion.  However, pmemd does not support vacuum free energy simulations
 in that version.  Hence, all vacuum simulations needed to be run with
@@ -455,10 +455,13 @@ careful construction of the patch file.
 \label{sec:rafe_setup}
 
 The setup for all relative free energy simulations has been carried
-out with the tool FESetup (version
-1.2).~\cite{loeffler_fesetup:_2015}  FESetup is a perturbed topology writer for AMBER, CHARMM,
-GROMACS, SOMD and NAMD~\cite{JCC:JCC20289}.  The tool makes use of a
-maximum common substructure search algorithm to automatically compute
+out with the tool FESetup (version 1.2).~\cite{loeffler_fesetup:_2015}
+FESetup is a perturbed topology writer for AMBER, CHARMM,
+GROMACS, SOMD and NAMD~\cite{JCC:JCC20289} (NAMD is currently a purely
+dual--topolgy code and has thus not been considered in this study due
+to the technical differences as explained in the Introduction).  The
+tool makes use of a maximum common substructure search algorithm to
+automatically compute
 atoms that can be mapped, i.e.\ atoms that have a direct relationship
 to an equivalent atom in the other state -- atoms undergoing atom type conversion or modification.  The only current limit is that rings are
 required to be preserved~\cite{doi:10.1021/acs.jcim.5b00057}.  With this
