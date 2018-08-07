@@ -71,9 +71,13 @@
   RAFE calculations of hydration free energies for a set
   of small organic molecules and demonstrate that free energies can be
   reproduced to within about \SI{0.2}{kcal/mol} with aforementioned
-  codes.  Achieving this level of reproducibility requires considerable
-  attention to detail and package--specific simulation protocols, and no universally   applicable protocol emerges. The  benchmarks and protocols reported here should be useful for the community to validate new and future versions of software for free
-  energy calculations.
+  codes.  Absolute alchemical free energy simulations have been
+  carried out as a reference.  Achieving this level of reproducibility
+  requires considerable attention to detail and package--specific
+  simulation protocols, and no universally applicable protocol
+  emerges. The  benchmarks and protocols reported here should be
+  useful for the community to validate new and future versions of
+  software for free energy calculations.
 \end{abstract}
 
 \begin{tocentry}
@@ -309,7 +313,7 @@ different among the simulation codes (see~\ref{sec:afe_impl} for
 details).  This implies that setting the parameters specific to the
 free energy protocol, in parituclar the lambda schedule, the same for
 all codes will not automatically lead to the free energy reproduced in
-the same fashion.  In the SI we show various TI curves to demonstrate this.
+the same fashion.  In the SI we show various curves to demonstrate this.
 Hence, these parameters were adjusted individually for each code based
 on previous experience of the researchers involved.  In addition there
 may be differences in the choice of physical constants used for
@@ -729,29 +733,26 @@ Soft core parameters         & \begin{tabular}[c]{@{}l@{}}$r_{LJ}=(2\sigma_{ij}^
 \subsection{Free Energy Estimations}
 \label{sec:analysis}
 
-In this work we primarily focus on TI as this is supported by all the tested MD packages ``out--of--the--box''.
-Equation~\ref{eq:ti} computes the free energy as
-\begin{equation}\label{eq:ti}
-	\Delta G = \int_{\lambda=0}^{\lambda=1}
-	\left\langle
-	\frac{\mathscr{H}(\vec{q},\vec{p};\lambda)}{\partial\lambda}\right\rangle_\lambda
-	 d\lambda
+In this work we primarily focus on TI as this is supported by all the
+tested MD packages ``out--of--the--box''. Equation~\ref{eq:ti}
+computes the free energy as \begin{equation}\label{eq:ti}
+  \Delta G = \int_{\lambda=0}^{\lambda=1}
+  \left\langle
+  \frac{\mathscr{H}(\vec{q},\vec{p};\lambda)}{\partial\lambda}\right\rangle_\lambda
+  d\lambda
 \end{equation}
-where $\mathscr{H}(\vec{q},\vec{p};\lambda)$ is the Hamiltonian as a function
-of the coordinate vectors $\vec{q}$ and the momentum vectors $\vec{p}$, and
-parametric dependence on the coupling parameter $\lambda$ is explicit.  The angle brackets
-denote the ensemble average of the gradient of the Hamiltonian with respect to
-$\lambda$, at a given $\lambda$ value.
-%An AFE simulation is typically carried
-%out in a series of equilibrium simulations at discrete values of $\lambda$ but
-%the gradient can also be evaluated with a continuously varying coupling
-%parameter as a function of the simulation time.
-The free energy is finally
-computed through a suitable numerical integration method. Results from additional estimators will be given where available.  We have used
-the \progname{alchemical analysis
-  tool}~\cite{klimovich_guidelines_2015} for all analyses. This tool provides various estimators such as TI, TI with
-cubic splines, BAR and MBAR.  All data was sub--sampled to eliminate correlated
-data.
+where $\mathscr{H}(\vec{q},\vec{p};\lambda)$ is the Hamiltonian as a
+function of the coordinate vectors $\vec{q}$ and the momentum vectors
+$\vec{p}$, and parametric dependence on the coupling parameter
+$\lambda$ is explicit.  The angle brackets denote the ensemble average
+of the gradient of the Hamiltonian with respect to $\lambda$, at a
+given $\lambda$ value.  Results from additional
+estimators will be given where available.  We have used the
+\progname{alchemical analysis tool}~\cite{klimovich_guidelines_2015}
+for all analyses.  This tool provides various estimators such as TI,
+TI with cubic splines, BAR and MBAR.  We have used the cubic splines
+method to integrate the free energy.  All data was sub--sampled to
+eliminate correlated data.
 
 All RAFE simulations were run in triplicate in forward as well as
 backward direction for a total of 6 simulations per mutation.  The
@@ -787,12 +788,17 @@ the $i$--th datum to be compared.
 \section{Results}
 \label{sec:results}
 
-We will use absolute hydration free energies here as our standard point of comparison because for the present dataset they can be calculated with high precision,~\cite{doi:10.1021/acs.jced.7b00104} %check for more references
-and are simpler to set up and implement than relative calculations.
-Prior work has successfully compared calculated absolute hydration
-free energies across GROMACS and DESMOND codes.~\cite{klimovich_predicting_2010}
+In the following we will present our RAFE results for the
+thermodynamic cycles shown in Fig.~\ref{fig:thermocycle}.  We will use
+absolute hydration free energies here as our standard point of
+comparison because for the present dataset they can be calculated with
+high precision~\cite{doi:10.1021/acs.jced.7b00104}, and are simpler to
+set up and implement than relative calculations.  Prior work has
+successfully compared calculated absolute hydration free energies
+across GROMACS and DESMOND codes.~\cite{klimovich_predicting_2010}
 
-Tab.~\ref{tab:absolute2} summarizes results for the absolute hydration free energies.  The table shows the data
+Tab.~\ref{tab:absolute2} summarizes results for the absolute hydration
+free energies.  The table shows the data
 from simulations with the recommended protocol for each MD code, as
 discussed in detail in the following subsections.
 The  precision of the calculated free energies is similar between
