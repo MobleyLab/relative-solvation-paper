@@ -1422,7 +1422,8 @@ Reaction field and PME results are in good agreement.  All SOMD RAFE simulations
 This study addressed whether contemporary MD packages such as AMBER, CHARMM, GROMACS and SOMD are able to reproduce relative alchemical free energies of hydration for a set of neutral small organic molecules, given a
 pre--defined force field.
 We have found that establishing a simulation protocol that leads to consistent results across codes has been cumbersome due to technical difficulties encountered with every code.
-This was the case despite our best efforts to maintain a consistent protocol across codes; for example, the codes compared nominally use the same functional form of soft core potentials, and implementations of many other algorithms which should be the same or are thought to be equivalent.
+This was the case despite our best efforts to maintain fairly consistent protocols for settings which were expected to significantly impact results.
+For example, we used nominally the same form of soft core potentials in most of the codes compared , and implementations of many other algorithms which should be the same or are thought to be equivalent.
 Still, we encountered numerous difficulties.
 Overall, the MD codes have a wide range of options and setup features which makes it difficult for the unexperienced user to decide on the most
 appropriate ones.
@@ -1454,7 +1455,11 @@ Comparison between codes is hampered by several factors.  Firstly, the codes use
 electrostatics are handled differently in vacuum i.e.\ infinite cutoff vs.\
 reaction field.  Temperature and pressure control, time step integrators, etc. are other examples.  But the data here suggest that, if there are any systematic errors introduced through these algorithms, then they are small.  It is reassuring that AFEs for the systems tested here show only a small dependence on MD protocol decisions (provided a correct implementation).
 
-As part of this work we make our input data and protocols available.  We recommend using this dataset to test and benchmark future RAFE implementations to validate reproducibility against other simulation packages.
+Some of the differences between protocols used in this comparison could have been avoided, and it may be worth pursuing these in follow up work.
+For example, the number of lambda values, length of simulations, and choice of Lennard-Jones cutoff were varied across packages in some cases.
+While previous studies have suggested results are relatively insensitive to these choices, it may be worth further exploring these issues in follow-up work to ensure results are robust with respect to these settings.
+
+To aid with follow-up studies, we make our input data and protocols available.  We recommend using this dataset to test and benchmark future RAFE implementations to validate reproducibility against other simulation packages.
 Where possible, we recommend comparing results from both absolute and relative transformations to verify internal consistency.
 The relative transformation should be run in both forward and backward directions, even if the free energy estimator is agnostic to this decision, as other implementation details (e.g. bugs in parameters, atomic masses) may lead to inconsistent results.
 
