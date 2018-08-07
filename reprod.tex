@@ -576,15 +576,16 @@ equilibrated but the final perturbed system combined from those, potentially
 differently sized solutes.  To make the number of atoms the same for forward
 and backward setups the water coordinates of the larger of the two boxes are
 chosen.  Thus, in transformations from a smaller to a larger solute, water
-molecules may be in close proximity to the solute. At the end of the
-construction process, FESetup performs a minimization onto the system.
-All production simulations were run at \SI{298}{K} and \SI{1.0}{bar}
-in the NPT ensemble.  Water molecules were constraint.  As specified
-below, some software performed a second minimization of the system
-before proceeding with the alchemical free energy calcualtion.  Atomic
-masses were not changed along the alchemical transformations as this
-would affect only the kinetic energy, and would not contribute to the
-free energy change.
+molecules may be in close proximity to the solute.  At the end of the
+construction process, FESetup performs a minimization onto the
+system.  In addition, some simulation protocols started with a,
+redundant, minimization step.  All production simulations were run at
+\SI{298}{K} and \SI{1.0}{bar} in the NPT ensemble.  Water molecules
+were constraint.  As specified below, some software performed a second
+minimization of the system before proceeding with the alchemical free
+energy calcualtion.  Atomic masses were not changed along the
+alchemical transformations as this would affect only the kinetic
+energy, and would not contribute to the free energy change.
 
 %BR: I SUGGEST TO ORDER ALL THE ITEMS SIMILARLY FOR ALL THE PROGRAMS...
 %\paragraph{PROGRAM.}
