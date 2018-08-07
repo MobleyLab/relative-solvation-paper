@@ -116,12 +116,12 @@ are firmly rooted in statistical thermodynamics and should give asymptotically
 correct free energy estimates, i.e.\ they are correct for a given potential
 energy function in the limit of sufficient simulation
 time~\cite{Beveridge-citeulike:3789890, straatsma:92, doi:10.1021/cr00023a004,
-hansen_practical_2014}.  
+hansen_practical_2014}.
 The method has been applied in various forms for
 several decades now since the early days of computer
 simulation~\cite{doi:10.1063/1.1671118, bennett_efficient_1976,
-doi:10.1063/1.432264, FS9821700055,  Tembe1984281, doi:10.1063/1.449208}.  
-The method is also increasingly referred as free energy perturbation (FEP)  in the literature, even though different techniques may have actually been used to estimate free energy changes. 
+doi:10.1063/1.432264, FS9821700055,  Tembe1984281, doi:10.1063/1.449208}.
+The method is also increasingly referred as free energy perturbation (FEP)  in the literature, even though different techniques may have actually been used to estimate free energy changes.
 The method has gained renewed attention in recent years --- concomitant with
 improvements in computer hardware design --- within the traditional equilibrium
 framework~\cite{GILSON19971047, doi:10.1021/jp0217839, deng_computations_2009}
@@ -188,7 +188,7 @@ but approaches that produce the reversible work directly in one simulation
 have been proposed as well~\cite{doi:10.1063/1.3519057, C3FD00125C}.
 
 Relative alchemical free energy (RAFE) calculations transform or
-mutate one molecule into another. 
+mutate one molecule into another.
 An appealing aspect of RAFE calculations is the hope that they may be somewhat less demanding computationally
 or converge better than the more ambitious approaches that require a complete decoupling or annihilation of a ligand from its environment.
 RAFEs have proven useful for
@@ -200,7 +200,6 @@ molecules and biomolecules~\cite{doi:10.1021/ja512751q,
   doi:10.1021/acs.jctc.6b00991}.
 
 RAFEs can be calculated by making use of either the so--called single or dual topology method.
-% BR: We should introduce dual topology before single topology, as it is conceptually simpler. (RESOLVED)
 Dual topology means that groups of atoms of the end states are
 duplicated and thus both sets are present at all
 times but do not interact with each other \cite{doi:10.1021/j100056a020, doi:10.1021/jp981628n}.  The atom types are not changed, and, in principal, the groups
@@ -213,8 +212,6 @@ The dual topology method is the most straightforward approach to compute RAFEs w
 In situations where all atoms in a perturbed molecule are duplicated a dual topology calculation is the technically same as two absolute calculations, executed simultaneously in opposite directions.
 This, however, comes with additional complications as the two independent
 molecules can drift apart and sample completely different environments (e.g. binding site versus bulk solution).
-%BR: This has some similarity with the wandering ligand problem, but adding too much here may lead to confusion.
-%so suffer from the ``wandering'' ligand problem, as in absolute transformations\cite{Hermans-1986,Roux-bR-1996,GILSON19971047,Hermans-1997, doi:10.1021/jp0217839, deng_computations_2009}. (RESOLVED)
 It has been shown though that with the introduction of
 special restraints or constraints this can be a viable
 option~\cite{doi:10.1021/ct700081t, rocklin_separated_2013, JCC:Axelsen-Li}.
@@ -228,10 +225,6 @@ were made equal.  This means that the core does not need to be duplicated and
 thus is not included in the mutation.
 
 Single topology means that there is only one connected representation of the molecule to be transformed into another molecule.
-% deleted: also implying a  single set of coordinates.
-% BR This is not true: in dual topology too there is a single set of coordinates
-% JM  in some codes there are two sets of coordinates but I think
-% we don't have to go in that level of details (RESOLVED)
 Atoms of a given type are directly transformed, typically by linearly scaling the force field parameters, into atoms of a different type.
 The single topology method offers a straightforward route to implement RAFE calculations.\cite{doi:10.1021/j100056a020,Michel2010,doi:10.1063/1.449208, doi:10.1021/jp981628n}
 In typical implementations,
@@ -243,13 +236,6 @@ However, it is important to stress that a dummy atom should retain at most only
 one angle term (Atom1--Atom2--Dummy) and one dihedral term
 (Atom1--Atom2--Atom3--Dummy) with respect to non-dummy atoms
 to yield correct results \cite{doi:10.1021/jp981628n,doi:10.1021/jp994193s}.
-%{color{red} JM: HL mark as resolved discussion in comments in the tex source if the issue is resolved }
-%DLM: I don't actually understand why this is; clarify slightly? What's wrong with having a second angle term of a second dihedral? And what exactly is meant by "angle term"? e.g. if I have a benzene proton I am turning into a dummy atom, it has two different angle terms running in different directions around the ring; do these comprise two different "angle terms"?
-%DLM: What I had THOUGHT was the issue was that if your dummy atoms formed a closed loop, then you'd have problems, but otherwise the situation was OK.
-%HL CAN YOU CLARIFY IF RESOLVED ?
-%
-% BR: I cannot make sense of the rest of the paragraph. Also, you seem to ascribe this method only to AMBER and yet one reference is from me (with CHARMM).
-%JM removed paragraph as that level of details is better discussed  when the AMBER implementation is explained. (RESOLVED)
 
 The single topology approach seeks to exploit the
 topological and structural similarity of the two end states.~\cite{doi:10.1021/j100056a020}
@@ -397,7 +383,6 @@ Alternatively it is possible for the user to construct an input
 topology of a single molecule that explicitly contains dummy atoms
 such that the desired end--states can be simulated.  This is a similar approach to that employed by SOMD and GROMACS, and we call this the ``explicit dummy protocol''.
 
-% BR: Personally, I would not call PERT a dual topology. In fact, it is neither completely dual nor single. It depends on the user.(RESOLVED)
 \paragraph{CHARMM.} The PERT module duplicates the topology similarly to
 \progname{sander} but mapped atoms are given in the topology only once.
 The module requires balancing with explicit dummy atoms.  All energy terms are
@@ -489,7 +474,7 @@ neopentane (blue).  The first approach will be called ``terminally mapped'' and
 the second one ``centrally mapped''.
 
 
-\subsection{Free Energy Simulation Protocols}   %BR: NOT ONLY ABOUT RAFE IN THE FOLLOWING...(RESOLVED)
+\subsection{Free Energy Simulation Protocols}
 \label{sec:rafe_protocols}
 
 One of the major goals of the present study is to ensure
@@ -530,7 +515,7 @@ elsewhere, see e.g. Refs.~\citenum{doi:10.1021/ct300203w,Hu2016}.
 While the MD packages principally allow a ``one--step''
 transformation~\cite{steinbrecher_soft-core_2011},
 that is with both LJ and Coulombic parameters varied
-simultaneously (unified protocol), it has also been proposed that carrying out a 
+simultaneously (unified protocol), it has also been proposed that carrying out a
 split protocol may be more efficient.~\cite{Deng-2004, naden_linear_2014, naden_linear_2015}
 In such a protocol the charges are transformed
 linearly between the end states followed by a mutation of the van der
@@ -544,17 +529,17 @@ charge,\cite{pitera_comparison_2002, anwar_robust_2005,
 steinbrecher_soft-core_2011} see section~\ref{S-sec:separated}x in the SI.
 
 All simulations were started from simulation boxes prepared by
-FESetup~\cite{loeffler_fesetup:_2015}.  During construction of the 
+FESetup~\cite{loeffler_fesetup:_2015}.  During construction of the
 perturbed systems, steric overlaps between the solute and the
 solvent may happen.  This is because each unperturbed solute is independently
 equilibrated but the final perturbed system combined from those, potentially
 differently sized solutes.  To make the number of atoms the same for forward
 and backward setups the water coordinates of the larger of the two boxes are
 chosen.  Thus, in transformations from a smaller to a larger solute, water
-molecules may be in close proximity to the solute. At the end of the construction process, 
-FESetup performs a minimization onto the system. 
+molecules may be in close proximity to the solute. At the end of the construction process,
+FESetup performs a minimization onto the system.
 The production simulations
-were run at \SI{298}{K} and \SI{1.0}{bar}. As specified below, some software performed 
+were run at \SI{298}{K} and \SI{1.0}{bar}. As specified below, some software performed
 a second minimization of the system before proceeding with the alchemical free energy calcualtion.
 Atomic masses were not
 changed along the alchemical transformations as this would affect only
@@ -620,7 +605,7 @@ with a compressibility of \SI{4.63e-5}{atm^{-1}} and temperature and pressure co
 Long--range electrostatics in solution was handled with PME to order 6 with a cutoff of \SI{12.0}{\angstrom} for the real-space Coulomb and vdW interactions.
 No cutoff was used for the vacuum simulations.
 %
- No LRC term was applied during the alchemical MD simulations but a solute-solvent LRC term was included in post-processing to calculate the final free energy. 
+ No LRC term was applied during the alchemical MD simulations but a solute-solvent LRC term was included in post-processing to calculate the final free energy.
 %
 The PSSP softcore potential function was used for the perturbed atoms.
 The PERT module currently does not currently support the force switching (option \inpopt{VFSwitch}) for LJ potentials with softcores.
@@ -687,28 +672,28 @@ Additionally, an end-point correction for truncated VdW potentials was applied b
 \makebox[\textwidth][c]{
 \resizebox{0.7\width}{!}{
 \begin{tabular}{lllll}
-\hline 
+\hline
  &  AMBER & CHARMM & GROMACS & SOMD  \\                                                                                                                                             \hline
-Version & AMBER16   & c40b1  & 4.6.7 & 2016.1 \\  
-Module  & \progname{pmemd, sander}  & \progname{PERT} & \progname{gmx} & \progname{somd-freenrg}\\                                                                                                                      
-Protocol& Split protocol  & Unified protocol & Split protocol & Unified protocol\\                                                                                                                                        
-Number of $\lambda$ windows  
-	& \begin{tabular}[c]{@{}l@{}}11 (charge mutations)\\ 21 (vdW mutations)\end{tabular}                                                                            & 21 evenly spaced                                                                                                                                    & \begin{tabular}[c]{@{}l@{}}31 (charge mutations)\\ 31 (vdW mutations)\end{tabular}                                                      
+Version & AMBER16   & c40b1  & 4.6.7 & 2016.1 \\
+Module  & \progname{pmemd, sander}  & \progname{PERT} & \progname{gmx} & \progname{somd-freenrg}\\
+Protocol& Split protocol  & Unified protocol & Split protocol & Unified protocol\\
+Number of $\lambda$ windows
+	& \begin{tabular}[c]{@{}l@{}}11 (charge mutations)\\ 21 (vdW mutations)\end{tabular}                                                                            & 21 evenly spaced                                                                                                                                    & \begin{tabular}[c]{@{}l@{}}31 (charge mutations)\\ 31 (vdW mutations)\end{tabular}
 	& 17 evenly spaced\\
-Starting coordinates  & FESetup pre-equilibration   & FESetup pre-equilibration   & FESetup pre-equilibration   & FESetup pre-equilibration  \\ 
-Simulation length per window & 2.5 ns  & 1.5 ns &  4.2 ns & 2 ns\\ 
-Timestep& 1 fs  & 1 fs & 1fs & 2fs\\ 
-Electrostatic method & PME   & PME & PME & atom-based RF\\                                                                                          
-Solvated phase cutoff& 8 \AA{} & 12 \AA{} & 10 \AA{} & 10 \AA{}\\ 
+Starting coordinates  & FESetup pre-equilibration   & FESetup pre-equilibration   & FESetup pre-equilibration   & FESetup pre-equilibration  \\
+Simulation length per window & 2.5 ns  & 1.5 ns &  4.2 ns & 2 ns\\
+Timestep& 1 fs  & 1 fs & 1fs & 2fs\\
+Electrostatic method & PME   & PME & PME & atom-based RF\\
+Solvated phase cutoff& 8 \AA{} & 12 \AA{} & 10 \AA{} & 10 \AA{}\\
 Vacuum phase cutoff  & no cutoff & no cutoff & 50 \AA{} & no cutoff\\
-Constraint  & none  & none & none & H-bonds not perturbed\\                                                                                                                                
-LRC corrections   & during MD  & post-processing & during MD & post-processing\\ 
+Constraint  & none  & none & none & H-bonds not perturbed\\
+LRC corrections   & during MD  & post-processing & during MD & post-processing\\
 Barostat  & Monte Carlo & Berendsen & Parrinello-Rahman & Monte Carlo \\
 Thermostat & Langevin   & Berendsen & Langevin          & Andersen \\
 \\
-Soft core parameters         & \begin{tabular}[c]{@{}l@{}}$r_{LJ}=(2\sigma_{ij}^6 \lambda + r_{ij}^6)^{1/6}$\\ \\ \\ $r_{Coul} = (\beta \lambda + r^p_{ij})^{1/p}$\\ \\ \\ $n=1$\end{tabular} 
-			     & \begin{tabular}[c]{@{}l@{}}$r_{LJ}=(2\lambda + r^2_{ij})^{1/2}$\\ \\ \\ $r_{Coul} = (\beta \lambda + r_{ij}^2)^{1/2}$\\ \\ \\ $n=1$\end{tabular} 
-			     & \begin{tabular}[c]{@{}l@{}}$r_{LJ} = (2\sigma_{ij}^{6}\lambda + r_{ij}^6)^{1/6}$\\ \\ \\ $r_{coul} = r_{LJ}$\\ \\ \\ $n=1$\end{tabular} 
+Soft core parameters         & \begin{tabular}[c]{@{}l@{}}$r_{LJ}=(2\sigma_{ij}^6 \lambda + r_{ij}^6)^{1/6}$\\ \\ \\ $r_{Coul} = (\beta \lambda + r^p_{ij})^{1/p}$\\ \\ \\ $n=1$\end{tabular}
+			     & \begin{tabular}[c]{@{}l@{}}$r_{LJ}=(2\lambda + r^2_{ij})^{1/2}$\\ \\ \\ $r_{Coul} = (\beta \lambda + r_{ij}^2)^{1/2}$\\ \\ \\ $n=1$\end{tabular}
+			     & \begin{tabular}[c]{@{}l@{}}$r_{LJ} = (2\sigma_{ij}^{6}\lambda + r_{ij}^6)^{1/6}$\\ \\ \\ $r_{coul} = r_{LJ}$\\ \\ \\ $n=1$\end{tabular}
 			     & \begin{tabular}[c]{@{}l@{}}$r_{LJ} = (2\sigma_{ij}\lambda +  r^2_{ij})^{1/2}$\\ \\ \\ $r_{Coul} = (\lambda + r^2_{ij} )^{1/2}$\\ \\ \\ $n=1$\end{tabular} \\
                              &                                                                                                                                                                &                                                                                                                                                     &                                                                                                                                         &                                                                                                                                                           \\ \hline
 \end{tabular}%
@@ -733,11 +718,11 @@ where $\mathscr{H}(\vec{q},\vec{p};\lambda)$ is the Hamiltonian as a function
 of the coordinate vectors $\vec{q}$ and the momentum vectors $\vec{p}$, and
 parametric dependence on the coupling parameter $\lambda$ is explicit.  The angle brackets
 denote the ensemble average of the gradient of the Hamiltonian with respect to
-$\lambda$, at a given $\lambda$ value.  
+$\lambda$, at a given $\lambda$ value.
 %An AFE simulation is typically carried
 %out in a series of equilibrium simulations at discrete values of $\lambda$ but
 %the gradient can also be evaluated with a continuously varying coupling
-%parameter as a function of the simulation time.  
+%parameter as a function of the simulation time.
 The free energy is finally
 computed through a suitable numerical integration method. Results from additional estimators will be given where available.  We have used
 the \progname{alchemical analysis
@@ -896,23 +881,6 @@ TIP3P water density of \SI{0.980}{g/cm^3}~\cite{doi:10.1021/jz500737m}.
 
 Tab.~\ref{tab:mue-absolute} shows the MAE between SOMD, GROMACS, AMBER and CHARMM. CHARMM produces figures that agree the most with other MD packages. The largest difference reaches \SI{0.2}{kcal.mol^{-1}} for SOMD and GROMACS. Variabilities between the codes may be partly explained by differences in densities due to different treatments of long range electrostatics and vdW interactions.
 
-%{\footnotesize \bf \color{red} [BR: I am not sure how Table~%\ref{tab:mue-absolute} was generated. I insert my own table below based on Table \ref{tab:absolute2} and the deviations are not smaller for SOMD.]}
-%JM resolved this as using previous CHARMM and GROMACS-reaction field values
-
-%\begin{table}[h!]
-%{\color{red}
-%    \caption{\color{red} BR: MATRIX OF ABSOLUTE DEVIATIONS %BETWEEN PROGRAMS}
-%      \begin{tabular}{l|cccc}
-%        & AMBER  &  CHARMM  & GROMACS &  SOMD  \\ \hline
-%AMBER   & 0.000  &   0.126  &  0.198  &  0.136 \\
-%CHARMM  & 0.126  &   0.000  &  0.148  &  0.066 \\
-%GROMACS & 0.198  &   0.148  &  0.000  &  0.209 \\
-%SOMD    & 0.136  &   0.066  &  0.209  &  0.000 \\
-%      \end{tabular}
-%}
-%\end{table}
-
-
 \begin{table}[]
  \begin{minipage}{\linewidth}
    \caption{Mean Absolute Error (MAE) (\SI{}{kcal.mol^{-1}}) between relative free energies obtained with the absolute protocol for the SOMD, GROMACS, AMBER and CHARMM packages.}\label{tab:mue-absolute}
@@ -1047,7 +1015,7 @@ $\rightarrow$ ethane}\label{tab:cycle-closure}
   \end{minipage}
 \end{table}
 
-Finally we also examined whether the codes reproduced consistent changes in mean box volumes between forward and backward transformations. We find that the codes are generally consistent with GROMACS giving the most precise volume changes, whereas SOMD gives the least precise volume changes (See Tab. S1 in the SI). This indicates that the barostats used by the different simulation packages relax volume fluctuations with different efficiency, or that they sample different volume fluctuations. 
+Finally we also examined whether the codes reproduced consistent changes in mean box volumes between forward and backward transformations. We find that the codes are generally consistent with GROMACS giving the most precise volume changes, whereas SOMD gives the least precise volume changes (See Tab. S1 in the SI). This indicates that the barostats used by the different simulation packages relax volume fluctuations with different efficiency, or that they sample different volume fluctuations.
 
 \subsection{AMBER}
 \label{sec:amber-results}
@@ -1203,7 +1171,7 @@ methane & 2-methylindole & \num{8.81+-0.01} & \num{8.56+-0.02} &  \\
 }
   \end{minipage}
 \end{table}
-While results from all three protocols (split, unified, absolute) seem to be in good agreement with each other, the split-protocol results are more precise due to the additional amount of data generated. It is notable that the split-protocol results are more similar to the ones obtained by other MD packages (i.e. neopentane and toluene), but the relative-unified results are more consistent with the CHARMM absolute simulations (e.g. 2-methylindole). Overall, the relative free energies obtained by these three different protocols are in good agreement with those reported for the other MD packages (Tab. 1 and 3). 
+While results from all three protocols (split, unified, absolute) seem to be in good agreement with each other, the split-protocol results are more precise due to the additional amount of data generated. It is notable that the split-protocol results are more similar to the ones obtained by other MD packages (i.e. neopentane and toluene), but the relative-unified results are more consistent with the CHARMM absolute simulations (e.g. 2-methylindole). Overall, the relative free energies obtained by these three different protocols are in good agreement with those reported for the other MD packages (Tab. 1 and 3).
 
 \subsection{GROMACS}
 \label{sec:gromacs-results}
@@ -1350,7 +1318,7 @@ split protocol without Coulomb softcore potentials and both protocols that
 use it. The data shown in Fig. \ref{S-fig:gro_sc_eff}x suggests that
 softening of the electrostatic interactions requires  adjustments in
 the $\lambda$-distance between states in the rapidly varying part of
-the $\partial \mathcal{H}/\partial\lambda$. 
+the $\partial \mathcal{H}/\partial\lambda$.
 A variant that combined the bonded terms with the vdW transformation
 did not change this result.  Thus, we find that the split protocol
 without Coulomb softcore potentials is the most effective way to
@@ -1381,16 +1349,13 @@ A very good agreement is observed between both methodologies
 ($R^2$=\SI{0.99+-0.01}{} and MAE = \SI{0.10+-0.03}{kcal.mol^{-1}}),
 highlighting internal consistency within SOMD.
 
-%BR: The foolling around with masses of dummy atoms is mostly a technical trick. The whole thing could have been run with a mass of 5 AMU on everyone....
-% We should make it clear that free energy do not depend on masses....
-%JM clarified below
 To achieve this level of reproducibility within SOMD it was crucial to pay close attention to constraints. Specifically, bonds that involve unperturbed hydrogen atoms are constrained. Bonds involving hydrogen atoms that are perturbed to a heavy element are unconstrained.  Additionally the atomic mass of the perturbed hydrogen atom is set to the mass of the heavy atom it is
-perturbed to.  Bonds involving hydrogen atoms that are perturbed to another hydrogen atom type are constrained. We stress that it is acceptable to artificially increase the atomic mass of hydrogen atoms because the calculated excess free energy changes do not depend on atomic masses. 
+perturbed to.  Bonds involving hydrogen atoms that are perturbed to another hydrogen atom type are constrained. We stress that it is acceptable to artificially increase the atomic mass of hydrogen atoms because the calculated excess free energy changes do not depend on atomic masses.
 
 This protocol suppresses high frequency vibrations in flexible bonds involving hydrogen atoms, thus enabling a time
 step of \SI{2}{fs}, whilst giving essentially negligible errors due to the use of constraints for perturbed bonds.  This is apparent from the comparison with the absolute hydration free energy calculations.  Additionally, the protocol
 yields relative hydration free energy very similar  (MAE =
-\SI{0.09}{kcal.mol^{-1}}) to those computed from simulations where noconstraints are applied on the solutes and a timestep of \SI{1}{fs} is used (See Fig.~\ref{S-fig:sire_constraints}x). 
+\SI{0.09}{kcal.mol^{-1}}) to those computed from simulations where noconstraints are applied on the solutes and a timestep of \SI{1}{fs} is used (See Fig.~\ref{S-fig:sire_constraints}x).
 
 By contrast, a protocol that constrains all bonds in a solute leads to
 significant differences with the absolute hydration free energies. For instance
@@ -1405,7 +1370,7 @@ the bonded term (and associated coupled terms) to the free energy change. The ef
 to/from a heavy atom.
 
 The reaction fields implemented in SOMD and GROMACS differ somewhat (atom-based
-shifted Barker Watts,~\cite{doi:10.1080/00268977300102101} vs group based switched Barker Watts), but nevertheless SOMD and GROMACS RF produce comparable results with a MAE of \SI{0.18}{kcal.mol^{-1}}. Overall, the SOMD free energy estimations are in good agreement with the other MD packages, as the MAE suggests (see Tab.~\ref{tab:mue-relative}). For the methane $\rightarrow$ neopentane transformations SOMD yields consistent results between central and terminal mappings, as shown in Tab.~\ref{S-tab:sire-finalresults}x. 
+shifted Barker Watts,~\cite{doi:10.1080/00268977300102101} vs group based switched Barker Watts), but nevertheless SOMD and GROMACS RF produce comparable results with a MAE of \SI{0.18}{kcal.mol^{-1}}. Overall, the SOMD free energy estimations are in good agreement with the other MD packages, as the MAE suggests (see Tab.~\ref{tab:mue-relative}). For the methane $\rightarrow$ neopentane transformations SOMD yields consistent results between central and terminal mappings, as shown in Tab.~\ref{S-tab:sire-finalresults}x.
 Reaction field and PME results are in good agreement.  All SOMD RAFE simulations were carried out with simultaneous transformation of Lennard-Jones, charges, and bonded terms. This suggests that the failure of the GROMACS ``unified protocol'' in some instances may be due to differences in the softcore Coulomb implementations.
 
 
@@ -1482,19 +1447,6 @@ average SEM \SI{0.015}{kcal/mol}).  Further work should be pursued to
 understand what algorithmic details in the various implementations are
 important for the efficiency of the free energy calculations.
 
-%average SEM for absolute calcs in table 2 and aggregate number of MD steps per pert (1M = 1million)
-% AMBER 0.014 kcal/mol 80M steps
-% CHARMM 0.017 kcal/mol 31.5 M steps
-% GROMACS 0.011 kcal/mol 200M steps
-% SOMD 0.045 kcal/mol  34M steps
-
-%average SEM for relative calcs in table 4
-% AMBER implicit 0.024 kcal/mol 80M
-% AMBER explicit  0.027 kcal/mol 80M
-% CHARMM 0.015  kcal/mol  31.5M
-% GROMACS 0.020 kcal/mol  197.4M
-% SOMD 0.048 kcal/mol 17M
-
  Beyond careful protocol validation,  further automation of alchemical free energy studies will also decrease user errors, and thus increases  reproducibility.  Various attempts in
 this direction are currently underway for both absolute and relative
 setups~\cite{christ_accuracy_2013, JCC:JCC23804, Liu2013,
@@ -1516,7 +1468,7 @@ doi:10.1021/acs.jctc.6b00979,loeffler_fesetup:_2015}. To conclude, we hope this 
   National Science Foundation (CHE 1352608), and computing support
   from the UCI GreenPlanet cluster, supported in part by NSF Grant
   CHE-0840513. DS and BR appreciate support from the National Science Foundation (NSF) through grant MCB-1517221 and additional computational resources were provided by the University of Chicago Research Computing Center.
-  
+
 
   We thank Prof.\ Stefan Boresch for valuable discussions and making code
   modifications to CHARMM.  We thank Dr.\ Ross Walker and Daniel Mermelstein
@@ -1538,4 +1490,3 @@ https://github.com/halx/relative-solvation-inputs .
 \bibliography{journal-abbrev,reprod}
 
 \end{document}
-
