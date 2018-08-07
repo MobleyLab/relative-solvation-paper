@@ -1356,15 +1356,14 @@ methane & methanol & \multicolumn{1}{l}{\num{6.168 +- 0.005}} & \num{6.199 +-
 
 We noticed a difference of approximately \SI{1.5}{kcal.mol^{-1}} between the
 split protocol without Coulomb softcore potentials and both protocols that
-use it. The data shown in Fig. \ref{S-fig:gro_sc_eff}x suggests that
-softening of the electrostatic interactions requires  adjustments in
+use it.  The data shown in Fig. \ref{S-fig:gro_sc_eff}x suggests that
+softening of the electrostatic interactions requires adjustments in
 the $\lambda$-distance between states in the rapidly varying part of
-the $\partial \mathcal{H}/\partial\lambda$.
-A variant that combined the bonded terms with the vdW transformation
-did not change this result.  Thus, we find that the split protocol
-without Coulomb softcore potentials is the most effective way to
-calculate relative free energies with the current GROMACS
-implementation.
+the $\partial \mathcal{H}/\partial\lambda$.  A variant that combined
+the bonded terms with the vdW transformation did not change this
+result.  Thus, we find that the split protocol without Coulomb
+softcore potentials is the most effective way to calculate relative
+free energies with the current GROMACS implementation.
 
 Additionally it is worth mentioning is that relative free energy
 simulations that feature alchemical transformations of a hydrogen atom
@@ -1436,13 +1435,15 @@ We were unable to define  a \emph{universal} protocol that could be recommended 
 vacuum leg of the thermodynamic cycle.  In the case of AMBER the vacuum simulation has currently been done with the separately developed \progname{sander} module.  The problem may be a consequence of the different softcore functions (see Eq.~S\ref{S-eq:general-softcore}x) used in these MD packages but further investigations are needed to resolve this issue.
 
 The unperturbed H bond protocol is an interesting alternative which
-applies constraints to all non--transforming bonds and thus allowed us to increase the time step to \SI{2}{fs}.
- The split protocol was found to work  well for all codes.
-  It appears to be the most efficient
-approach for GROMACS as shown with the methanol to methane case because the unified protocol produces a less smooth function~\cite{shirts_chapter_2007}.
-A complete separation of lambdas may not be necessary though as a certain degree of overlap between vdW and Coulumb $\lambda$ may be a viable
-solution~\cite{procacci_fast_2014} for equilibrium AFEs. % HHL: is this
-%really true?  Procacci discusses this in the context of fast switching.
+applies constraints to all non--transforming bonds and thus allowed us
+to increase the time step to \SI{2}{fs}.  The split protocol was found
+to work well for all codes.  It appears to be the most effective
+approach for GROMACS as shown with the methanol to methane case
+because the unified protocol produces a less smooth
+function~\cite{shirts_chapter_2007}.  A complete separation of lambdas
+may not be necessary though as a certain degree of overlap between vdW
+and Coulumb $\lambda$ may be a viable
+solution~\cite{procacci_fast_2014} for equilibrium AFEs.
 
 Comparison between codes is hampered by several factors.  Firstly, the codes use different simulation algorithms e.g.\
 electrostatics are handled differently in vacuum i.e.\ infinite cutoff vs.\
