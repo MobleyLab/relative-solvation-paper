@@ -524,7 +524,7 @@ At the most basic level, even pressure and temperature scaling, integrators and 
 It is unclear if and how any of these implementation details can affect results.
 The implementation details of alchemical free energy simulation in code are discussed in subsection~\ref{sec:afe_impl}.
 
-In this study we consider at a set of simple organic molecules (see
+In this study we consider a set of simple organic molecules (see
 Fig.~\ref{fig:cycles}).  As the focus here is on probing for
 reproducibility among various MD packages, we chose fairly small,
 rigid and neutral molecules to minimize statistical sampling errors, and
@@ -576,15 +576,15 @@ equilibrated but the final perturbed system combined from those, potentially
 differently sized solutes.  To make the number of atoms the same for forward
 and backward setups the water coordinates of the larger of the two boxes are
 chosen.  Thus, in transformations from a smaller to a larger solute, water
-molecules may be in close proximity to the solute. At the end of the construction process,
-FESetup performs a minimization onto the system.
-The production simulations
-were run at \SI{298}{K} and \SI{1.0}{bar}. As specified below, some software performed
-a second minimization of the system before proceeding with the alchemical free energy calcualtion.
-Atomic masses were not
-changed along the alchemical transformations as this would affect only
-the kinetic energy, and would not contribute to the free energy
-change.
+molecules may be in close proximity to the solute. At the end of the
+construction process, FESetup performs a minimization onto the system.
+All production simulations were run at \SI{298}{K} and \SI{1.0}{bar}
+in the NPT ensemble.  Water molecules were constraint.  As specified
+below, some software performed a second minimization of the system
+before proceeding with the alchemical free energy calcualtion.  Atomic
+masses were not changed along the alchemical transformations as this
+would affect only the kinetic energy, and would not contribute to the
+free energy change.
 
 %BR: I SUGGEST TO ORDER ALL THE ITEMS SIMILARLY FOR ALL THE PROGRAMS...
 %\paragraph{PROGRAM.}
