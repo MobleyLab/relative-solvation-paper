@@ -1477,8 +1477,15 @@ would have the advantage of eliminating one additional evaluation of the recipro
 
  Another practical issue is the complex setup associated with the
  split protocol. For instance in GROMACS it is necessary to carry out two separate simulations per lambda because discharging and recharging groups cannot be selected separately.
-Lambda paths as implemented in GROMACS could also be beneficial for other codes as they make the setup of split protocols easier.  The alternative we have used in codes lacking this feature is to mimick this protocol through careful constructions of
+Lambda paths as implemented in GROMACS could also be beneficial for other codes as they make the setup of split protocols easier.  The alternative we have used in codes lacking this feature is to mimic this protocol through careful construction of
 topologies via scripting.
+
+It may seem remarkable that of the computed free energies, the absolute hydration free energies seem to be more reproducible across codes than relative free energies.
+Conventional wisdom is that relative free energy calculations are computationally less demanding than absolute free energy calculations, which would lead to the opposite result.
+However, absolute calculations are considerably simpler to implement and deploy correctly as they do not involve as many challenging technical issues such as atom mapping, and the lambda protocols which must be employed have been optimized fairly well, since such calculations always involve either removal or insertion of atoms but never both simultaneously.
+This has made absolute calculations valuable as large-scale tests of free energy methods and force fields (e.g.~\cite{Mobley2014, doi:10.1021/ct300203w} and others), and in the SAMPL series of blind challenges (e.g.~\cite{fennell_fixed-charge_2014, geballe_sampl3_2012}).
+Thus absolute calculations are already well automated, robust across codes, and well-performing protocols are available.
+Apparently similar is yet needed for relative free energy calculations.
 
 The primary focus of this work was to achieve low statistical errors
 to establish if codes are able to reproduce free energies.  We have
