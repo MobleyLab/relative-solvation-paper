@@ -369,10 +369,16 @@ to bonds, which change bond lengths in a transformation e.g.\ C--H to C--C.
 Changes in bond length need to account for the associated change in the free
 energy.  These and other details will be outlined below.
 
-\paragraph{AMBER.}
-This code uses a hybrid dual/single topology approach.  All terms are energy scaled.
-The perturbed group must be entirely duplicated, i.e.\ for
-\progname{sander} this means two topology files with one end state each, and for \progname{pmemd} both end states in one topology file.
+\paragraph{AMBER.}  This code uses a hybrid dual/single topology
+approach.  All terms are energy scaled. The perturbed group must be
+entirely duplicated, i.e.\ for \progname{sander} this means two
+topology files with one end state each, and for \progname{pmemd} both
+end states in one topology file. In AMBER16 \progname{sander} and
+\progname{pmemd} implement free energy simulation in an equivalent
+fashion.  However, pmemd does not support vacuum free energy simulations
+in that version.  Hence, all vacuum simulations needed to be run with
+\progname{sander} while all solution runs were done with
+\progname{pmemd}.
 
 The code loads two separate input topologies that describe the end
 states of interest and allows users to map atoms between the two
