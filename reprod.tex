@@ -1037,25 +1037,25 @@ Tab.~\ref{tab:mue-relative}.  They are on average slightly larger than the MAEs 
 \end{table}
 
 We also computed cycle closure errors from Tab.~\ref{tab:cycle-closure} for
-the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane $\rightarrow$ ethane (see Fig.~\ref{fig:cycles}). The results are shown in Tab.~\ref{tab:cycle-closure}. Uncertainties were estimated by propagating uncertainties from the individual perturbations. AMBER explicit dummy and CHARMM are the only protocol consistent within uncertainty estimates, but the deviations observed with the other protocols are small. The largest discrepancy is observed with the GROMACS unified PME protocol, with the error just under \SI{0.2}{kcal/mol}.
+the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane $\rightarrow$ ethane (see Fig.~\ref{fig:cycles}). The results are shown in Tab.~\ref{tab:cycle-closure}. Uncertainties were estimated by propagating uncertainties from the individual perturbations. The AMBER protocols, CHARMM and SOMD are protocol consistent within uncertainty estimates, but the deviations observed with the GROMACS protocols are small. The largest discrepancy is observed with the GROMACS unified PME protocol, with the error just under \SI{0.2}{kcal/mol}.
 
 \begin{table}[]
   \begin{minipage}{\linewidth}
-    \caption{Cycle closure errors (in \si{kcal.mol^{-1}}) for  ethane$ \rightarrow$ methanol $\rightarrow$ methane
-$\rightarrow$ ethane}\label{tab:cycle-closure}
+    \caption{Cycle closure errors in \si{kcal.mol^{-1}}) for  ethane$ \rightarrow$ methanol. $\rightarrow$ methane
+$\rightarrow$ ethane. Uncertainties denote a 95\% confidence  interval}\label{tab:cycle-closure}
     \makebox[\textwidth][c]{
       \begin{tabular}{lrrr}
         \toprule
         Package and Protocol & Closure Error \\
         \midrule
-        AMBER implicit    & 0.07 $\pm$ 0.04  \\
-        AMBER explicit    & 0.02 $\pm$ 0.05  \\
-        GROMACS split reaction field  &  0.05 $\pm$ 0.02  \\
-        GROMACS unified reaction field  &  0.13 $\pm$ 0.03  \\
-        GROMACS split PME  &  0.04 $\pm$ 0.01  \\
-        GROMACS unified PME  &  0.18 $\pm$ 0.03  \\
-        CHARMM            &   0.01 $\pm$ 0.03   \\
-        SOMD                &  -0.11 $\pm$ 0.08 \\
+        AMBER implicit    & 0.07 $\pm$ 0.08  \\
+        AMBER explicit    & 0.02 $\pm$ 0.10  \\
+        GROMACS split reaction field  &  0.05 $\pm$ 0.04  \\
+        GROMACS unified reaction field  &  0.13 $\pm$ 0.06  \\
+        GROMACS split PME  &  0.04 $\pm$ 0.02  \\
+        GROMACS unified PME  &  0.18 $\pm$ 0.06  \\
+        CHARMM            &   0.01 $\pm$ 0.06   \\
+        SOMD                &  -0.11 $\pm$ 0.16 \\
         \bottomrule
       \end{tabular}
     }
