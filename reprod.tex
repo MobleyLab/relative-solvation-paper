@@ -258,6 +258,17 @@ CHARMM,~\cite{JCC:JCC21287} GROMACS,~\cite{Abraham201519}
 GROMOS,~\cite{doi:10.1021/jp984217f} and SOMD.~\cite{Sire-2016,
   doi:10.1021/ct300857j}) support a hybrid approach that combines aspects of single and dual topology~\cite{doi:10.1021/jp994193s}.
 
+Another algorithmic decision for single topology is whether  the implementation scales force field parameters (``parameter
+scaling'') and/or energy components (``energy
+scaling'')~\cite{doi:10.1021/jp981628n}.  In the former case each parameter is
+scaled individually, e.g.\ in the case of a harmonic bond or angle term,
+the force constant and the equilibrium distance/angle are scaled
+individually.  In the
+latter case, the total energy is scaled, all at once, or, equivalently for each
+individual force field contribution.  While free energy is a state function that
+depends only on the end points, the pathways taken by the
+two methods through state space or alchemical space are different.
+
 
 As alluded to above, consistency and reliability are the principal matter of concern.
 In particular, we need to ensure reproducibility of free energy results
@@ -267,11 +278,13 @@ However, there have been some recent efforts to test \emph{energy}
 reproducibility across packages~\cite{Shirts2017} --- a necessary but not
 sufficient prerequisite.  Another study went further and also compared liquid
 densities across packages, revealing a variety of
-issues~\cite{doi:10.1021/acs.jctc.7b00489}.
+issues~\cite{doi:10.1021/acs.jctc.7b00489}. 
 For free energies, given a predefined force field and run--time
 parameters we ought to be able to obtain comparable free energy
-results within the limits of statistical convergence.  This comparison
-has not yet been carried out.
+results within the limits of statistical convergence.  Prior work has
+successfully compared calculated absolute hydration free energies
+across GROMACS and DESMOND codes.~\cite{klimovich_predicting_2010}
+This comparison has not yet been carried out for relative free energies.
 
 Nevertheless, it is critical that free energy
 changes computed with different simulation software should be reproducible
@@ -358,16 +371,7 @@ well as numerical errors in post processing analyses even when simulations do
 terminate normally~\cite{beutler_avoiding_1994,
 zacharias_separationshifted_1994, steinbrecher_nonlinear_2007}.
 
-Another difference is how the codes scale force field parameters (``parameter
-scaling'') and/or the energy (``energy
-scaling'')~\cite{doi:10.1021/jp981628n}.  In the former case each parameter is
-scaled individually, e.g.\ in the case of a harmonic bond or angle term,
-the force constant and the equilibrium distance/angle are scaled
-individually.  In the
-latter case, the total energy is scaled, all at once, or, equivalently for each
-individual force field contribution.  While free energy is a state function that
-depends only on the end points, the pathways taken by the
-two methods through state space or alchemical space are different.
+
 
 One more important issue is whether the code allows holonomic constraints to be applied
 to bonds, which change bond lengths in a transformation e.g.\ C--H to C--C.
@@ -549,8 +553,7 @@ missing bonded and vdW terms were generated with the
 All parameters are compiled at
 https://github.com/halx/relative-solvation-inputs.
 The quality of free energies of various small molecule force fields
-has been discussed elsewhere, see
-e.g.\ Refs.~\citenum{doi:10.1021/ct300203w, Hu2016}.
+has been discussed elsewhere.~\cite{doi:10.1021/ct300203w}
 
 While the MD packages principally allow a ``one--step''
 transformation~\cite{steinbrecher_soft-core_2011},
@@ -583,9 +586,13 @@ redundant, minimization step.  All production simulations were run at
 \SI{298}{K} and \SI{1.0}{bar} in the NPT ensemble.  Water molecules
 were constraint.  As specified below, some software performed a second
 minimization of the system before proceeding with the alchemical free
-energy calcualtion.  Atomic masses were not changed along the
+energy calculation.  Atomic masses were not changed along the
 alchemical transformations as this would affect only the kinetic
 energy, and would not contribute to the free energy change.
+A summary of the main algorithmic differences between each simulation package is given in
+Tab.~\ref{tab:resumeSpecifications}.
+
+
 
 %BR: I SUGGEST TO ORDER ALL THE ITEMS SIMILARLY FOR ALL THE PROGRAMS...
 %\paragraph{PROGRAM.}
@@ -605,7 +612,7 @@ energy, and would not contribute to the free energy change.
 The AMBER16 program was used for this set of free energy calculations.
 %
 Typically 11 windows were used for charge mutations and 21 windows for VdW mutations.
-In some instances, steep variations in gradients were observed with this protocol and additional windows were added to obtain smoother integration profiles.
+In some instances, steep variations in TI gradients were observed by visual inspection with this protocol and additional windows were added to obtain smoother integration profiles.
 The starting coordinates were usually taken directly from the pre--equilibrated setup step but no further $\lambda$ specific equilibration  was carried out,
 i.e.\ RAFE MD simulations were started with new velocities appropriate for the final simulation temperature.
 In a very few cases it was necessary to use coordinates from the end of the simulation at a nearby $\lambda$ state because of simulation instabilities.
@@ -664,8 +671,8 @@ In the first two cases, each alchemical transformation was described by 31 and 1
 We used a 20-step alchemical protocol where charge coupling and LJ coupling were dealt with separately along the path \cite{Mobley2014, doi:10.1021/acs.jced.7b00104}.
 %
 The free energies were calculated from \SI{5}{ns} Langevin dynamics at \SI{298}{K}.
-A friction coefficient of \SI{1.0}{ps/m_{atom}} was used, where $m_{atom}$ is the the mass of the atom.
-No holonomic bond or angle constraints were used.
+A friction coefficient of \SI{1.0}{ps/m_{atom}} was used, where $m_{atom}$ is the the mass of the atom. 
+No holonomic bond or angle constraints for the solutes were used. Waters were constrained with LINCS. 
 A Parrinello--Rahman barostat with $\tau_p =$ \SI{10}{ps} and compressibility equal to \SI{4.5d-5}{bar^{-1}} was used.
 %
 Two methods were used to calculate electrostatic interactions:
@@ -691,7 +698,7 @@ The starting coordinates for each window were obtained by an additional energy m
 %Simulation length timestep
 A velocity-Verlet integrator was employed with a \SI{2}{fs} time step.
 %SHAKE and CONSTRAINTS
-Water hydrogens (TIP3P) were constrained with SHAKE. For the alchemical solute, only bonds involving hydrogens which are not alchemically transformed were constrained. This approach is referred as the ``unperturbed H bond constraint protocol''. Given the number of the perturbed hydrogen bonds in the solutes (Fig.~\ref{fig:cycles}, this constraint allows to use a \SI{2}{fs} time-step.
+Water hydrogens (TIP3P) were constrained with SHAKE. For the alchemical solute, only bonds involving hydrogens which are not alchemically transformed were constrained. This approach is referred as the ``unperturbed H bond constraint protocol''. Given the number of the perturbed hydrogen bonds in the solutes (Fig.~\ref{fig:cycles}, this constraint allows to use a \SI{2}{fs} time-step through use of higher atomic masses for perturbed hydrogen atoms (see discussion below).
 %Temperature and pressure
 Temperature control was achieved with the Andersen thermostat,~\cite{doi:10.1063/1.439486} with a stochastic collision frequency of \SI{10}{ps^{-1}}.
 A Monte Carlo barostat assured pressure control, with isotropic box edge scaling moves attempted every 25 time steps.
@@ -802,19 +809,19 @@ the $i$--th datum to be compared.
 \section{Results}
 \label{sec:results}
 
+\subsection{Overall comparison}
+\label{sec-comparison}
+
 In the following we will present our RAFE results for the
 thermodynamic cycles shown in Fig.~\ref{fig:thermocycle}.  We will use
 absolute hydration free energies here as our standard point of
 comparison because for the present dataset they can be calculated with
 high precision~\cite{doi:10.1021/acs.jced.7b00104}, and are simpler to
-set up and implement than relative calculations.  Prior work has
-successfully compared calculated absolute hydration free energies
-across GROMACS and DESMOND codes.~\cite{klimovich_predicting_2010}
+set up and implement than relative calculations.  
 
 Tab.~\ref{tab:absolute2} summarizes results for the absolute hydration
 free energies.  The table shows the data
-from simulations with the recommended protocol for each MD code, as
-discussed in detail in the following subsections.
+from simulations with the protocol our groups considered most trustworthy for the respective MD code used, as discussed in detail in the following subsections.
 The  precision of the calculated free energies is similar between
 AMBER, CHARMM and GROMACS, whereas the SOMD free energies are less
 precise.  This may reflect differences in the lambda schedules and
@@ -1008,7 +1015,7 @@ We next reviewed consistency between forwards and backwards relative hydration f
 
 Next we compared relative free energies across packages.
 CHARMM tends to show relative free energies with smaller values for a number of transformations:  neopentane, 2--methylfuran and 2--methylindole. SOMD displays smaller values $\Delta\Delta G_{\mathrm{hydr}}$ for the methanol and toluene transformations.  The largest discrepancy, however, is in the neopentane transformation with central mapping where AMBER with implicit dummy atoms is about \SI{0.5}{kcal.mol^{-1}} higher and CHARMM about \SI{0.2}{kcal.mol^{-1}} lower than the other two codes.  The
-terminal mapped neopentane case reveals AMBER to be in line with GROMACS and SOMD while CHARMM's results deviate further.  AMBER deviates also quite strongly from the other codes in the cyclopentanyl indole cases.
+terminal mapped neopentane case reveals AMBER to be in line with GROMACS and SOMD while CHARMM's results deviate further.  AMBER deviates also quite strongly from the other codes in the cyclopentanyl indole cases. It is possible that the discrepancies observed with AMBER are partly due to inconsistencies in the end point geometries (see section \ref{sec:amber-results}).
 
 The MAEs of the relative free energy simulations are presented in
 Tab.~\ref{tab:mue-relative}.  They are on average slightly larger than the MAEs from the absolute simulations (Tab.~\ref{tab:mue-absolute}) and reach \SI{0.26}{kcal.mol^{-1}} for AMBER compared with CHARMM.
@@ -1033,25 +1040,25 @@ Tab.~\ref{tab:mue-relative}.  They are on average slightly larger than the MAEs 
 \end{table}
 
 We also computed cycle closure errors from Tab.~\ref{tab:cycle-closure} for
-the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane $\rightarrow$ ethane (see Fig.~\ref{fig:cycles}). The results are shown in Tab.~\ref{tab:cycle-closure}. Uncertainties were estimated by propagating uncertainties from the individual perturbations. AMBER explicit dummy and CHARMM are the only protocol consistent within uncertainty estimates, but the deviations observed with the other protocols are small. The largest discrepancy is observed with the GROMACS unified PME protocol, with the error just under \SI{0.2}{kcal/mol}.
+the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane $\rightarrow$ ethane (see Fig.~\ref{fig:cycles}). The results are shown in Tab.~\ref{tab:cycle-closure}. Uncertainties were estimated by propagating uncertainties from the individual perturbations. The AMBER protocols, CHARMM and SOMD are protocol consistent within uncertainty estimates, but the deviations observed with the GROMACS protocols are small. The largest discrepancy is observed with the GROMACS unified PME protocol, with the error just under \SI{0.2}{kcal/mol}.
 
 \begin{table}[]
   \begin{minipage}{\linewidth}
-    \caption{Cycle closure errors (in \si{kcal.mol^{-1}}) for  ethane$ \rightarrow$ methanol $\rightarrow$ methane
-$\rightarrow$ ethane}\label{tab:cycle-closure}
+    \caption{Cycle closure errors in \si{kcal.mol^{-1}}) for  ethane$ \rightarrow$ methanol. $\rightarrow$ methane
+$\rightarrow$ ethane. Uncertainties denote a 95\% confidence  interval.}\label{tab:cycle-closure}
     \makebox[\textwidth][c]{
       \begin{tabular}{lrrr}
         \toprule
         Package and Protocol & Closure Error \\
         \midrule
-        AMBER implicit    & 0.07 $\pm$ 0.04  \\
-        AMBER explicit    & 0.02 $\pm$ 0.05  \\
-        GROMACS split reaction field  &  0.05 $\pm$ 0.02  \\
-        GROMACS unified reaction field  &  0.13 $\pm$ 0.03  \\
-        GROMACS split PME  &  0.04 $\pm$ 0.01  \\
-        GROMACS unified PME  &  0.18 $\pm$ 0.03  \\
-        CHARMM            &   0.01 $\pm$ 0.03   \\
-        SOMD                &  -0.11 $\pm$ 0.08 \\
+        AMBER implicit    & 0.07 $\pm$ 0.08  \\
+        AMBER explicit    & 0.02 $\pm$ 0.10  \\
+        GROMACS split reaction field  &  0.05 $\pm$ 0.04  \\
+        GROMACS unified reaction field  &  0.13 $\pm$ 0.06  \\
+        GROMACS split PME  &  0.04 $\pm$ 0.02  \\
+        GROMACS unified PME  &  0.18 $\pm$ 0.06  \\
+        CHARMM            &   0.01 $\pm$ 0.06   \\
+        SOMD                &  -0.11 $\pm$ 0.16 \\
         \bottomrule
       \end{tabular}
     }
@@ -1059,6 +1066,8 @@ $\rightarrow$ ethane}\label{tab:cycle-closure}
 \end{table}
 
 Finally we also examined whether the codes reproduced consistent changes in mean box volumes between forward and backward transformations. We find that the codes are generally consistent with GROMACS giving the most precise volume changes, whereas SOMD gives the least precise volume changes (See Tab. S1 in the SI). This indicates that the barostats used by the different simulation packages relax volume fluctuations with different efficiency, or that they sample different volume fluctuations.
+
+We now turn to considerations for individual packages. 
 
 \subsection{AMBER}
 \label{sec:amber-results}
@@ -1489,7 +1498,7 @@ Apparently similar is yet needed for relative free energy calculations.
 
 The primary focus of this work was to achieve low statistical errors
 to establish if codes are able to reproduce free energies.  We have
-not investigated in detail the efficiency of the respective protocols
+not investigated the efficiency of the respective protocols
 as this would require further, complex investigations.  For absolute
 calculations the most demanding protocol and most precise protocol is
 GROMACS (200 million aggregate time--steps per solute, average SEM
@@ -1499,7 +1508,7 @@ time--steps is comparable to CHARMM (34 million time--steps) but the
 free energies are less precise (average SEM \SI{0.045}{kcal/mol}).
 For relative calculations, the least demanding protocol is SOMD (17
 million time--steps), and this is also the least precise (average SEM
-\SI{0.048}{kcal/mol}).  Remarkably the most demanding protocol (GROMACS
+\SI{0.048}{kcal/mol}).  The most demanding protocol (GROMACS
 197.4 million time--steps, average SEM \SI{0.020}{kcal/mol}) is less precise
 than CHARMM that used fewer time--steps (31.5 million time-steps,
 average SEM \SI{0.015}{kcal/mol}).  Further work should be pursued to
