@@ -308,7 +308,7 @@ computed from alchemical free energy (AFE) simulations, FreeSolv, has been
 presented recently.~\cite{Mobley2014,doi:10.1021/acs.jced.7b00104} Here, we focus on the
 reproducibility of RAFE with the simulation programs AMBER, CHARMM, GROMACS and
 SOMD.  We will discuss the reversible work results obtained with these packages
-and make recommendations regarding simulation protocols, setup procedures and
+and make observations regarding simulation protocols, setup procedures and
 analysis techniques.  We will also deliberate on what needs to be done to
 progress the field, both from a usability perspective as well as from the view
 point of code development.
@@ -834,12 +834,7 @@ The $\Delta G_{\mathrm{hydr}}$
 obtained with the various MD packages in
 this way agree quite well given statistical errors, although some larger deviations are apparent as
 well.  GROMACS predicts a smaller $\Delta G_{\mathrm{hydr}}$ for
-methanol by about \SI{+0.2}{kcal.mol^{-1}}.  Similarly, there are some
-small discrepancies in the toluene, 2--methylfuran and 2--methylindole
-cases, where CHARMM produces slightly smaller $\Delta
-G_{\mathrm{hydr}}$.  These small discrepancies may be due to the
-differences in calculated densities between CHARMM and other codes
-(typically smaller by ca.\ \SI{0.01}{g/cm^3}).
+methanol by about \SI{+0.2}{kcal.mol^{-1}}. 
 The largest deviation can be found for one of the largest
 molecules (7--CPI) with the AMBER result being less negative than with
 the other MD packages by 0.4--\SI{0.8}{kcal.mol^{-1}}.  This
@@ -856,6 +851,7 @@ densities presumably because a LRC term was applied during the MD
 simulations, whereas LRC terms for SOMD and CHARMM are only applied via
 post-processing of trajectories.  For reference, a recent study from Lee--Ping et al.\ reports a
 TIP3P water density of \SI{0.980}{g/cm^3}~\cite{doi:10.1021/jz500737m}.
+
 
 \begin{table}[]
   \begin{minipage}{\linewidth}
@@ -1513,7 +1509,7 @@ million time--steps), and this is also the least precise (average SEM
 than CHARMM that used fewer time--steps (31.5 million time-steps,
 average SEM \SI{0.015}{kcal/mol}).  Further work should be pursued to
 understand what algorithmic details in the various implementations are
-important for the efficiency of the free energy calculations.
+important for the efficiency of the free energy calculations. In particular it may be interesting to apply overlap measures to explore the relative efficiency of the different protocols.~\cite{klimovich_guidelines_2015}
 
  Beyond careful protocol validation,  further automation of alchemical free energy studies will also decrease user errors, and thus increases  reproducibility.  Various attempts in
 this direction are currently underway for both absolute and relative
