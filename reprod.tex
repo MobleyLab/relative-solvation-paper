@@ -810,6 +810,7 @@ the $i$--th datum to be compared.
 \label{sec:results}
 
 \subsection{Overall comparison}
+\label{sec-comparison}
 
 In the following we will present our RAFE results for the
 thermodynamic cycles shown in Fig.~\ref{fig:thermocycle}.  We will use
@@ -1014,7 +1015,7 @@ We next reviewed consistency between forwards and backwards relative hydration f
 
 Next we compared relative free energies across packages.
 CHARMM tends to show relative free energies with smaller values for a number of transformations:  neopentane, 2--methylfuran and 2--methylindole. SOMD displays smaller values $\Delta\Delta G_{\mathrm{hydr}}$ for the methanol and toluene transformations.  The largest discrepancy, however, is in the neopentane transformation with central mapping where AMBER with implicit dummy atoms is about \SI{0.5}{kcal.mol^{-1}} higher and CHARMM about \SI{0.2}{kcal.mol^{-1}} lower than the other two codes.  The
-terminal mapped neopentane case reveals AMBER to be in line with GROMACS and SOMD while CHARMM's results deviate further.  AMBER deviates also quite strongly from the other codes in the cyclopentanyl indole cases.
+terminal mapped neopentane case reveals AMBER to be in line with GROMACS and SOMD while CHARMM's results deviate further.  AMBER deviates also quite strongly from the other codes in the cyclopentanyl indole cases. It is possible that the discrepancies observed with AMBER are partly due to inconsistencies in the end point geometries (see section \ref{sec:amber-results}).
 
 The MAEs of the relative free energy simulations are presented in
 Tab.~\ref{tab:mue-relative}.  They are on average slightly larger than the MAEs from the absolute simulations (Tab.~\ref{tab:mue-absolute}) and reach \SI{0.26}{kcal.mol^{-1}} for AMBER compared with CHARMM.
@@ -1044,7 +1045,7 @@ the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane $\rightarro
 \begin{table}[]
   \begin{minipage}{\linewidth}
     \caption{Cycle closure errors in \si{kcal.mol^{-1}}) for  ethane$ \rightarrow$ methanol. $\rightarrow$ methane
-$\rightarrow$ ethane. Uncertainties denote a 95\% confidence  interval}\label{tab:cycle-closure}
+$\rightarrow$ ethane. Uncertainties denote a 95\% confidence  interval.}\label{tab:cycle-closure}
     \makebox[\textwidth][c]{
       \begin{tabular}{lrrr}
         \toprule
