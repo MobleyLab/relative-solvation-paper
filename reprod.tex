@@ -258,6 +258,17 @@ CHARMM,~\cite{JCC:JCC21287} GROMACS,~\cite{Abraham201519}
 GROMOS,~\cite{doi:10.1021/jp984217f} and SOMD.~\cite{Sire-2016,
   doi:10.1021/ct300857j}) support a hybrid approach that combines aspects of single and dual topology~\cite{doi:10.1021/jp994193s}.
 
+Another algorithmic decision for single topology is whether  the implementation scales force field parameters (``parameter
+scaling'') and/or energy components (``energy
+scaling'')~\cite{doi:10.1021/jp981628n}.  In the former case each parameter is
+scaled individually, e.g.\ in the case of a harmonic bond or angle term,
+the force constant and the equilibrium distance/angle are scaled
+individually.  In the
+latter case, the total energy is scaled, all at once, or, equivalently for each
+individual force field contribution.  While free energy is a state function that
+depends only on the end points, the pathways taken by the
+two methods through state space or alchemical space are different.
+
 
 As alluded to above, consistency and reliability are the principal matter of concern.
 In particular, we need to ensure reproducibility of free energy results
@@ -358,16 +369,7 @@ well as numerical errors in post processing analyses even when simulations do
 terminate normally~\cite{beutler_avoiding_1994,
 zacharias_separationshifted_1994, steinbrecher_nonlinear_2007}.
 
-Another difference is how the codes scale force field parameters (``parameter
-scaling'') and/or the energy (``energy
-scaling'')~\cite{doi:10.1021/jp981628n}.  In the former case each parameter is
-scaled individually, e.g.\ in the case of a harmonic bond or angle term,
-the force constant and the equilibrium distance/angle are scaled
-individually.  In the
-latter case, the total energy is scaled, all at once, or, equivalently for each
-individual force field contribution.  While free energy is a state function that
-depends only on the end points, the pathways taken by the
-two methods through state space or alchemical space are different.
+
 
 One more important issue is whether the code allows holonomic constraints to be applied
 to bonds, which change bond lengths in a transformation e.g.\ C--H to C--C.
@@ -583,9 +585,13 @@ redundant, minimization step.  All production simulations were run at
 \SI{298}{K} and \SI{1.0}{bar} in the NPT ensemble.  Water molecules
 were constraint.  As specified below, some software performed a second
 minimization of the system before proceeding with the alchemical free
-energy calcualtion.  Atomic masses were not changed along the
+energy calculation.  Atomic masses were not changed along the
 alchemical transformations as this would affect only the kinetic
 energy, and would not contribute to the free energy change.
+A summary of the main algorithmic differences between each simulation package is given in
+Tab.~\ref{tab:resumeSpecifications}.
+
+
 
 %BR: I SUGGEST TO ORDER ALL THE ITEMS SIMILARLY FOR ALL THE PROGRAMS...
 %\paragraph{PROGRAM.}
