@@ -278,11 +278,13 @@ However, there have been some recent efforts to test \emph{energy}
 reproducibility across packages~\cite{Shirts2017} --- a necessary but not
 sufficient prerequisite.  Another study went further and also compared liquid
 densities across packages, revealing a variety of
-issues~\cite{doi:10.1021/acs.jctc.7b00489}.
+issues~\cite{doi:10.1021/acs.jctc.7b00489}. 
 For free energies, given a predefined force field and run--time
 parameters we ought to be able to obtain comparable free energy
-results within the limits of statistical convergence.  This comparison
-has not yet been carried out.
+results within the limits of statistical convergence.  Prior work has
+successfully compared calculated absolute hydration free energies
+across GROMACS and DESMOND codes.~\cite{klimovich_predicting_2010}
+This comparison has not yet been carried out for relative free energies.
 
 Nevertheless, it is critical that free energy
 changes computed with different simulation software should be reproducible
@@ -812,9 +814,7 @@ thermodynamic cycles shown in Fig.~\ref{fig:thermocycle}.  We will use
 absolute hydration free energies here as our standard point of
 comparison because for the present dataset they can be calculated with
 high precision~\cite{doi:10.1021/acs.jced.7b00104}, and are simpler to
-set up and implement than relative calculations.  Prior work has
-successfully compared calculated absolute hydration free energies
-across GROMACS and DESMOND codes.~\cite{klimovich_predicting_2010}
+set up and implement than relative calculations.  
 
 Tab.~\ref{tab:absolute2} summarizes results for the absolute hydration
 free energies.  The table shows the data
