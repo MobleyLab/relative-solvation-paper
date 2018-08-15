@@ -669,8 +669,8 @@ In the first two cases, each alchemical transformation was described by 31 and 1
 We used a 20-step alchemical protocol where charge coupling and LJ coupling were dealt with separately along the path \cite{Mobley2014, doi:10.1021/acs.jced.7b00104}.
 %
 The free energies were calculated from \SI{5}{ns} Langevin dynamics at \SI{298}{K}.
-A friction coefficient of \SI{1.0}{ps/m_{atom}} was used, where $m_{atom}$ is the the mass of the atom.
-No holonomic bond or angle constraints were used.
+A friction coefficient of \SI{1.0}{ps/m_{atom}} was used, where $m_{atom}$ is the the mass of the atom. 
+No holonomic bond or angle constraints for the solutes were used. Waters were constrained with LINCS. 
 A Parrinello--Rahman barostat with $\tau_p =$ \SI{10}{ps} and compressibility equal to \SI{4.5d-5}{bar^{-1}} was used.
 %
 Two methods were used to calculate electrostatic interactions:
@@ -696,7 +696,7 @@ The starting coordinates for each window were obtained by an additional energy m
 %Simulation length timestep
 A velocity-Verlet integrator was employed with a \SI{2}{fs} time step.
 %SHAKE and CONSTRAINTS
-Water hydrogens (TIP3P) were constrained with SHAKE. For the alchemical solute, only bonds involving hydrogens which are not alchemically transformed were constrained. This approach is referred as the ``unperturbed H bond constraint protocol''. Given the number of the perturbed hydrogen bonds in the solutes (Fig.~\ref{fig:cycles}, this constraint allows to use a \SI{2}{fs} time-step.
+Water hydrogens (TIP3P) were constrained with SHAKE. For the alchemical solute, only bonds involving hydrogens which are not alchemically transformed were constrained. This approach is referred as the ``unperturbed H bond constraint protocol''. Given the number of the perturbed hydrogen bonds in the solutes (Fig.~\ref{fig:cycles}, this constraint allows to use a \SI{2}{fs} time-step through use of higher atomic masses for perturbed hydrogen atoms (see discussion below).
 %Temperature and pressure
 Temperature control was achieved with the Andersen thermostat,~\cite{doi:10.1063/1.439486} with a stochastic collision frequency of \SI{10}{ps^{-1}}.
 A Monte Carlo barostat assured pressure control, with isotropic box edge scaling moves attempted every 25 time steps.
