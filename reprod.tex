@@ -1429,7 +1429,7 @@ This study addressed whether contemporary MD packages such as AMBER, CHARMM, GRO
 pre--defined force field.
 We have found that establishing a simulation protocol that leads to consistent results across codes has been cumbersome due to technical difficulties encountered with every code.
 This was the case despite our best efforts to maintain fairly consistent protocols for settings which were expected to significantly impact results.
-For example, we used nominally the same form of soft core potentials in most of the codes compared , and implementations of many other algorithms which should be the same or are thought to be equivalent.
+For example, we used nominally the same form of soft core potentials in most of the codes compared, and implementations of many other algorithms which should be the same or are thought to be equivalent.
 Still, we encountered numerous difficulties.
 Overall, the MD codes have a wide range of options and setup features which makes it difficult for the unexperienced user to decide on the most
 appropriate ones.
@@ -1487,9 +1487,9 @@ Lambda paths as implemented in GROMACS could also be beneficial for other codes 
 topologies via scripting.
 
 It may seem remarkable that of the computed free energies, the absolute hydration free energies seem to be more reproducible across codes than relative free energies.
-Conventional wisdom is that relative free energy calculations are computationally less demanding than absolute free energy calculations, which would lead to the opposite result.
-However, absolute calculations are considerably simpler to implement and deploy correctly as they do not involve as many challenging technical issues such as atom mapping, and the lambda protocols which must be employed have been optimized fairly well, since such calculations always involve either removal or insertion of atoms but never both simultaneously.
-This has made absolute calculations valuable as large-scale tests of free energy methods and force fields (e.g.~\cite{Mobley2014, doi:10.1021/ct300203w} and others), and in the SAMPL series of blind challenges (e.g.~\cite{fennell_fixed-charge_2014, geballe_sampl3_2012}).
+Conventional wisdom is that relative free energy calculations are computationally less demanding than absolute free energy calculations, which would lead to the opposite result~\cite{christ_basic_2010, Michel2010, Liu2013}.
+However, absolute calculations are considerably simpler to implement and deploy correctly as they do not involve as many challenging technical issues such as atom mapping~\cite{Liu2013, Cournia:2017:J.Chem.Inf.Model.}, and the lambda protocols which must be employed have been optimized fairly well, since such calculations always involve either removal or insertion of atoms but never both simultaneously.
+This has made absolute calculations valuable as large-scale tests of free energy methods and force fields (e.g.~\cite{Mobley2014, doi:10.1021/ct300203w, doi:10.1021/acs.jced.7b00104} and others), and in the SAMPL series of blind challenges (e.g.~\cite{fennell_fixed-charge_2014, geballe_sampl3_2012, Mobley2014}).
 Thus absolute calculations are already well automated, robust across codes, and well-performing protocols are available.
 Apparently similar is yet needed for relative free energy calculations.
 
