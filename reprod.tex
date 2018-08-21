@@ -845,7 +845,7 @@ water box.  The average densities across all simulations are
 CHARMM, GROMACS and SOMD respectively.  AMBER and GROMACS show higher
 densities presumably because a LRC term was applied during the MD
 simulations, whereas LRC terms for SOMD and CHARMM are only applied via
-post-processing of trajectories.  For reference, a recent study from Lee--Ping et al.\ reports a
+post-processing of trajectories.  For reference, a recent study from Wang et al.\ reports a
 TIP3P water density of \SI{0.980}{g/cm^3}~\cite{doi:10.1021/jz500737m}.
 
 
@@ -1032,7 +1032,7 @@ Tab.~\ref{tab:mue-relative}.  They are on average slightly larger than the MAEs 
 \end{table}
 
 We also computed cycle closure errors from Tab.~\ref{tab:cycle-closure} for
-the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane $\rightarrow$ ethane (see Fig.~\ref{fig:cycles}). The results are shown in Tab.~\ref{tab:cycle-closure}. Uncertainties were estimated by propagating uncertainties from the individual perturbations. The AMBER protocols, CHARMM and SOMD are protocol consistent within uncertainty estimates, but the deviations observed with the GROMACS protocols are small. The largest discrepancy is observed with the GROMACS unified PME protocol, with the error just under \SI{0.2}{kcal/mol}.
+the closed cycle ethane$ \rightarrow$ methanol $\rightarrow$ methane $\rightarrow$ ethane (see Fig.~\ref{fig:cycles}). The results are shown in Tab.~\ref{tab:cycle-closure}. Uncertainties were estimated by propagating uncertainties from the individual perturbations. The AMBER protocols, CHARMM and SOMD are consistent within uncertainty estimates, but the deviations observed with the GROMACS protocols are small. The largest discrepancy is observed with the GROMACS unified PME protocol, with the error just under \SI{0.2}{kcal/mol}.
 
 \begin{table}[]
   \begin{minipage}{\linewidth}
@@ -1085,8 +1085,7 @@ smaller transformations (refer to Fig.~\ref{fig:cycles}).  The split RAFE
 protocol and absolute free energies, however, are very close to the other MD
 packages as demonstrated in Tab.~\ref{tab:amber-comp} below.
 
-End point geometries appear to be another issue with AMBER simulations
-in both solution and vacuum.  This is most obvious in the neopentane
+End point geometries appear to be another issue with AMBER simulations both in solution and vacuum.  This is most obvious in the neopentane
 $\rightarrow$ methane test case with central mapping (see
 \nameref{sec:rafe_setup} and Fig.~\ref{fig:thermocycle}).
 As shown in Fig.~\ref{S-fig:amber-dist}x, the methane end state exhibits
@@ -1150,9 +1149,9 @@ non--SHAKE simulations, this SHAKE protocol appears to be a viable solution to
 increase the performance of RAFE simulations.  We have repeated this protocol
 with AMBER in response to the results obtained with SOMD using this
 implementation.  From a practical point of view, AMBER uses an \emph{atom}
-based mask for bond SHAKEs such that the mask must be set for the hydrogens in
+based mask for application of bond constraints such that the mask must be set for the hydrogens in
 question while the same is not possible for their non--H counter--part in the
-other state because \emph{all} bonds emanating from this atom would be affected.
+other state because \emph{all} bonds emanating from the atom would be affected.
 
 In general, the free energies computed with each approach are in good agreement
 with each other and with the results of the other MD packages
@@ -1172,8 +1171,8 @@ atoms.
 \subsection{CHARMM}
 \label{sec:charmm-results}
 
-CHARMM for alchemical free energy calculation (AFE) has been widely used with PERT module, but few bugs not previously reported in CHARMM c40b1 were found and careful AFE setup is needed to produce robust and accurate results. Bugs regarding TI gradient accumulation in the parallel version were identified and fixed by Dr. Stefan Boresch.
-The PERT module does not allow a hydrogen bond constraint (SHAKE) to be applied on the perturbed region, and this requires end point lambdas to be equilibrated carefully. These windows at end-point lambda were started with their own equilibration using timesteps of \SI{0.1}{fs} to \SI{0.5}{fs} before the production run. The VSwitch option was used to apply a switching function to the potential since that option is cannot be applied to forces for calculations run with the PERT module.
+CHARMM for alchemical free energy calculation (AFE) has been widely used with the PERT module, but few bugs not previously reported in CHARMM c40b1 were found and careful AFE setup is needed to produce robust and accurate results. Bugs regarding TI gradient accumulation in the parallel version were identified and fixed by Dr. Stefan Boresch.
+The PERT module does not allow a hydrogen bond constraint (SHAKE) to be applied on the perturbed region, and this requires end point lambdas to be equilibrated carefully. These windows at end-point lambda were started with their own equilibration using timesteps of \SI{0.1}{fs} to \SI{0.5}{fs} before the production run. The VSwitch option was used to apply a switching function to the potential since that option cannot be applied to forces for calculations run with the PERT module.
 
 %, since the PERT module is not compatible with the VFSwitch %option that is a switching function applied to force.
 %JM do we need to mention the above sentence?
@@ -1235,7 +1234,10 @@ The entries \inpopt{vdw-lambdas} and \inpopt{fep-lambdas}
 define the lambda schedule.  The former indicates the value of the $\lambda$
 vector component that modifies van der Waals interactions for each state,
 while the latter changes all $\lambda$ vector components that are not specified
-in the \inpopt{.mdp} file.  For instance, in split protocol simulations, these
+in the \inpopt{.mdp} file.  
+
+Here, we use these options to simplify our setup.
+For instance, in split protocol simulations, these
 entries are sets such that the components of the energy are modified in
 different stages.  If the transformation involves particle deletion (``forward
 process''), \inpopt{fep-lambdas} is set to change charges and bonds
@@ -1368,7 +1370,7 @@ result.  Thus, we find that the split protocol without Coulomb
 softcore potentials is the most effective way to calculate relative
 free energies with the current GROMACS implementation.
 
-Additionally it is worth mentioning is that relative free energy
+Additionally it is worth mentioning that relative free energy
 simulations that feature alchemical transformations of a hydrogen atom
 into a heavy atom will crash if the bond involving the hydrogen atom
 is constrained with algorithms such as SHAKE or LINCS.  Successful
