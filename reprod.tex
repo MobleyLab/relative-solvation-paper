@@ -58,12 +58,12 @@
 
 \begin{abstract}
   Alchemical free energy calculations are an increasingly
-  important modern simulation technique.  Contemporary molecular
+  important modern simulation technique to calculate free energy changes on binding or solvation.  Contemporary molecular
   simulation software such as AMBER, CHARMM, GROMACS and SOMD include
   support for the method.  Implementation details vary among those
   codes but users expect reliability and reproducibility, i.e.\ for a
   given molecular model and set of forcefield parameters, comparable
-  free energy should be obtained within statistical bounds regardless
+  free energy differences should be obtained within statistical bounds regardless
   of the code used.  \emph{Relative} alchemical free energy (RAFE)
   simulation is increasingly used to support molecule discovery
   projects, yet the reproducibility of the methodology has been less
@@ -185,7 +185,7 @@ its environment.  We distinguish decoupling from \emph{annihilation},
 as the latter also includes a scaling of
 the \emph{intra}--molecular non-bonded interactions in addition to the
 inter--molecular interactions.~\cite{shirtsmobleyreview_2013}(\footnote{It is worth noting that the terms ``double decoupling method'' and ``double annihilation method'' also employ the words ``decoupling'' and ``annihilation'' but used in an entirely different sense in the context of standard binding free energy calculations.})
-Torsional interactions may also be scaled in an annihilation protocol, but bond and angle terms are usually not scaled as this leads to poorly converging free energy changes.~\cite{doi:10.1021/jp981628n}
+Torsional interactions may also be scaled in an annihilation protocol, but bond and angle terms are usually not scaled as this leads to poorly converging free energy estimates.~\cite{doi:10.1021/jp981628n}
 These schemes may require two
 simulations along the opposite edges of a quadrilateral thermodynamic cycle
 but approaches that produce the reversible work directly in one simulation
@@ -207,14 +207,14 @@ biomolecules~\cite{christ_accuracy_2013, doi:10.1021/ci5004027,
 RAFEs can be calculated by making use of either the so--called single or dual topology method.
 Dual topology means that groups of atoms of the end states are
 duplicated and thus both sets are present at all
-times but do not interact with each other \cite{doi:10.1021/j100056a020, doi:10.1021/jp981628n}.  The atom types are not changed, and, in principal, the groups
+times but do not interact with each other \cite{doi:10.1021/j100056a020, doi:10.1021/jp981628n}.  The atom types are not changed, and, in principle, the groups
 of both states would need to have the same total charge to avoid partially
 charged intermediates.  In practice this could require, depending on force field,
 to duplicate all atoms of the end states.  Only non--bonded
 interactions need to be scaled such that the disappearing end state
 is fully decoupled from its environment~\cite{doi:10.1021/jp981628n}.
 The dual topology method is the most straightforward approach to compute RAFEs when the two molecules are structurally dissimilar.
-In situations where all atoms in a perturbed molecule are duplicated a dual topology calculation is the technically same as two absolute calculations, executed simultaneously in opposite directions.
+In situations where all atoms in a perturbed molecule are duplicated a dual topology calculation is the technically same as two absolute calculations executed simultaneously in opposite directions.
 This, however, comes with additional complications as the two independent
 molecules can drift apart and sample completely different environments (e.g. binding site versus bulk solution).
 It has been shown though that with the introduction of
@@ -321,14 +321,12 @@ One practical challenge is that the free energy methodologies used in
 one MD program are not always available in another package, or the
 same functionality is provided via different algorithms
 (e.g.\ algorithms for pressure and temperature scaling, integrators,
-cufoffs for Coulomb and vdW interactions, etc).  We also note, that
+cufoffs for Coulomb and vdW interactions, etc).  We also note that
 the implementation of alchemical free energy calculations is very
-different among the simulation codes (see~\ref{sec:afe_impl} for
-details).  This implies that setting the parameters specific to the
-free energy protocol, in parituclar the lambda schedule, the same for
-all codes will not automatically lead to the free energy reproduced in
-the same fashion.  In the SI we show various curves to demonstrate this.
-Hence, these parameters were adjusted individually for each code based
+different among the simulation codes (see Section~\ref{sec:afe_impl} for
+details).  This implies that using the same free energy parameters across all codes, and especially using the same lambda schedule, will not automatically lead to equivalent free energies.
+In the SI we show various plots of the free energy derivative versus lambda to demonstrate this.
+Hence, the protocol and especially the choice of lambda values was adjusted individually for each code based
 on previous experience of the researchers involved.  In addition there
 may be differences in the choice of physical constants used for
 evaluating potential energies.  A previous study noted that variations
@@ -339,9 +337,8 @@ GROMACS~\cite{Shirts2017, SOMDcoulomb}.
 To circumvent some of these practical problems, we will compare
 relative free energies calculated via three protocols.  In the
 ``unified protocol'' we calculate relative free energies by scaling
-together all force field parameters i.e.\ partial charges, van der
-Waals parameters, and bonded parameters vary simultaneously along the
-alchemical path.  In the ``split protocol'' we calculate relative free
+together all force field parameters simultaneously along the alchemical path --- i.e.\ partial charges, van der
+Waals parameters, and bonded parameters.  In the ``split protocol'' we calculate relative free
 energies by scaling separately the van der Waals parameters and the
 partial charges parameters.  The order in which this has to be done is
 detailed in section~\ref{S-sec:separated}x of the SI.  The scaling of
@@ -373,8 +370,8 @@ zacharias_separationshifted_1994, steinbrecher_nonlinear_2007}.
 
 
 
-One more important issue is whether the code allows holonomic constraints to be applied
-to bonds, which change bond lengths in a transformation e.g.\ C--H to C--C.
+One additional important issue is whether the code allows holonomic constraints to be applied
+to bonds, which may change bond lengths in some transformations, e.g.\ C--H to C--C.
 Changes in bond length need to account for the associated change in the free
 energy.  These and other details will be outlined below.
 
@@ -383,7 +380,7 @@ approach.  All terms are energy scaled. The perturbed group must be
 entirely duplicated, i.e.\ for \progname{sander} this means two
 topology files with one end state each, and for \progname{pmemd} both
 end states in one topology file.  In AMBER16 \progname{sander} and
-\progname{pmemd} implement free energy simulation in an equivalent
+\progname{pmemd} implement free energy simulations in an equivalent
 fashion.  However, pmemd does not support vacuum free energy simulations
 in that version.  Hence, all vacuum simulations needed to be run with
 \progname{sander} while all solution runs were done with
@@ -437,7 +434,7 @@ series must have an equivalent in both end states.  If the term does not exist
 it must be created with parameters zeroing its energy.
 The softcore potential applies to dummy
 atoms only determined from atoms having zero LJ parameters in the end states.
-The code allows changing bond lengths involving constraints within the perturbed group  but this can lead to instabilities and wrong results (Michael Shirts, private communication).  There are separate $\lambda$s for LJ,
+The code allows changing bond lengths involving constraints within the perturbed group  but this can lead to instabilities and wrong results (Michael Shirts, private communication).  There are separate lambda values for LJ,
 Coulomb and bonded parameters (and some other possible terms in the potential) which allows easy implementation
 of split protocols.
 
@@ -486,7 +483,7 @@ sufficient sampling, RAFE simulations should not depend on the
 ``forward'' and ``backward'' direction of change with respect to the
 coupling parameter $\lambda$.  However to test for possible
 discrepancies, we have run simulations in both directions.  As we
-shall discuss in the\nameref{sec:results} section, we do see
+shall discuss in the \nameref{sec:results} section, we do see
 differences in some cases.
 \begin{figure}[ht]
   \includegraphics[width=\textwidth]{figures/cycles.pdf}
@@ -524,8 +521,8 @@ consistency and reproducibility from the computational protocols.  This is compl
 that a given MD software may employ a range of methods and algorithms that one may not be
 able to duplicate exactly with other MD software.
 In particular, how the alchemical transformation is controlled via the coupling parameter may be very different.
-At the most basic level, even pressure and temperature scaling, integrators and other algorithms can also display important differences.
-It is unclear if and how any of these implementation details can affect results.
+At the most basic level, important differences could even result from pressure and temperature scaling, integrators and other algorithms.
+It is unclear if and how any of these implementation details affect results.
 The implementation details of alchemical free energy simulation in code are discussed in subsection~\ref{sec:afe_impl}.
 
 In this study we consider a set of simple organic molecules (see
@@ -535,7 +532,7 @@ rigid and neutral molecules to minimize statistical sampling errors, and
 avoid difficulties with charged
 particles~\cite{rocklin_calculating_2013, JCC:JCC1050}.  The force
 field was chosen to be GAFF (version
-1.8),~\cite{wang_development_2004} utilizing AM1/BCC charges~ for the solute,\cite{jakalian_fast_2000,jakalian_fast_2002} and
+1.8),~\cite{wang_development_2004} utilizing AM1-BCC charges~ for the solute,\cite{jakalian_fast_2000,jakalian_fast_2002} and
 TIP3P for the solvent.~\cite{jorgensen_comparison_1983-1}
 % REF: Durell, S. R.; Brooks, B. R.; Ben-Naim, A. J Phys Chem 1994, 98, 2198.
 % REF Pettitt, B. M.; Karplus, M. Chem Phys Lett 1985, 121, 194.
@@ -550,15 +547,15 @@ TIP3P for the solvent.~\cite{jorgensen_comparison_1983-1}
 Charges were computed with the \progname{antechamber} program and
 missing bonded and vdW terms were generated with the
 \progname{parmchk2} program, both from the AmberTools16 distribution.
-All parameters are compiled at
+All parameters and input files are available at
 https://github.com/halx/relative-solvation-inputs.
-The quality of free energies of various small molecule force fields
-has been discussed elsewhere.~\cite{doi:10.1021/ct300203w}
+The quality of free energies estimated using various small molecule force fields
+has been discussed elsewhere and is not a focus of this work; here we focus on reproducibility given a particular force field.~\cite{doi:10.1021/ct300203w}
 
-While the MD packages principally allow a ``one--step''
+While the MD packages employed principally allow a ``one--step''
 transformation~\cite{steinbrecher_soft-core_2011},
-that is with both LJ and Coulombic parameters varied
-simultaneously (unified protocol), it has also been proposed that carrying out a
+that is, with both LJ and Coulombic parameters varied
+simultaneously (what we call a unified protocol), it has also been proposed that carrying out a
 split protocol may be more efficient.~\cite{Deng-2004, naden_linear_2014, naden_linear_2015}
 In such a protocol the charges are transformed
 linearly between the end states followed by a mutation of the van der
@@ -575,18 +572,16 @@ All simulations were started from simulation boxes prepared by
 FESetup~\cite{loeffler_fesetup:_2015}.  During construction of the
 perturbed systems, steric overlaps between the solute and the
 solvent may happen.  This is because each unperturbed solute is independently
-equilibrated but the final perturbed system combined from those, potentially
+equilibrated but the final perturbed system is a composite of coordinates from those potentially
 differently sized solutes.  To make the number of atoms the same for forward
-and backward setups the water coordinates of the larger of the two boxes are
+and backward setups, the water coordinates of the larger of the two boxes are
 chosen.  Thus, in transformations from a smaller to a larger solute, water
 molecules may be in close proximity to the solute.  At the end of the
 construction process, FESetup performs a minimization onto the
-system.  In addition, some simulation protocols started with a,
-redundant, minimization step.  All production simulations were run at
+system.  In addition, some simulation protocols started with an additional (
+redundant) minimization step.  All production simulations were run at
 \SI{298}{K} and \SI{1.0}{bar} in the NPT ensemble.  Water molecules
-were constraint.  As specified below, some software performed a second
-minimization of the system before proceeding with the alchemical free
-energy calculation.  Atomic masses were not changed along the
+were constrained.  Atomic masses were not changed along the
 alchemical transformations as this would affect only the kinetic
 energy, and would not contribute to the free energy change.
 A summary of the main algorithmic differences between each simulation package is given in
@@ -619,10 +614,10 @@ In a very few cases it was necessary to use coordinates from the end of the simu
 This happened in transformations with a larger number of dummy atoms.
 Absolute transformations were carried out using a one step protocol featuring 21 windows initially.
 For some perturbations additional windows were run in regions where the free energy gradients varied sharply.
-Each window was simulated for 2.5 ns, with the first 0.2 ns discarded prior analysis.
+Each window was simulated for 2.5 ns, with the first 0.2 ns discarded prior to analysis.
 %
 Water hydrogens (TIP3P) were constrained with SHAKE.
-None of the atoms in the perturbed group where constrained and hence the time step was set to \SI{1}{fs}.
+None of the atoms in the perturbed group were constrained and hence the time step was set to \SI{1}{fs}.
 An alternative protocol with SHAKE on bonds that do not change during transformation and a time step of \SI{2}{fs} was also tested (see SOMD protocol below).
 %
 The temperature was controlled through a Langevin thermostat with a friction constant of \SI{2.0}{ps^{-1}} and pressure
@@ -632,14 +627,14 @@ Long--range electrostatics in solution was handled with Particle Mesh Eward (PME
 of \SI{8.0}{\angstrom} for the real-space Coulomb and vdW interactions.
 No cutoff was used for the vacuum simulations.
 %
-A Long Range Correction (LRC) term for truncated VdW interactions is applied during the MD simulations.
+A Long Range Correction (LRC) term for truncated VdW interactions was applied during the MD simulations.
 %
 
 \paragraph{CHARMM.}
 The version c40b1 was used for this set of free energy calculations.
 The PERT module was used to handle the alchemical transformations.
 %
-Three different approaches were used to calculate the relative Gibbs free energy: (i) RAFE simulation where electrostatic and VdW interactions were changed separately (split-protocol) , (ii) RAFE simulation where electrostatic and VdW interactions were changed together (unified-protocol) , and (iii) difference between free energies from two AFE simulations where AFE simulations followed unified-protocol.
+Three different approaches were used to calculate the relative Gibbs free energy: (i) RAFE simulation where electrostatic and VdW interactions were changed separately (split-protocol), (ii) RAFE simulation where electrostatic and VdW interactions were changed together (unified-protocol), and (iii) difference between free energies from two AFE simulations where AFE simulations followed unified-protocol.
 %
 In total, 21 evenly spaced windows were used and all windows were run for \SI{1.5}{ns} with a timestep of \SI{1}{fs}.
 Most windows used the same pre-equilibrated configuration.
@@ -1490,7 +1485,7 @@ It may seem remarkable that of the computed free energies, the absolute hydratio
 Conventional wisdom is that relative free energy calculations are computationally less demanding than absolute free energy calculations, which would lead to the opposite result~\cite{christ_basic_2010, Michel2010, Liu2013}.
 However, absolute calculations are considerably simpler to implement and deploy correctly as they do not involve as many challenging technical issues such as atom mapping~\cite{Liu2013, Cournia:2017:J.Chem.Inf.Model.}, and the lambda protocols which must be employed have been optimized fairly well, since such calculations always involve either removal or insertion of atoms but never both simultaneously.
 This has made absolute calculations valuable as large-scale tests of free energy methods and force fields (e.g.~\cite{Mobley2014, doi:10.1021/ct300203w, doi:10.1021/acs.jced.7b00104} and others), and in the SAMPL series of blind challenges (e.g.~\cite{fennell_fixed-charge_2014, geballe_sampl3_2012, Mobley2014}).
-Thus absolute calculations are already well automated, robust across codes, and well-performing protocols are available.
+Thus absolute calculations are already well automated, robust across codes (e.g.~\cite{{klimovich_predicting_2010}), and well-performing protocols are available.
 Apparently similar is yet needed for relative free energy calculations.
 
 The primary focus of this work was to achieve low statistical errors
