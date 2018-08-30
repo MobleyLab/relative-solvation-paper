@@ -146,6 +146,19 @@ parameter in the other end state.  ``Dummy'' atom is used here as a
 shorthand notation for any atom that appears or disappears during the
 course of the transformation.
 
+\section{TI curves}
+\label{sec:ti_curves}
+
+\begin{figure}[ht]
+  a)\includegraphics[scale=0.2]{figures/AMBER_dhdl_TI.pdf}
+  b)\includegraphics[scale=0.2]{figures/GROMACS_dhdl_TI.pdf}
+  c)\includegraphics[scale=0.2]{figures/SOMD_charge_dhdl_TI.pdf}
+  d)\includegraphics[scale=0.2]{figures/SOMD_vdw_dhdl_TI.pdf}
+  e)\includegraphics[scale=0.2]{figures/CHARMM_dvdl.pdf}
+  \caption{Graphs obtained from various simulation codes for the absolute transformation of methane. a) AMBER unified protocol. b) Gromacs where red is from the Coulomb only transformation (but which does not make any contribution) and green for the free energy from all other contributions,  c) and d) are from SOMD with the charge contributions in c) and the vdW component in d). e) CHARMM unified protocol.}
+  \label{fig:ti_curves}
+\end{figure}
+
 
 \section{Split Protocols}
 \label{sec:separated}
