@@ -229,16 +229,25 @@ typically different in individual parameterization due to the local chemistry
 were made equal.  This means that the core does not need to be duplicated and
 thus is not included in the mutation.
 
-Single topology means that there is only one connected representation of the molecule to be transformed into another molecule.
+
+%Single topology means that there is only one connected representation of the molecule to be transformed into another molecule.
+% BR:
+Single topology means that the alchemical transformation of one molecule into another molecule is handled via a single set of connected atoms.
 Atoms of a given type are directly transformed, typically by linearly scaling the force field parameters, into atoms of a different type.
 The single topology method offers a straightforward route to implement RAFE calculations.\cite{doi:10.1021/j100056a020,Michel2010,doi:10.1063/1.449208, doi:10.1021/jp981628n}
-In typical implementations,
+% BR:
+
+An example of single topology is the simple transformation of methane (CH4) into tetrafluoromethane (CF4), 
+in which real atoms are mapped into real atoms with different force field parameters at the two end states.
+%In typical implementations,
+However, in most typical implementations,
 a certain number of non-interacting ``dummy'' atoms must hold the place of disappearing/appearing atoms in order to balance the number of atoms in both end states.
+For example, one dummy atom is necessary to match a methane molecule (5 atoms) transforming into methanol (6 atoms).
 Dummy atoms have no non--bonded interactions in the end state but normally retain the bonded
 terms of the original atom to avoid complications with unbound
 atoms~\cite{doi:10.1021/jp981628n}.
 % but this is somewhat controversial in the literature~\cite{Boresch:2002:Mol.Simul.}.
-Some practitioners stress that a given dummy atom should retain at most only one angle term with respect to “real” non-dummy atoms to yield correct results~\cite{doi:10.1021/jp981628n,doi:10.1021/jp994193s,Boresch:2002:Mol.Simul.}.  For example, if the angle term Atom2--Atom1--Dummy1 is included then additional angle terms such as Atom3--Atom1--Dummy1 should not be included.  Likewise, if the dihedral term Atom3--Atom2--Atom1--Dummy1 is included then additional terms such as Atom4--Atom2--Atom1--Dummy1 should not be included.
+Some practitioners stress that a given dummy atom should retain at most only one angle term with respect to ``real'' non-dummy atoms to yield correct results~\cite{doi:10.1021/jp981628n,doi:10.1021/jp994193s,Boresch:2002:Mol.Simul.}.  For example, if the angle term Atom2--Atom1--Dummy1 is included then additional angle terms such as Atom3--Atom1--Dummy1 should not be included.  Likewise, if the dihedral term Atom3--Atom2--Atom1--Dummy1 is included then additional terms such as Atom4--Atom2--Atom1--Dummy1 should not be included.
 
 The single topology approach seeks to exploit the
 topological and structural similarity of the two end states.~\cite{doi:10.1021/j100056a020}
@@ -323,7 +332,7 @@ cufoffs for Coulomb and vdW interactions, etc).  We also note that
 the implementation of alchemical free energy calculations is very
 different among the simulation codes (see Section~\ref{sec:afe_impl} for
 details).  This implies that using the same free energy parameters across all codes, and especially using the same lambda schedule, will not automatically lead to equivalent free energies.
-In the SI we show various plots of the free energy derivative versus lambda to demonstrate this.
+In Fig.~\ref{S-fig:ti_curves}x we show various plots of the free energy derivative versus lambda to demonstrate this.
 Hence, the protocol and especially the choice of lambda values was adjusted individually for each code based
 on previous experience of the researchers involved.  In addition there
 may be differences in the choice of physical constants used for
@@ -390,15 +399,17 @@ end--states that will share the same coordinates for the free energy
 calculation.  Evaluation of the interactions involving these atoms as
 a function of the coupling parameter is done by default via linear
 scaling of the energy and forces of the end--states.  Alternatively
-the user can request that a softcore potential be used.  The
-non--bonded interactions of atoms that are not paired between the
-end--states are handled with a softcore potential.  In addition,
-bonded terms involving different unpaired atoms are ignored.  This in
-effect amounts to defining unpaired atoms as dummy atoms in one of the
-end--states.  We call this the ``implicit dummy protocol'' since the
-procedure is handled automatically by the software through analysis of
-the end--state topologies rather than via explicit definition of dummy
-atoms in an input topology.
+the user can request that a softcore potential be used.  
+Atoms that are not paired between the
+end--states are are effectively treated as dummy atoms in one of the
+two end--states.  
+Bonded terms involving different unpaired atoms are ignored
+and their non--bonded interactions are handled with a softcore potential.
+We call this the ``implicit dummy protocol'' since the
+procedure is handled automatically by the software through analysis of 
+the end--state topologies rather than via explicit introduction of dummy
+atoms that is required in computations based on a single topology framework.
+
 
 The code cannot handle bond length changes involving a constraint.
 There is only one global $\lambda$ for parameter transformation.
@@ -1062,7 +1073,7 @@ We now turn to considerations for individual packages.
 \subsection{AMBER}
 \label{sec:amber-results}
 
-Using AMBER for RAFE simulations has revealed several problems with the implementation.  Some bugs were identified and the developers have fixed those for AMBER16, e.g.\ energy minimization in \progname{sander} led to
+Using AMBER for RAFE simulations has revealed several problems with the implementation.  Some issues were identified and the developers have fixed those for AMBER16, e.g.\ energy minimization in \progname{sander} led to
 diverged coordinates for mapped atoms.  For a single topology description,
 however, it is necessary to have the same coordinates.  Other issues are that
 vacuum simulations can only be carried out with the \progname{sander} program
@@ -1169,7 +1180,7 @@ atoms.
 \subsection{CHARMM}
 \label{sec:charmm-results}
 
-CHARMM for alchemical free energy calculation (AFE) has been widely used with the PERT module, but few bugs not previously reported in CHARMM c40b1 were found and careful AFE setup is needed to produce robust and accurate results. Bugs regarding TI gradient accumulation in the parallel version were identified and fixed by Dr. Stefan Boresch.
+CHARMM for alchemical free energy calculation (AFE) has been widely used with the PERT module, but few issues not previously reported in CHARMM c40b1 were found and careful AFE setup is needed to produce robust and accurate results. Bugs regarding TI gradient accumulation in the parallel version were identified and fixed by Dr. Stefan Boresch.
 The PERT module does not allow a hydrogen bond constraint (SHAKE) to be applied on the perturbed region, and this requires end point lambdas to be equilibrated carefully. These windows at end-point lambda were started with their own equilibration using timesteps of \SI{0.1}{fs} to \SI{0.5}{fs} before the production run. The VSwitch option was used to apply a switching function to the potential since that option cannot be applied to forces for calculations run with the PERT module.
 
 %, since the PERT module is not compatible with the VFSwitch %option that is a switching function applied to force.
@@ -1434,7 +1445,7 @@ this level of reproducibility.  There is some doubt, however, over the AMBER
 results because the particular version of the software we tested  cannot reproduce the correct end-point
 geometries.  This is particularly evident in the case of the transformation from neopentane to methane
 with central mapping, where the relative free energies are clearly
-different from the other packages.  We suspect these issues reflect a bug in
+different from the other packages.  We suspect these reflect issues in
 the AMBER package but have been unable to isolate it; we have reported the
 issue to the AMBER developers.
 
@@ -1463,7 +1474,7 @@ This could also allow for a direct comparison of efficiency across codes.
 
 To aid with follow-up studies, we make our input data and protocols available.  We recommend using this dataset to test and benchmark future RAFE implementations to validate reproducibility against other simulation packages.
 Where possible, we recommend comparing results from both absolute and relative transformations to verify internal consistency.
-The relative transformation should be run in both forward and backward directions, even if the free energy estimator is agnostic to this decision, as other implementation details (e.g. bugs in parameters, atomic masses, use of bond constraints, or details of the number of dummy atoms and how they are handled) may lead to inconsistent results depending on the transformation direction.
+The relative transformation should be run in both forward and backward directions, even if the free energy estimator is agnostic to this decision, as other implementation details (e.g. parameters, atomic masses, use of bond constraints, or details of the number of dummy atoms and how they are handled) may lead to inconsistent results depending on the transformation direction.
 
 More specifically, various issues with current code bases have been revealed through this work.
 We have found that constraints in connection with varying bond length can cause errors with GROMACS, just as masses (in many codes) must not be allowed to vary in RAFE simulations, both to avoid crashes and incorrect results from the

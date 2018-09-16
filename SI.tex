@@ -146,11 +146,10 @@ parameter in the other end state.  ``Dummy'' atom is used here as a
 shorthand notation for any atom that appears or disappears during the
 course of the transformation.
 
-\section{TI curves}
-\label{sec:ti_curves}
+\section{TI gradients}
+\label{sec:ti_gradients}
 
-The gradients from thermodynamic integration simulations for all four codes are summarized in Fig.~\ref{fig:ti_curves}.  The graphs are for the absolute transformation of methanol.  The gradients demonstrate how the different transformation functions especially the softcore potentials (see section~\ref{sec:softcores}) influence the TI gradients.  As can be seen these are very different implying that a lambda schedule must be appropriately planned for each simulation code and also the particular transformation.
-
+The free energy derivative versus lambda from thermodynamic integration simulations (TI gradients) for all four codes are summarized in Fig.~\ref{fig:ti_curves} by example of the absolute transformation of methanol.  The derivatives demonstrate how the different transformation functions especially the softcore potentials (see section~\ref{sec:softcores}) influence the TI gradients.  As can be seen these are very different from each other implying that the lambda schedule must be appropriately planned for each simulation code and also for the particular transformation.
 
 \begin{figure}[ht]
   a)\includegraphics[scale=0.25]{figures/AMBER_charge_dhdl_TI.pdf}
@@ -158,7 +157,7 @@ The gradients from thermodynamic integration simulations for all four codes are 
   d)\includegraphics[scale=0.25]{figures/SOMD_charge_dhdl_TI.pdf}
   e)\includegraphics[scale=0.25]{figures/SOMD_vdw_dhdl_TI.pdf}
   f)\includegraphics[scale=0.20]{figures/CHARMM_dvdl.pdf}
-  \caption{TI gradients obtained from various simulation codes for the absolute transformation of methanol. a) and b) AMBER charge and vdw transformations. c) Gromacs where red is from the Coulomb only transformation (but which does not make any contribution) and green for the free energy from all other contributions,  d) and e) SOMD charge and vdw transformations. f) CHARMM unified protocol.}
+  \caption{TI gradients obtained from various simulation codes for the absolute transformation of methanol. a) and b) AMBER charge and vdw transformations. c) Gromacs where green is from the vdw only transformation and red for the free energies from all other contributions,  d) and e) SOMD charge and vdw transformations. f) CHARMM unified protocol.}
   \label{fig:ti_curves}
 \end{figure}
 
